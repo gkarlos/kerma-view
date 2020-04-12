@@ -1,0 +1,31 @@
+{
+  "name": "kerma-view",
+  "description": "A desktop client for Kerma",
+  "version": "1.0.0",
+  "author": "George Karlos",
+  "license": "Apache-2.0",
+  "homepage": "https://gkarlos.github.io/kerma",
+  "bugs": "https://github.com/gkarlos/kerma-view/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gkarlos/kerma-view"
+  },
+  "engines": {
+    "node": ">=12",
+    "npm": ">=6"
+  },
+  "main": "./src/main/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "clean": "rm -rf external",
+    "deps": "node scripts/build-external-deps.js"
+  },
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "commander": "^5.0.0"
+  },
+  "devDependencies": {
+    "electron": "^8.2.1"
+  }
+}
