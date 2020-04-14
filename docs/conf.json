@@ -1,0 +1,14 @@
+{
+  "plugins"   : ["plugins/markdown"],
+  "templates" : {
+    "monospaceLinks" : true
+  },
+  "source" : {
+    "include" : ["./src"]
+  },
+  "opts": {
+    "recurse": true,
+    "destination": "./docs/dev",
+    "readme": "./README.md"
+  }
+}

@@ -4,8 +4,9 @@ const electron        = require('electron');
 const path            = require('path');
 
 //
+const release    = require('../common/release')
 const log            = require("./logging");
-const cli            = require("./cli");
+const cl             = require("../util/cl");
 const defaults       = require("../common/config").defaults;
 
 
@@ -28,6 +29,15 @@ const ipcMain         = electron.ipcMain;
 // };
 
 // START
-const {argc, argv} = cli.argParse(process.argv)
+// 
 
-app.on("ready", () => {});
+
+
+app.on("ready", () => {
+  // TODO
+  cl.arg.parse(process.argv)
+});
+
+app.on("exit", () => {
+  console.log("exiting")
+})

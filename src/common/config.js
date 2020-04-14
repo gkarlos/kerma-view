@@ -12,7 +12,10 @@ const defaults = {
   MODE : mode.release
 }
 
+const VERBOSE_LEVEL = 1
+
 module.exports = {
   defaults,
-  mode
+  mode,
+  VERBOSE_LEVEL
 }
