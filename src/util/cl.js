@@ -15,20 +15,30 @@
 'use strict'
 
 const app        = require('electron').app
-const chalk      = require('chalk')
+const color      = require("cli-color")
 const path       = require('path')
 const {Command}  = require('commander')
 
 const release    = require('../common/release')
 const config     = require('../common/config')
-const defaults   = require('../common/config').defaults
-const mode       = require('../common/config').mode
+const defaults   = config.defaults
+const settings   = config.settings
+const mode       = config.mode
 const fileExists = require('../util/fs').fileExists
 const dirExists  = require('../util/fs').dirExists
 
+//
+// Some cl writting settings
+// 
+const TAG = {
+  INFO  : { id : 0, txt : "info:",   color : color.bold.cyan},
+  WARN  : { id : 1, txt : "warn:",   color : color.bold.yellow },
+  ERROR : { id : 2, txt : "error:",  color : color.bold.red },
+  DEBUG : { id : 3, txt : "[debug]", color : color.bold.blackBright}
+}
+
 var maybeExit = {
   exit: function(code) { 
-    console.log("bout to exit")
     if ( config.VERBOSE_LEVEL > 0)
       console.log("Exiting...");
     app.exit(code); 
@@ -39,44 +49,56 @@ function normalizeLogDetails(details) {
   if ( details == null)
     return "null"
   else if ( typeof details === 'object' )
-    return JSON.stringify(details)
+    return JSON.stringify(details, null, 2)
   return details
 }
 
 /**
  * Utility function that prints the details part of a log message
  */
-function printLogDetails(details) {
+function printLogDetails(details, tag) {
+  
   let lines = normalizeLogDetails(details).split('\n')
-  for ( let i = 0; i < lines.length; ++i)
-    console.log("  " + lines[i])
+  if ( tag === TAG.DEBUG) {
+    for ( let i = 0; i < lines.length; ++i)
+      console.log(tag.color(tag.txt) + " " + lines[i])
+  } else {
+    for ( let i = 0; i < lines.length; ++i)
+      console.log(" ".repeat(tag.txt.length + 1) + lines[i]) 
+  }
 }
 
 /** 
-* Wrapper for calling log functions with a given prefix
+* Wrapper for calling log functions with a given tag
 *
 * @param {prefix} - A prefix to be applied
 */
-function writeWithPrefix(prefix) {
-  let write = function(msg, details) {
-    console.log(prefix, msg)
+function taggedWrite(tag) {
+  let write = function(msg, details, showTag=settings.SHOW_DEBUG_TAGS) {
+    showTag? console.log(tag.color(tag.txt), msg) : console.log(msg);
     if ( details !== undefined )
-      printLogDetails(details)
+      printLogDetails(details, showTag? tag : undefined)
     return maybeExit;
   }
   return write;
 }
 
+//
+// API
+//
+
 const log = {
-  error : writeWithPrefix(chalk.bold.red("error:")),
-  warn  : writeWithPrefix(chalk.bold.yellow("warn:")),
-  info  : writeWithPrefix(chalk.bold.cyan("info:")),
-  debug : writeWithPrefix(chalk.bold.green("debug:"))
+  error : taggedWrite(TAG.ERROR),
+  warn  : taggedWrite(TAG.WARN),
+  info  : taggedWrite(TAG.INFO),
+  debug : taggedWrite(TAG.DEBUG),
+  log   : console.log
 }
       
 const arg = {
   parse: function(args) {
     let parser = new Command();
+    let input = "";
     parser.exitOverride();
     parser.storeOptionsAsProperties(false)
       .name(release.name)  
@@ -84,21 +106,26 @@ const arg = {
       .helpOption('-h, --help', 'Display this help message')
       .option('-d, --debug', "Output debug info")
       .option('-s, --silent', "Hide all output")
+      .option('-stat, --print-statistics', 'Print performance statistics on exit')
       .arguments('<input>').action( (input) => {
         let abs = path.normalize(process.cwd() + '/' + input);
         if ( !fileExists(abs))
-          log.error('Could not find file `' + abs + `'`).exit(2);
+          log.error('Could not find file `' + abs + `'`).exit(0);
+        this.input = abs 
       });
       
       try {
-        parser.parse(args, { from: 'electron'})
+        parser.parse(args)
+        if ( parser.opts().debug)
+          settings.MODE = mode.debug
       } catch(err) {
         app.exit(0); //exit with 0 to avoid verbose output when `npm start`
       }
     
     return {
-      argc: Object.keys(parser.opts()).length,
-      argv: parser.opts()
+      noptions : Object.keys(parser.opts()).length,
+      options  : parser.opts(),
+      input    : this.input
     }
   }
 }
