@@ -1,13 +1,16 @@
-//===-- util/fs.js ----------------------------------------------===//
+/**==-- util/fs.js ----------------------------------------------===//
 //
 // Part of the kerma project
 //
 //===------------------------------------------------------------===//
 //
+// @file util/fs.js 
+// @module fs
+// @description 
 // This module includes filesystem utilities. It mostly wraps 
 // around and combines nodejs's fs and path functionality
 //
-//===------------------------------------------------------------===/
+//===------------------------------------------------------------===*/
 'use strict'
 
 const fs      = require('fs')

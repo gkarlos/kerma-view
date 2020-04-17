@@ -5,4 +5,4 @@ if [ ! -f $jsdoc ]; then
   exit
 fi
 
-$jsdoc -c $KERMA_VIEW_ROOT/docs/conf.json $KERMA_VIEW_ROOT/src
+$jsdoc --debug -c $KERMA_VIEW_ROOT/conf.json -d $KERMA_VIEW_ROOT/docs/dev

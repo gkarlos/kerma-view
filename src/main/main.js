@@ -7,7 +7,6 @@ const BrowserWindow   = electron.BrowserWindow;
 const menu            = electron.Menu;
 const dialog          = electron.dialog;
 const ipcMain         = electron.ipcMain;
-const chalk           = require("chalk")
 const release         = require('../common/release')
 const cl              = require("../util/cl");
 const arg             = cl.arg
@@ -18,7 +17,7 @@ const perf            = require('./perf')
 
 app.args = arg.parse.list(process.argv, (error, result) => {
   if ( error)
-    arg.parse.defaultErrorHandler()
+    arg.parse.defaultErrorHandler(error)
   cl.verbose(0, "Kerma-View v" + app.getVersion() + " | " + settings.build + "." + process.arch + "\n")
   return result;
 })
