@@ -1,48 +1,62 @@
 'use strict'
 
-const electron        = require('electron');
-const app             = electron.app
+const electron = require('electron');
+const app      = electron.app
 
-const mode = {
-  debug : "debug",
+const build = {
+  dev : "dev",
   release : "release"
 }
 
 const defaults = {
-  WINDOW_WIDTH: 1600,
-  WINDOW_HEIGHT: 1080,
-  KERMAD_EXECUTABLE: "kermad",
-  MODE : mode.release
+  window : { width : 1600, height : 1080 },
+  kermadExecutable : "kermad",
+  build   : build.release,
+  editor : {
+    ace : {
+      theme : 'ace/theme/github',
+      mode : 'ace/mode/c_cpp'
+    }
+  }
 }
 
 const settings = {
-  VERBOSE_LEVEL   : 1,
-  SCREEN_WIDTH    : false,
-  SCREEN_HEIGHT   : false,
-  WINDOW_WIDTH    : defaults.WINDOW_WIDTH,
-  WINDOW_HEIGHT   : defaults.WINDOW_HEIGHT,
-  MODE            : defaults.MODE,
-  SHOW_DEBUG_TAGS : true
+  verbose : 0,
+  screen  : { width : 0, height : 0 },
+  window  : { width : defaults.window.width, height : defaults.window.height },
+  build   : defaults.build,
+  cl      : { 
+    tags  : true,
+    color : true
+  },
+  silent  : false,
+  debug   : false,
+  color   : true
 }
 
-function inDebugMode() { 
-  return settings.MODE === mode.debug;
+function inDebugMode() {
+  return this.settings.debug;
 }
 
-function inReleaseMode() {
-  return settings.MODE === mode.debug;
+function isDevBuild() { 
+  return settings.build === build.dev;
+}
+
+function isReleaseBuild() {
+  return settings.build === build.release;
 }
 
 function configure() {
-  settings.SCREEN_WIDTH  = electron.screen.getPrimaryDisplay().workAreaSize.width;
-  settings.SCREEN_HEIGHT = electron.screen.getPrimaryDisplay().workAreaSize.height;
+  settings.screen.width  = electron.screen.getPrimaryDisplay().workAreaSize.width;
+  settings.screen.height = electron.screen.getPrimaryDisplay().workAreaSize.height;
+  // TODO set window size based on screen size
 }
 
 function dumpLaunchConfiguration() {
-  if ( !inDebugMode())
-    return;
-  let log = require('../util/cl').log
-  log.debug("Configuration: ", {
+  const cl = require('../util/cl')
+
+  let fn = settings.debug? cl.debug : cl.info;
+  fn("Configuration: ", {
     system : {
       platform : process.platform,
       version  : process.getSystemVersion(),
@@ -51,21 +65,22 @@ function dumpLaunchConfiguration() {
         free :  process.getSystemMemoryInfo().free.toString() + 
                 " (" + ((process.getSystemMemoryInfo().free / process.getSystemMemoryInfo().total) * 100).toFixed(1) + " %)"
       },
-      screen : settings.SCREEN_WIDTH + "x" + settings.SCREEN_HEIGHT
+      screen : settings.screen.width + "x" + settings.screen.height
     },
     app : {
       args : { "Input" : app.args.input, "Options" : app.args.options },
-      window : settings.WINDOW_WIDTH + "x" + settings.WINDOW_HEIGHT
+      window : settings.screen.width + "x" + settings.screen.height
     }
   })
 }
 
 module.exports = {
   defaults,
-  mode,
+  build,
   settings,
   configure,
   inDebugMode,
-  inReleaseMode,
+  isDevBuild,
+  isReleaseBuild,
   dumpLaunchConfiguration
 }
