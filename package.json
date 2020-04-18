@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "electron": "^8.2.1",
-    "jsdoc": "^3.6.4"
+    "jsdoc": "^3.6.4",
+    "minami": "^1.2.3"
   }
 }

@@ -9,15 +9,14 @@ const dialog          = electron.dialog;
 const ipcMain         = electron.ipcMain;
 const release         = require('../common/release')
 const cl              = require("../util/cl");
-const arg             = cl.arg
 const config          = require("../common/config")
 const settings        = config.settings
 const perf            = require('./perf')
 
 
-app.args = arg.parse.list(process.argv, (error, result) => {
+app.args = cl.parse.list(process.argv, (error, result) => {
   if ( error)
-    arg.parse.defaultErrorHandler(error)
+    cl.parse.defaultErrorHandler(error)
   cl.verbose(0, "Kerma-View v" + app.getVersion() + " | " + settings.build + "." + process.arch + "\n")
   return result;
 })

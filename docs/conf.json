@@ -1,0 +1,18 @@
+{
+  "plugins"   : ["plugins/markdown"],
+  "templates" : {
+    "monospaceLinks" : true,
+    "cleverlinks": true,
+    "showInheritedInNav": true,
+    "useLongnameInNav" : true,
+    "systemName" : "KermaView"
+  },
+  "source" : {
+    "include" : ["./src/"]
+  },
+  "opts": {
+    "recurse": true,
+    "destination": "./docs/dev",
+    "template" : "node_modules/minami"
+  }
+}

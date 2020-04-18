@@ -1,13 +1,33 @@
+/** /---------------------------------------------------------------/
+ * @file common/config.js
+ * @fileoverview
+ *  Part of the kerma project
+ * @author gkarlos 
+ * @module common/config
+ * @description 
+ * App configuration. Includes settings and relavant utilities
+ *  
+ *//**-------------------------------------------------------------*/
 'use strict'
 
 const electron = require('electron');
 const app      = electron.app
 
+/**
+ * Build types
+ * @namespace
+ */
 const build = {
+  /** */
   dev : "dev",
+  /** */
   release : "release"
 }
 
+/**
+ * The default settings
+ * @namespace
+ */
 const defaults = {
   window : { width : 1600, height : 1080 },
   kermadExecutable : "kermad",

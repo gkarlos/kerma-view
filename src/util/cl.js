@@ -29,35 +29,32 @@ const {isNumber,
 
 
 /**
- * Available tags for command line logging
- * @namespace
- */
-const tags = {
-  info  : { id : 0, text : "info:",   color : color.bold.cyan},
-  warn  : { id : 1, text : "warn:",   color : color.bold.yellow },
-  error : { id : 2, text : "error:",  color : color.bold.red },
-  debug : { id : 3, text : "[debug]", color : color.bold.blackBright},
-  cl    : { id : 4, text : "cl:",     color : color.bold }
-}
-
-
-/**
  * Base class for command line related errors
  */
 class CLError extends Error { 
   constructor(msg) { super(msg)} 
 }
 
-/**
- * Indicates that a file is not found
- */
-class FileNotFoundError extends CLError { 
-  constructor(file) { super(`Could not find file '${file}'`)} 
+/** Error indicating a file wasn't found */
+class FileNotFoundError extends CLError {
+  /**
+   * @constructor
+   * @class FileNotFoundError
+   * @param {*} filename - the name of the file
+   */
+  constructor(filename) { super(`Could not find file '${filename}'`) }
 }
 
+// /**
+//  * Indicates that a file is not found
+//  */
+// class FileNotFoundError extends CLError { 
+//   constructor(file) { super(`Could not find file '${file}'`)} 
+// }
+
 
 /**
- * @private
+ * Construct a default command-line parser
  */
 const createParser = () => 
   new Command()
@@ -76,6 +73,18 @@ const createParser = () =>
           throw new FileNotFoundError(abs);
         this.input = abs 
       })
+
+/**
+ * Available tags for command line logging
+ * @namespace
+ */
+const tags = {
+  info  : { id : 0, text : "info:",   color : color.bold.cyan},
+  warn  : { id : 1, text : "warn:",   color : color.bold.yellow },
+  error : { id : 2, text : "error:",  color : color.bold.red },
+  debug : { id : 3, text : "[debug]", color : color.bold.blackBright},
+  cl    : { id : 4, text : "cl:",     color : color.bold }
+}
 
 /**
  * Generic console write function. 
@@ -160,142 +169,143 @@ const maybeExit = {
   }
 }
 
+
+
+
 /**
- * @namespace
+ * Write an error message
+ * 
+ * @param {*} msg  - The error message
+ * @param {*} more - (Optional) Additional details
+ * @param {*} subtag - (Optional) A subtag to be appended after 'error;'
+ * @example
+ *  error("an error") 
  */
-var cl = {
-  /**
-   * 
-   * @param {*} msg 
-   * @param {*} more 
-   * @param {*} subtag 
-   */
-  error : function(msg, more, subtag) {
-    write(msg, tags.error, subtag, more)
-    return maybeExit;
-  }
-  
-  ,
+function error(msg, more, subtag) {
+  write(msg, tags.error, subtag, more)
+  return maybeExit;
+}
 
-  /**
-   * 
-   * @param {*} msg 
-   * @param {*} more 
-   * @param {*} subtag 
-   * @static
-   */
-  warn : function(msg, more, subtag) {
-    write(msg, tags.warn, subtag, more);
-    return maybeExit;
-  }
+/**
+ * Write a warning message
+ * 
+ * @static
+ * @param {*} msg 
+ * @param {*} more 
+ * @param {*} subtag 
+ */
+function warn(msg, more, subtag) {
+  write(msg, tags.warn, subtag, more);
+  return maybeExit;
+}
 
-  ,
+/**
+ * Write a debug message
+ * 
+ * @static
+ * @param {*} msg 
+ * @param {*} more 
+ * @param {*} subtag 
+ */
+function debug(msg, more, subtag) {
+  write(msg, tags.debug, subtag, more);
+  return maybeExit;
+}
 
-  /**
-   * 
-   * @param {*} msg 
-   * @param {*} more 
-   * @param {*} subtag 
-   * @static
-   */
-  debug : function(msg, more, subtag) {
-    write(msg, tags.debug, subtag, more);
-    return maybeExit;
-  }
+/**
+ * Write an info message
+ * 
+ * @static
+ * @param {*} msg 
+ * @param {*} more 
+ * @param {*} subtag 
+ */
+function info(msg, more, subtag) {
+  write(msg, tags.info, subtag, more);
+  return maybeExit;
+}
 
-  ,
-  
-  /**
-   * 
-   * @param {*} msg 
-   * @param {*} more 
-   * @param {*} subtag 
-   * @static
-   */
-  info : function(msg, more, subtag) {
-    write(msg, tags.info, subtag, more);
-    return maybeExit;
-  }
-
-  ,
-
-  verbose : function(level, msg) {
-    if ( !settings.silent && level <= settings.verbose )
-      write(msg)
-  }
-
-  ,
-
-  /**
-   * @namespace
-   */
-  arg : {
-    /**
-     * @namespace
-     */
-    parse : {
-      /**
-       * Parse command line arguments from a list
-       * @member
-       * @param {*} args 
-       * @param {*} callback 
-       */
-      list: function(args, callback) {
-        let err, clparser = createParser(), result = {}
-        
-        try {
-          clparser.parse(args)
-          settings.debug = clparser.opts().debug
-          settings.color = clparser.opts().color
-          result.noptions = Object.keys(clparser.opts()).length
-          result.options  = clparser.opts()
-          result.input    = clparser.input
-        } catch(e) {
-          err = e
-        }
-
-        if ( callback) // let callback (if one exists) to decide what to do
-          return callback(err, result)
-        
-        return err? defaultErrorHandler(err) : result;
-      }
-      
-      ,
-
-      /**
-       * Parse command line arguments from a string
-       * @param {*} str 
-       * @param {*} callback 
-       */
-      raw : function(str, callback) {
-        this.list(str.split(' '), callback);
-      }
-      
-      ,
-
-      /**
-       * Default handler when a command line argument parsing error occurs
-       * 
-       * @param {*} err 
-       */
-      defaultErrorHandler : function(err) {
-        if ( err) {
-          if ( err instanceof CLError)
-            cl.error(err.message, null, tags.cl);
-          else if ( err instanceof CommanderError) {
-            // commander.js logs the error without the option to 
-            // override the behavior. So for now we do not print 
-            // anything to avoid duplicate messages
-            // https://github.com/tj/commander.js/issues/1241 
-          } else {
-            error(err)
-          }
-        }
-        app.exit(0);
-      }
-    }
-  }
+/**
+ * Raw write that depends on the application's
+ * verbosity level. 
+ * @see {@link settings.verbose}
+ * @param {*} level 
+ * @param {*} msg 
+ * @static
+ */
+function verbose(level, msg) {
+  if ( level <= settings.verbose)
+    write(msg)
 }
 
 
-module.exports = cl
+
+
+/** @namespace */
+const parse = {}
+
+/**
+ * Parse command line arguments from a list
+ * @member
+ * @param {*} args 
+ * @param {*} callback 
+ */
+parse.list = function(args, callback) {
+  let err, clparser = createParser(), result = {}
+  
+  try {
+    clparser.parse(args)
+    settings.debug = clparser.opts().debug
+    settings.color = clparser.opts().color
+    result.noptions = Object.keys(clparser.opts()).length
+    result.options  = clparser.opts()
+    result.input    = clparser.input
+  } catch(e) {
+    err = e
+  }
+
+  if ( callback) // let callback (if one exists) to decide what to do
+    return callback(err, result)
+  
+  return err? defaultErrorHandler(err) : result;
+}
+      
+
+/**
+ * Parse command line arguments from a string
+ * @param {*} str 
+ * @param {*} callback 
+ */
+parse.raw = function(str, callback) {
+  this.list(str.split(' '), callback);
+}
+
+/**
+ * Default handler when a command line argument parsing error occurs
+ * 
+ * @param {*} err 
+ */
+parse.defaultErrorHandler = function(err) {
+  if ( err) {
+    if ( err instanceof CLError)
+      error(err.message, null, tags.cl);
+    else if ( err instanceof CommanderError) {
+      // commander.js logs the error without the option to 
+      // override the behavior. So for now we do not print 
+      // anything to avoid duplicate messages
+      // https://github.com/tj/commander.js/issues/1241 
+    } else {
+      error(err)
+    }
+  }
+  app.exit(0);
+}
+module.exports = {
+  CLError,
+  FileNotFoundError,
+  error, warn, info, debug, verbose,
+  parse
+}
+
+
+// module.exports = cl

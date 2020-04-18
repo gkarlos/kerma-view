@@ -5,7 +5,7 @@
 //===------------------------------------------------------------===//
 //
 // @file util/error.js 
-// @module cl
+// @module util/error
 // @description 
 // This module includes error handling utilities
 // @author gkarlos
