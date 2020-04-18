@@ -4,5 +4,6 @@ package-lock.json
 
 docs/*
 !docs/conf.json
+!docs/README.md
 
 *.log
