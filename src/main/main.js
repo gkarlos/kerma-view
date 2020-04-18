@@ -12,6 +12,7 @@ const cl              = require("../util/cl");
 const config          = require("../common/config")
 const settings        = config.settings
 const perf            = require('./perf')
+const devtools        = require('../util/devtools')
 
 
 app.args = cl.parse.list(process.argv, (error, result) => {
@@ -21,14 +22,48 @@ app.args = cl.parse.list(process.argv, (error, result) => {
   return result;
 })
 
+/**
+ * Perform necessary setup before window.ready
+ */
 function setup() {
-  config.configure()  
+  config.configure() 
   config.dumpLaunchConfiguration()
 }
 
+/**
+ * Creates the main window
+ */
+function createMainWindow() {
+  let win = new BrowserWindow({
+    width : settings.window.width, height : settings.window.height,
+    webPreferences : {
+      nodeIntegration : true
+    },
+    icon : path.join(__dirname, '../../', 'assets', 'icon-48.png')
+  })
+
+  win.setVibrancy('ultra-dark') // TODO read more
+
+  if ( settings.debug)
+    devtools.open(win, true,true);
+
+  win.on('close', () => {
+    cl.debug('Closing main window')
+  })
+
+  return win;
+}
+
+let mainWindow = null;
+
 app.on("ready", () => {
-  setup();
-  app.quit()
+  setup()
+
+  try {
+    mainWindow = createMainWindow();
+  } catch ( error) {
+    cl.error(error).exit(0);
+  }
 });
 
 app.on('before-quit',function()
@@ -45,6 +80,5 @@ app.on('will-quit', function () {
 });
 
 app.on("quit", () => {
-  cl.info("Quiting...")
   perf.dumpPerformanceStats();
 })

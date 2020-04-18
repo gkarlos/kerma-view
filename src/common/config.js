@@ -69,7 +69,6 @@ function isReleaseBuild() {
 function configure() {
   settings.screen.width  = electron.screen.getPrimaryDisplay().workAreaSize.width;
   settings.screen.height = electron.screen.getPrimaryDisplay().workAreaSize.height;
-  // TODO set window size based on screen size
 }
 
 function dumpLaunchConfiguration() {
@@ -91,7 +90,7 @@ function dumpLaunchConfiguration() {
       args : { "Input" : app.args.input, "Options" : app.args.options },
       window : settings.screen.width + "x" + settings.screen.height
     }
-  })
+  }, true)
 }
 
 module.exports = {
