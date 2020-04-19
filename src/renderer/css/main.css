@@ -1,0 +1,143 @@
+img#logo {
+    height : 40px;
+    width : 40px;
+}
+
+.navbar {
+    height : 5vh;
+}
+
+body, html {
+    width : 100vw;
+    height : 100vh;
+    overflow: none;
+}
+
+.container-fluid {
+    height: 95vh;
+}
+
+
+
+.main-row {
+    height: 100%;
+}
+
+.global-memory-vis {
+    height: 75%;
+    border: 2px;
+    border-style: solid;
+    border-color: black;
+}
+
+.shared-memory-vis {
+    height: 25%;
+    border: 2px;
+    border-style: solid;
+    border-color: greenyellow;
+}
+
+.global-info {
+    height : 15%;
+    border : 2px;
+    border-style: solid;
+    border-color: slateblue;
+}
+
+.current-selection-info {
+    height : 15%;
+    border : 2px;
+    border-style: solid;
+    border-color: blueviolet;
+}
+
+.local-memory-vis {
+    height : 35%;
+    border : 2px;
+    border-style: solid;
+    border-color: olive;
+}
+
+.constant-memory-vis {
+    height : 35%;
+    border : 2px;
+    border-style: solid;
+    border-color: olivedrab;
+}
+
+
+
+.left-column {
+    padding : 0;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+    left: 0;
+    right :0;
+}
+
+.vis-row {
+    height : 100%;    
+}
+
+.vis-col {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+#kernelEditor {
+    /* border: 1px solid black; */
+    margin-bottom: 2px;
+    margin-top: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+#driverEditor {
+    /* border: 1px solid black; */
+    margin-bottom: 2px;
+    margin-top: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+#driver-editor-collapse-wrapper {
+    padding: 0;
+}
+
+.kernel-editor-wrapper, .driver-editor-wrapper {
+    margin-bottom: 4px;
+}
+
+.container-fluid {
+  padding-left : 0;
+  padding-right: 0;
+}
+
+/* ::-webkit-scrollbar {     
+    background-color: #fff;
+    width: .8em
+} */
+
+/* ::-webkit-scrollbar-thumb:window-inactive,
+::-webkit-scrollbar-thumb {
+    background:  black
+} */
+
+#log-container { overflow: auto; height: 150px; }
+
+.log-warn { color: orange }
+.log-error { color: red }
+.log-info { color: skyblue }
+.log-log { color: silver }
+
+.log-warn, .log-error { font-weight: bold; }
+
+#log-container-collapse-wrapper {
+    padding-left: 2px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

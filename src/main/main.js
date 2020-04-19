@@ -47,6 +47,8 @@ function createMainWindow() {
   if ( settings.debug)
     devtools.open(win, true,true);
 
+  win.setMenuBarVisibility(false)
+  win.loadFile(path.join(__dirname, "../", "renderer", "index.html"))
   win.on('close', () => {
     cl.debug('Closing main window')
   })

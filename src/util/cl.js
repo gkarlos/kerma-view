@@ -265,8 +265,6 @@ parse.list = function(args, callback) {
     result.noptions = Object.keys(clparser.opts()).length
     result.options  = clparser.opts()
     result.input    = clparser.input
-
-    console.log(clparser.opts())
   } catch(e) {
     err = e
   }
