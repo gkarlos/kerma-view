@@ -20,10 +20,9 @@ const path       = require('path')
 const {Command, 
        CommanderError} = require('commander')
 const release    = require('../common/release')
-const config     = require('../common/config')
-const defaults   = config.defaults
-const settings   = config.settings
-const build      = config.build
+const settings   = require('../common/settings')
+const defaults   = settings.defaults
+const build      = settings.Builds
 const fileExists = require('../util/fs').fileExists
 const dirExists  = require('../util/fs').dirExists
 const {isNumber, 

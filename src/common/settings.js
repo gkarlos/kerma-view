@@ -13,31 +13,38 @@
  *-----------------------------------------------------------------*/
 'use strict'
 
-
-
-/**
- * @property {object}  defaults               - The default values for parties.
- * @property {number}  defaults.players       - The default number of players.
- * @property {string}  defaults.level         - The default level for the party.
- * @property {object}  defaults.treasure      - The default treasure.
- * @property {number}  defaults.treasure.gold - How much gold the party starts with.
- */
-var config = {
-  /** asd */
-  defaults: {
-      /** */
-      players: 1,
-      level:   'beginner',
-      treasure: {
-          gold: 0
-      }
-  }
-};
-
 // /** 
 //  * Default values for (some of) the settings
 //  * @namespace
 //  * 
+
+/**
+ * Available builds types
+ * @namespace
+ */
+const Builds = {
+  /** */
+  dev : "dev",
+  /** */
+  release : "release"
+}
+
+/**
+ * @namespace
+ */
+const SupportedEditors = {
+  ace : {
+    name : "ace",
+    theme : 'ace/theme/github',
+    mode : 'ace/mode/c_cpp'
+  },
+
+  monaco : {
+    name : "monaco",
+    theme : "TODO",
+    mode : "TODO"
+  }
+}
 
 /** 
  * Default settings 
@@ -49,7 +56,7 @@ var config = {
  * @property {string} kermadExecutable
  * @property {string} build 
  */
-defaults = {
+const defaults = {
   verbose : 0,
   /** */
   window : { 
@@ -58,12 +65,23 @@ defaults = {
     height : 1080 
   },
   kermadExecutable : "kermad",
-  build  : build.release,
+  build  : Builds.release,
   editor : "ace"
 }
 
-class XClass {
+/** Check whether in debug mode */
+function inDebugMode() {
+  return settings.debug;
+}
 
+/** Check if build type is {@link build.dev} */
+function isDevBuild() { 
+  return settings.build === build.dev;
+}
+
+/* Check if build type is {@link build.release} */
+function isReleaseBuild() {
+  return settings.build === build.release;
 }
 
 module.exports = {
@@ -74,10 +92,9 @@ module.exports = {
    */
   verbose : 0,
   screen  : { 
-    width : 0, 
-    height : 0 
+    width : 0,
+    height : 0
   },
-
   window  : { 
     width : defaults.window.width, 
     height : defaults.window.height 
@@ -94,11 +111,15 @@ module.exports = {
 }
 
 module.exports.defaults = defaults
+module.exports.Builds = Builds
+module.exports.SupportedEditors = SupportedEditors
 
 /**
  * Restore the settings back the the defaults; as
- * define by {@link settings.defaults}
+ * defined by {@link settings.defaults}
  */
 module.exports.resetDefaults = function () {
-
+  this.verbose = this.defaults.verbose
+  this.screen = this.defaults.screen
+  // TODO finish me
 }

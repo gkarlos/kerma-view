@@ -1,6 +1,6 @@
-const app    = require('electron').app
-const config = require('../common/config.js')
-const cl     = require('../util/cl')
+const app      = require('electron').app
+const cl       = require('../util/cl')
+const settings = require('../common/settings') 
 
 function dumpPerformanceStats() {
   if ( !app.args)
@@ -13,7 +13,7 @@ function dumpPerformanceStats() {
       iocounters : process.getIOCounters(),
     }
 
-    if ( config.inDebugMode())
+    if ( settings.inDebugMode())
       cl.debug("Performance Stats:", stats)
     else 
       cl.info("Performance Stats:", stats)

@@ -15,10 +15,7 @@
 
 const settings = require("../common/config").settings
 
-function configure() {
-  settings.screen.width  = electron.screen.getPrimaryDisplay().workAreaSize.width;
-  settings.screen.height = electron.screen.getPrimaryDisplay().workAreaSize.height;
-}
+
 
 function dumpLaunchConfiguration() {
   const cl = require('../util/cl')

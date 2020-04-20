@@ -14,5 +14,5 @@ $(() => {
   // editor = ace.edit('editor')
   // $('#editor').text('int main(int x){}')
 
-  editor = new Editor(2);
+  editor = new Editor('editor');
 })

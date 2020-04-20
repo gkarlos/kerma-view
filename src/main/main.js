@@ -1,3 +1,16 @@
+/**--main/main.js-----------------------------------------------------/
+ *
+ * Part of the kerma project
+ * 
+ *------------------------------------------------------------------/
+ * 
+ * @file main/main.js
+ * @author gkarlos 
+ * @module main/main
+ * @description 
+ *   The main/entry-point module
+ *  
+ *-----------------------------------------------------------------*/
 'use strict';
 
 const electron        = require('electron');
@@ -9,8 +22,7 @@ const dialog          = electron.dialog;
 const ipcMain         = electron.ipcMain;
 const release         = require('../common/release')
 const cl              = require("../util/cl");
-const config          = require("../common/config")
-const settings        = config.settings
+const settings        = require('../common/settings')
 const perf            = require('./perf')
 const devtools        = require('../util/devtools')
 
@@ -23,15 +35,19 @@ app.args = cl.parse.list(process.argv, (error, result) => {
 })
 
 /**
- * Perform necessary setup before window.ready
+ * Perform configuration steps.
+ * Must only be called after `app.ready`
  */
-function setup() {
-  // config.configure() 
-  // config.dumpLaunchConfiguration()
+function configure() {
+  settings.screen.width  = electron.screen.getPrimaryDisplay().workAreaSize.width;
+  settings.screen.height = electron.screen.getPrimaryDisplay().workAreaSize.height;
 
-  const u = require('util')
-
-  u.cl.error("WTF")
+  if ( settings.window.width > settings.screen.width)
+    settings.window.width = settigs.screen.width
+  if ( settings.window.height > settings.screen.height)
+    settings.window.height = settings.screen.height
+  
+  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true //TODO Remove and fix
 }
 
 /**
@@ -63,7 +79,7 @@ function createMainWindow() {
 let mainWindow = null;
 
 app.on("ready", () => {
-  setup()
+  configure()
 
   try {
     mainWindow = createMainWindow();
