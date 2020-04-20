@@ -1,7 +1,18 @@
+const {Editor} = require('./editor')
+
 console.log("In the renderer")
 
-const ace = require('ace-builds/src-noconflict/ace')
+window.$ = window.jQuery = require('jquery');
 
-var editor = ace.edit('editor')
+const ace = require("../../node_modules/ace-builds/src-noconflict/ace")
 
-console.log(editor)
+let editor;
+
+console.log("Setting the value")
+
+$(() => {
+  // editor = ace.edit('editor')
+  // $('#editor').text('int main(int x){}')
+
+  editor = new Editor(2);
+})

@@ -1,15 +1,19 @@
-/** /---------------------------------------------------------------/
+/**--util/cl.js-----------------------------------------------------/
+ *
+ * Part of the kerma project
+ * 
+ *------------------------------------------------------------------/
+ * 
  * @file util/cl.js
- * @fileoverview
- *  Part of the kerma project
  * @author gkarlos 
  * @module util/cl
  * @description 
- * Command line utilities such us logging and argument parsing. 
- * Moreover it defines a standard arg parser for the application
+ *   Command line utilities such us logging and argument parsing. 
+ *   Moreover it defines a standard arg parser for the application
  *  
- *//**-------------------------------------------------------------*/
+ *-----------------------------------------------------------------*/
 'use strict'
+
 const app        = require('electron').app
 const color      = require("cli-color")
 const path       = require('path')
@@ -27,23 +31,10 @@ const {isNumber,
        isArray, 
        isObject} = require('./traits')
 const inspect    = require('util').inspect
+const {
+  CLError,
+  FileNotFoundError }  = require('../util/error')
 
-/**
- * Base class for command line related errors
- */
-class CLError extends Error { 
-  constructor(msg) { super(msg)} 
-}
-
-/** Error indicating a file wasn't found */
-class FileNotFoundError extends CLError {
-  /**
-   * @constructor
-   * @class FileNotFoundError
-   * @param {*} filename - the name of the file
-   */
-  constructor(filename) { super(`Could not find file '${filename}'`) }
-}
 
 // /**
 //  * Indicates that a file is not found
@@ -292,16 +283,11 @@ parse.raw = function(str, callback) {
  */
 parse.defaultErrorHandler = function(err) {
   if ( err) {
-    if ( err instanceof CLError)
-      error(err.message, null, tags.cl);
-    else if ( err instanceof CommanderError) {
-      // commander.js logs the error without the option to 
-      // override the behavior. So for now we do not print 
-      // anything to avoid duplicate messages
-      // https://github.com/tj/commander.js/issues/1241 
-    } else {
-      error(err)
-    }
+    // commander.js logs the error without the option to 
+    // override the behavior. So for now we do not print 
+    // anything to avoid duplicate messages
+    // https://github.com/tj/commander.js/issues/1241 
+    (err instanceof CommanderError) || error(err);
   }
   app.exit(0);
 }

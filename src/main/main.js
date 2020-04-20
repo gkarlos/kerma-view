@@ -26,8 +26,12 @@ app.args = cl.parse.list(process.argv, (error, result) => {
  * Perform necessary setup before window.ready
  */
 function setup() {
-  config.configure() 
-  config.dumpLaunchConfiguration()
+  // config.configure() 
+  // config.dumpLaunchConfiguration()
+
+  const u = require('util')
+
+  u.cl.error("WTF")
 }
 
 /**
@@ -41,11 +45,11 @@ function createMainWindow() {
     },
     icon : path.join(__dirname, '../../', 'assets', 'icon-48.png')
   })
-
+  win.setPosition(0, 0);
   win.setVibrancy('ultra-dark') // TODO read more
 
   if ( settings.debug)
-    devtools.open(win, true,true);
+    devtools.open(win, true, true);
 
   win.setMenuBarVisibility(false)
   win.loadFile(path.join(__dirname, "../", "renderer", "index.html"))
