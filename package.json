@@ -24,8 +24,7 @@
     "docs:read": "run-script-os",
     "docs:read:linux": "KERMA_VIEW_ROOT=$(pwd) ./scripts/read-the-docs.sh",
     "docs:read:windowns": "powershell Invoke-Item docs/dev/index.html",
-    "clean": "run-script-os",
-    "clean:linux": "./scripts/clean.sh",
+    "clean": "node scripts/clean.js",
     "deps": "node scripts/build-external-deps.js"
   },
   "dependencies": {
@@ -37,6 +36,7 @@
     "monaco-editor": "^0.20.0",
     "monaco-loader": "^1.0.0",
     "npm-scripts-tree": "^1.4.1",
+    "rimraf": "^3.0.2",
     "run-script-os": "^1.1.1"
   },
   "devDependencies": {
