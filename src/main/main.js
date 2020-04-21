@@ -57,7 +57,8 @@ function createMainWindow() {
   let win = new BrowserWindow({
     width : settings.window.width, height : settings.window.height,
     webPreferences : {
-      nodeIntegration : true
+      nodeIntegration : true,
+      nodeIntegrationInWorker: true
     },
     icon : path.join(__dirname, '../../', 'assets', 'icon-48.png')
   })

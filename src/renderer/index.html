@@ -5,33 +5,44 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'all'"> -->
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
-    
-    <script> 
-
-
-      // if (typeof module === 'object')
-      //   window.module = module; module = undefined;
-      
-      // window.$ = window.jQuery           = require('jquery');
-      // require('./renderer.js')
-      // require('bootstrap');
-
-      // if (window.module) 
-      //   module = window.module;
-      // 
-      require('./renderer.js')
-    </script>
     <!-- <link rel="import" href="static/html/blog-post.html" id="templates"> -->
 
     <title>KermaView</title>
 
-    <style type="text/css" media="screen">
-
-  </style>
+    <style type="text/css" media="screen"></style>
   </head>
 
   <body>
+    <!-- navigation -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark static-top">
+
+    </nav><!-- navigation end -->
+    
+    <!-- container -->
+    <div name="container" class="container-fluid">
+      <div class="row main-row"> <!-- main row start -->
+        
+        <!-- left column -->
+        <div class="col-lg-3 col-md-6 left-column" style="background-color:rgb(255, 255, 255);">
+          
+          <div id="kernel-editor" style="height: 500px; width: 500px">
+          </div>
+          
+          <div id="host-editor">
+            asd
+          </div>
+        </div>
+        
+        <!-- rest start -->
+        <div class="col-lg-9 col-md-6 container-fluid" style="background-color:rgb(253, 253, 253);">
+        </div>
+
+      </div>
+    </div>
+
     <div>Hello</div>
     <div id="editor"></div>
+    <script src="renderer.js"> </script>
   </body>
+  
 </html>
