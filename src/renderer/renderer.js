@@ -4,7 +4,7 @@ console.log("In the renderer")
 
 window.$ = window.jQuery = require('jquery');
 
-const ace = require("../../node_modules/ace-builds/src-noconflict/ace")
+
 
 let editor;
 
