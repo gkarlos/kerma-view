@@ -56,6 +56,7 @@ class Editor {
     this.ace_ = null
     this.location_ = location
     this.loaded_ = false
+    this.contents_ = null;
   }
 
   /** Load the Editor into the DOM */
@@ -64,6 +65,8 @@ class Editor {
     this.ace_.getSession().setOption('useWorker', false)
     this.ace_.getSession().setMode('ace/mode/javascript')
     this.ace_.setTheme('ace/theme/monokai')
+    if ( this.content_ )
+      this.ace_.setValue(this.content_)
     this.loaded_ = true;
   }
 
@@ -78,7 +81,9 @@ class Editor {
    * */
   setContent(content) {
     //TODO error check param
-    this.ace_.setValue(content);
+    this.content_ = content;
+    if ( this.loaded_)
+      this.ace_.setValue(content);
     return this;
   }
 
@@ -112,7 +117,58 @@ class Editor {
 
 }
 
+// function loadMonaco() {
+//   const loader = require('monaco-loader')
+ 
+//   loader().then((monaco) => {
+//     let editor = monaco.editor.create(document.getElementById('host-editor'), {
+//       language: 'javascript',
+//       theme: 'vs-dark',
+//       automaticLayout: true
+//     })
+
+//     editor.se
+//   })
+// }
+
+class MonacoEditor {
+  constructor() {
+    const path = require('path');
+    const amdLoader = require('../../node_modules/monaco-editor/min/vs/loader.js');
+    const amdRequire = amdLoader.require;
+    const amdDefine = amdLoader.require.define;
+
+    function uriFromPath(_path) {
+      var pathName = path.resolve(_path).replace(/\\/g, '/');
+      if (pathName.length > 0 && pathName.charAt(0) !== '/') {
+        pathName = '/' + pathName;
+      }
+      return encodeURI('file://' + pathName);
+    }
+
+    amdRequire.config({
+      baseUrl: uriFromPath(path.join(__dirname, '../../node_modules/monaco-editor/min'))
+    });
+
+    // workaround monaco-css not understanding the environment
+    self.module = undefined;
+
+    amdRequire(['vs/editor/editor.main'], function() {
+      var editor = monaco.editor.create(document.getElementById('host-editor'), {
+        value: [
+          'function x() {',
+          '\tconsole.log("Hello world!");',
+          '}'
+        ].join('\n'),
+        language: 'javascript',
+        theme: 'vs-dark'
+      });
+    });
+  }
+}
+
 module.exports = {
   Position,
-  Editor
+  Editor,
+  MonacoEditor
 }
