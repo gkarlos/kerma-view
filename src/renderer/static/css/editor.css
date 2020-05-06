@@ -1,0 +1,40 @@
+
+.gutter-glyph-memory-read {
+    background-color: lightgreen;
+}
+
+.gutter-glyph-memory-write {
+    background-color: brown;
+}
+
+.gutter-glyph-memory-read-write {
+    background: linear-gradient(to right, lightgreen 0%, lightgreen 50%, brown 50%, brown 100%);
+}
+
+.editor-kernel-line-decoration {
+	background-color: rgb(61, 165, 197);
+	width: 5px !important;
+	margin-left: 3px;
+}
+
+.editor-kernel-line-highlight {
+    background-color: rgba(197, 197, 197, 0.2);
+}
+
+.editor-kernel-line-highlight-first {
+    background-color: rgba(197, 197, 197, 0.2);
+    border: 1px solid black;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.editor-kernel-line-highlight-last {
+    background-color: rgba(197, 197, 197, 0.2);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.editor-kernel-line-highlight-both {
+    background-color: rgba(197, 197, 197, 0.2);
+    border-radius: 3px;
+}

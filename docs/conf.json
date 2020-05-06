@@ -1,0 +1,28 @@
+{
+  "plugins"   : ["plugins/markdown"],
+  "templates" : {
+    "monospaceLinks" : true,
+    "cleverlinks": true,
+    "showInheritedInNav": true,
+    "useLongnameInNav" : true,
+    "name" : "KermaView Source Documentation",
+    "logo" : {
+      "url" : "./assets/icon-48.png",
+      "width": "40px",
+      "height": "40px",
+      "link": "https://github.com/nhnent/tui.jsdoc-template"
+    },
+
+    "footerText": "My awesome footer text"
+
+  },
+  "source" : {
+    "include" : ["./src/"]
+  },
+  "opts": {
+    "recurse": true,
+    "destination": "./docs/dev",
+    "template": "node_modules/cpb-jsdoc-template"
+  }
+}
+
