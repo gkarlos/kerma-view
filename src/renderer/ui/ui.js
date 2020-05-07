@@ -6,7 +6,7 @@ module.exports = (app) => {
   
   const ui = {
     layout : require('./layout')(app),
-    numComponents : 1, 
+    numComponents : 2, 
     components : new Map(),
     window: window,
     split: {},
@@ -55,8 +55,8 @@ module.exports = (app) => {
   }
 
   ui.init = () => {
-    let uiComponentsReady = () => ui.components.size === ui.numComponents
-                               && [...ui.components.values()].reduce((accu, component) => accu & component.ready)
+    let uiComponentsReady = () => ui.components.size == ui.numComponents
+                               && [...ui.components.values()].reduce((accu, component) => accu & component.ready, true)
     
     ui.layout.init()
     
@@ -65,7 +65,7 @@ module.exports = (app) => {
         throw new InternalError(`Unregistered component '${component.name}' is ready`)
 
       ui.components.get(component).ready = true
-
+      
       if ( uiComponentsReady())
         ui.emit('components-ready')
     })

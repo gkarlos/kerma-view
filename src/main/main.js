@@ -26,6 +26,7 @@ const fs              = require("../util/fs")
 const settings        = require('../common/settings')
 const perf            = require('./perf')
 const devtools        = require('../util/devtools')
+const ProgressBar     = require('electron-progressbar')
 
 app.allowRendererProcessReuse = false
 
@@ -150,26 +151,39 @@ function createMainWindow() {
   return win;
 }
 
+function createProgressBar() {
+  return new ProgressBar({
+    text: "",
+    detail: "",
+    browserWindow: {
+      transparent: true,
+      frame: false,
+			webPreferences: {
+				nodeIntegration: true
+			}
+    }
+  });
+}
+
 function registerShortcuts() {
   require('./shortcuts')(app)
 }
 
 app.on("ready", () => {
+  var progressBar = createProgressBar()
+
   preConfigure()
 
-  let loading = createLoadingWindow()
+  // let loading = createLoadingWindow()
 
   let mainWindow = createMainWindow();
 
   configure()
 
-  loading.show()
-  
   app.windows.main.webContents.once('dom-ready', () => {
-    loading.hide()
     app.windows.main = mainWindow
-    app.windows.main.show()
-    loading.close()
+    progressBar.setCompleted()
+    setTimeout(() => app.windows.main.show(), 300)    
   })
 
 

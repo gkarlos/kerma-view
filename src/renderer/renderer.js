@@ -20,15 +20,11 @@ $(() => {
 
   ui.init()
 
-  require("./components/editor/editor")(app)
   require("./components/selectors/kernel-selector")(app)
   require("./components/selectors/launch-selector")(app)
-
+  require("./components/editor/editor")(app)
   // TODO https://developer.snapappointments.com/bootstrap-select/
-
   
-
-
   require("./components/input-file-dialog")(app)
   require('./components/info-button')(app)
   
@@ -39,7 +35,7 @@ $(() => {
    * For real data this should be triggered _after_ kermad has perfomed the initial
    * analysis to identify the kernels and their invocations
    */
-  ui.on('editor-input-loaded', () => {
+  ui.on('editor:input-loaded', () => {
     mock.kernels.forEach(kernel => {
       console.log(kernel)
       ui.selector.kernel.selectize.addOption(kernel)

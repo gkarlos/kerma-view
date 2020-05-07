@@ -40,15 +40,22 @@ module.exports = (app) => {
    */
   ui.on('editor:loaded', (ref) => {
     let monaco = ref
-    let editor = ui.editor.instance
+    // let editor = ui.editor.instance
 
     ui.editor.monaco = monaco
+  })
 
+  ui.on('input:selected', path => {
     console.log("Loading input to the editor")
-    fs.readFile(app.input.path, 'utf-8', (err, data) => {
+    app.input.path = path
+    fs.readFile(path, 'utf-8', (err, data) => {
       app.input.content = data
-      editor.setValue(data);
-      ui.emit('editor-input-loaded')
+      ui.editor.instance.setValue(data);
+      console.log("READ THE FILE")
+      setTimeout(() => {
+        ui.emit('editor:input-loaded')
+      }, 1000)
+      
     })
   })
 
@@ -57,7 +64,8 @@ module.exports = (app) => {
   /*
    * Monaco finished loading the input file
    */
-  ui.on('editor-input-loaded', () => {
+  ui.on('editor:input-loaded', () => {
+    console.log("ok here")
     if ( DUMMYDATA.kernels.length == 0)
       return;
     

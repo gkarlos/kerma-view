@@ -1,5 +1,10 @@
-- Electron
-- Monaco
+## Events
+
+#### UI
+- `ui:resize`
+- `ui:input-selected`
+### Editor
+- `editor:input-loaded`
 
 ------
 IDEAS:

@@ -35,6 +35,6 @@ module.exports = (app) => {
   ui.emit('component-ready', infoButton)
 
   $(infoButton.node).on('click', () => {
-    app.showAboutPanel({todo: "TODO"})
+    app.showAboutPanel()
   })
 }
