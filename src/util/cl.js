@@ -51,12 +51,13 @@ const createParser = () => {
    .option('-s, --silent', "Hide all output", false)
    .option('-c, --color', "Monochrome output", true)
    .option('-stat, --print-statistics', 'Print performance statistics on exit')
-   .arguments('<input>').action( (input) => {
-     let abs = path.normalize(process.cwd() + '/' + input);
-     if ( !fileExists(abs))
-      throw new FileNotFoundError(abs);
-     p.input = abs;
-     settings.input = abs
+   .arguments('[input]').action( (input) => {
+     if ( settings.cl.requireInput) {
+        let abs = path.normalize(process.cwd() + '/' + input);
+        if ( !fileExists(abs))
+          throw new FileNotFoundError(abs);
+        p.input = abs;
+     }
     })
   return p;
 }

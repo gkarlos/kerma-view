@@ -28,7 +28,11 @@ const perf            = require('./perf')
 const devtools        = require('../util/devtools')
 const ProgressBar     = require('electron-progressbar')
 
+const session = require('../session').session
+
 app.allowRendererProcessReuse = false
+
+session()
 
 // console.log
 app.windows = {
@@ -36,15 +40,21 @@ app.windows = {
   loading: null,
 }
 
+app.input = {
+  path : null,
+  content: null
+}
+
 app.args = cl.parse.list(process.argv, (error, result) => {
   if ( error)
     cl.parse.defaultErrorHandler(error)
   cl.verbose(0, `Kerma-View v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"--debug":""}\n`)
 
-  app.input = {}
-  app.input.path = settings.input
-  app.input.content = fs.readFileSync( app.input.path, "utf-8")
-  
+  if ( result.input) {
+    app.input.path = result.input
+    app.input.content = fs.readFileSync( app.input.path, "utf-8")
+    
+  }
   return result;
 })
 

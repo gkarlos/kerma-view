@@ -102,7 +102,8 @@ module.exports = {
   build   : defaults.build,
   cl      : { 
     tags  : true,
-    color : true
+    color : true,
+    requireInput : false
   },
   silent  : false,
   debug   : false,

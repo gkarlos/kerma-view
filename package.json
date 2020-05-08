@@ -24,7 +24,9 @@
     "docs:read": "run-script-os",
     "docs:read:linux": "KERMA_VIEW_ROOT=$(pwd) ./scripts/read-the-docs.sh",
     "docs:read:windows": "powershell Invoke-Item docs/dev/index.html",
-    "clean": "node scripts/clean.js",
+    "clean": "run-script-os",
+    "clean:linux": "rm -rf docs/dev && rm -rf node_modules",
+    "clean:windows": "rm node_modules",
     "deps": "node scripts/build-external-deps.js"
   },
   "dependencies": {
