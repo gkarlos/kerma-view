@@ -46,6 +46,11 @@ require("./components/editor/editor")(app)
 require("./components/input-file-dialog")(app)
 require('./components/info-button')(app)
 
+function createNewSession() {
+  app.session = app.sessionManager.createNew()
+  ui.emit('session:new')
+}
+
 $(() => {
   /**
    * Once the source is loaded into the editor, load the dummy data to the list
@@ -75,8 +80,6 @@ $(() => {
     }
   })
 
-  $("#top-refresh-button").tooltip({placement : 'bottom'});
-
   let m = new Memory("myArray", "int")
 
   $('#button-add-memory').on('click', () => {
@@ -86,9 +89,27 @@ $(() => {
     m.render('#heatmap-example')
   })
 
+  $("#top-refresh-button").tooltip({placement : 'bottom'});
   $('#top-refresh-button').on('click', () => {
     ui.reload()
   })
+  
+  ui.on('session:killed', () => {
+    if ( app.session)
+      console.log(`[info] session: killed: ${app.session.id}`)
+  })
+
+  ui.on('session:new', () => {
+    console.log(`[info] session: new: ${app.session.id}`)
+  })
+
+  $("#top-restart-session-button").tooltip({placement: 'bottom'})
+  $("#top-restart-session-button").on("click", () => {
+    ui.emit('session:killed')
+    createNewSession()
+  })
+
+
 
   function loadConsole() {
     app.session.console.loaded = true
@@ -113,4 +134,6 @@ $(() => {
    * setting like this, this is probably even reasonanble to assume.
    */
   console.log(global.editor)
+
+  createNewSession()
 })

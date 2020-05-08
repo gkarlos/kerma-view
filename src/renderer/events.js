@@ -19,3 +19,11 @@
  /**
   * @event editor:input-loaded
   */
+
+/**
+ * @event session:new
+ */
+
+/**
+ * @event session:killed
+ */

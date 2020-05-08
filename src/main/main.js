@@ -28,11 +28,7 @@ const perf            = require('./perf')
 const devtools        = require('../util/devtools')
 const ProgressBar     = require('electron-progressbar')
 
-const session = require('../session').session
-
 app.allowRendererProcessReuse = false
-
-session()
 
 // console.log
 app.windows = {
@@ -59,6 +55,8 @@ app.args = cl.parse.list(process.argv, (error, result) => {
 })
 
 app.title = `KermaView v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"[debug]":""}`
+
+app.sessionManager = require('../session').sessionManager
 
 /**
  * Perform configuration steps
@@ -195,7 +193,6 @@ app.on("ready", () => {
     progressBar.setCompleted()
     setTimeout(() => app.windows.main.show(), 300)    
   })
-
 
   // setTimeout(() => {
     // loading.once('show', () => {

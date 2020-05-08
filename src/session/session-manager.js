@@ -1,4 +1,4 @@
-/**--session/session-manager.js-----------------------------------------------------/
+/**--session/session-manager.js-------------------------------------/
  *
  * Part of the kerma project
  * 
@@ -11,13 +11,25 @@
  *    Defines a simple (for now) session manager.
  *    The SessionManager is a singleton
  *  
- *//*---------------------------------------------------------------*/
+ *//*--------------------------------------------------------------*/
 
 class SessionManager {
+  sessions = []
 
+  currentSession = null
+
+  createNew() {
+    let Session = require('./session')
+    
+    let session = new Session()
+
+    this.sessions.push(session)
+    this.currentSession = session
+
+    return session
+  }
 }
 
 const instance = new SessionManager()
-Object.freeze(instance)
 
-module.exports = () => instance;
+module.exports = instance;
