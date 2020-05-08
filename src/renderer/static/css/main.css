@@ -21,6 +21,12 @@
     display: none;
 }
 
+/* Bootstrap changes */
+
+.tooltip-inner {
+    max-width: none;
+}
+
 /*=---------------=*/
 
 /* Specific tags   */

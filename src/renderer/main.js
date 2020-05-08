@@ -75,7 +75,7 @@ $(() => {
     }
   })
 
-  $("#top-refresh-button").tooltip({placement : 'top'});
+  $("#top-refresh-button").tooltip({placement : 'bottom'});
 
   let m = new Memory("myArray", "int")
 

@@ -144,6 +144,7 @@ module.exports = (app) => {
     }).then(res => {
       if ( res.filePaths.length) {
         ifdialog.selectFile(res.filePaths[0])
+        ifdialog.enableOkButton()
       }
     })
   })
@@ -161,6 +162,8 @@ module.exports = (app) => {
   ui.on('editor:input-loaded', () => {
     console.log("releasing ok button")
     ifdialog.okButtonLoadingStop()
+    ifdialog.disableOkButton()
+    ifdialog.node.attr("title", ifdialog.selectedFile).tooltip( {placement : 'bottom', container: "body", id: "yeyeye"})
   })
 
   ui.emit('component-ready', ifdialog)
