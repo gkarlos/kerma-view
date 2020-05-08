@@ -1,10 +1,14 @@
 ## Events
 
+#### Editor
+- `editor:loaded` - Monaco editor loaded
+- `editor:input-loaded` - Editor has loaded a file and is displaying its contents
+#### Input
+- `input:loaded`
 #### UI
 - `ui:resize`
 - `ui:input-selected`
-### Editor
-- `editor:input-loaded`
+
 
 ------
 IDEAS:

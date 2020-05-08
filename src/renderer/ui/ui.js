@@ -77,6 +77,7 @@ module.exports = (app) => {
     })
   
     ui.window.addEventListener('resize', e => ui.emit('ui:resize'))
+    return ui;
   }
 
   return ui;

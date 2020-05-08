@@ -6,17 +6,12 @@
  * 
  * @file common/settings.js
  * @author gkarlos 
- * @module common/settings
+ * @module settings
  * @description 
  *   Global app settings
  *  
  *-----------------------------------------------------------------*/
 'use strict'
-
-// /** 
-//  * Default values for (some of) the settings
-//  * @namespace
-//  * 
 
 /**
  * Available builds types

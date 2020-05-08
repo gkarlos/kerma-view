@@ -33,7 +33,7 @@ module.exports = (app) => {
     ui.emit('editor:loaded', monaco)
   });
   
-  ui.on('editor:loaded', status => console.log(`Monaco Loaded with status: ${status.message}`))
+  ui.on('editor:loaded', status => console.log(`Monaco Loaded with status:`, status))
 
   /*
    * Monaco finished loading
@@ -51,11 +51,7 @@ module.exports = (app) => {
     fs.readFile(path, 'utf-8', (err, data) => {
       app.input.content = data
       ui.editor.instance.setValue(data);
-      console.log("READ THE FILE")
-      setTimeout(() => {
-        ui.emit('editor:input-loaded')
-      }, 1000)
-      
+      setTimeout(() => ui.emit('editor:input-loaded'), 500)
     })
   })
 

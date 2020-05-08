@@ -1,10 +1,29 @@
+/**--util/cl.js-----------------------------------------------------/
+ *
+ * Part of the kerma project
+ * 
+ *------------------------------------------------------------------/
+ * 
+ * @file renderer/main.js
+ * @author gkarlos
+ * @module renderer/main
+ * @description 
+ *   Main entry of the renderer process
+ * 
+ *   The following steps are performed:
+ * 
+ *   - {@link app.ui} is initialized and components are loaded
+ *  
+ *//*---------------------------------------------------------------*/
+ 'use-strict'
+
 const app              = require('electron').remote.app
 const remote           = require('electron').remote;  
 const settings         = remote.getGlobal('settings')
 const mock             = require('../mock/cuda-source')
 const {Memory}         = require('./components/memory')
 
-/** Some Globals  */
+/* Some Globals  */
 const $ = window.$ = window.jQuery = require('jquery');
 require('popper.js')
 require('bootstrap')
@@ -14,22 +33,20 @@ require('bootstrap')
 
 // ui.on('ui:reload', () => require("./components/editor/editor")(app))
 
+/**
+ * A reference to `app.ui`
+ */
+const ui = app.ui = require('./ui/ui')(app).init()
+
+require("./components/selectors/kernel-selector")(app)
+require("./components/selectors/launch-selector")(app)
+require("./components/editor/editor")(app)
+// TODO https://developer.snapappointments.com/bootstrap-select/
+
+require("./components/input-file-dialog")(app)
+require('./components/info-button')(app)
+
 $(() => {
-
-  const ui = app.ui = require('./ui/ui')(app)
-
-  ui.init()
-
-  require("./components/selectors/kernel-selector")(app)
-  require("./components/selectors/launch-selector")(app)
-  require("./components/editor/editor")(app)
-  // TODO https://developer.snapappointments.com/bootstrap-select/
-  
-  require("./components/input-file-dialog")(app)
-  require('./components/info-button')(app)
-  
-
-
   /**
    * Once the source is loaded into the editor, load the dummy data to the list
    * For real data this should be triggered _after_ kermad has perfomed the initial

@@ -5,16 +5,11 @@
     "cleverlinks": true,
     "showInheritedInNav": true,
     "useLongnameInNav" : true,
-    "name" : "KermaView Source Documentation",
-    "logo" : {
-      "url" : "./assets/icon-48.png",
-      "width": "40px",
-      "height": "40px",
-      "link": "https://github.com/nhnent/tui.jsdoc-template"
+    "logo": {
+      "type": "text",
+      "src":  "KermaView Source"
     },
-
-    "footerText": "My awesome footer text"
-
+    "footer": "Part of the Kerma project"
   },
   "source" : {
     "include" : ["./src/"]
@@ -22,7 +17,8 @@
   "opts": {
     "recurse": true,
     "destination": "./docs/dev",
-    "template": "node_modules/cpb-jsdoc-template"
+    "title": "KermaView",
+    "template": "node_modules/@kdominic/dkdoc"
   }
 }
 

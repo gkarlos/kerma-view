@@ -11,7 +11,7 @@
  *   Command line utilities such us logging and argument parsing. 
  *   Moreover it defines a standard arg parser for the application
  *  
- *-----------------------------------------------------------------*/
+ *//*---------------------------------------------------------------*/
 'use strict'
 
 const app        = require('electron').app
@@ -33,15 +33,6 @@ const inspect    = require('util').inspect
 const {
   CLError,
   FileNotFoundError }  = require('../util/error')
-
-
-// /**
-//  * Indicates that a file is not found
-//  */
-// class FileNotFoundError extends CLError { 
-//   constructor(file) { super(`Could not find file '${file}'`)} 
-// }
-
 
 /**
  * Construct a default command-line parser
@@ -73,13 +64,19 @@ const createParser = () => {
 
 /**
  * Available tags for command line logging
+ * 
  * @namespace
  */
 const tags = {
+  /** info tag    */
   info  : { id : 0, text : "info:",   color : color.bold.cyan},
+  /** warning tag */
   warn  : { id : 1, text : "warn:",   color : color.bold.yellow },
+  /** error tag   */
   error : { id : 2, text : "error:",  color : color.bold.red },
+  /** debug tag   */
   debug : { id : 3, text : "[debug]", color : color.bold.blackBright},
+  /** cl tag      */
   cl    : { id : 4, text : "cl:",     color : color.bold }
 }
 
@@ -90,9 +87,9 @@ const tags = {
  * 
  * In silent mode only `tags.debug` is printed
  * 
- * @param {*} msg - The message to print
- * @param {*} tag - (optional) A tag to prefix the message with
- * @param {*} subtag - (optional) A subtag to follow the tag. Ignored if no tag is provided
+ * @param {string} msg - The message to print
+ * @param {string} tag - (optional) A tag to prefix the message with
+ * @param {string} subtag - (optional) A subtag to follow the tag. Ignored if no tag is provided
  * @param {*} more - (optional) Additional details. Will be printed on a new line
  * @param {boolean} expand - (optional) Expand internal objects if applicable
  */
@@ -124,9 +121,10 @@ function write(msg, tag=null, subtag=null, more=null, expand=false) {
 }
 
 /**
- * Utility class returned by logging functions. 
+ * Utility class returned by logging functions.
+ * 
  * It allows to chain an exit() call after the
- * call, e.g: 
+ * call, e.g:
  * ```js
  *  cl.error("something bad happened").exit(0);
  * ```
@@ -142,17 +140,15 @@ const maybeExit = {
 }
 
 
-
-
 /**
- * Write an error message
+ * Write an error message.
  * 
  * @param {*} msg  - The error message
  * @param {*} more - (Optional) Additional details
  * @param {*} expand
  * @param {*} subtag - (Optional) A subtag to be appended after 'error;'
- * @example
- *  error("an error") 
+ * @example 
+ *   error("an error") 
  */
 function error(msg, more, expand, subtag) {
   write(msg, tags.error, subtag, more, expand)

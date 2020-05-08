@@ -1,5 +1,11 @@
+/**
+ * @file input-file-dialog.js
+ */
 const Component = require('./component')
 
+/**
+ * @class
+ */
 class InputFileDialog extends Component {
   constructor( id, container, prompt) {
     super()
@@ -71,7 +77,6 @@ class InputFileDialog extends Component {
 
   okButtonLoadingStart() {
     this.okButtonLoading = true
-    console.log("LOADING START")
     this.okButton.innerHTML = this.okButtonContentLoading
     this.disableOkButton()
   }
@@ -80,6 +85,12 @@ class InputFileDialog extends Component {
     this.okButton.innerHTML = this.okButtonContent
     this.enableOkButton()
     this.okButtonLoading = false
+  }
+
+  selectFile(path) {
+    this.selectedFile = path
+    this.browseInput.value = this.selectedFile
+    this.enableOkButton()
   }
 
   render() {
@@ -99,24 +110,22 @@ class InputFileDialog extends Component {
       )
       
       this.node.css("margin-left", "10px")
-              .css("float", "left")
-              .css("width", "50%")
+               .css("float", "left")
+               .css("width", "50%")
 
       this.node.appendTo(this.container)
+
       this.rendered = true;
     }
 
     return this;
   }
-
-  selectFile(path) {
-    this.selectedFile = path
-    this.browseInput.value = this.selectedFile
-    this.enableOkButton()
-  }
 }
 
-
+/**
+ * @event testEvent
+ * @fires testEvent
+ */
 module.exports = (app) => {
   const {dialog} = require('electron').remote
 
@@ -129,7 +138,7 @@ module.exports = (app) => {
   ifdialog.render()
   ifdialog.disable() // disable file selection until the editor is ready
 
-  ifdialog.browseButton.addEventListener('click', (e) => {
+  ifdialog.browseButton.addEventListener('click', e => {
     dialog.showOpenDialog({
       properties: ['openFile']
     }).then(res => {
@@ -139,7 +148,7 @@ module.exports = (app) => {
     })
   })
 
-  ifdialog.okButton.addEventListener('click', (e) => {
+  ifdialog.okButton.addEventListener('click', e => {
     ifdialog.disableBrowseInput()
     ifdialog.okButtonLoadingStart()
     ui.emit('input:selected', ifdialog.selectedFile)
