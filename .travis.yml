@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+  - node_modules
+script:
+  - npm install
+  - chmod +x ./scripts/build-the-docs.sh
+  - npm run docs:build
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_API_KEY
+  local_dir: docs/dev
+  on:
+    branch: master
