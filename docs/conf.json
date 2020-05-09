@@ -1,15 +1,23 @@
 {
   "plugins"   : ["plugins/markdown"],
   "templates" : {
+    "tabNames": {
+      "api": "API",
+      "tutorials": "Examples"
+    },
+    "name": "KermaView",
     "monospaceLinks" : true,
     "cleverlinks": true,
     "showInheritedInNav": true,
     "useLongnameInNav" : true,
+    "useCollapsibles": true,
     "logo": {
-      "type": "text",
-      "src":  "KermaView Source"
+      "url": "https://miro.medium.com/max/1400/1*OtfM8fdvOaIT3OlaUfZBjw.jpeg",
+      "width": "150px",
+      "height": "13px",
+      "link": "https://github.com/nhnent/tui.jsdoc-template"
     },
-    "footer": "Part of the Kerma project"
+    "footerText": "Part of the Kerma-Project"
   },
   "source" : {
     "include" : ["./src/"]
@@ -18,7 +26,7 @@
     "recurse": true,
     "destination": "./docs/dev",
     "title": "KermaView",
-    "template": "node_modules/@kdominic/dkdoc"
+    "template": "node_modules/tui-jsdoc-template"
   }
 }
 
