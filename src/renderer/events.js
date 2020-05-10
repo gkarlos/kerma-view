@@ -5,25 +5,23 @@
  *------------------------------------------------------------------/
  * 
  * @file renderer/events.js
+ * @module renderer/events
  * @author gkarlos 
  * @description 
- *   This file does not include any source code. Its only purpose
- *   is to document the available global events
+ *   This module includes all the available events
  *  
  *//*--------------------------------------------------------------*/
 
-/**
- * @event editor:loaded
- */
+module.exports = {
+  /** @event */UI_RESIZE : "ui:resize",
+  /** @event */UI_COMPONENT_READY: "ui:component-ready",
 
- /**
-  * @event editor:input-loaded
-  */
+  /** @event */EDITOR_LOADED : "editor:loaded",
+  /** @event */EDITOR_INPUT_LOADED: "editor:input-loaded",
+  /** @event */EDITOR_TAB_SELECTED: "editor:tab-selected",
 
-/**
- * @event session:new
- */
-
-/**
- * @event session:killed
- */
+  /** @event */INPUT_SELECTED: "input:selected",
+  
+  /** @event */SESSION_NEW : "session:new",
+  /** @event */SESSION_KILLED: "session:killed"
+}

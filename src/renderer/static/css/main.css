@@ -57,6 +57,10 @@ body {
     box-shadow: 0 0px 3px 1px;
 }
 
+#top-toolbar-left, #top-toolbar-right {
+    width: 50%
+}
+
 
 #file-select-group {
     padding: 0px;

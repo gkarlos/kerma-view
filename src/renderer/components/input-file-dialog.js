@@ -14,7 +14,7 @@ class InputFileDialog extends Component {
     this.node = null;  
     this.prompt = prompt || ""
     this.enabled = true
-    this.name = `InputFileDialog[id: ${id}]`
+    this.name = `InputFileDialog[${id}]`
     this.browseButtonId = `${id}-browse-button`
     this.browseInputId = `${id}-browse-input`
     this.okButtonId = `${id}-ok-button`
@@ -110,6 +110,7 @@ class InputFileDialog extends Component {
       )
       
       this.node.css("margin-left", "10px")
+               .css("margin-right", "3px")
                .css("float", "left")
                .css("width", "50%")
 

@@ -1,3 +1,16 @@
+/**--renderer/main.js---------------------------------------------------/
+ *
+ * Part of the kerma project
+ * 
+ *------------------------------------------------------------------/
+ * 
+ * @file main/main.js
+ * @author gkarlos 
+ * @module main/main
+ * @description 
+ *   The main/entry-point module
+ *  
+ *-----------------------------------------------------------------*/
 var initialized = false;
 
 module.exports = (app) => {
@@ -5,40 +18,45 @@ module.exports = (app) => {
   const Split = require('split.js')
 
   const layout = {
-    header : {
-      selector : "#top-toolbar",
-      node: null
-    }
-    ,
-    main : {
-      selector : "#main",
+    container : {
+      selector : "#container",
       node : null,
-      split : null,
 
-      left  : {
-        selector : "#left",
-        node: null,
-        split: null,
-
-        top : {
-          selector : "#left-top",
-          node : null
+      header : {
+        selector : "#header",
+        node: null
+      }
+      ,
+      main : {
+        selector : "#main",
+        node : null,
+        split : null,
+  
+        left  : {
+          selector : "#left",
+          node: null,
+          split: null,
+  
+          top : {
+            selector : "#left-top",
+            node : null
+          },
+          bottom : {
+            selector : "#left-bottom",
+            node : null
+          }
         },
-        bottom : {
-          selector : "#left-bottom",
-          node : null
-        }
-      },
-
-      right : {
-        selector : "#right",
-        node: null,
-      },
-    }
-    ,
-    footer : {
-      selector : "#footer",
-      node : null
+  
+        right : {
+          selector : "#right",
+          node: null,
+        },
+      }
+      ,
+      footer : {
+        selector : "#footer",
+        node : null
+      }
     }
   }
 

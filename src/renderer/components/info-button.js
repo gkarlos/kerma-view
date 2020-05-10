@@ -6,7 +6,7 @@ class InfoButton extends Component {
     this.id = id
     this.container = container
     this.node = null
-    this.name = "InfoButtom"
+    this.name = `InfoButton[${this.id}]`
   }
 
   render() {
