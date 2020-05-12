@@ -83,16 +83,16 @@ function defaultCreate(app) {
   const ui     = app.ui
   const editor = new Editor('editor', '#left-top', app).render()
 
-  /*
-   * Monaco finished loading
-   */
-  ui.on(Events.EDITOR_LOADED, monaco => {
+  let on = (event, cb) => ui.on(event, cb)
+
+  // Monaco finished loading
+  on(Events.EDITOR_LOADED, monaco => {
     ui.editor.monaco = monaco
     ui.emit(Events.UI_COMPONENT_READY, editor)
   })
 
   // User selected a file so load it to the editor
-  ui.on(Events.INPUT_FILE_SELECTED, path => {
+  on(Events.INPUT_FILE_SELECTED, path => {
     console.log("[info] Loading input to the editor")
     app.input.path = path
     fs.readFile(path, 'utf-8', (err, data) => {
@@ -103,11 +103,10 @@ function defaultCreate(app) {
     })
   })
 
-  ui.on(Events.UI_RESIZE, () => ui.editor.instance && app.ui.editor.instance.layout())
+  on(Events.UI_RESIZE, () => ui.editor.instance && app.ui.editor.instance.layout())
 
   // Monaco finished loading the input file
-  ui.on(Events.EDITOR_INPUT_LOADED, () => {
-    // console.log("dummydata", DUMMYDATA)
+  on(Events.EDITOR_INPUT_LOADED, () => { 
     if ( mock.kernels.length == 0)
       return;
   
@@ -127,9 +126,7 @@ function defaultCreate(app) {
     editor.instance.deltaDecorations([], decorations)
   })
 
-  /**
-   * Force resize monaco with window resize
-   */
+  // Force resize monaco with window resize
   window.addEventListener('resize', () => {
     if ( editor.instance)
       editor.instance.layout()

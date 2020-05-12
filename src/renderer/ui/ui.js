@@ -41,6 +41,10 @@ module.exports = (app) => {
     ready : false,
     on : UIEmitter.on,
     emit : UIEmitter.emit,
+    once: UIEmitter.once,
+    eventNames: UIEmitter.eventNames,
+    removeAllListeners: UIEmitter.removeAllListeners,
+    removeListener: UIEmitter.removeListener,
     reload : () => {
       console.log("RELOAD")
       app.windows.main.webContents.reload()
@@ -91,6 +95,11 @@ module.exports = (app) => {
     require("../components/editor").defaultCreate(app)
     require("../components/MainToolbar").defaultCreate(app)
     // require("../components/selectors/launch-selector")(app)
+
+    ui.on(Events.UI_READY, () => {
+      console.log(ui.eventNames())
+    })
+    
   })
   return ui;
 }

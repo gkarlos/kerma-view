@@ -1,6 +1,5 @@
 const Component = require('./component')
-const KernelSelector = require('./selectors/KernelSelector')
-const Events = require('./../events')
+const Events    = require('./../events')
 
 class MainToolbar extends Component {
   constructor(id, container, app) {
@@ -30,9 +29,12 @@ class MainToolbar extends Component {
     `).appendTo(this.container)
     
     // create the kernel selection dropdown
-    this.kernelSelector = KernelSelector.defaultCreate('select-kernel', '#kernel-launch-selection-row', this.app)
+    this.kernelSelector = require('./selectors/KernelSelector')
+                            .defaultCreate('select-kernel', '#kernel-launch-selection-row', this.app)
     
     // create the launch selection dropdown
+    this.kernelLaunchSelector = require('./selectors/KernelLaunchSelector')
+                                  .defaultCreate('select-kernel-launch', '#kernel-launch-selection-row', this.app)
 
     this.rendered = true
     this.app.ui.emit(Events.UI_COMPONENT_READY, this);

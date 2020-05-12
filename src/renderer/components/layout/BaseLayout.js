@@ -63,7 +63,7 @@ class BaseLayout extends Component {
    * Materialize the layout components, and place the root node {@link this.node} into the DOM
    */
   render() {
-    throw new InternalError("Cannot invoke abstract method BaseLayout.container")
+    throw new InternalError("Cannot invoke abstract method BaseLayout.render")
   }
 
   /**
