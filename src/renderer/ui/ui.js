@@ -1,22 +1,25 @@
+/**
+ * This module is an aggregation of all ui elements
+ */
 module.exports = (app) => {
 
   const EventEmitter     = require('events')
   const {InternalError}  = require('../../util/error')
   const UIEmitter = new EventEmitter()
   const ElectronLayout  = require('../components/layout').ElectronLayout
-  
+  const Events          = require('../events')
+
   const ui = {
-    layout : null,
-    numComponents : 2, 
+    layout : new ElectronLayout(app),
+    numComponents : 8, 
     components : new Map(),
     window: window,
     split: {},
-    editor : {
-      instance: null,
-      monaco: null,
-      location: "editor",
-      theme : "vs-dark"
+    toolbar : {
+      main: null,
+      session: null
     },
+    editor : null,
     selector : {
       kernel : {
         instance : null,
@@ -30,10 +33,12 @@ module.exports = (app) => {
       }
     },
     console : {
+      button: null,
       instance : null,
       loaded: false,
       visible: false
     },
+    ready : false,
     on : UIEmitter.on,
     emit : UIEmitter.emit,
     reload : () => {
@@ -50,46 +55,42 @@ module.exports = (app) => {
     return component
   }
 
-  // For now we let the ui register its layout itself
-  // Just to be consistent with layout being a component
-  // Until some other mechanism is implemented
-  ui.layout = new ElectronLayout(ui)
-  ui.registerComponent(ui.layout)
-  ui.emit('component-ready', ui.layout)
-
-  function uiComponentsRendered() {
-    console.log("size", ui.components.size)
-    return ui.components.size == 2
-  }
-
-  let uiComponentsReady = () => 
-       ui.components.size == ui.numComponents
+  let uiComponentsReady = () => (ui.components.size === ui.numComponents)
     && [...ui.components.values()].reduce((accu, component) => accu & component.ready, true)
 
-  ui.on('component-ready', (component) => {
+  ui.on('ui:component-ready', (component) => {
     if ( !ui.components.has(component))
       throw new InternalError(`Unregistered component '${component.name}' is ready`)
-      
+    
     ui.components.get(component).ready = true
     
     if ( uiComponentsReady())
-      ui.emit('components-ready')
+      ui.emit('ui:components-ready')
   })
 
-  ui.on('components-ready', () => {
+  ui.on('ui:components-ready', () => {
     console.groupCollapsed("[info] ui: ready")
     console.log(ui.components)
     console.groupEnd()
+    ui.ready = true
+    ui.emit(Events.UI_READY)
   })
 
+  // Load all components once DOM is ready
+  // It may be an optimization to load some
+  // components before document.ready but
+  // for now loading times are good enough
   $(() => { 
-    ui.layout.render() 
-    require('../components/console-button')(app)
-    require('../components/refresh-button')(app)
-    require("../components/input-file-dialog")(app)
-    require("../components/session-control-toolbar")(app)
-    require('../components/info-button')(app)
-    require("../components/editor")(app)
+    ui.layout.render()
+
+    require('../components/ConsoleButton').defaultCreate(app)
+    require('../components/RefreshButton').defaultCreate(app)
+    require("../components/InputFileDialog").defaultCreate(app)
+    require("../components/SessionControlToolbar").defaultCreate(app)
+    require('../components/InfoButton').defaultCreate(app)
+    require("../components/editor").defaultCreate(app)
+    require("../components/MainToolbar").defaultCreate(app)
+    // require("../components/selectors/launch-selector")(app)
   })
   return ui;
 }

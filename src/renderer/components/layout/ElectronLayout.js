@@ -29,13 +29,13 @@ class ElectronLayout extends BaseLayout {
    * @param {string} [name] A name for this layout
    * @param {Object} [ui] A reference to the UI this layout is part of
    * */
-  constructor(ui, name="ElectronLayout") {
-    if ( !ui)
-      throw new InternalError("Layout requires a UI reference but none was passed")
+  constructor(app, name="ElectronLayout") {
+    if ( !app)
+      throw new InternalError("Layout requires an app reference but none was passed")
 
     super(name)
 
-    this.ui = ui;
+    this.app = app;
     this.rendered = false;
 
     /**
@@ -100,6 +100,8 @@ class ElectronLayout extends BaseLayout {
         node : null,
       }
     }
+
+
   }
 
   /**
@@ -141,6 +143,8 @@ class ElectronLayout extends BaseLayout {
   render() {
     if ( this.rendered )
       return console.log(`[warn] Layout [${this.name}] is already rendered. This is a no-op`)
+
+    this.app.ui.registerComponent(this)
 
     /// Root
     let root = document.createElement('div')
@@ -199,13 +203,13 @@ class ElectronLayout extends BaseLayout {
     let bodyLeftTop = document.createElement('div')
     bodyLeftTop.id = "left-top"
     bodyLeftTop.classList.add("split", "w-100", "card")
-    bodyLeft.setAttribute("layout-element", "body.left.top")
+    bodyLeftTop.setAttribute("layout-element", "body.left.top")
     this.layout.body.left.top.node = bodyLeftTop
 
     let bodyLeftBottom = document.createElement('div')
     bodyLeftBottom.id = "left-bottom"
     bodyLeftBottom.classList.add("split")
-    bodyLeft.setAttribute("layout-element", "body.left.bottom")
+    bodyLeftBottom.setAttribute("layout-element", "body.left.bottom")
     this.layout.body.left.bottom.node = bodyLeftBottom
 
     bodyLeft.appendChild(bodyLeftTop)
@@ -237,7 +241,7 @@ class ElectronLayout extends BaseLayout {
     });
 
     this.rendered = true
-    this.ui.emit('layout-rendered')
+    this.app.ui.emit('ui:component-ready', this)
   }
 }
 

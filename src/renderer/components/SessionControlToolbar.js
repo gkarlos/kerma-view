@@ -1,11 +1,13 @@
 const Component = require('./component')
+const Events = require('../events')
 
-class RestartSessionButton extends Component {
-  constructor(id, container) {
+class SessionRestartButton extends Component {
+  constructor(id, container, app) {
     super()
     this.id = id
     this.name = `RestartSessionButton[${this.id}]`
     this.container = container
+    this.app = app
   }
   render() {
     if ( this.rendered )
@@ -25,11 +27,13 @@ class RestartSessionButton extends Component {
 }
 
 class SessionControlToolbar extends Component {
-  constructor(id, container) {
+  constructor(id, container, app) {
     super()
     this.id = id
     this.name = `SessionControlToolbar[${this.id}]`
     this.container = container
+    this.app = app
+    this.app.ui.registerComponent(this)
   }
   
 
@@ -42,15 +46,25 @@ class SessionControlToolbar extends Component {
 
     this.node.appendTo(this.container)
     
-    new RestartSessionButton("top-restart-session-button", `#${this.id}`).render()
+    // create the session restart button
+    this.restartSessionButton = new SessionRestartButton("top-restart-session-button", `#${this.id}`, this.app).render()
 
+    // TODO add more button
+    
     this.rendered = true
+    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
 }
 
-module.exports = (app) => {
-  let sessionControlToolbar = app.ui.registerComponent(new SessionControlToolbar("session-control-toolbar", "#top-toolbar-right"))
-  sessionControlToolbar.render()
-  app.ui.emit('component-ready', sessionControlToolbar)
+function defaultCreate(app) {
+  let sessionControlToolbar = new SessionControlToolbar("session-control-toolbar", "#top-toolbar-right", app).render()
+  // TODO app.ui.on(Events.UI_READY, ... )
+  return sessionControlToolbar
+}
+
+module.exports = {
+  SessionControlToolbar,
+  SessionRestartButton,
+  defaultCreate
 }

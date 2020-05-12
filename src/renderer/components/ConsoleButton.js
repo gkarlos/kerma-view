@@ -2,13 +2,18 @@
  * @file console-button.js
  */
 const Component = require('./component')
+const Events = require('./../events')
 
 class ConsoleButton extends Component {
-  constructor(id, container) {
+  constructor(id, container, app) {
     super()
     this.id = id
+    this.app = app
     this.name = `ConsoleButton[${this.id}]`
     this.container = container
+    this.rendered = false
+    this.app.ui.registerComponent(this)
+    this.app.ui.console.button = this
   }
 
   render() {
@@ -20,23 +25,30 @@ class ConsoleButton extends Component {
                     data-toggle="tooltip" data-placement="bottom" title="Open the terminal">
         <i class="fas fa-terminal"></i> Console
       </button>
-    `).css(
-      "margin-right", "2px"
-    )
+    `).css("margin-right", "2px")
     
     this.node.tooltip()
-    
     this.node.appendTo(this.container)
-
+    
+    // ready
     this.rendered = true
-
+    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
 }
 
+function defaultCreate(app) {
+  if ( !app)
+    throw new InternalError('ConsoleButton.defaultCreate requires an app reference and none was passed')
 
-module.exports = (app) => {
-  let consoleButton = app.ui.registerComponent(new ConsoleButton("console-toggle-button", `#top-toolbar-left`))
-  consoleButton.render()
-  app.ui.emit('component-ready', consoleButton)
+  let consoleButton = new ConsoleButton("console-toggle-button", `#top-toolbar-left`, app).render()
+
+  // TODO app.ui.on(Events.UI_READY, ... )
+  return consoleButton
+}
+
+
+module.exports = {  
+  ConsoleButton,
+  defaultCreate
 }

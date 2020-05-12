@@ -29,17 +29,12 @@ const devtools        = require('../util/devtools')
 const ProgressBar     = require('electron-progressbar')
 
 app.allowRendererProcessReuse = false
-
-// console.log
-app.windows = {
-  main: null, 
-  loading: null,
-}
-
-app.input = {
-  path : null,
-  content: null
-}
+app.root     = path.join(__dirname, "../../")
+app.iconPath = path.join(app.root, "assets", "icon-48.png")
+app.version  = require('../../package.json').version
+app.windows  = { main : null, loading: null}
+app.input    = { path : null, content: null}
+app.title    = `KermaView v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"[debug]":""}`
 
 app.args = cl.parse.list(process.argv, (error, result) => {
   if ( error)
@@ -54,7 +49,7 @@ app.args = cl.parse.list(process.argv, (error, result) => {
   return result;
 })
 
-app.title = `KermaView v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"[debug]":""}`
+
 
 app.sessionManager = require('../session').sessionManager
 

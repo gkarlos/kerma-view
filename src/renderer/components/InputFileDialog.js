@@ -2,17 +2,20 @@
  * @file input-file-dialog.js
  */
 const Component = require('./component')
+const Events = require('../events')
+const {dialog} = require('electron').remote
 
 /**
  * @class
  */
 class InputFileDialog extends Component {
-  constructor( id, container, prompt) {
+  constructor( id, container, prompt, app) {
     super()
     this.id = id;
     this.container = container;
-    this.node = null;  
     this.prompt = prompt || ""
+    this.app = app
+    this.node = null;  
     this.enabled = true
     this.name = `InputFileDialog[${id}]`
     this.browseButtonId = `${id}-browse-button`
@@ -22,6 +25,7 @@ class InputFileDialog extends Component {
     this.okButtonContent = "<i class=\"fas fa-check-circle\"></i>"
     this.okButtonContentLoading = "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>"
     this.okButtonLoading = false
+    this.app.ui.registerComponent(this)
   }
 
   disable() {
@@ -38,7 +42,7 @@ class InputFileDialog extends Component {
   }
 
   disableBrowseButton() {
-    $(`#${this.browseButtonId}`).removeClass('btn-secondary').addClass('btn-outline-secondary').prop('disabled', true)
+    $(`#${this.browseButtonId}`).prop('disabled', true)
   }
 
   enableBrowseButton() {
@@ -76,14 +80,16 @@ class InputFileDialog extends Component {
   }
 
   okButtonLoadingStart() {
+    console.log("loading start")
     this.okButtonLoading = true
     this.okButton.innerHTML = this.okButtonContentLoading
     this.disableOkButton()
   }
 
   okButtonLoadingStop() {
+    console.log("loading stop")
     this.okButton.innerHTML = this.okButtonContent
-    this.enableOkButton()
+    // this.enableOkButton()
     this.okButtonLoading = false
   }
 
@@ -93,79 +99,86 @@ class InputFileDialog extends Component {
     this.enableOkButton()
   }
 
+  /**
+   * @fires Events.UI_COMPONENT_READY
+   */
   render() {
     if ( this.rendered ) {
       console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
-    } else {
-      this.node = $(`
-        <div class="input-group input-group-sm" id="${this.id}">
-          <div class="input-group-prepend">
-            <button class="btn" type="button" id="${this.browseButtonId}">Browse&hellip;</button>
-          </div>
-          <input type="text" class="form-control" id="${this.browseInputId}" placeholder="${this.prompt}" aria-label="" aria-describedby="">
-          <div class="input-group-append" id="">
-            <button class="btn btn-info" type="button" id="${this.okButtonId}">${this.okButtonContent}</button>
-          </div>
-        </div>`
-      )
-      
-      this.node.css("margin-left", "10px")
-               .css("margin-right", "3px")
-               .css("float", "left")
-               .css("width", "50%")
-
-      this.node.appendTo(this.container)
-
-      this.rendered = true;
+      return this;
     }
 
+    this.node = $(`
+      <div class="input-group input-group-sm" id="${this.id}">
+        <div class="input-group-prepend">
+          <button class="btn btn-secondary" type="button" id="${this.browseButtonId}">Browse&hellip;</button>
+        </div>
+        <input type="text" class="form-control" id="${this.browseInputId}" placeholder="${this.prompt}" aria-label="" aria-describedby="">
+        <div class="input-group-append" id="">
+          <button class="btn btn-info" type="button" id="${this.okButtonId}">${this.okButtonContent}</button>
+        </div>
+      </div>`
+    )
+    
+    this.node.css("margin-left", "10px")
+             .css("margin-right", "3px")
+             .css("float", "left")
+             .css("width", "50%")
+
+    this.node.appendTo(this.container)
+    this.rendered = true
+
+    let ui = this.app.ui
+
+    // open file dialog when clicking "browse"
+    this.browseButton.addEventListener('click', e => {
+      this.app.ui.ready && 
+      dialog
+        .showOpenDialog({ 
+          properties: ['openFile']
+        })
+        .then(res => {
+          if ( res.filePaths.length) {
+            this.selectFile(res.filePaths[0])
+            this.enableOkButton()
+          }
+        })
+    })
+
+    this.okButton.addEventListener('click', e => {
+      this.disableBrowseButton()
+      this.disableBrowseInput()
+      this.okButtonLoadingStart()
+      ui.emit(Events.INPUT_FILE_SELECTED, this.selectedFile)
+    })
+
+    ui.on(Events.EDITOR_LOADED, () => this.enable())
+
+    ui.on(Events.EDITOR_INPUT_LOADED, () => {
+      console.log("editor loaded file XX")
+      this.okButtonLoadingStop()
+      this.disableOkButton()
+      this.node.attr("title", this.selectedFile)
+               .tooltip( {placement : 'bottom', container: "body", id: "yeyeye"})
+    }) 
+
+    // ready
+    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
     return this;
   }
 }
 
-/**
- * @event testEvent
- * @fires testEvent
- */
-module.exports = (app) => {
-  const {dialog} = require('electron').remote
-
-  let ui = app.ui
-
-  let ifdialog = ui.registerComponent(new InputFileDialog( "file-select-group", 
-                                                           "#top-toolbar-right", 
-                                                           "Select a *.cu file..."))
-
+function defaultCreate(app) {
+  let ifdialog = new InputFileDialog( "file-select-group", "#top-toolbar-right", "Select a *.cu file...", app)
+  
   ifdialog.render()
   ifdialog.disable() // disable file selection until the editor is ready
+  
+  return ifdialog
+}
 
-  ifdialog.browseButton.addEventListener('click', e => {
-    dialog.showOpenDialog({
-      properties: ['openFile']
-    }).then(res => {
-      if ( res.filePaths.length) {
-        ifdialog.selectFile(res.filePaths[0])
-        ifdialog.enableOkButton()
-      }
-    })
-  })
 
-  ifdialog.okButton.addEventListener('click', e => {
-    ifdialog.disableBrowseInput()
-    ifdialog.okButtonLoadingStart()
-    ui.emit('input:selected', ifdialog.selectedFile)
-  })
-
-  ui.on('editor:loaded', () => {
-    ifdialog.enable()
-  })
-
-  ui.on('editor:input-loaded', () => {
-    console.log("releasing ok button")
-    ifdialog.okButtonLoadingStop()
-    ifdialog.disableOkButton()
-    ifdialog.node.attr("title", ifdialog.selectedFile).tooltip( {placement : 'bottom', container: "body", id: "yeyeye"})
-  })
-
-  ui.emit('component-ready', ifdialog)
+module.exports = {
+  InputFileDialog,
+  defaultCreate
 }

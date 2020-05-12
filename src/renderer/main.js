@@ -22,9 +22,6 @@ const remote           = require('electron').remote;
 const settings         = remote.getGlobal('settings')
 const mock             = require('../mock/cuda-source')
 const {Memory}         = require('./components/memory')
-
-/* Some Globals  */
-
 require('popper.js')
 require('bootstrap')
 
@@ -38,7 +35,7 @@ require('bootstrap')
 /**
  * A reference to `app.ui`
  */
-const ui = app.ui = require('./ui/ui')(app)
+app.ui = require('./ui/ui')(app)
 
 // ui.on('ui:reload', () => require("./components/editor/editor")(app))
 
@@ -61,12 +58,6 @@ $(() => {
    * For real data this should be triggered _after_ kermad has perfomed the initial
    * analysis to identify the kernels and their invocations
    */
-  // ui.on('editor:input-loaded', () => {
-  //   mock.kernels.forEach(kernel => {
-  //     console.log(kernel)
-  //     ui.selector.kernel.selectize.addOption(kernel)
-  //   }) 
-  // })
 
   // $('#button-analyze').on('click', () => {
   //   if ( !$('#button-analyze').hasClass('btn-disabled')) {

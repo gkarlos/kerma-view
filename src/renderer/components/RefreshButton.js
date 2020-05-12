@@ -1,14 +1,17 @@
 /**
- * @file refresh-button.js
+ * @file RefreshButton.js
  */
 const Component = require('./component')
+const Events = require('../events')
 
 class RefreshButton extends Component {
-  constructor(id, container) {
+  constructor(id, container, app) {
     super()
     this.id = id
-    this.name = `RefreshButton[${this.id}]`
+    this.app = app
     this.container = container
+    this.name = `RefreshButton[${this.id}]`
+    this.app.ui.registerComponent(this)
   }
 
   render() {
@@ -26,14 +29,20 @@ class RefreshButton extends Component {
     
     this.node.appendTo(this.container)
 
+    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
     this.rendered = true
-
     return this
   }
 }
 
-module.exports = (app) => {
-  let refreshButton = app.ui.registerComponent(new RefreshButton("top-refresh-button", "#top-toolbar-left"))
-  refreshButton.render()
-  app.ui.emit('component-ready', refreshButton)
+function defaultCreate(app) {
+  let refreshButton = new RefreshButton("top-refresh-button", "#top-toolbar-left", app).render()
+
+  // TODO app.ui.on(Events.UI_READY, ...)
+  return refreshButton
+}
+
+module.exports = {
+  RefreshButton,
+  defaultCreate
 }

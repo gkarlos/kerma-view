@@ -1,14 +1,8 @@
 ## Events
 
-#### Editor
-- `editor:loaded` - Monaco editor loaded
-- `editor:input-loaded` - Editor has loaded a file and is displaying its contents
-#### Input
-- `input:loaded`
-#### UI
-- `ui:resize`
-- `ui:input-selected`
-
+In general code fired on events resides in the same file as the 'listeing' object.
+For instance if objects A and B wait for an event E, then there will be two stubs ui.on(E, ...)
+in the source files of A and B.
 
 ------
 IDEAS:
@@ -19,3 +13,5 @@ IDEAS:
 - Memory areas: https://themes.getbootstrap.com/preview/?theme_id=4974
 
 - Heatmap of the arrays accesses per thread. Example https://github.com/UsabilityEtc/d3-space-filler-explorer
+
+- https://blog.dcpos.ch/how-to-make-your-electron-app-sexy
