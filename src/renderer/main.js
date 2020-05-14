@@ -22,8 +22,7 @@ const remote           = require('electron').remote;
 const settings         = remote.getGlobal('settings')
 const mock             = require('../mock/cuda-source')
 const {Memory}         = require('./components/memory')
-require('popper.js')
-require('bootstrap')
+
 
 
 
@@ -77,12 +76,7 @@ $(() => {
 
   // let m = new Memory("myArray", "int")
 
-  // $('#button-add-memory').on('click', () => {
-  //   const {Memory} = require('./components/memory')
-  //   let m = new Memory("myArray", "int", [1024])
-  //   console.log(m)
-  //   m.render('#heatmap-example')
-  // })
+  // 
 
   // $("#top-refresh-button").tooltip({placement : 'bottom'});
   // $('#top-refresh-button').on('click', () => {

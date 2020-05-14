@@ -33,7 +33,7 @@ class SessionControlToolbar extends Component {
     this.name = `SessionControlToolbar[${this.id}]`
     this.container = container
     this.app = app
-    this.app.ui.registerComponent(this)
+    this.sessionRestartButton = new SessionRestartButton("top-restart-session-button", `#${this.id}`, this.app)
   }
   
 
@@ -42,12 +42,9 @@ class SessionControlToolbar extends Component {
     if ( this.rendered )
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
     
-    this.node = $(`<div id="${this.id}"></div>`).css('display', "inline")
+    this.node = $(`<div id="${this.id}"></div>`).css('display', "inline").appendTo(this.container)
 
-    this.node.appendTo(this.container)
-    
-    // create the session restart button
-    this.restartSessionButton = new SessionRestartButton("top-restart-session-button", `#${this.id}`, this.app).render()
+    this.sessionRestartButton.render()
 
     // TODO add more button
     
@@ -55,16 +52,22 @@ class SessionControlToolbar extends Component {
     this.app.ui.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
+
+  useDefaultControls() {
+    
+  }
 }
 
-function defaultCreate(app) {
-  let sessionControlToolbar = new SessionControlToolbar("session-control-toolbar", "#top-toolbar-right", app).render()
-  // TODO app.ui.on(Events.UI_READY, ... )
-  return sessionControlToolbar
-}
+// function defaultCreate(app) {
+//   let sessionControlToolbar = new SessionControlToolbar("session-control-toolbar", "#top-toolbar-right", app).render()
+//   // TODO app.ui.on(Events.UI_READY, ... )
+//   return sessionControlToolbar
+// }
 
-module.exports = {
-  SessionControlToolbar,
-  SessionRestartButton,
-  defaultCreate
-}
+module.exports = SessionControlToolbar
+
+// {
+//   SessionControlToolbar,
+//   SessionRestartButton,
+//   defaultCreate
+// }

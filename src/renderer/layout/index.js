@@ -17,5 +17,5 @@
  *//*--------------------------------------------------------------*/
 module.exports = {
   BaseLayout : require('./BaseLayout'),
-  ElectronLayout: require('./ElectronLayout'),
+  ElectronLayout: require('./ElectronLayout')
 }

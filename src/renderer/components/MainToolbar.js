@@ -1,5 +1,8 @@
 const Component = require('./component')
 const Events    = require('./../events')
+const KernelSelector = require('./selectors/KernelSelector')
+const KernelLaunchSelector = require('./selectors/KernelLaunchSelector')
+const CodeNavToolbar = require('./CodeNavToolbar')
 
 class MainToolbar extends Component {
   constructor(id, container, app) {
@@ -11,9 +14,11 @@ class MainToolbar extends Component {
     this.rendered = false
     this.node = null
     this.insertTo = null;
-    this.kernelSelector = null;
-    this.app.ui.registerComponent(this)
-    this.app.ui.toolbar.main = this
+    this.kernelSelector = new KernelSelector('select-kernel', '#kernel-launch-selection-row', this.app)
+    this.kernelLaunchSelector = new KernelLaunchSelector('select-kernel-launch', '#kernel-launch-selection-row', this.app);
+    this.codeNavToolbar = new CodeNavToolbar('code-nav-toolbar', '#codenav-threadselect-row', this.app, true)
+    // this.app.ui.registerComponent(this)
+    // this.app.ui.toolbar.main = this
   }
 
   render() {
@@ -25,37 +30,26 @@ class MainToolbar extends Component {
       <div id="${this.id}" class="input-group card-header">
         <div class="row selection-row d-inline-flex justify-content-between" id="kernel-launch-selection-row">
         </div>
+        <div class="row selection-row d-inline-flex justify-content-between" id="codenav-threadselect-row">
+        </div>
       <div>
     `).appendTo(this.container)
     
-    // create the kernel selection dropdown
-    this.kernelSelector = require('./selectors/KernelSelector')
-                            .defaultCreate('select-kernel', '#kernel-launch-selection-row', this.app)
-    
-    // create the launch selection dropdown
-    this.kernelLaunchSelector = require('./selectors/KernelLaunchSelector')
-                                  .defaultCreate('select-kernel-launch', '#kernel-launch-selection-row', this.app)
+    this.kernelSelector.render()
+    this.kernelLaunchSelector.render()
+    this.codeNavToolbar.render()
 
     this.rendered = true
     this.app.ui.emit(Events.UI_COMPONENT_READY, this);
     return this
   }
+
+  useDefaultControls() {
+    this.kernelSelector.useDefaultControls()
+    this.kernelLaunchSelector.useDefaultControls()
+    this.codeNavToolbar.useDefaultControls()
+    return this;
+  }
 }
 
-const defaultId       = 'editor-toolbar'
-const defaultLocation = "#left-bottom"
-
-// Create a toolbar and define the default behavior
-function defaultCreate(app) {
-  let toolbar = new MainToolbar(defaultId, defaultLocation, app).render()
-
-  // TODO app.ui.on(Events.UI_READY, ... )
-  return toolbar
-}
-
-module.exports = {
-  MainToolbar,
-  defaultId,
-  defaultLocation,
-  defaultCreate
-}
+module.exports = MainToolbar

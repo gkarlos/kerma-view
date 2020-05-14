@@ -1,24 +1,20 @@
-/**--renderer/components/selectrons/launch-selector.js--------------/
+/**--renderer/components/selectors/KernelLaunchSelector.js----------/
 *
 * Part of the kerma project
 * 
-*------------------------------------------------------------------/
+*-------------------------------------------------------------------/
 * 
 * @file renderer/components/selectrons/launch-selector.js
 * @author gkarlos 
-* @module renderer/components/selectrons/launch-selector
-* @description 
-*   Defines the kernel-launch selector component at the top 
-*   of the editor
 *  
-*-----------------------------------------------------------------*/
+*------------------------------------------------------------------*/
 
-require('selectize')
 
 const {InternalError} = require('../../../util/error')
-
 const mock = require('../../../mock/cuda-source')
 const Events = require('../../events')
+require('selectize')
+
 
 function renderSelected( launch, escape) {
   return `<span class="launch-selection-selected-item">
@@ -49,6 +45,9 @@ function renderOption( launch, escape) {
 
 const Selector = require('./Selector')
 
+/**
+ * @memberof module:renderer/components/selectors
+ */
 class KernelLaunchSelector extends Selector {
   constructor(id, container, app) {
     super(id, container, app)
@@ -85,18 +84,33 @@ class KernelLaunchSelector extends Selector {
     return this
   }
 
-  static defaultCreate(id, container, app) {
-    if ( !app)
-      throw new InternalError('KernelLaunchSelector.defaultCreate requires an app reference and none was passed')
+  useDefaultControls() {
+    let mock = require('../../../mock/cuda-source')
+    let ui = this.app.ui
 
-    let kernelLaunchSelector = new KernelLaunchSelector(id, container, app).render().disable()
-    let ui = app.ui
+    this.disable()
 
     ui.on(Events.INPUT_KERNEL_SELECTED, id => {
-      kernelLaunchSelector.enable()
-      mock.kernels[id].launches.forEach( launch => kernelLaunchSelector.addOption(launch) )
+      this.enable()
+      mock.kernels[id].launches.forEach( launch => this.addOption(launch) )
     })
   }
+
+  // static defaultCreate(id, container, app) {
+  //   if ( !app)
+  //     throw new InternalError('KernelLaunchSelector.defaultCreate requires an app reference and none was passed')
+
+  //   let kernelLaunchSelector = new KernelLaunchSelector(id, container, app).render().disable()
+
+  //   let mock = require('../../../mock/cuda-source')
+    
+  //   let ui = app.ui
+
+  //   ui.on(Events.INPUT_KERNEL_SELECTED, id => {
+  //     kernelLaunchSelector.enable()
+  //     mock.kernels[id].launches.forEach( launch => kernelLaunchSelector.addOption(launch) )
+  //   })
+  // }
 }
 
 module.exports = KernelLaunchSelector

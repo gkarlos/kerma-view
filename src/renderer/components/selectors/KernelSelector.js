@@ -1,20 +1,17 @@
-/**-renderer/components/selectrons/kernel-selector.js--------------/
+/**-renderer/components/selectors/KernelSelector.js-----------------/
 *
 * Part of the kerma project
 * 
-*------------------------------------------------------------------/
+*-------------------------------------------------------------------/
 * 
 * @file renderer/components/selectors/KernelSelector.js
 * @author gkarlos 
-* @description 
-*   Defines the kernel selector component at the top of the editor
 *  
-*-----------------------------------------------------------------*/
+*------------------------------------------------------------------*/
 
 'use-strict'
 
 const {InternalError} = require('../../../util/error')
-const mock = require('../../../mock/cuda-source')
 const Events = require('../../events')
 require('selectize')
 
@@ -85,36 +82,22 @@ class KernelSelector extends Selector {
     return this
   }
 
-  
-  /**
-   * Create a KernelSelector and define the default behavior
-   * 
-   * @param {*} app A reference to the app
-   */
-  static defaultCreate(id, container, app) {
-    if ( !app)
-      throw new InternalError('KernelSelector.defaultCreate requires an app reference and none was passed')
+  useDefaultControls() {
+    let ui = this.app.ui
+    let mock = require('../../../mock/cuda-source')
 
-    let kernelSelector = new KernelSelector(id, container, app).render().disable()
+    this.disable()
 
-    let ui = app.ui
-
-    ui.on(Events.UI_READY, () => {
       //highlight the kernels in the editor
-      kernelSelector.selectize.on('change', id => {
-        app.ui.editor.instance.revealLinesInCenter( mock.kernels[id].source.range[0], mock.kernels[id].source.range[2])
-        app.ui.emit(Events.INPUT_KERNEL_SELECTED, id)
-      })
-      
-      ui.on(Events.EDITOR_INPUT_LOADED, () => {
-        kernelSelector.enable()
-        require('../../../mock/cuda-source').kernels.forEach(kernel => {
-          ui.toolbar.main.kernelSelector.addOption(kernel)
-        }) 
-      })
+    this.selectize.on('change', id => {
+      ui.editor.instance.revealLinesInCenter( mock.kernels[id].source.range[0], mock.kernels[id].source.range[2])
+      ui.emit(Events.INPUT_KERNEL_SELECTED, id)
     })
-
-    return kernelSelector
+      
+    ui.on(Events.EDITOR_INPUT_LOADED, () => {
+      this.enable()
+      mock.kernels.forEach(kernel => this.addOption(kernel)) 
+    })
   }
 }
 

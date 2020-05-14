@@ -8,12 +8,12 @@ const {dialog} = require('electron').remote
 /**
  * @class
  */
-class InputFileDialog extends Component {
-  constructor( id, container, prompt, app) {
+class InputToolbar extends Component {
+  constructor( id, container, app) {
     super()
     this.id = id;
     this.container = container;
-    this.prompt = prompt || ""
+    this.prompt = "Select a *.cu file..."
     this.app = app
     this.node = null;  
     this.enabled = true
@@ -25,7 +25,6 @@ class InputFileDialog extends Component {
     this.okButtonContent = "<i class=\"fas fa-check-circle\"></i>"
     this.okButtonContentLoading = "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>"
     this.okButtonLoading = false
-    this.app.ui.registerComponent(this)
   }
 
   disable() {
@@ -132,7 +131,7 @@ class InputFileDialog extends Component {
 
     // open file dialog when clicking "browse"
     this.browseButton.addEventListener('click', e => {
-      this.app.ui.ready && 
+      // this.app.ui.ready && 
       dialog
         .showOpenDialog({ 
           properties: ['openFile']
@@ -159,26 +158,29 @@ class InputFileDialog extends Component {
       this.okButtonLoadingStop()
       this.disableOkButton()
       this.node.attr("title", this.selectedFile)
-               .tooltip( {placement : 'bottom', container: "body", id: "yeyeye"})
+               .tooltip( {placement : 'bottom', container: "body"})
     }) 
+
+    this.disable()
 
     // ready
     this.app.ui.emit(Events.UI_COMPONENT_READY, this)
     return this;
   }
+
+  useDefaultControls() {
+
+  }
 }
 
-function defaultCreate(app) {
-  let ifdialog = new InputFileDialog( "file-select-group", "#top-toolbar-right", "Select a *.cu file...", app)
+// function defaultCreate(app) {
+//   let ifdialog = new InputFileDialog( "file-select-group", "#top-toolbar-right", "Select a *.cu file...", app)
   
-  ifdialog.render()
-  ifdialog.disable() // disable file selection until the editor is ready
+//   ifdialog.render()
+//   ifdialog.disable() // disable file selection until the editor is ready
   
-  return ifdialog
-}
+//   return ifdialog
+// }
 
 
-module.exports = {
-  InputFileDialog,
-  defaultCreate
-}
+module.exports = InputToolbar

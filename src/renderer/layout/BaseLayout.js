@@ -11,8 +11,8 @@
 
  'use-strict'
 
-const Component = require('../component')
-const {InternalError} = require('../../../util/error')
+// const Component = require('../component')
+const {InternalError} = require('../../util/error')
 
 /**
  * @abstract
@@ -32,9 +32,8 @@ const {InternalError} = require('../../../util/error')
  *  of {@link BaseLayout}
  *  
  */
-class BaseLayout extends Component {
+class BaseLayout {
   constructor(name) {
-    super(name)
 
     if ( this.constructor === BaseLayout)
       throw new InternalError('Cannot instantiate abstract class BaseLayout')
