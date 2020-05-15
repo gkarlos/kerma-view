@@ -80,8 +80,9 @@ class Editor extends Component {
     let ui = this.app.ui
     let on = (event, cb) => ui.on(event, cb)
 
-    on(Events.UI_RESIZE, () => editor.updateLayout())
-    
+    on(Events.UI_RESIZE, () => this.updateLayout())
+    window.onresize = () => this.updateLayout()
+
     on(Events.EDITOR_LOADED, () => ui.emit(Events.UI_COMPONENT_READY, this))
     this.rendered = true;
     return this;

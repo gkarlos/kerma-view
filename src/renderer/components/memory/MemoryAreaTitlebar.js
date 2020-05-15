@@ -26,6 +26,10 @@ class MemoryAreaTitleBar extends Component {
 
     return this;
   }
+
+  useDefaultControls() {
+    
+  }
 }
 
 module.exports = MemoryAreaTitleBar

@@ -24,6 +24,7 @@ module.exports = {
   /** @event */EDITOR_VALUE_CHANGED: "editor:value-changed",
 
   /** @event */INPUT_FILE_SELECTED : "input:selected",
+  /** @event */INPUT_TYPE_SELECTED : "input:type-selected",
   /** @event */INPUT_KERNEL_SELECTED : "input:kernel-selected",
   /** @event */INPUT_KERNEL_LAUNCH_SELECTED : "input:kernel-launch-selected",
   

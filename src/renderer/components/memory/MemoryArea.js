@@ -1,5 +1,6 @@
 const Component = require('../component')
 const MemoryAreaTitleBar = require('./MemoryAreaTitlebar')
+const MemoryAreaBody = require('./MemoryAreaBody')
 const Events = require('../../events')
 
 class MemoryArea extends Component {
@@ -10,25 +11,26 @@ class MemoryArea extends Component {
     this.app = app
     this.name = `MemoryArea[${this.id}]`
     this.node = null
-    this.titlebar = null
-    // this.app.ui.registerComponent(this)
+    this.title = new MemoryAreaTitleBar("memory-area-titlebar", `#${this.id}`, this.app)
+    this.body = new MemoryAreaBody("memory-area-body", `#${this.id}`, this.app)
   }
 
   render() {
-    this.node = $(`<div class="card" id="${this.id}"></div>`).appendTo(this.container)
-    this.title = new MemoryAreaTitleBar("memory-area-titlebar", `#${this.id}`, this.app).render()
-    this.memoryContainer = 
-      $(`
-        <div class="card-body">
-          <ul class="list-group" id="heatmap-example"></ul>
-        </div>`).appendTo(this.container)
+    this.node  = $(`<div class="card" id="${this.id}"></div>`).appendTo(this.container)
+    this.title.render()
+    this.body.render()
+      // $(`
+        
+    // $("#heatmap-example").css("height", "100%").css("width", "100%")
+
 
     this.app.ui.emit(Events.UI_COMPONENT_READY, this);
     return this;
   }
 
   useDefaultControls() {
-
+    this.title.useDefaultControls()
+    this.body.useDefaultControls()
   }
 }
 
