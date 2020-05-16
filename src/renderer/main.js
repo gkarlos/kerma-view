@@ -31,6 +31,7 @@ const {Memory}         = require('./components/memory')
 
 // const session = app.session
 
+app.window = remote.getCurrentWindow()
 /**
  * A reference to `app.ui`
  */

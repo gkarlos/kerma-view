@@ -5,6 +5,11 @@ For instance if objects A and B wait for an event E, then there will be two stub
 in the source files of A and B.
 
 ------
+TODO:
+- Replace jquery
+    - https://github.com/atom/etch
+    - https://github.com/atom/atom/blob/master/src/text-editor-component.js
+------
 IDEAS:
 
 - https://www.electronjs.org/apps/thermal

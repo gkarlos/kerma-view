@@ -11,6 +11,7 @@ class Component {
   consturctor(name="UnnamedComponent") {
     this.name = name;
     this.rendered = false
+    this.node = null;
   }
 
   render() {

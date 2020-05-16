@@ -67,6 +67,10 @@ body {
 }
 
 
+#heatmap-example {
+    width: 100%;
+}
+
 #main {
     height: 100vh;
     padding: 5px;

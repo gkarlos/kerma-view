@@ -3,6 +3,10 @@ const MemoryAreaTitleBar = require('./MemoryAreaTitlebar')
 const MemoryAreaBody = require('./MemoryAreaBody')
 const Events = require('../../events')
 
+/**
+ * The main container for memory visualizations
+ * @memberof module:renderer/components/memory
+ */
 class MemoryArea extends Component {
   constructor(id, container, app) {
     super()

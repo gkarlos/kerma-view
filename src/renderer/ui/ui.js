@@ -96,11 +96,11 @@ module.exports = (app) => {
   function createComponents() {
     const ConsoleButton  = require('../components/ConsoleButton')
     const RefreshButton  = require('../components/RefreshButton')
-    const InputToolbar   = require('../components/InputToolbar')
-    const SessionControlToolbar = require('../components/SessionControlToolbar')
+    const InputToolbar   = require('../components/toolbars/InputToolbar')
+    const SessionControlToolbar = require('../components/toolbars/SessionControlToolbar')
     const Editor = require('../components/editor/Editor')
     const InfoButton = require('../components/InfoButton')
-    const MainToolbar = require('../components/MainToolbar')
+    const MainToolbar = require('../components/toolbars/MainToolbar')
     const MemoryArea = require('../components/memory/MemoryArea')
 
     ui.console.button  = ui.registerComponent(new ConsoleButton("console-toggle-button", `#${ui.layout.header.left.id}`, app))

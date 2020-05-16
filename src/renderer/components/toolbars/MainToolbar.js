@@ -1,7 +1,7 @@
-const Component = require('./component')
-const Events    = require('./../events')
-const KernelSelector = require('./selectors/KernelSelector')
-const KernelLaunchSelector = require('./selectors/KernelLaunchSelector')
+const Component = require('../component')
+const Events    = require('../../events')
+const KernelSelector = require('../selectors/KernelSelector')
+const KernelLaunchSelector = require('../selectors/KernelLaunchSelector')
 const CodeNavToolbar = require('./CodeNavToolbar')
 
 class MainToolbar extends Component {

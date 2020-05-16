@@ -1,6 +1,15 @@
+'use-strict'
 
 const Component = require('../component')
 
+/**
+ * The body of the memory are. This is roughly a collection
+ * of {@link MemoryVis} objects.
+ * 
+ * This class is only meant to be used within {@link MemoryArea}
+ * 
+ * @memberof module:renderer/components/memory
+ */
 class MemoryAreaBody extends Component {
   constructor(id, container, app) {
     super()

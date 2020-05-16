@@ -1,5 +1,5 @@
-const Component = require('./component')
-const Events = require('../events')
+const Component = require('../component')
+const Events = require('../../events')
 
 class SessionRestartButton extends Component {
   constructor(id, container, app) {
