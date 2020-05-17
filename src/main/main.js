@@ -33,7 +33,7 @@ app.root     = path.join(__dirname, "../../")
 app.iconPath = path.join(app.root, "assets", "icon-48.png")
 app.version  = require('../../package.json').version
 app.windows  = { main : null, loading: null}
-app.input    = { path : null, content: null}
+// app.input    = { path : null, content: null}
 app.title    = `KermaView v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"[debug]":""}`
 
 app.args = cl.parse.list(process.argv, (error, result) => {
@@ -51,7 +51,7 @@ app.args = cl.parse.list(process.argv, (error, result) => {
 
 
 
-app.sessionManager = require('../session').sessionManager
+// app.sessionManager = require('../session').sessionManager
 
 /**
  * Perform configuration steps

@@ -19,7 +19,8 @@ module.exports = (app) => {
       main: null,
       input: null,
       code: null,
-      session: null
+      session: null,
+      util : null,
     },
     editor : null,
     memory : null,
@@ -45,14 +46,8 @@ module.exports = (app) => {
       totalRenderTime: 0,
     },
     refresh : { button: null },
-    info : { button: null},
+    // info : { button: null},
     ready : false,
-    on : UIEmitter.on,
-    emit : UIEmitter.emit,
-    once: UIEmitter.once,
-    eventNames: UIEmitter.eventNames,
-    removeAllListeners: UIEmitter.removeAllListeners,
-    removeListener: UIEmitter.removeListener,
     reload : () => {
       console.log("RELOAD")
       app.windows.main.webContents.reload()
@@ -66,49 +61,42 @@ module.exports = (app) => {
 
   let uiComponentsReady = () => [...ui.components.values()].reduce((accu, component) => accu & component.ready, true)
 
-  ui.on('ui:component-ready', (component, ms=0) => {
+  app.on('ui:component-ready', (component, ms=0) => {
     if ( !ui.components.has(component))
       throw new InternalError(`Unregistered component '${component.name}' is ready`)
     ui.components.get(component).ready = true
     // console.log(`[info] ui: ${component.name}: ready: ${ms}ms`)
     if ( uiComponentsReady())
-      ui.emit(Events.UI_READY)
+      app.emit(Events.UI_READY)
   })
 
   function logUiComponentRegistration() {
-    console.groupCollapsed(`[info] ui: registered ${ui.components.size} components`)
-    console.log(ui.console.button)
-    console.log(ui.refresh.button)
-    console.log(ui.toolbar.input)
-    console.log(ui.toolbar.session)
-    console.log(ui.info.button)
-    console.log(ui.toolbar.main)
-    console.log(ui.toolbar.code)
-    console.log(ui.memory)
-    console.groupEnd()
+    app.log.info(`ui: registered ${ui.components.size} components`, {components : {...Array.from(ui.components.keys())}})
   }
 
   function logUiReady() {
-    console.log(`[info] ui: ready: ${ui.perf.totalRenderTime}ms`)
+    app.log.info(`ui: ready after ${ui.perf.totalRenderTime}ms`)
     // console.groupEnd()
   }
 
   function createComponents() {
     const ConsoleButton  = require('../components/ConsoleButton')
     const RefreshButton  = require('../components/RefreshButton')
-    const InputToolbar   = require('../components/toolbars/InputToolbar')
+    const InputToolbar   = require('../components/toolbars/input/InputToolbar')
     const SessionControlToolbar = require('../components/toolbars/SessionControlToolbar')
     const Editor = require('../components/editor/Editor')
-    const InfoButton = require('../components/InfoButton')
+    const InfoButton = require('../components/toolbars/util/InfoButton')
     const MainToolbar = require('../components/toolbars/MainToolbar')
-    const MemoryArea = require('../components/memory/MemoryArea')
+    const UtilityToolbar = require('renderer/components/toolbars/util').UtilityToolbar
+    const MemoryArea = require('renderer/components/memory/MemoryArea')
 
     ui.console.button  = ui.registerComponent(new ConsoleButton("console-toggle-button", `#${ui.layout.header.left.id}`, app))
     ui.refresh.button  = ui.registerComponent(new RefreshButton("top-refresh-button", `#${ui.layout.header.left.id}`, app))
     ui.toolbar.input   = ui.registerComponent(new InputToolbar("file-select-group", `#${ui.layout.header.right.id}`, app))
     ui.toolbar.session = ui.registerComponent(new SessionControlToolbar("session-control-toolbar", `#${ui.layout.header.right.id}`, app))
     ui.editor          = ui.registerComponent(new Editor('editor', `#${ui.layout.body.left.top.id}`, app))
-    ui.info.button     = ui.registerComponent(new InfoButton("info-button", `#${ui.layout.header.right.id}`, app))
+    ui.toolbar.util    = ui.registerComponent(new UtilityToolbar('utility-toolbar', `#${ui.layout.header.right.id}`, app))
+    // ui.info.button     = ui.registerComponent(new InfoButton("info-button", `#${ui.layout.header.right.id}`, app))
     ui.toolbar.main    = ui.registerComponent(new MainToolbar("editor-toolbar", "#left-bottom", app))
     ui.toolbar.code    = ui.toolbar.main.codeNavToolbar
     ui.memory          = ui.registerComponent(new MemoryArea("memory-area", "#right", app))
@@ -122,7 +110,8 @@ module.exports = (app) => {
     ui.toolbar.input.render()
     ui.toolbar.session.render()
     ui.editor.render()
-    ui.info.button.render()
+    // ui.info.button.render()
+    ui.toolbar.util.render()
     ui.toolbar.main.render()
     ui.memory.render()
   }
@@ -133,8 +122,9 @@ module.exports = (app) => {
     ui.toolbar.input.useDefaultControls()
     ui.toolbar.session.useDefaultControls()
     ui.editor.useDefaultControls()
-    ui.info.button.useDefaultControls()
+    // ui.info.button.useDefaultControls()
     ui.toolbar.main.useDefaultControls()
+    ui.toolbar.util.useDefaultControls()
     ui.memory.useDefaultControls()
   }
 
@@ -147,7 +137,7 @@ module.exports = (app) => {
     ui.layout.render()
     createComponents()
     renderComponents()
-    ui.on(Events.UI_READY, () => {
+    app.on(Events.UI_READY, () => {
       ui.perf.totalRenderTime = new Date().getTime() - start
       logUiReady()
       useDefaultControls()

@@ -1,1 +1,4 @@
 
+moduleExports = {
+  KermadClient : require('./KermadClient')
+}

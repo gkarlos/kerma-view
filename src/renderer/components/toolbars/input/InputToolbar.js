@@ -1,10 +1,10 @@
 /**
  * @file input-file-dialog.js
  */
-const Component = require('../component')
-const Events = require('../../events')
+const Component = require('../../component')
+const Events = require('../../../events')
 const {dialog} = require('electron').remote
-const {InternalError} = require('../../../util/error')
+const {InternalError} = require('../../../../util/error')
 
 class InputTypeSelectionItem extends Component {
   constructor(container, app) {
@@ -53,8 +53,7 @@ class InputTypeSelectionItem extends Component {
       // .on('mouseoute')
     this.enabled && this.enable()
     this.node.on('click', () => {
-      this.app.ui.emit(Events.INPUT_TYPE_SELECTED, this)
-      console.log("clicked")
+      this.app.emit(Events.INPUT_TYPE_SELECTED, this)
     })
 
     this.rendered = true;
@@ -112,7 +111,7 @@ class InputTypeSelection extends Component {
     if ( !found)
       throw new InternalError(`Could not find option ${value}`)
 
-    this.app.ui.emit(Events.INPUT_TYPE_SELECTED, this.selected)
+    this.app.emit(Events.INPUT_TYPE_SELECTED, this.selected)
   }
 
   enable() {
@@ -128,15 +127,9 @@ class InputTypeSelection extends Component {
   }
 
   render() {
-    console.log(this.container)
-
-    console.log(this.node)
-
     this.node.button = $(`
       <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       </button>`).appendTo(this.container)
-
-    console.log(this.node.button.text())
 
     this.node.dropdown = $(`
       <ul class="dropdown-menu" id="type-selection-dropdown">
@@ -152,8 +145,7 @@ class InputTypeSelection extends Component {
 
   useDefaultControls() {
     this.options.forEach( opt => opt.useDefaultControls())
-    this.app.ui.on(Events.INPUT_TYPE_SELECTED, (opt) => {
-      console.log("YES")
+    this.app.on(Events.INPUT_TYPE_SELECTED, (opt) => {
       this.node.button.html(`<span>${opt.shortValue} </span>`)
     })
   }
@@ -242,14 +234,12 @@ class InputToolbar extends Component {
   }
 
   okButtonLoadingStart() {
-    console.log("loading start")
     this.okButtonLoading = true
     this.okButton.innerHTML = this.okButtonContentLoading
     this.disableOkButton()
   }
 
   okButtonLoadingStop() {
-    console.log("loading stop")
     this.okButton.innerHTML = this.okButtonContent
     // this.enableOkButton()
     this.okButtonLoading = false
@@ -288,6 +278,10 @@ class InputToolbar extends Component {
     this.rendered = true
   }
 
+  reset() {
+    //TODO implement me
+  }
+
   /**
    * @fires Events.UI_COMPONENT_READY
    */
@@ -320,13 +314,12 @@ class InputToolbar extends Component {
       this.disableBrowseButton()
       this.disableBrowseInput()
       this.okButtonLoadingStart()
-      ui.emit(Events.INPUT_FILE_SELECTED, this.selectedFile)
+      this.app.emit(Events.INPUT_FILE_SELECTED, this.selectedFile)
     })
 
-    ui.on(Events.EDITOR_LOADED, () => this.enable())
+    this.app.on(Events.EDITOR_LOADED, () => this.enable())
 
-    ui.on(Events.EDITOR_INPUT_LOADED, () => {
-      console.log("editor loaded file XX")
+    this.app.on(Events.EDITOR_INPUT_LOADED, () => {
       this.okButtonLoadingStop()
       this.disableOkButton()
       this.typeSelect.disable()
@@ -338,7 +331,7 @@ class InputToolbar extends Component {
     this.disable()
 
     // ready
-    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
+    this.app.emit(Events.UI_COMPONENT_READY, this)
     return this;
   }
 
@@ -347,8 +340,6 @@ class InputToolbar extends Component {
     this.typeSelect.addOption("Cuda", "CU")
                    .addOption("OpenCL", "CL")
                    .selectOption('Cuda')
-    console.log(this.typeSelect.options)
-    console.log(this.typeSelect)
   }
 }
 

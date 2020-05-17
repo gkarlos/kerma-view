@@ -28,7 +28,7 @@ class MemoryArea extends Component {
     // $("#heatmap-example").css("height", "100%").css("width", "100%")
 
 
-    this.app.ui.emit(Events.UI_COMPONENT_READY, this);
+    this.app.emit(Events.UI_COMPONENT_READY, this);
     return this;
   }
 

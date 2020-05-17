@@ -13,7 +13,7 @@
  *//*--------------------------------------------------------------*/
 const Component = require('../../components/component')
 
-class MemoryVis extends Component() {
+class MemoryVis extends Component {
 
 }
 

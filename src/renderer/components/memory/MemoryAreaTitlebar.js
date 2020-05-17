@@ -19,11 +19,8 @@ class AddRandomMemoryButton extends Component {
   render() {
     if ( this.rendered ) { console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`); return this; }
 
-    console.log("herehere")
     this.node = $(`<a class="btn btn-sm btn-success" href="#" id="${this.id}">Add...</a>`).appendTo(this.container)
-    console.log(this.node)
-    console.log(this.container)
-    console.log($(this.container))
+
     this.rendered = true;
     return this;
   }

@@ -41,7 +41,7 @@ class Editor extends Component {
 
   setValue(s) { 
     this.instance.setValue(s) 
-    this.app.ui.emit(Events.EDITOR_VALUE_CHANGED)
+    this.app.emit(Events.EDITOR_VALUE_CHANGED)
   }
 
   updateLayout() {
@@ -73,17 +73,16 @@ class Editor extends Component {
         contextmenu: true
       });
 
-      this.app.ui.emit(Events.EDITOR_LOADED, monaco)
+      this.app.emit(Events.EDITOR_LOADED, monaco)
       this.tabs.select('Cuda')
     });
 
-    let ui = this.app.ui
-    let on = (event, cb) => ui.on(event, cb)
+    let on = (event, cb) => this.app.on(event, cb)
 
     on(Events.UI_RESIZE, () => this.updateLayout())
     window.onresize = () => this.updateLayout()
 
-    on(Events.EDITOR_LOADED, () => ui.emit(Events.UI_COMPONENT_READY, this))
+    on(Events.EDITOR_LOADED, () => this.app.emit(Events.UI_COMPONENT_READY, this))
     this.rendered = true;
     return this;
   }
@@ -92,18 +91,19 @@ class Editor extends Component {
     if ( !this.rendered)
       throw new InternalError('Component must be rendered before calling defaultControls()')
 
-    let ui = this.app.ui
-    let on = (event, cb) => ui.on(event, cb)
-
+    let on = (event, cb) => this.app.on(event, cb)
+    
     // User selected a file so load it to the editor
     on(Events.INPUT_FILE_SELECTED, path => {
-      console.log("[info] Loading input to the editor")
       this.app.input.path = path
       fs.readFile(path, 'utf-8', (err, data) => {
+        if ( err)
+          console.log('[error] failed to load file to the editor')
+          
         this.app.input.content = data
         this.setValue(data);
         // TODO this delay is not really needed
-        setTimeout(() => ui.emit(Events.EDITOR_INPUT_LOADED), 500)
+        setTimeout(() => this.app.emit(Events.EDITOR_INPUT_LOADED), 500)
       })
     })
 

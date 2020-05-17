@@ -86,11 +86,10 @@ class KernelLaunchSelector extends Selector {
 
   useDefaultControls() {
     let mock = require('../../../mock/cuda-source')
-    let ui = this.app.ui
 
     this.disable()
 
-    ui.on(Events.INPUT_KERNEL_SELECTED, id => {
+    this.app.on(Events.INPUT_KERNEL_SELECTED, id => {
       this.enable()
       mock.kernels[id].launches.forEach( launch => this.addOption(launch) )
     })

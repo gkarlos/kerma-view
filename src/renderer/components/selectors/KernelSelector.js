@@ -83,18 +83,17 @@ class KernelSelector extends Selector {
   }
 
   useDefaultControls() {
-    let ui = this.app.ui
     let mock = require('../../../mock/cuda-source')
 
     this.disable()
 
       //highlight the kernels in the editor
     this.selectize.on('change', id => {
-      ui.editor.instance.revealLinesInCenter( mock.kernels[id].source.range[0], mock.kernels[id].source.range[2])
-      ui.emit(Events.INPUT_KERNEL_SELECTED, id)
+      this.app.ui.editor.instance.revealLinesInCenter( mock.kernels[id].source.range[0], mock.kernels[id].source.range[2])
+      this.app.emit(Events.INPUT_KERNEL_SELECTED, id)
     })
       
-    ui.on(Events.EDITOR_INPUT_LOADED, () => {
+    this.app.on(Events.EDITOR_INPUT_LOADED, () => {
       this.enable()
       mock.kernels.forEach(kernel => this.addOption(kernel)) 
     })

@@ -31,7 +31,7 @@ class CodeNavToolbar extends Component {
     this.rendered = true
 
     if ( !this.subcomponent)
-      this.app.ui.emit(Events.UI_COMPONENT_READY, this)
+      this.app.emit(Events.UI_COMPONENT_READY, this)
   }
 
   useDefaultControls() {

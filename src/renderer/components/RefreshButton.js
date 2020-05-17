@@ -47,7 +47,7 @@ class RefreshButton extends Component {
     this.node.tooltip()
     this.node.appendTo(this.container)
 
-    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
+    this.app.emit(Events.UI_COMPONENT_READY, this)
     this.rendered = true
     return this
   }

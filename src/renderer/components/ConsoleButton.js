@@ -32,7 +32,7 @@ class ConsoleButton extends Component {
     
     // ready
     this.rendered = true
-    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
+    this.app.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
 

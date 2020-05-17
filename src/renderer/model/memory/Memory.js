@@ -1,3 +1,5 @@
+const util = require('util.js')
+
 class Memory {
   
 }

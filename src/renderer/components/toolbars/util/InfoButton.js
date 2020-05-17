@@ -1,8 +1,8 @@
-const Component = require('./component')
-const Events = require('../events')
+const Component = require('../../component')
+const Events = require('../../../events')
 const openAboutWindow = require('electron-about-window').default
 const path = require('path')
-const {InternalError} = require('../../util/error')
+const {InternalError} = require('../../../../util/error')
 
 class InfoButton extends Component {
   constructor(id, container, app) {
@@ -13,20 +13,24 @@ class InfoButton extends Component {
     this.node = null
     this.name = `InfoButton[${this.id}]`
     this.rendered = false
+    this.tooltip = "About"
   }
 
   render() {
     this.node = $(`
-      <div id='${this.id}'>
+      <div id='${this.id}' data-toggle='tooltip' title='${this.tooltip}'>
         <h4><i class="fas fa-info-circle"></i></h4>
       </div>
-    `).css("cursor", "pointer")
-      .css("float", "right")
-
-    this.node.appendTo(this.container)
+    `).appendTo(this.container)
+      .css("cursor", "pointer")
+      .css("opacity", "0.6")
+      .hover( function() { $( this ).fadeTo( 'fast', '1'); }, 
+              function() { $( this ).fadeTo( 'fast', '.6'); })
+      .tooltip()
+      // .css("float", "right")
 
     this.rendered = true
-    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
+    // this.app.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
 

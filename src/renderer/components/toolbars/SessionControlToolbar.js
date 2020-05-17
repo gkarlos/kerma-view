@@ -49,7 +49,7 @@ class SessionControlToolbar extends Component {
     // TODO add more button
     
     this.rendered = true
-    this.app.ui.emit(Events.UI_COMPONENT_READY, this)
+    this.app.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
 

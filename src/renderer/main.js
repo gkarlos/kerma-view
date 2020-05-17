@@ -16,26 +16,57 @@
  *  
  *//*---------------------------------------------------------------*/
  'use-strict'
+const path = require('path')
 
-const app              = require('electron').remote.app
-const remote           = require('electron').remote;  
-const settings         = remote.getGlobal('settings')
+require('app-module-path').addPath(path.join(__dirname, "../"))
+
+const electronApp      = require('electron').remote.app
+const electronRemote   = require('electron').remote;  
+
+const EventEmitter     = require('events')
 const mock             = require('../mock/cuda-source')
 const {Memory}         = require('./components/memory')
 
+const Events           = require('./events')
+const ConsoleLogger    = require('log').ConsoleLogger
+const KermadClient     = require('./client/KermadClient')
 
+const app = {}
 
+app.electron = {
+  remote: electronRemote,
+  app: electronRemote.app
+}
+app.input    = {
+  path : null,
+  contents : null
+}
+app.root     = app.electron.remote.app.root;
+app.iconPath = app.electron.remote.app.iconPath;
+app.version  = app.electron.remote.app.version;
+app.args     = app.electron.remote.app.args;
+app.window   = app.electron.remote.getCurrentWindow();
+app.settings = app.electron.remote.getGlobal('settings');
+app.mock     = require('../mock/cuda-source');
+app.log      = new ConsoleLogger(ConsoleLogger.Level.Info)
+// events
+app.emitter  = new EventEmitter()
+app.on = app.emitter.on;
+app.emit = app.emitter.emit;
+app.once = app.emitter.once;
+app.eventNames = app.emitter.eventNames;
+app.removeAllListeners = app.emitter.removeAllListeners;
+app.removeListener = app.emitter.removeListener;
+// main parts
+app.ui       = require('./ui/ui')(app);
+app.client   = new KermadClient(app)
 
+app.on(Events.INPUT_FILE_SELECTED, (filename) => app.client.startSession(filename))
 
-// require('bootstrap')
-
-// const session = app.session
-
-app.window = remote.getCurrentWindow()
 /**
  * A reference to `app.ui`
  */
-app.ui = require('./ui/ui')(app)
+// app.ui = 
 
 // ui.on('ui:reload', () => require("./components/editor/editor")(app))
 
