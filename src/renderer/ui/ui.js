@@ -87,7 +87,7 @@ module.exports = (app) => {
     const Editor = require('../components/editor/Editor')
     const InfoButton = require('../components/toolbars/util/InfoButton')
     const MainToolbar = require('../components/toolbars/MainToolbar')
-    const UtilityToolbar = require('renderer/components/toolbars/util').UtilityToolbar
+    const UtilityToolbar = require('renderer/components/toolbars/util/UtilityToolbar')
     const MemoryArea = require('renderer/components/memory/MemoryArea')
 
     ui.console.button  = ui.registerComponent(new ConsoleButton("console-toggle-button", `#${ui.layout.header.left.id}`, app))
