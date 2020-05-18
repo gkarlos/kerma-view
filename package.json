@@ -27,6 +27,8 @@
     "clean": "run-script-os",
     "clean:linux": "rm -rf docs/dev && rm -rf node_modules",
     "clean:windows": "rm node_modules",
+    "test": "npm run test:unit",
+    "test:unit": "mocha --recursive test/unit/**/*.test.js",
     "deps": "node scripts/build-external-deps.js"
   },
   "dependencies": {
@@ -45,6 +47,7 @@
     "jquery": "^3.5.0",
     "json-rpc2": "^2.0.0",
     "lodash": "^4.17.15",
+    "mocha": "^7.1.2",
     "monaco-editor": "^0.20.0",
     "npm-scripts-tree": "^1.4.1",
     "pace-js": "^1.0.2",
@@ -59,6 +62,7 @@
     "xterm-addon-fit": "^0.3.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "electron": "^8.2.1",
     "jsdoc": "^3.6.4"
   }

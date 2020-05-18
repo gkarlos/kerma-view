@@ -8,10 +8,12 @@ class KermaClient {
   }
 
   startSession(filename) {
-    this.client.call('session.start', {filename: filename}, (err, result) => {
+    console.log(this.app.ui.toolbar.input.getMode())
+
+    this.client.call('session.start', {mode: this.app.ui.toolbar.input.getMode().value, filename: filename}, (err, result) => {
       if ( err)
         return console.log(err.message)
-      console.log("[info] session.start:", result)
+      this.app.log.info("session: start:", result)
     })
   }
 

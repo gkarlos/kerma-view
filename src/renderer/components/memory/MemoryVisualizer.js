@@ -4,14 +4,14 @@
  * 
  *------------------------------------------------------------------/
  * 
- * @file renderer/events.js
+ * @file renderer/components/memory/MemoryVisualizer.js
  * @module renderer/events
  * @author gkarlos 
  * @description 
  *   This module includes all the available events
  *  
  *//*--------------------------------------------------------------*/
-const Component = require('../../components/component')
+const Component = require('../component')
 
 class MemoryVis extends Component {
 

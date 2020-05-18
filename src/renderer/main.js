@@ -48,7 +48,7 @@ app.args     = app.electron.remote.app.args;
 app.window   = app.electron.remote.getCurrentWindow();
 app.settings = app.electron.remote.getGlobal('settings');
 app.mock     = require('../mock/cuda-source');
-app.log      = new ConsoleLogger(ConsoleLogger.Level.Info)
+app.log      = new ConsoleLogger({level: ConsoleLogger.Level.Info})
 // events
 app.emitter  = new EventEmitter()
 app.on = app.emitter.on;

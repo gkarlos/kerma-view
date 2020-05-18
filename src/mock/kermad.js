@@ -1,8 +1,14 @@
-const rpc  = require('json-rpc2');
+const path = require('path')
 
+require('app-module-path').addPath(path.join(__dirname, "../"))
+
+const rpc  = require('json-rpc2');
+const ConsoleLogger  = require('../log/ConsoleLogger')
 const host = 'localhost'
 const port = 8000
 
+
+const log = new ConsoleLogger()
 
 var server = rpc.Server.$create({
   'websocket': true, // is true by default
@@ -15,7 +21,7 @@ let ongoingSession = false;
 
 function startSession(args, opt, reply) {
   ongoingSession = true
-  console.log("Started session:", args, opt)
+  log.info("Started session:", args)
   reply(null, {status: "ok"})
 }
 

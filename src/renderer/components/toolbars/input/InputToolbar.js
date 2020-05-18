@@ -6,7 +6,7 @@ const Events = require('../../../events')
 const {dialog} = require('electron').remote
 const {InternalError} = require('../../../../util/error')
 
-class InputTypeSelectionItem extends Component {
+class InputModeSelectionItem extends Component {
   constructor(container, app) {
     super(`InputTypeSelectionItem.@${container}`)
     this.container = container
@@ -65,9 +65,10 @@ class InputTypeSelectionItem extends Component {
   }
 }
 
-class InputTypeSelection extends Component {
-  constructor(container, app) {
+class InputModeSelection extends Component {
+  constructor(id, container, app) {
     super()
+    this.id = id
     this.container = container
     this.app = app
     this.options = []
@@ -89,7 +90,7 @@ class InputTypeSelection extends Component {
   }
 
   addOption(value, shortValue=null) {
-    let opt = new InputTypeSelectionItem(this.node.dropdown, this.app).setValue(value, shortValue);
+    let opt = new InputModeSelectionItem(this.node.dropdown, this.app).setValue(value, shortValue);
     this.options.push(opt)
     if ( this.rendered) {
       opt.render()
@@ -128,7 +129,7 @@ class InputTypeSelection extends Component {
 
   render() {
     this.node.button = $(`
-      <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button id="${this.id} type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       </button>`).appendTo(this.container)
 
     this.node.dropdown = $(`
@@ -183,14 +184,14 @@ class InputToolbar extends Component {
   disable() {
     this.enabled = false
     this.disableBrowseButton()
-    this.typeSelect.disable()
+    this.mode.disable()
     this.disableBrowseInput()
     this.disableOkButton()
   }
 
   enable() {
     this.enabled = true
-    this.typeSelect.enable()
+    this.mode.enable()
     this.enableBrowseButton()
     this.enableBrowseInput()
   }
@@ -255,11 +256,11 @@ class InputToolbar extends Component {
     this.node   = $(`<div class="input-group input-group-sm" id="${this.id}"></div>`).appendTo(this.container)
 
     this.browse = $(`
-      <div class="input-group-prepend" id="input-browse-type-prepend">
+      <div class="input-group-prepend" id="input-browse-mode-prepend">
         <button class="btn btn-secondary" type="button" id="${this.browseButtonId}">Browse&hellip;</button>
       </div>`).appendTo(this.node)
 
-    this.typeSelect = new InputTypeSelection('#input-browse-type-prepend', this.app).render()
+    this.mode = new InputModeSelection('input-mode', '#input-browse-mode-prepend', this.app).render()
 
     this.input  = $(`
       <input type="text" class="form-control" id="${this.browseInputId}" placeholder="${this.prompt}" aria-label="" aria-describedby="">
@@ -280,6 +281,10 @@ class InputToolbar extends Component {
 
   reset() {
     //TODO implement me
+  }
+
+  getMode() {
+    return this.mode.selected
   }
 
   /**
@@ -322,7 +327,7 @@ class InputToolbar extends Component {
     this.app.on(Events.EDITOR_INPUT_LOADED, () => {
       this.okButtonLoadingStop()
       this.disableOkButton()
-      this.typeSelect.disable()
+      this.mode.disable()
       this.node.attr("title", this.selectedFile)
                .tooltip( {placement : 'bottom', container: "body"})
       $(`#${this.okButtonId}`).css("cursor", "pointer")
@@ -336,8 +341,8 @@ class InputToolbar extends Component {
   }
 
   useDefaultControls() {
-    this.typeSelect.useDefaultControls()
-    this.typeSelect.addOption("Cuda", "CU")
+    this.mode.useDefaultControls()
+    this.mode.addOption("Cuda", "CU")
                    .addOption("OpenCL", "CL")
                    .selectOption('Cuda')
   }

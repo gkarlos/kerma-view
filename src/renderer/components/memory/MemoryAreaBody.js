@@ -17,6 +17,7 @@ class MemoryAreaBody extends Component {
     this.container = container;
     this.app = app
     this.name = `MemoryAreaBody[${this.id}]`
+    this.memories = []
   }
 
   render() {
@@ -30,7 +31,7 @@ class MemoryAreaBody extends Component {
              .css("overflow-y", "scroll")
   }
 
-  addMemory() {
+  addMemory(memory) {
 
   }
 

@@ -1,16 +1,23 @@
 const BaseLogger = require('./BaseLogger')
 const LogLevel   = require('./LogLevel')
 
-const DEFAULT_LOG_LEVEL = LogLevel.Info
-
 function now() {
 	return new Date().toISOString();
 }
 
+const ConsoleLoggerOptions = {
+	level : {
+		default : LogLevel.Info
+	}
+}
+
 class ConsoleLogger extends BaseLogger {
-  constructor(level=DEFAULT_LOG_LEVEL) {
-    super()
-    this.setLevel(level)
+  constructor(opts = {
+		level: ConsoleLoggerOptions.level.default,
+	}) 
+	{
+		super()
+		this.setLevel(opts.level)
   }
 
   static get Level() {
