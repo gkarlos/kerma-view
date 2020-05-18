@@ -9,7 +9,8 @@ function isNumber(v) {
 }
 
 function isString(v) {
-  return Object.prototype.toString.call(v) == '[object String]'
+  // return Object.prototype.toString.call(v) == '[object String]'
+  return (typeof v === 'string' || v instanceof String)
 }
 
 function isArray(v) {

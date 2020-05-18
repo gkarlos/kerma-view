@@ -49,18 +49,18 @@ class MemoryShape {
   getZ() { return this.z }
   /** Set the size of the x dimension */
   setX(value) { 
-    if ( !value) throw new InternalError(`Invalid x value '${value}'`)
+    if ( !value || value === 0) throw new InternalError(`Invalid x value '${value}'`)
     this.x = value;
   }
 
   setY(value) {
-    if ( !value) throw new InternalError(`Invalid y value '${value}'`)
+    if ( !value || value === 0) throw new InternalError(`Invalid y value '${value}'`)
     this.y = value
   }
 
   setZ(value) {
-    if ( !value) throw new InternalError(`Invalid z value '${value}'`)
-    this.z = z
+    if ( !value || value === 0) throw new InternalError(`Invalid z value '${value}'`)
+    this.z = value
   }
 
   /**
