@@ -85,7 +85,7 @@ module.exports = (app) => {
     const InputToolbar   = require('../components/toolbars/input/InputToolbar')
     const SessionControlToolbar = require('../components/toolbars/SessionControlToolbar')
     const Editor = require('../components/editor/Editor')
-    const InfoButton = require('../components/toolbars/util/InfoButton')
+    // const InfoButton = require('../components/toolbars/util/InfoButton')
     const MainToolbar = require('../components/toolbars/MainToolbar')
     const UtilityToolbar = require('renderer/components/toolbars/util/UtilityToolbar')
     const MemoryArea = require('renderer/components/memory/MemoryArea')

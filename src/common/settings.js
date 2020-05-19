@@ -94,8 +94,8 @@ module.exports = {
     height : 0
   },
   window  : { 
-    width : defaults.window.width, 
-    height : defaults.window.height,
+    width : 1920, 
+    height : 1080,
     maximized : false,
     zoom : false
   },

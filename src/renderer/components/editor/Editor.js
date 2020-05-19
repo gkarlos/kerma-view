@@ -61,7 +61,8 @@ class Editor extends Component {
   }
 
   updateLayout() {
-    this.instance.layout()
+    if( this.instance)
+      this.instance.layout()
   }
 
   render() {

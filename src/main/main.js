@@ -59,7 +59,7 @@ app.args = cl.parse.list(process.argv, (error, result) => {
  */
 function preConfigure() {
   settings.displays = electron.screen.getAllDisplays()
-
+  console.log(settings.displays)
   if ( settings.display.id != 0) {
     if ( settings.display.id > 1 )
       error(`Requested display ${settings.display.id} but only ${settings.display.list.electron} displays detected`).exit(0)
@@ -70,16 +70,10 @@ function preConfigure() {
   settings.display.height = settings.displays[settings.display.id].workAreaSize.height;
 
   if ( settings.window.maximized ) {
+    console.log("maximized")
     settings.window.width = settings.display.width
     settings.window.height = settings.display.height
-  } else {
-    if ( settings.displays[settings.display.id].bounds.x + settings.window.width > settings.display.width)
-      settings.window.width = settings.display.width
-    if ( settings.displays[settings.display.id].bounds.y + settings.window.height > settings.display.height)
-      settings.window.height = settings.display.height
-    // settings.window.width = 0.6 * settings.display.width  // window.width 65% of screen
-    // settings.window.height = 0.8 * settings.display.height // window.height 80% of screen
-  }
+  } 
 
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true //TODO Remove and fix
 
@@ -133,8 +127,8 @@ function createMainWindow() {
     show: false,
     icon : path.join(__dirname, '../../', 'assets', 'icon-48.png')
   })
-  win.setPosition(settings.displays[settings.display.id].bounds.x,
-                  settings.displays[settings.display.id].bounds.y + 50)
+  // win.setPosition(settings.displays[settings.display.id].bounds.x,
+  //                 settings.displays[settings.display.id].bounds.y + 50)
   win.setVibrancy('ultra-dark') // TODO read more
 
   if ( settings.debug)
