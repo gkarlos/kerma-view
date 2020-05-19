@@ -59,7 +59,7 @@ app.args = cl.parse.list(process.argv, (error, result) => {
  */
 function preConfigure() {
   settings.displays = electron.screen.getAllDisplays()
-  console.log(settings.displays)
+
   if ( settings.display.id != 0) {
     if ( settings.display.id > 1 )
       error(`Requested display ${settings.display.id} but only ${settings.display.list.electron} displays detected`).exit(0)
