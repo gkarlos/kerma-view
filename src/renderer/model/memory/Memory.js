@@ -2,25 +2,42 @@ const MemoryShape = require('./MemoryShape')
 const {InternalError} = require('util/error')
 const {isString} = require('util/traits')
 
+var crypto = null;
 /**
- * @class
- * @constructor
- * @memberof module:model/memory
+ * Models arbitrary memory
  * 
- * //TODO For now this class does not store memory contents
+ * @memberof module:model/memory
+ *
  */
 class Memory {
+  //TODO For now this class does not store memory contents
+
+  /**
+   * Create a random Memory
+   */
+  static createRandom() {
+    if ( !crypto)
+      crypto = require('crypto')
+    
+    let name = `vec${crypto.randomBytes(8).toString('hex')}`
+    let type =  "int"
+    let shape = MemoryShape.createRandom()
+    return new Memory(name, type, shape)
+  }
+
   /**
    * @param {String} name
+   * @param {Integer} type
    * @param {MemoryShape} shape
    * @param {Object} props
    */
-  constructor(name, shape, props) {
+  constructor(name, type, shape, props) {
     if ( !name || !isString(name) || name.length < 1)
       throw new InternalError("Memory.constructor(): invalid or missing argument 'name'")
     if ( !shape || !(shape instanceof MemoryShape))
       throw new InternalError("Memory.constructor(): invalid of missing argument 'shape' ")
     this.name = name;
+    this.type = type;
     this.shape = shape;
     if ( props)
       Object.assign(this, props)
@@ -28,6 +45,9 @@ class Memory {
 
   /** @returns {String} the name of this memory */
   getName() { return this.name }
+
+  /** @returns {String} the type of this memory */
+  getType() { return this.type }
   
   /** @returns {Shape} the shape of this memory */
   getShape() { return this.shape }

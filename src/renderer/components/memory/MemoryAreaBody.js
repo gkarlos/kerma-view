@@ -1,6 +1,8 @@
 'use-strict'
 
 const Component = require('../component')
+const MemoryVisualizer = require('./MemoryVisualizer')
+const Memory = require('renderer/model/memory').Memory
 
 /**
  * The body of the memory are. This is roughly a collection
@@ -17,21 +19,52 @@ class MemoryAreaBody extends Component {
     this.container = container;
     this.app = app
     this.name = `MemoryAreaBody[${this.id}]`
-    this.memories = []
+    this.visualizers = []
+    this.rendered = false;
   }
 
+  /**
+   * Render to the DOM
+   * The first call creates the DOM node and renders
+   * all available visualizers.
+   * Subsequent calls remove the 'contents' of the DOM node (i.e the visualizers)
+   * and re-render them. That is because new visualizers may have been-added or
+   * removed
+   */
   render() {
-    this.node = $(`
-      <div class="card-body" id="memory-area-body">
+    if ( !this.rendered) {
+      this.node = $(`
+      <div class="card-body" id="${this.id}">
         <ul class="list-group" id="heatmap-example"></ul>
       </div>`).appendTo(this.container)
       
-    this.node.css("max-width", "100%")
-             .css("max-height", "90vh")
-             .css("overflow-y", "scroll")
+      this.node.css("max-width", "100%")
+              .css("max-height", "90vh")
+              .css("overflow-y", "scroll")
+    } else {
+      // re-render
+      $('.memory-visualizer').remove()
+    }
+
+    this.visualizers.forEach(visualizer => visualizer.render())
+    this.rendered = true
+    return this;
   }
 
-  addMemory(memory) {
+  /**
+   * @param {Memory} memory A Memory object
+   * @param {boolean} forceRender  If true, if the MemoryAreaBody is rendered, the memory
+   *                               will be immediately rendered
+   *                               If false, the memory will be rendered at the next {@link render()} call
+   */
+  addMemory(memory,forceRender=true) {
+    
+    let viz = new MemoryVisualizer(memory, `mem-viz-${memory.getName()}`, `#${this.id}`, this.app)
+
+    this.visualizers.push(viz)
+
+    if ( this.rendered && forceRender)
+      viz.render()
 
   }
 

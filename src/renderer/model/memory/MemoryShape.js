@@ -23,6 +23,15 @@ class MemoryShape {
     return __countDimensions(shape.x, shape.y, shape.z)
   }
 
+
+  static createRandom(dims=2) {
+    return new MemoryShape(
+      1 + Math.floor(Math.random() * Math.floor(2)), // x
+      dims > 1?  1 + Math.floor(Math.random() * Math.floor(2)) : 1, // y
+      dims > 2?  1 + Math.floor(Math.random() * Math.floor(2)) : 1  // z
+    )
+  }
+
   /**
    * 
    * @param {*} x The size of the x dimension

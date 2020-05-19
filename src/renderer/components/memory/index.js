@@ -15,5 +15,7 @@
 module.exports = {
   MemoryArea : require('./MemoryArea'),
   MemoryAreaTitlebar: require('./MemoryAreaTitlebar'),
-  MemoryVis : require('./MemoryVisualizer')
+  MemoryVisualizer : require('./MemoryVisualizer'),
+  MemoryVisualizerToolbar : require('./MemoryVisualizerToolbar'),
+  MemoryVisualizerCells : require('./MemoryVisualizerCells')
 }

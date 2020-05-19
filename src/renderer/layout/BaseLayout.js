@@ -18,14 +18,14 @@ const {InternalError} = require('../../util/error')
  * @abstract
  * @extends Component
  * @memberof module:renderer/components/layout
- * @classdesc
+ * @description
  *  Base (abstract) class for the app layout(s)
  *                                                       <br/>
- *  The app layout is composed for 3 main components:
+ *  The app layout is composed for 3 main components: 
  * 
- *  - header
- *  - body
- *  - footer 
+ *    1. header
+ *    2. body
+ *    3. footer 
  * 
  *  and their (common) container. The structure of these 
  *  components may differ between different implementations 
@@ -33,6 +33,10 @@ const {InternalError} = require('../../util/error')
  *  
  */
 class BaseLayout {
+  /**
+   * 
+   * @param {String} name A name for the layout
+   */
   constructor(name) {
 
     if ( this.constructor === BaseLayout)
@@ -60,12 +64,15 @@ class BaseLayout {
 
   /** 
    * Materialize the layout components, and place the root node {@link this.node} into the DOM
+   * @abstract
    */
   render() {
     throw new InternalError("Cannot invoke abstract method BaseLayout.render")
   }
 
   /**
+   * @abstract
+   * @returns {boolean}
    * Check if the layout has been rendered.
    */
   rendered() {

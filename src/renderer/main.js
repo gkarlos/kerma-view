@@ -82,6 +82,13 @@ function createNewSession() {
   ui.emit('session:new')
 }
 
+app.on(Events.UI_READY, () => {
+  const Memory = require('renderer/model/memory').Memory
+  app.ui.memory.body.addMemory(Memory.createRandom())
+
+})
+
+
 $(() => {
   // ui.init()
   /**

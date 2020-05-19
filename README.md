@@ -10,6 +10,12 @@ TODO:
     - https://github.com/atom/etch
     - https://github.com/atom/atom/blob/master/src/text-editor-component.js
 ------
+## Snippets
+- https://bootsnipp.com/snippets/gv6Pe
+- https://bootsnipp.com/snippets/xrKXW
+- https://bootsnipp.com/snippets/O5mM8
+
+------
 IDEAS:
 
 - https://www.electronjs.org/apps/thermal
