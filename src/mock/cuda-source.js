@@ -47,126 +47,64 @@ var data = {
       statements : {
         read: [
           {
-            source: {
-              from : { row: 112, col: 0},
-              to: {row: 112, col: 26}
-            },
+            source: { from : { row: 112, col: 0}, to: {row: 112, col: 26} },
             reads: [
-              {
-                from : {row: 112, col: 6},
-                to: {row: 112, col: 7},
-                addrspace: "local"
-              }
-              ,
-              {
-                from : {row: 112, col: 10},
-                to : {row: 112, col: 12},
-                addrspace: "local"
-              }
-              ,
-              {
-                from : {row: 112, col: 18},
-                to : {row: 112, col: 19},
-                addrspace: "local"
-              }
-              ,
-              {
-                from : {row: 112, col: 22},
-                to : {row: 112, col: 24},
-                addrspace: "local"
-              }
+              { from : {row: 112, col: 6 }, to : {row: 112, col: 7 }, addrspace: "local"},
+              { from : {row: 112, col: 10}, to : {row: 112, col: 12}, addrspace: "local"},
+              { from : {row: 112, col: 18}, to : {row: 112, col: 19}, addrspace: "local"},
+              { from : {row: 112, col: 22}, to : {row: 112, col: 24}, addrspace: "local"}
             ]
           }
         ],
-        write: [
+        write: [],
 
-        ],
         readwrite: [
-          {
-            source: {
-              from : { row: 125, col: 0},
-              to :   { row: 125, col: 47}
-            },
+          { // int j = ...
+            source: { from : { row: 109, col: 0}, to : { row: 109, col: 47} },
             reads : [
-              {
-                from: {row: 125, col: 9},
-                to:   {row: 125, col: 19},
-                addrspace: "special"
-              },
-              {
-                from: {row: 125, col: 22},
-                to:   {row: 125, col: 32},
-                addrspace: "special"
-              },
-              {
-                from: {row: 125, col: 35},
-                to:   {row: 125, col: 46},
-                addrspace: "special"
-              }
+              { from: {row: 109, col: 9 }, to: {row: 109, col: 19}, addrspace: "special"},
+              { from: {row: 109, col: 22}, to: {row: 109, col: 32}, addrspace: "special"},
+              { from: {row: 109, col: 35}, to: {row: 109, col: 46}, addrspace: "special"}
             ],
-            write: {
-              from : { row: 125, col: 1},
-              to : { row: 125, col: 7},
-              addrspace: "local"
-            }
+            writes: [
+              { from : { row: 109, col: 0}, to : { row: 109, col: 7}, addrspace: "local"}
+            ]
+          }
+          ,
+          { // int i = ...
+            source: { from : { row: 110, col: 0}, to :   { row: 110, col: 47} },
+            reads : [
+              { from: {row: 110, col: 9 }, to: {row: 110, col: 19}, addrspace: "special"},
+              { from: {row: 110, col: 22}, to: {row: 110, col: 32}, addrspace: "special"},
+              { from: {row: 110, col: 35}, to: {row: 110, col: 46}, addrspace: "special"}
+            ],
+            writes: [
+              { from : { row: 110, col: 0}, to : { row: 125, col: 7}, addrspace: "local"}
+            ]
+          }
+          ,
+          { // for ( k = 0; ...)
+            source: { from : { row: 115, col: 0}, to :   { row: 115, col: 26} },
+            reads: [
+              { from: { row: 115, col: 14}, to:   { row: 115, col: 15}, addrspace: "local"},
+              { from: { row: 115, col: 18}, to:   { row: 115, col: 20}, addrspace: "local"},
+              { from: { row: 115, col: 22}, to:   { row: 115, col: 25}, addrspace: "local"},
+            ],
+            writes: [
+              { from: { row: 115, col: 22}, to:   { row: 115, col: 25}, addrspace: "local"}
+            ]
           }
           ,
           {
-            source: {
-              from : { row: 126, col: 0},
-              to :   { row: 126, col: 47}
-            },
+            source: { from : { row: 117, col: 3}, to : { row: 117, col: 50}},
             reads : [
-              {
-                from: {row: 125, col: 9},
-                to:   {row: 125, col: 19},
-                addrspace: "special"
-              },
-              {
-                from: {row: 125, col: 22},
-                to:   {row: 125, col: 32},
-                addrspace: "special"
-              },
-              {
-                from: {row: 125, col: 35},
-                to:   {row: 125, col: 46},
-                addrspace: "special"
-              }
+              { from: {row: 117, col: 3 }, to: {row: 117, col: 16}, addrspace: "global"},
+              { from: {row: 117, col: 20}, to: {row: 117, col: 33}, addrspace: "global"},
+              { from: {row: 117, col: 36}, to: {row: 117, col: 49}, addrspace: "global"}
             ],
-            write: {
-              from : { row: 125, col: 1},
-              to : { row: 125, col: 7},
-              addrspace: "local"
-            }
-          }
-          ,
-          {
-            source: {
-              from : { row: 133, col: 0},
-              to :   { row: 133, col: 50}
-            },
-            reads : [
-              {
-                from: { row: 133, col: 3},
-                to:   { row: 133, col: 16},
-                addrspace: "global"
-              },
-              {
-                from: {row: 133, col: 20},
-                to:   {row: 133, col: 33},
-                addrspace: "global"
-              },
-              {
-                from: {row: 133, col: 36},
-                to:   {row: 133, col: 49},
-                addrspace: "global"
-              }
-            ],
-            write: {
-              from : { row: 133, col: 3},
-              to : { row: 133, col: 16},
-              addrspace: "global"
-            }
+            writes: [
+              { from: {row: 117, col: 3 }, to: {row: 133, col: 16}, addrspace: "global"}
+            ]
           }
         ]
       }
@@ -198,8 +136,13 @@ var data = {
           inloop : false
         }
       ],
-      statements : []
+      statements : {
+        read: [], 
+        write: [],
+        readwrite: []
+      }
     }
   ]
 }
+
 module.exports = data

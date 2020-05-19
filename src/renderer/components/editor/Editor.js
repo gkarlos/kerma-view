@@ -44,6 +44,22 @@ class Editor extends Component {
     this.app.emit(Events.EDITOR_VALUE_CHANGED)
   }
 
+  markLineRead(lineno) {
+
+  }
+
+  markLineWrite(lineno) {
+
+  }
+
+  showKernelLaunchSelection() {
+    
+  }
+
+  hideKernelLaunchSelection() {
+    
+  }
+
   updateLayout() {
     this.instance.layout()
   }
@@ -122,6 +138,53 @@ class Editor extends Component {
             linesDecorationsClassName: 'editor-kernel-line-decoration',
             className : 'editor-kernel-line-highlight'
           }
+        })
+      })
+
+      mock.kernels.forEach(kernel => {
+        if ( kernel.statements.read.length == 0 && kernel.statements.write.length == 0 && kernel.statements.readwrite.length == 0)
+          console.log(`No statements found for kernel: ${kernel.source.name}`)
+        else
+          console.log(`Statements for kernel: ${kernel.source.name}`)
+
+        kernel.statements.read.forEach(readStmt => {
+          readStmt.reads.forEach(read => {
+            decorations.push({
+              range: new this.monaco.Range(read.from.row, read.from.col, read.to.row, read.to.col),
+              options : { 
+                glyphMarginClassName: 'gutter-glyph-memory-read',
+                minimap: {
+                  color: 'rgb(191, 127, 63)',
+                  position: 1
+                }
+              }
+            })
+          })
+        })
+
+        kernel.statements.write.forEach(writeStmt => {
+          writeStmt.forEach(write => {
+            decorations.push({
+              range: new this.monaco.Range(write.from.row, write.from.col, write.to.row, write.to.col),
+              options : {
+                glyphMarginClassName: 'gutter-glyph-memory-write'
+              }
+            })
+          })
+        })
+
+        kernel.statements.readwrite.forEach(readWriteStmt => {
+          decorations.push({
+            range: new this.monaco.Range(readWriteStmt.source.from.row, readWriteStmt.source.from.col, 
+                                         readWriteStmt.source.to.row, readWriteStmt.source.to.col),
+            options : { 
+              glyphMarginClassName: 'gutter-glyph-memory-read-write',
+              minimap: {
+                color: 'rgb(191, 127, 63)',
+                position: 1
+              }
+            }
+          })
         })
       })
 

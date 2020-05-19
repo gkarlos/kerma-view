@@ -1,6 +1,7 @@
 
 .gutter-glyph-memory-read {
     background-color: lightgreen;
+    margin-top: 2px !important;
 }
 
 .gutter-glyph-memory-write {

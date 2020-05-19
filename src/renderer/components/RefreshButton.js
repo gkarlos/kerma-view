@@ -11,7 +11,7 @@ class RefreshButton extends Component {
     this.app = app
     this.container = container
     this.classList = ["btn", "btn-sm", "btn-secondary"]
-    this.tooltip = "Refresh the window"
+    this.tooltip = "Reload"
     this.name = `RefreshButton[${this.id}]`
     this.value = {
       default : `<i class="fas fa-sync-alt"></i>`,
@@ -53,7 +53,7 @@ class RefreshButton extends Component {
   }
 
   useDefaultControls() {
-
+    this.node.on('click', () => this.app.reload())
   }
 }
 

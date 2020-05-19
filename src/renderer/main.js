@@ -61,6 +61,10 @@ app.removeListener = app.emitter.removeListener;
 app.ui       = require('./ui/ui')(app);
 app.client   = new KermadClient(app)
 
+app.reload = function() {
+  app.window.reload()
+}
+
 app.on(Events.INPUT_FILE_SELECTED, (filename) => app.client.startSession(filename))
 
 /**
