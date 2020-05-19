@@ -52,7 +52,7 @@ app.args = cl.parse.list(process.argv, (error, result) => {
 
 
 // app.sessionManager = require('../session').sessionManager
-
+c
 /**
  * Perform configuration steps
  * Called after `app.ready`
@@ -70,7 +70,6 @@ function preConfigure() {
   settings.display.height = settings.displays[settings.display.id].workAreaSize.height;
 
   if ( settings.window.maximized ) {
-    console.log("maximized")
     settings.window.width = settings.display.width
     settings.window.height = settings.display.height
   } 
