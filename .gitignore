@@ -3,6 +3,7 @@ node_modules/
 package-lock.json
 
 docs/*
+!docs/tutorials
 !docs/conf.json
 !docs/README.md
 
