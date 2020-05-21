@@ -1,4 +1,4 @@
-const Component = require('../component')
+const Component = require('../component/Component')
 
 /**
  * A button that creates memory of random dimensions and
@@ -6,7 +6,7 @@ const Component = require('../component')
  * 
  * This class is only meant to be used within {@link MemoryAreaTitleBar}
  * 
- * @memberof module:renderer/components/memory
+ * @memberof module:ui/memory
  */
 class AddRandomMemoryButton extends Component {
   constructor(id, container, app) {

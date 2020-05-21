@@ -1,11 +1,11 @@
-const Component = require('../component')
+const Component = require('../component/Component')
 const MemoryAreaTitleBar = require('./MemoryAreaTitlebar')
 const MemoryAreaBody = require('./MemoryAreaBody')
 const Events = require('../../events')
 
 /**
  * The main container for memory visualizations
- * @memberof module:renderer/components/memory
+ * @memberof module:ui/memory
  */
 class MemoryArea extends Component {
   constructor(id, container, app) {

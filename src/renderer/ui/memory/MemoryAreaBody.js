@@ -1,6 +1,6 @@
 'use-strict'
 
-const Component = require('../component')
+const Component = require('../component/Component')
 const MemoryVisualizer = require('./MemoryVisualizer')
 const Memory = require('renderer/model/memory').Memory
 
@@ -10,7 +10,7 @@ const Memory = require('renderer/model/memory').Memory
  * 
  * This class is only meant to be used within {@link MemoryArea}
  * 
- * @memberof module:renderer/components/memory
+ * @memberof module:ui/memory
  */
 class MemoryAreaBody extends Component {
   constructor(id, container, app) {

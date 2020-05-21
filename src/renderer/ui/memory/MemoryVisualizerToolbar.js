@@ -9,8 +9,11 @@
  *//*--------------------------------------------------------------*/
 'use-strict'
 
-const Component = require('../component')
+const Component = require('../component/Component')
 
+/**
+ * @memberof module:ui/memory
+ */
 class MemoryVisualizerToolbar extends Component {
   constructor(id, container, vizualizer) {
     super(`MemoryVisualizerToolbar[${id}]`)

@@ -7,13 +7,13 @@
  * @file renderer/components/memory/MemoryVisualizer.js
  *  
  *//*--------------------------------------------------------------*/
-const Component = require('../component')
+const Component = require('../component/Component')
 const Memory = require('renderer/model/memory').Memory
 const MemoryVisualizerToolbar = require('./MemoryVisualizerToolbar')
 const {InternalError} = require('util/error')
 
 /**
- * @memberof module:renderer/components/memory
+ * @memberof module:ui/memory
  * @description 
  *   Visualizes a memory object
  *   ### Important

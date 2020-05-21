@@ -26,7 +26,8 @@
     "recurse": true,
     "destination": "./docs/dev",
     "title": "KermaView",
-    "template": "node_modules/better-docs"
+    "template": "node_modules/better-docs",
+    "tutorials": "./docs/tutorials"
   },
   "tags": {
     "allowUnknownTags": ["category"]

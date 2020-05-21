@@ -1,11 +1,12 @@
-/**--renderer/components/memory/index.js----------------------------/
+/**--renderer/ui/memory/index.js------------------------------------/
  *
  * Part of the kerma project
  * 
  *------------------------------------------------------------------/
  * 
- * @file renderer/components/memory/index.js
- * @module renderer/components/memory
+ * @file renderer/ui/memory/index.js
+ * @module ui/memory
+ * @category ui
  * @author gkarlos 
  * @description 
  *   Includes all the components used to visualize memory. i.e
