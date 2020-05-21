@@ -2,7 +2,7 @@
  * 
  */
 
-const Component = require('../component')
+const Component = require('../component/Component')
 const InternalError = require('../../../util/error')
 const Events = require('../../events')
 

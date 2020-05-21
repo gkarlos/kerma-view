@@ -9,7 +9,7 @@ module.exports = {
   layout : require('./layout'),
   memory : require('./memory'),
   toolbars : require('./toolbars'),
-  component : require('./component'),
+  component : require('./component/Component'),
   /** The ui init module */
   init : require('./init')
 }

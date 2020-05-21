@@ -1,6 +1,6 @@
 
 
-const Component = require('../component')
+const Component = require('../component/Component')
 
 /**
  * Base (abstract) class for the selectors

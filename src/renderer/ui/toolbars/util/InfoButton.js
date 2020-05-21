@@ -1,4 +1,4 @@
-const Component = require('../../component')
+const Component = require('../../component/Component')
 const Events = require('../../../events')
 const openAboutWindow = require('electron-about-window').default
 const path = require('path')

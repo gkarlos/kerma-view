@@ -1,4 +1,4 @@
-const Component = require('../component')
+const Component = require('../component/Component')
 const Events    = require('../../events')
 const KernelSelector = require('../selectors/KernelSelector')
 const KernelLaunchSelector = require('../selectors/KernelLaunchSelector')

@@ -1,7 +1,7 @@
 /**
  * @file input-file-dialog.js
  */
-const Component = require('../../component')
+const Component = require('../../component/Component')
 const Events = require('../../../events')
 const {dialog} = require('electron').remote
 const {InternalError} = require('../../../../util/error')

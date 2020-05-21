@@ -1,7 +1,7 @@
 /**
  * @file RefreshButton.js
  */
-const Component = require('./component')
+const Component = require('./component/Component')
 const Events = require('../events')
 
 /**

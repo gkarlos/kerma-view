@@ -1,4 +1,4 @@
-const Component = require('renderer/ui/component')
+const Component = require('../../component/Component')
 
 class SettingsButton extends Component {
   constructor(id, container, app) {

@@ -3,7 +3,7 @@
  */
 const fs        = require('../../../util/fs')
 const mock = require('../../../mock/cuda-source')
-const Component = require('../component')
+const Component = require('../component/Component')
 const Events    = require('../../events')
 const {InternalError} = require('../../../util/error')
 const path = require('path')
