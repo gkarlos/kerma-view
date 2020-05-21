@@ -52,7 +52,7 @@ app.args = cl.parse.list(process.argv, (error, result) => {
 
 
 // app.sessionManager = require('../session').sessionManager
-c
+
 /**
  * Perform configuration steps
  * Called after `app.ready`
