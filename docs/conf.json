@@ -27,7 +27,7 @@
     "destination": "./docs/dev",
     "title": "KermaView",
     "template": "node_modules/better-docs",
-    "tutorials": "./docs/tutorials"
+    "tutorials": "docs/tutorials"
   },
   "tags": {
     "allowUnknownTags": ["category", "subcategory"]
