@@ -12,11 +12,12 @@ class SettingsButton extends Component {
   render() {
     this.node = $(`
       <div id='${this.id}' data-toggle='tooltip' title='${this.tooltip}'>
-        <h4><i class="fas fa-cog"></i></h4>
+        <i class="fas fa-cog center-vertically"></i>
       </div>
     `).css("cursor", "pointer")
-      .css("margin-right", "10px")
+      .css("margin-right", "5px")
       .css("opacity", "0.6")
+      .css('font-size', '18px')
       .hover( function() { $( this ).fadeTo( 'fast', '1'); }, 
               function() { $( this ).fadeTo( 'fast', '.6'); })
       .tooltip()

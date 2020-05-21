@@ -19,11 +19,13 @@ class InfoButton extends Component {
   render() {
     this.node = $(`
       <div id='${this.id}' data-toggle='tooltip' title='${this.tooltip}'>
-        <h4><i class="fas fa-info-circle"></i></h4>
+        <i class="fas fa-info-circle center-vertically"></i>
       </div>
     `).appendTo(this.container)
       .css("cursor", "pointer")
+      .css("margin-right", "5px")
       .css("opacity", "0.6")
+      .css('font-size', '18px')
       .hover( function() { $( this ).fadeTo( 'fast', '1'); }, 
               function() { $( this ).fadeTo( 'fast', '.6'); })
       .tooltip()

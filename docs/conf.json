@@ -30,7 +30,7 @@
     "tutorials": "./docs/tutorials"
   },
   "tags": {
-    "allowUnknownTags": ["category"]
+    "allowUnknownTags": ["category", "subcategory"]
   }
 }
 

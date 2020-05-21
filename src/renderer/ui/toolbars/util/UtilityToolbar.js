@@ -1,7 +1,9 @@
 const Component      = require('../../component/Component')
 const SettingsButton = require('./SettingsButton')
+const NotificationsButton = require('./NotificationButton')
 const InfoButton     = require('./InfoButton')
 const Events         = require('renderer/events')
+const MenuSeparator  = require('renderer/ui/MenuSeparator')
 
 class UtilityToolbar extends Component {
   constructor(id, container, app) {
@@ -10,6 +12,8 @@ class UtilityToolbar extends Component {
     this.id = id
     this.container = container
     this.app = app
+    this.notificationButton = new NotificationsButton('notifications-button', `#${this.id}`, this.app)
+    this.separator = new MenuSeparator('utility-bar-separator', `#${this.id}`, this.app)
     this.settingsButton = new SettingsButton('settings-button', `#${this.id}`, this.app)
     this.infoButton = new InfoButton('info-button', `#${this.id}`, this.app)
   }
@@ -21,6 +25,8 @@ class UtilityToolbar extends Component {
     `).appendTo(this.container)
     this.node.css('float', 'right').css("display", "flex")
 
+    this.notificationButton.render()
+    this.separator.render()
     this.settingsButton.render()
     this.infoButton.render()
     this.rendered = true;
