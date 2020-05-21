@@ -4,35 +4,45 @@
 const Component = require('./component')
 const Events = require('../events')
 
+/**
+ * @category ui
+ */
 class RefreshButton extends Component {
   constructor(id, container, app) {
     super()
     this.id = id
     this.app = app
     this.container = container
+    /** */
     this.classList = ["btn", "btn-sm", "btn-secondary"]
+    /** */
     this.tooltip = "Reload"
     this.name = `RefreshButton[${this.id}]`
+    /** */
     this.value = {
       default : `<i class="fas fa-sync-alt"></i>`,
       current : `<i class="fas fa-sync-alt"></i>`
     }
   }
 
+  /** */
   enable() {
     // TODO implement me
   }
 
+  /** */
   disable() {
     // TODO implement me
   }
 
+  /** */
   setValue(value) {
     this.value.current = value
     if ( this.rendered)
       this.node.html(value)
   }
 
+  /** */
   render() {
     if ( this.rendered )
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)

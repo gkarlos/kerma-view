@@ -36,6 +36,10 @@ class MemoryArea extends Component {
     this.body.addMemory(memory)
   }
 
+  getMemory(name) {
+    return this.body.getMemory(name)
+  }
+
   useDefaultControls() {
     this.title.useDefaultControls()
     this.body.useDefaultControls()

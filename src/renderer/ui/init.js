@@ -1,14 +1,27 @@
 /**
- * This module is an aggregation of all ui elements
+ * @module ui/init
+ * @category ui
+ */
+
+/**
+ * Initialize the ui
+ * 
+ * If the app has an initialized ui, then this is a no-op <br/>
+ * 
+ * @function
+ * @param {Object} app Reference to the application
  */
 module.exports = (app) => {
+  if ( app.ui && app.ui.initialized)
+    return app.ui
+
   require('popper.js')
   require('bootstrap')
 
   const EventEmitter     = require('events')
-  const {InternalError}  = require('../../util/error')
+  const {InternalError}  = require('util/error')
   const UIEmitter = new EventEmitter()
-  const ElectronLayout  = require('../layout/ElectronLayout')
+  const ElectronLayout  = require('./layout/ElectronLayout')
   const Events          = require('../events')
 
   const ui = {
@@ -80,15 +93,15 @@ module.exports = (app) => {
   }
 
   function createComponents() {
-    const ConsoleButton  = require('../components/ConsoleButton')
-    const RefreshButton  = require('../components/RefreshButton')
-    const InputToolbar   = require('../components/toolbars/input/InputToolbar')
-    const SessionControlToolbar = require('../components/toolbars/SessionControlToolbar')
-    const Editor = require('../components/editor/Editor')
+    const ConsoleButton  = require('../ui/console/ConsoleButton')
+    const RefreshButton  = require('./RefreshButton')
+    const InputToolbar   = require('./toolbars/input/InputToolbar')
+    const SessionControlToolbar = require('./toolbars/SessionControlToolbar')
+    const Editor = require('./editor/Editor')
     // const InfoButton = require('../components/toolbars/util/InfoButton')
-    const MainToolbar = require('../components/toolbars/MainToolbar')
-    const UtilityToolbar = require('renderer/components/toolbars/util/UtilityToolbar')
-    const MemoryArea = require('renderer/components/memory/MemoryArea')
+    const MainToolbar = require('./toolbars/MainToolbar')
+    const UtilityToolbar = require('renderer/ui/toolbars/util/UtilityToolbar')
+    const MemoryArea = require('renderer/ui/memory/MemoryArea')
 
     ui.console.button  = ui.registerComponent(new ConsoleButton("console-toggle-button", `#${ui.layout.header.left.id}`, app))
     ui.refresh.button  = ui.registerComponent(new RefreshButton("top-refresh-button", `#${ui.layout.header.left.id}`, app))
@@ -145,7 +158,7 @@ module.exports = (app) => {
   })
 
 
-
+  ui.initialized = true;
   return ui;
 }
 

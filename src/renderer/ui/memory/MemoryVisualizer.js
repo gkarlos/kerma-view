@@ -60,7 +60,7 @@ class MemoryVisualizer extends Component {
 
   render() {
     this.node = $(`
-      <div id="${this.id}" class="${MemoryVisualizer.defaultClassName}">
+      <div id="${this.id}" class="${MemoryVisualizer.defaultClassName} list-group-item">
       </div>
     `).appendTo(this.container)
     

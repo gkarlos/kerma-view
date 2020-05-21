@@ -34,7 +34,7 @@ class MemoryAreaBody extends Component {
   render() {
     if ( !this.rendered) {
       this.node = $(`
-      <div class="card-body" id="${this.id}">
+      <div class="list-group" id="${this.id}">
         <ul class="list-group" id="heatmap-example"></ul>
       </div>`).appendTo(this.container)
       

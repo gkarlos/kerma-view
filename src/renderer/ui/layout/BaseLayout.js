@@ -12,12 +12,12 @@
  'use-strict'
 
 // const Component = require('../component')
-const {InternalError} = require('../../util/error')
+const {InternalError} = require('util/error')
 
 /**
  * @abstract
  * @extends Component
- * @memberof module:renderer/components/layout
+ * @memberof module:ui/layout
  * @description
  *  Base (abstract) class for the app layout(s)
  *                                                       <br/>

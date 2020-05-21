@@ -1,5 +1,5 @@
 {
-  "plugins"   : ["plugins/markdown"],
+  "plugins"   : ["plugins/markdown", "node_modules/better-docs/category"],
   "templates" : {
     "tabNames": {
       "api": "API",
@@ -26,7 +26,10 @@
     "recurse": true,
     "destination": "./docs/dev",
     "title": "KermaView",
-    "template": "node_modules/tui-jsdoc-template"
+    "template": "node_modules/better-docs"
+  },
+  "tags": {
+    "allowUnknownTags": ["category"]
   }
 }
 

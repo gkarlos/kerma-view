@@ -11,13 +11,15 @@
 'use-string'
 
 const BaseLayout      = require('./BaseLayout')
-const {InternalError} = require('../../util/error')
+const {InternalError} = require('util/error')
 const Split           = require('split.js')
-const Events          = require('../events')
+
+const Events          = require('renderer/events')
+
 
 /**
  * @class
- * @memberof module:renderer/components/layout
+ * @memberof module:ui/layout
  * @extends BaseLayout
  * @classdesc
  *  Defines the layout for the desktop (electron) app

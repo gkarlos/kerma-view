@@ -6,7 +6,8 @@
  * 
  * @file renderer/components/layout/index.js
  * @author gkarlos 
- * @module renderer/components/layout
+ * @module ui/layout
+ * @category ui
  * @description
  *  This modules defines layouts for the the app.
  *  There are two layouts planned, one for desktop (electron) 

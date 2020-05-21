@@ -39,7 +39,7 @@ app.title    = `KermaView v${app.getVersion()} | ${settings.build}.${process.arc
 app.args = cl.parse.list(process.argv, (error, result) => {
   if ( error)
     cl.parse.defaultErrorHandler(error)
-  cl.verbose(0, `Kerma-View v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"--debug":""}\n`)
+  cl.verbose(0, `KermaView v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"--debug":""}\n`)
 
   if ( result.input) {
     app.input.path = result.input

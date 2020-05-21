@@ -25,7 +25,7 @@ const electronRemote   = require('electron').remote;
 
 const EventEmitter     = require('events')
 const mock             = require('../mock/cuda-source')
-const {Memory}         = require('./components/memory')
+const {Memory}         = require('./ui/memory')
 
 const Events           = require('./events')
 const ConsoleLogger    = require('log').ConsoleLogger
@@ -58,7 +58,7 @@ app.eventNames = app.emitter.eventNames;
 app.removeAllListeners = app.emitter.removeAllListeners;
 app.removeListener = app.emitter.removeListener;
 // main parts
-app.ui       = require('./ui/ui')(app);
+app.ui       = require('./ui').init(app);
 app.client   = new KermadClient(app)
 
 app.reload = function() {

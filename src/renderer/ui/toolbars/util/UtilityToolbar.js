@@ -1,4 +1,4 @@
-const Component      = require('renderer/components/component')
+const Component      = require('renderer/ui/component')
 const SettingsButton = require('./SettingsButton')
 const InfoButton     = require('./InfoButton')
 const Events         = require('renderer/events')
