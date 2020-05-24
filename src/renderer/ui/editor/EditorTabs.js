@@ -18,7 +18,7 @@ function searchTabs(tabs, title) {
  * @memberof module:renderer/components/editor
  */
 class EditorTabs extends Component {
-  constructor(id, container, app) {
+  constructor(id, container, app, subcomponent=false) {
     super()
     this.id = id
     this.container = container
@@ -26,7 +26,8 @@ class EditorTabs extends Component {
     this.size = 0;
     this.selected = null
     this.app = app
-    this.node = $(`<ul id="${this.id}" role="tablist"> </ul>`).addClass("nav").addClass("nav-tabs")
+    this.subcomponent = subcomponent
+    this.node = $(`<ul id="${this.id}" role="tablist"> </ul>`).addClass("nav").addClass("nav-tabs").css('width', '50%')
   }
 
   /**
@@ -83,7 +84,13 @@ class EditorTabs extends Component {
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
     this.node.appendTo(this.container)
     this.rendered = true;
+    if ( !this.subcomponent)
+      this.app.emit(Events.UI_COMPONENT_READY, this)
     return this;
+  }
+
+  useDefaultControls() {
+
   }
 }
 

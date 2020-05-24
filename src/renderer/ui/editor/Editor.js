@@ -25,7 +25,9 @@ class Editor extends Component {
     this.monaco = null
     this.instance = null
     this.app = app
-    this.tabs = new EditorTabs("editor-tabs", this.container, app)
+
+    // this.tabs = new EditorTabs("editor-tabs", this.container, app)
+
     this.AMDLoader  = require('../../../../node_modules/monaco-editor/min/vs/loader.js');
     this.AMDRequire = this.AMDLoader.require;
     this.AMDDefine  = this.AMDLoader.require.define;
@@ -36,6 +38,8 @@ class Editor extends Component {
       // }
     });
   }
+
+  get tabs() { return this.app.ui.toolbar.editor.tabs }
 
   selectTab(title) { this.tabs.select(title) }
 
@@ -73,12 +77,11 @@ class Editor extends Component {
 
     // register myself to the ui
     // this.app.ui.registerComponent(this)
-
+    
     this.tabs.addNew("Cuda")
              .addNew("LLVM-IR")
              .addNew("PTX")
              .select("Cuda")
-             .render()
 
     // Asynchronously load the editor and emit a completion("editor-loaded") event
     this.AMDRequire(['vs/editor/editor.main'], (monaco) => {
@@ -87,7 +90,8 @@ class Editor extends Component {
       this.instance = monaco.editor.create(document.getElementById(this.id), {
         language : 'cpp',
         glyphMargin: true,
-        contextmenu: true
+        contextmenu: true,
+        readOnly: true
       });
 
       this.app.emit(Events.EDITOR_LOADED, monaco)

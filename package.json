@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
+    "animate.css": "^4.1.0",
     "app-module-path": "^2.2.0",
     "bootstrap": "^4.4.1",
     "bootstrap-notify": "^3.1.3",

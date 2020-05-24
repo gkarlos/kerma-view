@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../node_modules/selectize/dist/css/selectize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/editor.css">
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- <link rel="import" href="static/html/blog-post.html" id="templates"> -->
+    <style type="text/css" media="screen"></style>
+    </style>
+
+  </head>
+
+  <body class="d-flex flex-column">
+    <!-- container -->
+    <div name="container" id="container" class="container-fluid">
+      <!-- HEADER -->
+      <div class="row navbar" id='top-toolbar'>
+        <div id="top-toolbar-left">
+          <button class="btn btn-sm btn-secondary" id="console-toggle-button"><i class="fas fa-terminal"></i> Console</button>
+          <button class="btn btn-sm btn-secondary" id="top-refresh-button" data-toggle="tooltip" data-placement="bottom" title="Refresh the window"><i class="fas fa-sync-alt"></i></button>
+          <button class="btn btn-sm btn-secondary" id="top-restart-session-button" data-toggle="tooltip" data-placement="bottom" title="Start a new session"><i class="fas fa-trash-restore"></i></button>
+        </div>
+        <div id="top-toolbar-right"></div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="row main-row" id='main'>
+        
+        <!-- LEFT -->
+        <div class="h-100" id="left">
+          <div id="console-area" class="collapse"></div>
+
+          <!-- LEFT-TOP -->
+          <div id="left-top" class="split w-100 card ">
+            <!-- The editor div -->
+            <ul class="nav nav-tabs ">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Cuda</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">LLVM-IR</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">PTX</a>
+              </li>
+            </ul>
+
+            <div id="editor" class="w-100"></div>
+          </div> 
+
+          <!-- LEFT-BOTTOM -->
+          <div class="split" id="left-bottom">
+            
+            <div id="editor-toolbar" class="input-group card-header">
+              <div class="row selection-row d-inline-flex justify-content-between" id="kernel-launch-selection-row">
+                <!-- Kernel Selection -->
+                <div class="editor-toolbar-group d-flex" id="kernel-selection-group">
+                  <div class="input-group-prepend pre" id="kernel-list-dropdown-pre">
+                    <div class="input-group-text" id="kernel-list-dropdown-pre-text">Kernel</div>
+                  </div>
+                  <div class="control-group align-middle dropdown" id="kernel-list-dropdown" >
+                    <select id="select-repo" class="repositories input-group-sm"></select>
+                  </div>
+                </div>
+
+                <!-- Launch Selection -->
+                <div class="editor-toolbar-group" id="launch-selection-group">
+                  <div class="input-group-prepend pre" id="launch-list-dropdown-pre">
+                    <div class="input-group-text" id="launch-list-dropdown-pre-text">Launch</div>
+                  </div>
+                  <div class="control-group align-middle dropdown" id="launch-list-dropdown" >
+                    <select id="select-repo2" class="repositories"></select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row selection-row d-inline-flex justify-content-between">
+                <div class="w-50 editor-toolbar-group">
+                </div>
+                <!-- Start/Stop -->
+                <div class="btn-group btn-group-sm" role="group" aria-label="First group" id="start-stop-container">
+                  <button type="button" class="btn btn-secondary disabled" id="stop-button"><i class="fas fa-stop"></i></button>
+                  <button type="button" class="btn btn-info" id="start-button"><i class="fas fa-play"></i> Start</button>
+                  <div class="btn-group btn-group" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-redo"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-angle-double-down"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-angle-double-down"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-angle-double-right"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-chevron-circle-down"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-chevron-circle-right"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between" id="left-bottom">
+              <div class="card w-50" id="select-panel">
+                <div class="card-header">Select
+                </div>
+                <div class="card-body">
+                </div>  
+              </div>
+              <!-- <div class="card w-50" id="select-panel">
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                  <div class="btn-group btn-group-lg mr-2" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-redo"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-angle-double-down"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-angle-double-right"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-chevron-circle-down"></i></button>
+                    <button type="button" class="btn btn-secondary"><i class="fas fa-chevron-circle-right"></i></button>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+          
+        </div> 
+        
+        <!-- RIGHT -->
+        <div class="h-100 right split" id="right">
+          <div class="card" id="memory-area">
+            <div class="card-header">
+              <span class="title"><strong>Memory</strong></span> 
+              <a class="btn btn-sm btn-success" href="#" id="button-add-memory">Add...</a>
+            </div>
+            <div class="card-body">
+              <ul class="list-group" id="heatmap-example">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer id="sticky-footer" class="footer" id="footer">
+      <div class="container text-center">
+        
+      </div>
+    </footer>
+  </body>
+  <script>
+    require(require('path').join(__dirname, "../", "main.js"))
+  </script>
+</html>

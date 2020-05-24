@@ -134,7 +134,7 @@ function createMainWindow() {
     devtools.open(win, true, true);
 
   win.setMenuBarVisibility(false)
-  win.loadFile(path.join(__dirname, "../", "renderer", "static", "index2.html"))
+  win.loadFile(path.join(__dirname, "../", "renderer", "static", "index.html"))
 
   win.on('close', () => {
     app.windows.loading && app.windows.loading.close()

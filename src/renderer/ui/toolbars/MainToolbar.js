@@ -16,7 +16,7 @@ class MainToolbar extends Component {
     this.insertTo = null;
     this.kernelSelector = new KernelSelector('select-kernel', '#kernel-launch-selection-row', this.app)
     this.kernelLaunchSelector = new KernelLaunchSelector('select-kernel-launch', '#kernel-launch-selection-row', this.app);
-    this.codeNavToolbar = new CodeNavToolbar('code-nav-toolbar', '#codenav-threadselect-row', this.app, true)
+    // this.codeNavToolbar = new CodeNavToolbar('code-nav-toolbar', '#codenav-threadselect-row', this.app, true)
     // this.app.ui.registerComponent(this)
     // this.app.ui.toolbar.main = this
   }
@@ -37,7 +37,7 @@ class MainToolbar extends Component {
     
     this.kernelSelector.render()
     this.kernelLaunchSelector.render()
-    this.codeNavToolbar.render()
+    // this.codeNavToolbar.render()
 
     this.rendered = true
     this.app.emit(Events.UI_COMPONENT_READY, this);
@@ -47,7 +47,7 @@ class MainToolbar extends Component {
   useDefaultControls() {
     this.kernelSelector.useDefaultControls()
     this.kernelLaunchSelector.useDefaultControls()
-    this.codeNavToolbar.useDefaultControls()
+    // this.codeNavToolbar.useDefaultControls()
     return this;
   }
 }

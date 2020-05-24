@@ -97,21 +97,33 @@ module.exports = (app) => {
     const RefreshButton  = require('./RefreshButton')
     const InputToolbar   = require('./toolbars/input/InputToolbar')
     const SessionControlToolbar = require('./toolbars/SessionControlToolbar')
+    
+    const EditorToolbar = require('./editor/EditorToolbar')
     const Editor = require('./editor/Editor')
     // const InfoButton = require('../components/toolbars/util/InfoButton')
     const MainToolbar = require('./toolbars/MainToolbar')
     const UtilityToolbar = require('renderer/ui/toolbars/util/UtilityToolbar')
     const MemoryArea = require('renderer/ui/memory/MemoryArea')
 
+
+
+    const CodeNavToolbar = require('renderer/ui/toolbars/CodeNavToolbar')
+
     ui.console.button  = ui.registerComponent(new ConsoleButton("console-toggle-button", `#${ui.layout.header.left.id}`, app))
     ui.refresh.button  = ui.registerComponent(new RefreshButton("top-refresh-button", `#${ui.layout.header.left.id}`, app))
+    
     ui.toolbar.input   = ui.registerComponent(new InputToolbar("file-select-group", `#${ui.layout.header.right.id}`, app))
     ui.toolbar.session = ui.registerComponent(new SessionControlToolbar("session-control-toolbar", `#${ui.layout.header.right.id}`, app))
+
+    ui.toolbar.editor  = ui.registerComponent(new EditorToolbar('editor-toolbar', `#${ui.layout.body.left.top.id}`, app))
+    ui.toolbar.codenav = ui.toolbar.editor.codenav
     ui.editor          = ui.registerComponent(new Editor('editor', `#${ui.layout.body.left.top.id}`, app))
+
     ui.toolbar.util    = ui.registerComponent(new UtilityToolbar('utility-toolbar', `#${ui.layout.header.right.id}`, app))
     // ui.info.button     = ui.registerComponent(new InfoButton("info-button", `#${ui.layout.header.right.id}`, app))
-    ui.toolbar.main    = ui.registerComponent(new MainToolbar("editor-toolbar", "#left-bottom", app))
-    ui.toolbar.code    = ui.toolbar.main.codeNavToolbar
+    ui.toolbar.main    = ui.registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))
+    // ui.toolbar.code    = ui.toolbar.main.codeNavToolbar
+    // ui.toolbar.code    = ui.registerComponent(new CodeNavToolbar("code-nav-toolbar", `#tablist`, app))
     ui.memory          = ui.registerComponent(new MemoryArea("memory-area", "#right", app))
 
     logUiComponentRegistration()
@@ -122,10 +134,12 @@ module.exports = (app) => {
     ui.refresh.button.render()
     ui.toolbar.input.render()
     ui.toolbar.session.render()
+    ui.toolbar.editor.render()
     ui.editor.render()
     // ui.info.button.render()
     ui.toolbar.util.render()
     ui.toolbar.main.render()
+    // ui.toolbar.code.render()
     ui.memory.render()
   }
 
@@ -134,10 +148,12 @@ module.exports = (app) => {
     ui.refresh.button.useDefaultControls()
     ui.toolbar.input.useDefaultControls()
     ui.toolbar.session.useDefaultControls()
+    ui.toolbar.editor.useDefaultControls()
     ui.editor.useDefaultControls()
     // ui.info.button.useDefaultControls()
     ui.toolbar.main.useDefaultControls()
     ui.toolbar.util.useDefaultControls()
+    // ui.toolbar.code.useDefaultControls()
     ui.memory.useDefaultControls()
   }
 

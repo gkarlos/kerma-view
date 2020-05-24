@@ -56,8 +56,11 @@ body {
 #top-toolbar-left, #top-toolbar-right {
     width: 50%;
     padding-top: 2px;
-    padding-left: 5px;
     height: 100%;
+}
+
+#top-toolbar-left {
+    padding-left: 5px;
 }
 
 
@@ -70,6 +73,10 @@ body {
     padding: 0px;
 } */
 
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
 
 #heatmap-example {
     width: 100%;
@@ -110,7 +117,7 @@ body {
     border-bottom-right-radius: 3px;
 }
 
-#editor-toolbar {
+#main-toolbar {
     /* margin-top: 3px; */
     padding: 10px;
     margin-bottom: 5px;
@@ -131,14 +138,14 @@ body {
     border-bottom-right-radius: 3px;
 }
 
-#editor-toolbar .selection-row {
+#main-toolbar .selection-row {
     height: auto;
     width: 100%;
     bottom: 0px;
     max-width: 100%;
 }
 
-#editor-toolbar .editor-toolbar-group {
+#main-toolbar .editor-toolbar-group {
     display: inline-flex;
     flex-flow: row;
     height: 100%;
@@ -159,7 +166,7 @@ body {
 }
 
 #start-stop-container {
-    width: 49%;
+    /* width: 49%; */
     /* margin-right: auto; */
 }
 
@@ -188,7 +195,7 @@ body {
     float: right;
 }
 
-#editor-toolbar .editor-toolbar-group .input-group-text {
+#main-toolbar .editor-toolbar-group .input-group-text {
     /* height:100% !important; */
     width: 100%;
     height: 100%;
@@ -197,11 +204,11 @@ body {
     /* line-height: 14px !important; */
 }
 
-#editor-toolbar .editor-toolbar-group .dropdown {
+#main-toolbar .editor-toolbar-group .dropdown {
     width : 100%;
 }
 
-#editor-toolbar #selection-row-buttons #button-analyze {
+#main-toolbar #selection-row-buttons #button-analyze {
     /* padding: 10% 0;  */
     padding-top: 1px;
     padding-bottom: 1px;

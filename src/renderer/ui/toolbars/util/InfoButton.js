@@ -43,7 +43,7 @@ class InfoButton extends Component {
     this.node.on('click', () => {
       openAboutWindow({
         product_name: "KermaView",
-        icon_path: this.app.iconPath,
+        icon_path: this.app.icon,
         package_json_dir: this.app.root
       })
     })

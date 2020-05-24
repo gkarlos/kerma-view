@@ -52,6 +52,7 @@ class RefreshButton extends Component {
       </button>
     `)
     this.node.append($(this.value.current))
+    this.node.css('margin-right', '2px')
 
     
     this.node.tooltip()

@@ -232,7 +232,7 @@ class ElectronLayout extends BaseLayout {
 
     this.layout.body.split = Split(['#left', '#right'], { 
       sizes: [50, 50], 
-      onDrag: () => this.app.ui.emit(Events.UI_RESIZE)
+      onDrag: () => this.app.emit(Events.UI_RESIZE)
     })
 
     this.layout.body.left.split = Split(['#left-top', '#left-bottom'], {
@@ -242,7 +242,7 @@ class ElectronLayout extends BaseLayout {
       cursor: 'row-resize', 
       snapOffset : 0,
       dragInterval: 5,
-      onDrag: () => this.app.ui.emit(Events.UI_RESIZE)
+      onDrag: () => this.app.emit(Events.UI_RESIZE)
     });
 
     this.rendered = true
