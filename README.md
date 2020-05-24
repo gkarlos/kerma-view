@@ -17,7 +17,7 @@ TODO:
 
 ------
 IDEAS:
-
+- https://lynx.pink/notiny/
 - https://www.electronjs.org/apps/thermal
 - https://www.electronjs.org/apps/pomodoro-logger
 

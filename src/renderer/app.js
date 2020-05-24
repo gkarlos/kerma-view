@@ -1,6 +1,8 @@
 const ConsoleLogger       = require('log').ConsoleLogger
 const EventEmitter        = require('events')
-const NotificationService = require('./services/NotificationService')
+const NotificationService = require('./notification/NotificationService')
+const UI                  = require('./ui')
+const Events              = require('./events')
 
 class App {
   constructor() {
@@ -16,8 +18,10 @@ class App {
     this.mock     = require(`../mock/cuda-source`)
     this.log      = new ConsoleLogger({level: ConsoleLogger.Level.Info})
     this.emitter  = new EventEmitter()
-    this.notifier = new NotificationService() 
-    this.ui       = require('./ui').init(this)
+
+    this.notifier = new NotificationService();
+    
+    this.ui       = undefined
   }
 
   get root()    { return this.electron.app.root;     }
@@ -37,7 +41,25 @@ class App {
 
   reload() { this.window.reload() }
 
+
+  initUI() {
+    this.ui = UI.init(this);
+  }
+
+  initServices() {
+    
+  }
+
   start() {
+
+    this.initUI();
+
+    this.on(Events.UI_READY, () => {
+
+      this.initServices();
+    })
+
+
   } 
 }
 

@@ -67,6 +67,8 @@
     "better-docs": "^2.0.1",
     "chai": "^4.2.0",
     "electron": "^8.2.1",
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "jsdoc": "^3.6.4"
   }
 }

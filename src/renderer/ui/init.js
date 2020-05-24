@@ -120,41 +120,43 @@ module.exports = (app) => {
     ui.editor          = ui.registerComponent(new Editor('editor', `#${ui.layout.body.left.top.id}`, app))
 
     ui.toolbar.util    = ui.registerComponent(new UtilityToolbar('utility-toolbar', `#${ui.layout.header.right.id}`, app))
-    // ui.info.button     = ui.registerComponent(new InfoButton("info-button", `#${ui.layout.header.right.id}`, app))
     ui.toolbar.main    = ui.registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))
-    // ui.toolbar.code    = ui.toolbar.main.codeNavToolbar
-    // ui.toolbar.code    = ui.registerComponent(new CodeNavToolbar("code-nav-toolbar", `#tablist`, app))
     ui.memory          = ui.registerComponent(new MemoryArea("memory-area", "#right", app))
 
     logUiComponentRegistration()
   }
 
   function renderComponents() {
+    ui.initNotification.updateDetails('registering ui components...')
+
     ui.console.button.render()
     ui.refresh.button.render()
     ui.toolbar.input.render()
     ui.toolbar.session.render()
     ui.toolbar.editor.render()
     ui.editor.render()
-    // ui.info.button.render()
     ui.toolbar.util.render()
     ui.toolbar.main.render()
-    // ui.toolbar.code.render()
     ui.memory.render()
+
+    ui.initNotification.updateProgress(50)
   }
 
   function useDefaultControls() {
+
+    ui.initNotification.updateDetails('registering ui controllers...')
+
     ui.console.button.useDefaultControls()
     ui.refresh.button.useDefaultControls()
     ui.toolbar.input.useDefaultControls()
     ui.toolbar.session.useDefaultControls()
     ui.toolbar.editor.useDefaultControls()
     ui.editor.useDefaultControls()
-    // ui.info.button.useDefaultControls()
     ui.toolbar.main.useDefaultControls()
     ui.toolbar.util.useDefaultControls()
-    // ui.toolbar.code.useDefaultControls()
     ui.memory.useDefaultControls()
+
+    ui.initNotification.updateProgress(50)
   }
 
   // Load all components once DOM is ready
@@ -163,9 +165,14 @@ module.exports = (app) => {
   // for now loading times are good enough
   $(() => { 
     let start = new Date().getTime()
+
     ui.layout.render()
     createComponents()
+    
+    ui.initNotification = app.notifier.info("Initializing:", null)
+
     renderComponents()
+
     app.on(Events.UI_READY, () => {
       ui.perf.totalRenderTime = new Date().getTime() - start
       logUiReady()
