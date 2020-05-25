@@ -10,7 +10,6 @@ const app = new App()
 
 app.start()
 
-
 // app.on(Events.INPUT_FILE_SELECTED, (filename) => app.client.startSession(filename))
 
 // app.on(Events.UI_READY, () => app.notifier.info("App is ready") )

@@ -1,4 +1,4 @@
-const Notification = require('./Notification')
+const Notification = require('./NotificationModel')
 
 /**
  * @memberof module:notification
@@ -23,6 +23,8 @@ class ProgressNotification extends Notification {
     this.started = false
     this.completed = false
   }
+
+  getTotal() { return this.total }
 
   /**
    * Check if this notification is infinite
@@ -73,11 +75,11 @@ class ProgressNotification extends Notification {
    * Update the progress. No-op if the notification has not started.
    * See {@link hasStarted()}
    * 
-   * If this is an infinite notification {@link isInfinite()} the
+   * If this is an infinite notification {@link ProgressNotification#isInfinite} the
    * *value* parameter is ignored
    * 
-   * @param {*} value 
-   * @param {*} info 
+   * @param {Number} value 
+   * @param {String} info 
    */
   progress(value, info) {
     if ( this.isStarted()) {
@@ -116,15 +118,6 @@ class ProgressNotification extends Notification {
    */
   onProgress(callback) { 
     this.onProgressCallbacks.push(callback)   
-  }
-
-  /**
-   * Set a callback to be fired when the progress completes
-   * 
-   * @param {ProgressNotificationOnCompleteCallback} callback Fired when progress completes
-   */
-  onComplete(callback) { 
-    this.onCompleteCallbacks.push(callback) 
   }
 };
 

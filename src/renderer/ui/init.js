@@ -127,7 +127,7 @@ module.exports = (app) => {
   }
 
   function renderComponents() {
-    ui.initNotification.updateDetails('registering ui components...')
+    // ui.initNotification.updateDetails('rendering ui components...')
 
     ui.console.button.render()
     ui.refresh.button.render()
@@ -139,12 +139,13 @@ module.exports = (app) => {
     ui.toolbar.main.render()
     ui.memory.render()
 
-    ui.initNotification.updateProgress(50)
+    // ui.initNotification.updateProgress(50)
+    
   }
 
   function useDefaultControls() {
 
-    ui.initNotification.updateDetails('registering ui controllers...')
+    // ui.initNotification.updateDetails('registering ui controllers...')
 
     ui.console.button.useDefaultControls()
     ui.refresh.button.useDefaultControls()
@@ -156,7 +157,7 @@ module.exports = (app) => {
     ui.toolbar.util.useDefaultControls()
     ui.memory.useDefaultControls()
 
-    ui.initNotification.updateProgress(50)
+    // ui.initNotification.updateProgress(50)
   }
 
   // Load all components once DOM is ready
@@ -169,7 +170,15 @@ module.exports = (app) => {
     ui.layout.render()
     createComponents()
     
-    ui.initNotification = app.notifier.info("Initializing:", null)
+    // ui.initNotification = app.notifier.info("Initializing:", null, true)
+    const NotificationService = require('renderer/notification/NotificationService')
+
+    let notifier = new NotificationService(app)
+
+    notifier.success("TITLE", "MESSAGE", "DETAILS")
+    notifier.info("TITLE", "MESSAGE", "DETAILS")
+    notifier.warning("TITLE", "MESSAGE", "DETAILS")
+    notifier.error("TITLE", "MESSAGE", "DETAILS")
 
     renderComponents()
 

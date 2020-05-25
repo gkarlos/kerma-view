@@ -2,6 +2,10 @@
  * @module notification
  */
 module.exports = {
-  Notification : require('./Notification'),
-  ProgressNotification : require('./ProgressNotification')
+  AbstractNotification : require('./AbstractNotification'),
+  AbstractNotificationView : require('./AbstractNotificationView'),
+  Notification : require('./NotificationModel'),
+  NotificationView: require('./NotificationView'),
+  ProgressNotification : require('./ProgressNotification'),
+  ProgressNotificationView : require('./ProgressNotificationView')
 }
