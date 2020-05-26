@@ -1,4 +1,6 @@
 'use-strict'
+require('v8-compile-cache')
+
 const path = require('path')
 require('app-module-path').addPath(path.join(__dirname, "../"))
 

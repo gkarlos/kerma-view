@@ -12,6 +12,7 @@
  *  
  *-----------------------------------------------------------------*/
 'use strict';
+require('v8-compile-cache')
 
 const electron        = require('electron');
 const path            = require('path');
@@ -181,23 +182,6 @@ app.on("ready", () => {
     progressBar.setCompleted()
     setTimeout(() => app.windows.main.show(), 300)    
   })
-
-  // setTimeout(() => {
-    // loading.once('show', () => {
-    //   try {
-    //     let mainWindow = createMainWindow();
-  
-    //     registerShortcuts()
-        
-
-    //   } catch ( error) {
-    //     cl.error(error).exit(0);
-    //   }
-    // })
-  // }, 3000)
-
-
-  
 });
 
 app.on('before-quit',function()

@@ -59,6 +59,7 @@
     "selectize": "^0.12.6",
     "split.js": "^1.5.11",
     "tui-jsdoc-template": "^1.2.2",
+    "v8-compile-cache": "^2.1.0",
     "vscode-jsonrpc": "^5.0.1",
     "xterm": "^4.5.0",
     "xterm-addon-fit": "^0.3.0"
