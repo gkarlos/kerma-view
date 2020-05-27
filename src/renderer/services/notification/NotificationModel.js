@@ -1,5 +1,7 @@
 /**
- * Model for a basic notification
+ * Model for a basic notification.
+ * 
+ * Base class for all other notifications
  * 
  * @class
  * @memberof module:notification
@@ -7,16 +9,17 @@
 class NotificationModel {
 
   /**
-   * @param {String} type    Type of the notification
-   * @param {String} title   Title of the notification
-   * @param {String} message Message of the notification
-   * @param {String} details Details of the notification
+   * @param {Object} options
+   * @param {String} [options.type] Type of the notification
+   * @param {String} [options.title] Title of the notification
+   * @param {String} [options.message] Message of the notification
+   * @param {String} [options.details] Details of the notification
    */
-  constructor(type, title, message, details) {
-    this.title   = title
-    this.message = message
-    this.details = details
-    this.type    = type
+  constructor(options={}) {
+    this.title   = options.title   | ""
+    this.message = options.message | ""
+    this.details = options.details | ""
+    this.type    = options.type    | NotificationModel.Info
   }
 
   /** Get the title of the notification   */

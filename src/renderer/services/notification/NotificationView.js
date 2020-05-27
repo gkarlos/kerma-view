@@ -55,7 +55,7 @@ class NotificationView {
     this.onShowCallbacks = []
     /** @type {Array.<NotificationViewOnHideCallback>}  */
     this.onHideCallbacks = []
-    /** @type {Array.<NotificationViewOnChangeCallback> */
+    /** @type {Array.<NotificationViewOnChangeCallback>} */
     this.onChangeCallbacks = []
 
   }

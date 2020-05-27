@@ -1,6 +1,6 @@
 const ConsoleLogger       = require('log').ConsoleLogger
 const EventEmitter        = require('events')
-const NotificationService = require('./notification/NotificationService')
+const NotificationService = require('./services/notification/NotificationService')
 const UI                  = require('./ui')
 const Events              = require('./events')
 

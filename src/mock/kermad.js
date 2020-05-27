@@ -3,7 +3,7 @@ const path = require('path')
 require('app-module-path').addPath(path.join(__dirname, "../"))
 
 const rpc  = require('json-rpc2');
-const ConsoleLogger  = require('../log/ConsoleLogger')
+const ConsoleLogger  = require('../renderer/services/log/ConsoleLogger')
 const host = 'localhost'
 const port = 8000
 

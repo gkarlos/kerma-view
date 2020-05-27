@@ -1,20 +1,28 @@
-const Notification = require('./NotificationModel')
+const NotificationModel = require('./NotificationModel')
 
 /**
  * @memberof module:notification
  */
-class ProgressNotification extends Notification {
+class ProgressNotificationModel extends NotificationModel {
 
   /**
-   * @param {String} type Type of the notification
-   * @param {String} message The notification message
-   * @param {String} details Optional detail message
+   * @param {Object} options 
+   * @param {String} [options.type] A title for the notification
+   * @param {String} [options.message] The actual notification message
+   * @param {String} [options.details] Additional details
    * @param {Integer|Infinity} total Total progress value. If {@link Infinity} progress ends only when {@link ProgressNotification#complete} is called
    */
-  constructor(type, title, message, details, total=100) {
-    super(type, title, message, details)
-    this.total = total
-    this.currentProgress = total === Infinity? Infinity : 0
+  constructor(options={}) {
+    super({
+      type: options.type,
+      title: options.title,
+      message: options.message,
+      details: options.details
+    })
+
+    this.total = options.total | 100
+
+    this.currentProgress = this.total === Infinity? Infinity : 0
     this.currentProgressInfo = undefined
     this.onStartCallbacks = []
     this.onStopCallbacks = []
@@ -121,7 +129,7 @@ class ProgressNotification extends Notification {
   }
 };
 
-module.exports = ProgressNotification
+module.exports = ProgressNotificationModel
 
 /**
  * This callback is fired when {@link module:notification~ProgressNotification} starts
