@@ -2,14 +2,6 @@
  * @memberof module:log
  */
 class LogLevel {
-  static Unknown = 0
-  static Trace   = 1
-  static Debug   = 2
-  static Info    = 3
-  static Warning = 4
-  static Error   = 5
-  static None    = 6
-
   static str = {
     Unknown : "Unknown",
     Trace   : "Trace",
@@ -56,6 +48,27 @@ class LogLevel {
       return LogLevel.Warning
   } 
 }
+
+/** */
+LogLevel.Unknown = 0
+
+/** */
+LogLevel.Trace   = 1
+
+/** */
+LogLevel.Debug   = 2
+
+/** */
+LogLevel.Info    = 3
+
+/** */
+LogLevel.Warning = 4
+
+/** */
+LogLevel.Error   = 5
+
+/** */
+LogLevel.None    = 6
 
 module.exports = LogLevel
 

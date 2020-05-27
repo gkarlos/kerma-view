@@ -4,5 +4,6 @@
  */
 module.exports = {
   LogLevel : require('./LogLevel'),
+  Logger : require('./Logger'),
   ConsoleLogger : require('./ConsoleLogger')
 }

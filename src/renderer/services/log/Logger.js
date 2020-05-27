@@ -4,6 +4,7 @@ const random = require('renderer/util/random')
 /**
  * Base class for all loggers
  * 
+ * @public
  * @memberof module:log
  * @abstract
  */
@@ -20,7 +21,7 @@ class Logger {
 
   /**
    * Set the level of this logger
-   * @param {Integer} level A new level for this logger. @see {@link module:log.LogLevel}
+   * @param {Integer} level A new level for this logger. See {@link module:log.LogLevel}
    * @returns {void}
    * @example logger.setLevel(LogLevel.Debug)
    */
@@ -41,7 +42,7 @@ class Logger {
 
   /**
    * Get the level of this logger
-   * See @link module:log.LogLevel}
+   * See {@link module:log.LogLevel}
    * @returns {Integer}
    */
   getLevel() {
@@ -63,17 +64,59 @@ class Logger {
    * @param {*} args Additional arguments
    */
   trace(msg, args) { throw new Error("Cannot invoke abstract method Logger.trace")}
+
+  /**
+   * A debug message
+   * @abstract
+   * @param {String} msg 
+   * @param {*} args Additional arguments
+   */
   debug(msg, args) { throw new Error("Cannot invoke abstract method Logger.debug")}
+
+  /**
+   * A info message
+   * @abstract
+   * @param {String} msg 
+   * @param {*} args Additional arguments
+   */
   info(msg, args) { throw new Error("Cannot invoke abstract method Logger.info")}
+
+  /**
+   * A warning message
+   * @abstract
+   * @param {String} msg 
+   * @param {*} args Additional arguments
+   */
   warn(msg, args) { throw new Error("Cannot invoke abstract method Logger.warn")}
+
+  /**
+   * An error message
+   * @abstract
+   * @param {String} msg 
+   * @param {*} args Additional arguments
+   */
   error(msg, args) { throw new Error("Cannot invoke abstract method Logger.error")}
+  
+  /**
+   * A critical error message
+   * @abstract
+   * @param {String} msg 
+   * @param {*} args Additional arguments
+   */
   critical(msg, args) { throw new Error("Cannot invoke abstract method Logger.critical")}
 }
 
 /**
- * Default logging level
+ * Logger levels. Alias for {@link module:log.LogLevel}
  * @static
  */
-Logger.DEFAULT_LEVEL = LogLevel.Info
+Logger.Level = LogLevel
+
+/**
+ * Default logging level: {@link module:log.LogLevel.Info}
+ * @static
+ */
+Logger.DEFAULT_LEVEL = Logger.Level.Info
+
 
 module.exports = Logger
