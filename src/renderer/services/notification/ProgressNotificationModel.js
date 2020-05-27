@@ -5,12 +5,16 @@ const NotificationModel = require('./NotificationModel')
  */
 class ProgressNotificationModel extends NotificationModel {
 
+  static INFINITE_PROGRESS = Number.POSITIVE_INFINITY
+  static INFINITE_NO_PROGRESS =  Number.NEGATIVE_INFINITY
+  static FINITE_NO_PROGRESS = 0
   /**
-   * @param {Object} options 
+   * @param {Object} [options]
    * @param {String} [options.type] A title for the notification
+   * @param {String} [options.title]
    * @param {String} [options.message] The actual notification message
    * @param {String} [options.details] Additional details
-   * @param {Integer|Infinity} total Total progress value. If {@link Infinity} progress ends only when {@link ProgressNotification#complete} is called
+   * @param {Integer|Infinity} [options.total] Total progress value. If {@link Infinity} progress ends only when {@link ProgressNotification#complete} is called
    */
   constructor(options={}) {
     super({
@@ -20,14 +24,11 @@ class ProgressNotificationModel extends NotificationModel {
       details: options.details
     })
 
-    this.total = options.total | 100
+    this.total = options.total || 100
 
-    this.currentProgress = this.total === Infinity? Infinity : 0
-    this.currentProgressInfo = undefined
-    this.onStartCallbacks = []
-    this.onStopCallbacks = []
-    this.onProgressCallbacks = []
-    this.onCompleteCallbacks = []
+    this.currentProgress = this.total === Infinity? INFINITE_NO_PROGRESS: FINITE_NO_PROGRESS
+    this.currentProgressInfo = new Map()
+    
     this.started = false
     this.completed = false
   }
@@ -40,19 +41,26 @@ class ProgressNotificationModel extends NotificationModel {
   isInfinite() { return this.total === Infinity }
 
   /**
+   * Check if the progress has started
+   */
+  isStarted() { return this.started != Number.NEGATIVE_INFINITY && this.started > 0}
+
+  /**
    * Retrieve the current progress value.
    * If the total progress was set to {@link Infinity} then this method returns {@link Infinity} as well
    */
   getCurrentProgress() { return this.currentProgress }
 
-  /**
-   * Start the progress of this notification.
-   * This is a no-op if the notification has stopped and registered **onStart** callbacks are not invoked
-   */
-  start() { 
-    this.started = true 
-    this.onStartCallbacks.forEach(cb => cb())
-  }
+  // /**
+  //  * Start the progress of this notification.
+  //  * This is a no-op if the notification has stopped and registered **onStart** callbacks are not invoked
+  //  */
+  // start() { 
+  //   this.started = true 
+  //   this.onStartCallbacks.forEach(cb => cb())
+  // }
+
+
 
   /**
    * Force complete the progress.
@@ -90,6 +98,9 @@ class ProgressNotificationModel extends NotificationModel {
    * @param {String} info 
    */
   progress(value, info) {
+    if ( this.isInfinite()) {
+      if ( this.currentProgress)
+    }
     if ( this.isStarted()) {
 
       if ( this.isInfinite() ) {
@@ -108,6 +119,11 @@ class ProgressNotificationModel extends NotificationModel {
           this.onCompletenCallbacks.forEach( cb => cb()) 
       }
     }
+  }
+
+  
+  getProgressStepInfo(value) {
+
   }
 
   /**

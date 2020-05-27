@@ -28,6 +28,8 @@
     "clean:linux": "rm -rf docs/dev && rm -rf node_modules",
     "clean:windows": "rm node_modules",
     "test": "npm run test:unit",
+    "test:list": "mocha -R list -w test/unit/**/*.test.js",
+    "test:single" : "mocha $1",
     "test:unit": "mocha --recursive test/unit/**/*.test.js",
     "deps": "node scripts/build-external-deps.js"
   },
@@ -51,6 +53,7 @@
     "json-rpc2": "^2.0.0",
     "lodash": "^4.17.15",
     "mocha": "^7.1.2",
+    "mocha-list-tests": "^1.0.2",
     "monaco-editor": "^0.20.0",
     "npm-scripts-tree": "^1.4.1",
     "pace-js": "^1.0.2",
