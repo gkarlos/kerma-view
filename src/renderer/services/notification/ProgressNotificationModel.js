@@ -1,13 +1,19 @@
 const NotificationModel = require('./NotificationModel')
 
 /**
+ * A progress notification is a notification for which progress can be defined:
+ * - A total value is defined (see constructor {@link options.total}) and the notification
+ *   is complete only when the value is reached. Current progress is increased by 
+ *   {@link module:notification.ProgressNotificationModel#progress}
  * @memberof module:notification
  */
 class ProgressNotificationModel extends NotificationModel {
 
-  static INFINITE_PROGRESS = Number.POSITIVE_INFINITY
-  static INFINITE_NO_PROGRESS =  Number.NEGATIVE_INFINITY
-  static FINITE_NO_PROGRESS = 0
+  static INFINITE_IN_PROGRESS = Number.POSITIVE_INFINITY
+
+  static INFINITE_NO_PROGRESS = Number.NEGATIVE_INFINITY
+  static   FINITE_NO_PROGRESS = 0
+
   /**
    * @param {Object} [options]
    * @param {String} [options.type] A title for the notification
@@ -27,57 +33,55 @@ class ProgressNotificationModel extends NotificationModel {
     this.total = options.total || 100
 
     this.currentProgress = this.total === Infinity? INFINITE_NO_PROGRESS: FINITE_NO_PROGRESS
-    this.currentProgressInfo = new Map()
-    
+    this.currentProgressInfo = undefined
+
     this.started = false
-    this.completed = false
   }
 
-  getTotal() { return this.total }
+  /**
+   * Retrieve the value of the total progress
+   * @returns {Integer|Infinity}
+   */
+  getTotalProgress() { return this.total }
+
+  /**
+   * Retrieve the current progress value.
+   * If the total progress was set to {@link Infinity} then this method returns {@link Infinity} as well
+   * @returns {Integer|Infinity}
+   */
+  getCurrentProgress() { return this.currentProgress }
+
+  /**
+   * Retrieve the info string associated with the last progress update (if any)
+   * @returns {String|null}
+   */
+  getCurrentProgressInfo() { return this.currentProgressInfo }
 
   /**
    * Check if this notification is infinite
+   * @returns {Boolean}
    */
   isInfinite() { return this.total === Infinity }
 
   /**
    * Check if the progress has started
    */
-  isStarted() { return this.started != Number.NEGATIVE_INFINITY && this.started > 0}
-
-  /**
-   * Retrieve the current progress value.
-   * If the total progress was set to {@link Infinity} then this method returns {@link Infinity} as well
-   */
-  getCurrentProgress() { return this.currentProgress }
-
-  // /**
-  //  * Start the progress of this notification.
-  //  * This is a no-op if the notification has stopped and registered **onStart** callbacks are not invoked
-  //  */
-  // start() { 
-  //   this.started = true 
-  //   this.onStartCallbacks.forEach(cb => cb())
-  // }
-
-
+  hasStarted() { return this.started != Number.NEGATIVE_INFINITY && this.started > 0}
 
   /**
    * Force complete the progress.
    * No-op if the progress is completed. See {@link ProgressNotification#isCompleted}
-   * All callbacks registered with {@link ProgressNotification#onComplete} are fired
    */
   complete() { 
-    if ( !this.isCompleted) {
+    if ( !this.isCompleted()) {
       if ( !this.isInfinite)
         this.currentProgress = this.total
-      this.completed = true
-      this.onCompletenCallbacks.forEach(cb => cb())
     }
   }
 
   /**
    * Check if the this notification has started
+   * @returns {bool}
    */
   isStarted() { return this.started }
 
@@ -85,7 +89,7 @@ class ProgressNotificationModel extends NotificationModel {
    * Check if the progress has completed
    * Always returns false if total progress is set to {@link Infinity}
    */
-  isCompleted() { return this.completed }
+  isCompleted() { return this.currentProgress >= this.total }
 
   /**
    * Update the progress. No-op if the notification has not started.
@@ -99,49 +103,16 @@ class ProgressNotificationModel extends NotificationModel {
    */
   progress(value, info) {
     if ( this.isInfinite()) {
-      if ( this.currentProgress)
+      // if ( this.currentProgress)
+      if ( this.currentProgress !== ProgressNotificationModel.INFINITE_IN_PROGRESS)
+        this.currentProgress = ProgressNotificationModel.INFINITE_IN_PROGRESS
+    } else {
+      let oldValue = this.currentProgress;
+      let newValue = Math.min(this.currentProgress + value, this.total);
+      this.currentProgress = newValue;
+      this.currentProgressInfo = info | undefined
     }
-    if ( this.isStarted()) {
-
-      if ( this.isInfinite() ) {
-        this.onProgressCallbacks.forEach( cb => cb(info, Infinity, Infinity))
-      }
-      else {
-        let oldValue = this.currentProgress;
-        let newValue = Math.min(this.currentProgress + value, this.total);
-    
-        this.currentProgress = newValue;
-        this.currentProgressInfo = info | undefined
-    
-        this.onProgressCallbacks.forEach( cb => cb(oldValue, newValue))
-
-        if ( this.isCompleted())
-          this.onCompletenCallbacks.forEach( cb => cb()) 
-      }
-    }
-  }
-
-  
-  getProgressStepInfo(value) {
-
-  }
-
-  /**
-   * Set a callback to be fired when the progress starts
-   * 
-   * @param {ProgressNotificationOnStartCallback} callback 
-   */
-  onStart(callback) { 
-    this.onStartCallbacks.push(callback)
-  }
-
-  /**
-   * Set a callback to be fired when the progress changes
-   * 
-   * @param {ProgressNotificationOnProgressCallback} callback Fired when progress changes
-   */
-  onProgress(callback) { 
-    this.onProgressCallbacks.push(callback)   
+    this.started = true
   }
 };
 
