@@ -32,10 +32,14 @@ class ProgressNotificationModel extends NotificationModel {
 
     this.total = options.total || 100
 
-    this.currentProgress = this.total === Infinity? INFINITE_NO_PROGRESS: FINITE_NO_PROGRESS
+    this.currentProgress = this.total === Infinity
+        ? ProgressNotificationModel.INFINITE_NO_PROGRESS
+        : ProgressNotificationModel.FINITE_NO_PROGRESS
+
     this.currentProgressInfo = undefined
 
     this.started = false
+    this.completed = false
   }
 
   /**
@@ -74,8 +78,9 @@ class ProgressNotificationModel extends NotificationModel {
    */
   complete() { 
     if ( !this.isCompleted()) {
-      if ( !this.isInfinite)
+      if ( !this.isInfinite())
         this.currentProgress = this.total
+      this.completed = true
     }
   }
 
@@ -89,7 +94,7 @@ class ProgressNotificationModel extends NotificationModel {
    * Check if the progress has completed
    * Always returns false if total progress is set to {@link Infinity}
    */
-  isCompleted() { return this.currentProgress >= this.total }
+  isCompleted() { return this.completed }
 
   /**
    * Update the progress. No-op if the notification has not started.
@@ -98,19 +103,23 @@ class ProgressNotificationModel extends NotificationModel {
    * If this is an infinite notification {@link ProgressNotification#isInfinite} the
    * *value* parameter is ignored
    * 
-   * @param {Number} value 
-   * @param {String} info 
+   * @param {Number} [value]
+   * @param {String} [info] 
    */
   progress(value, info) {
     if ( this.isInfinite()) {
-      // if ( this.currentProgress)
       if ( this.currentProgress !== ProgressNotificationModel.INFINITE_IN_PROGRESS)
         this.currentProgress = ProgressNotificationModel.INFINITE_IN_PROGRESS
     } else {
-      let oldValue = this.currentProgress;
+      if (value === undefined || value === null)
+        value = 0
+
       let newValue = Math.min(this.currentProgress + value, this.total);
       this.currentProgress = newValue;
-      this.currentProgressInfo = info | undefined
+      this.currentProgressInfo = info || undefined
+
+      if ( this.currentProgress >= this.total)
+        this.completed = true
     }
     this.started = true
   }
@@ -118,25 +127,25 @@ class ProgressNotificationModel extends NotificationModel {
 
 module.exports = ProgressNotificationModel
 
-/**
- * This callback is fired when {@link module:notification~ProgressNotification} starts
- * @callback ProgressNotificationOnStartCallback
- * @returns {void}
- */
+// /**
+//  * This callback is fired when {@link module:notification~ProgressNotification} starts
+//  * @callback ProgressNotificationOnStartCallback
+//  * @returns {void}
+//  */
 
-/**
- * This callback is fired when {@link module:notification~ProgressNotification} completes
- * @callback ProgressNotificationOnCompleteCallback
- * @returns {void}
- */
+// /**
+//  * This callback is fired when {@link module:notification~ProgressNotification} completes
+//  * @callback ProgressNotificationOnCompleteCallback
+//  * @returns {void}
+//  */
 
-/**
- * This callback is fired when there is a {@link module:notification~ProgressNotification} progress update
- * @callback ProgressNotificationOnProgressCallback
- * @param {string} info The info string passed to the progress update
- * @param {int|Infinity} oldValue The progress value before the progress update.
- *        {@link Infinity} if the notification is infinite. See {@link module:notification~ProgressNotification#isInfinite}
- * @param {int|Infinity} newValue The progress value after the progress update.
- *        {@link Infinity} if the notification is infinite. See {@link ProgressNotification#isInfinite}
- * @returns {void}
- */
+// /**
+//  * This callback is fired when there is a {@link module:notification~ProgressNotification} progress update
+//  * @callback ProgressNotificationOnProgressCallback
+//  * @param {string} info The info string passed to the progress update
+//  * @param {int|Infinity} oldValue The progress value before the progress update.
+//  *        {@link Infinity} if the notification is infinite. See {@link module:notification~ProgressNotification#isInfinite}
+//  * @param {int|Infinity} newValue The progress value after the progress update.
+//  *        {@link Infinity} if the notification is infinite. See {@link ProgressNotification#isInfinite}
+//  * @returns {void}
+//  */

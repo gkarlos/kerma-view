@@ -5,6 +5,6 @@
 module.exports = {
   NotificationModel : require('./NotificationModel'),
   NotificationView: require('./NotificationView'),
-  ProgressNotificationModel : require('./ProgressNotification'),
+  ProgressNotificationModel : require('./ProgressNotificationModel'),
   ProgressNotificationView : require('./ProgressNotificationView')
 }
