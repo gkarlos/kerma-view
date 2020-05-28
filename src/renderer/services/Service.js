@@ -102,23 +102,23 @@ class Service {
     return this
   }
 
-  /**
-   * Check if the service is currently operating,
-   * That is, the service is in Started.Active state
-   * @returns {Boolean}
-   */
-  isOnline() {
-    return this.started && !this.stopped && this.enabled
-  }
+  // /**
+  //  * Check if the service is currently operating,
+  //  * That is, the service is enabled and started state
+  //  * @returns {Boolean}
+  //  */
+  // isOnline() {
+  //   return this.started && !this.stopped && this.enabled
+  // }
 
-  /**
-   * Check if the service is currently not operating.
-   * Will return true if the service is either disabled, stopped, or was never started
-   * @returns {Boolean}
-   */
-  isOffline() {
-    return !this.isOnline()
-  }
+  // /**
+  //  * Check if the service is currently not operating.
+  //  * Will return true if the service is either disabled, stopped, or was never started
+  //  * @returns {Boolean}
+  //  */
+  // isOffline() {
+  //   return !this.isOnline()
+  // }
 
   /**
    * Check if the service is enabled
@@ -137,4 +137,12 @@ class Service {
    * @returns {Boolean}
    */
   hasStarted() { return this.started; }
+
+  /**
+   * Check if the service was stopped. That is {@link Service#stop} was called at least once
+   * @returns {Boolean}
+   */
+  hasStopped() { return this.stopped; }
 }
+
+module.exports = Service
