@@ -42,6 +42,11 @@ class Service {
     this.enabled = false
     this.started = false
     this.stopped = false
+    this.onEnableCallbacks = []
+    this.onDisableCallbacks = []
+    this.onStartCallbacks = []
+    this.onStopCallbacks = []
+    this.onStateChangeCallbacks = []
   }
 
   /**
@@ -57,8 +62,18 @@ class Service {
    * @returns {Service}
    */
   enable() { 
-    if ( !this.stopped)
+    if ( !this.stopped) {
+      let wasDisabled = !this.enabled
+
       this.enabled = true
+      
+      if ( wasDisabled) {
+        let self = this
+        this.onStateChangeCallbacks.forEach(callback => callback(self));
+        this.onEnableCallbacks.forEach(callback => callback(self));
+      }
+    }
+
     return this
   }
 
@@ -67,8 +82,18 @@ class Service {
    * @returns {Service}
    */
   disable() {
-    if ( !this.stopped)
+    if ( !this.stopped) {
+      let wasEnabled = this.enabled
+
       this.enabled = false
+
+      if ( wasEnabled) {
+        let self = this
+        this.onStateChangeCallbacks.forEach(callback => callback(self));
+        this.onDisableCallbacks.forEach(callback => callback(self));
+      }
+    }
+      
     return this
   }
 
@@ -83,13 +108,17 @@ class Service {
   start() {
     if ( !this.stopped && !this.started) {
       this.started = true
-      this.enabled = true
+
+      let self = this
+      this.onStartCallbacks.forEach(callback => callback(self))
+      this.enable()
     }
     return this;
   }
 
   /**
-   * Stop the service. This operation is irreversible. A stopped service
+   * Stop the service. A stopped service is also disabled.
+   * This operation is irreversible. A stopped service
    * cannot be restarted.
    * This operation is idempotent
    * @returns {Service}
@@ -97,28 +126,13 @@ class Service {
   stop() {
     if (!this.stopped) {
       this.stopped = true
-      this.enabled = false
+
+      let self = this
+      this.onStopCallbacks.forEach(callback => callback(self))
+      this.disable()
     }
     return this
   }
-
-  // /**
-  //  * Check if the service is currently operating,
-  //  * That is, the service is enabled and started state
-  //  * @returns {Boolean}
-  //  */
-  // isOnline() {
-  //   return this.started && !this.stopped && this.enabled
-  // }
-
-  // /**
-  //  * Check if the service is currently not operating.
-  //  * Will return true if the service is either disabled, stopped, or was never started
-  //  * @returns {Boolean}
-  //  */
-  // isOffline() {
-  //   return !this.isOnline()
-  // }
 
   /**
    * Check if the service is enabled
@@ -143,6 +157,112 @@ class Service {
    * @returns {Boolean}
    */
   hasStopped() { return this.stopped; }
+
+  /**
+   * Register a callback to be called when the service starts
+   * 
+   * @param {ServiceOnStartCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered correctly
+   */
+  onStart(callback) {
+    if (typeof callback === 'function') {
+      this.onStartCallbacks.push(callback)
+      return true
+    }
+    
+    return false
+  }
+
+  /**
+   * Register a callback to be called when the service stops
+   * 
+   * @param {ServiceOnStopCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered correctly
+   */
+  onStop(callback) {
+    if (typeof callback === 'function') {
+      this.onStopCallbacks.push(callback)
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Register a callback to be called when the service gets enabled
+   * 
+   * @param {ServiceOnEnableCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered correctly
+   */
+  onEnable(callback) {
+    if (typeof callback === 'function') {
+      this.onEnableCallbacks.push(callback)
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Register a callback to be called when the service gets disabled
+   * 
+   * @param {ServiceOnDisableCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered correctly
+   */
+  onDisable(callback) {
+    if (typeof callback === 'function') {
+      this.onDisableCallbacks.push(callback)
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Register a callback to be called when the service changes state
+   * 
+   * @param {ServiceOnStateChangeCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered correctly
+   */
+  onDisable(callback) {
+    if (typeof callback === 'function') {
+      this.onStateChangeCallbacks.push(callback)
+      return true
+    }
+    return false
+  }
 }
+
+/**
+ * This callback is fired when the Service starts
+ * @callback ServiceOnStartCallback
+ * @param {Service} self Reference to the relevant Service
+ * @returns {void}
+ */
+
+/**
+ * This callback is fired when the Service stops
+ * @callback ServiceOnStopCallback
+ * @param {Service} self Reference to the relevant Service
+ * @returns {void}
+ */
+
+ /**
+ * This callback is fired when the Service gets enabled
+ * @callback ServiceOnEnableCallback
+ * @param {Service} self Reference to the relevant Service
+ * @returns {void}
+ */
+
+/**
+ * This callback is fired when the Service gets disabled
+ * @callback ServiceOnDisableCallback
+ * @param {Service} self Reference to the relevant Service
+ * @returns {void}
+ */
+
+ /**
+ * This callback is fired when the Service changes state
+ * @callback ServiceOnStateChangeCallback
+ * @param {Service} self Reference to the relevant Service
+ * @returns {void}
+ */
 
 module.exports = Service

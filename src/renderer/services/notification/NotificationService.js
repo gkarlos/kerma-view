@@ -1,3 +1,4 @@
+const Service             = require('../Service')
 const NotificationModel   = require('./NotificationModel')
 const NotificationView    = require('./NotificationView')
 
@@ -13,16 +14,20 @@ function createNotification(type, msg, details, progress) {
 /**
  * @memberof module:notification
  */
-class NotificationService {
+class NotificationService extends Service {
   constructor(app) {
-    this.enabled = true
+    super("NotificationService")
   }
 
   /** enable the service  */
-  enable() { this.enabled = true }
+  enable() {
+    super.enable()
+  }
   
   /** disable the service */
-  disable() { this.enabled = false}
+  disable() { 
+    super.disable()
+  }
 
   /** check if the service is enabled */
   isEnabled() { return this.enabled }
