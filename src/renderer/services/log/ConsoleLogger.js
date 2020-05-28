@@ -1,10 +1,13 @@
 const Logger = require('./Logger')
-const LogLevel   = require('./LogLevel')
+const LogLevel = require('./LogLevel')
 
 function now() {
 	return new Date().toISOString();
 }
 
+/**
+ * @augments module:log.Logger
+ */
 class ConsoleLogger extends Logger {
 	/**
 	 * 
@@ -42,7 +45,7 @@ class ConsoleLogger extends Logger {
 			if ( this.color)
 				console.log('%c INFO', 'color: #33f', message, ...args);
 			else
-				console.log('%c INFO', message, ...args);
+				console.log('INFO', message, ...args);
 		}
 	}
 

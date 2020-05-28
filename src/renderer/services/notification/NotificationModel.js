@@ -3,7 +3,6 @@
  * 
  * Base class for all other notifications
  * 
- * @class
  * @memberof module:notification
  */
 class NotificationModel {

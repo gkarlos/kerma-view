@@ -1,4 +1,4 @@
-const ConsoleLogger       = require('log').ConsoleLogger
+const ConsoleLogger       = require('./services/log').ConsoleLogger
 const EventEmitter        = require('events')
 const NotificationService = require('./services/notification/NotificationService')
 const UI                  = require('./ui')
@@ -16,7 +16,7 @@ class App {
     }
 
     this.mock     = require(`../mock/cuda-source`)
-    this.log      = new ConsoleLogger({level: ConsoleLogger.Level.Info})
+    this.log      = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
     this.emitter  = new EventEmitter()
 
     this.notifier = new NotificationService();

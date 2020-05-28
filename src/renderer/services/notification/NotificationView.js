@@ -40,7 +40,6 @@ var BootstrapNotify = undefined
  * In the future we may explicitely add a NotificationHandler if the use cases
  * get more complicated
  * 
- * @class
  * @memberof module:notification
  */
 class NotificationView {

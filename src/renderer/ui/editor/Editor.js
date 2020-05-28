@@ -12,7 +12,6 @@ const path = require('path')
 const EditorTabs = require('./EditorTabs')
 
 /**
- * @class
  */
 class Editor extends Component {
 

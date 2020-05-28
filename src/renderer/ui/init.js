@@ -171,7 +171,7 @@ module.exports = (app) => {
     createComponents()
     
     // ui.initNotification = app.notifier.info("Initializing:", null, true)
-    const NotificationService = require('renderer/notification/NotificationService')
+    const NotificationService = require('renderer/services/notification/NotificationService')
 
     let notifier = new NotificationService(app)
 

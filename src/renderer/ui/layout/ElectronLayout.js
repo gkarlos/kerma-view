@@ -18,16 +18,13 @@ const Events          = require('renderer/events')
 
 
 /**
- * @class
+ * Defines the layout for the desktop (electron) app
+ * 
  * @memberof module:ui/layout
- * @extends BaseLayout
- * @classdesc
- *  Defines the layout for the desktop (electron) app
- *  
+ * @extends BaseLayout 
  */
 class ElectronLayout extends BaseLayout {
   /** 
-   * @constructor 
    * @param {string} [name] A name for this layout
    * @param {Object} [ui] A reference to the UI this layout is part of
    * */

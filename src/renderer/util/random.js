@@ -18,7 +18,7 @@ function uuid(len=40,
       let pos = Math.floor(Math.random() * charSet.length);
       res += charSet.substring(pos, pos + 1);
   }
-  return randomString;
+  return res;
 }
 
 module.exports = {

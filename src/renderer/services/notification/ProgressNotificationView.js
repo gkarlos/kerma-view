@@ -1,15 +1,15 @@
 // const ProgressNotification = require('./ProgressNotification')
-const NotificationView = require('./NotificationView.b')
+const NotificationView = require('./NotificationView')
 
 var BootstrapNotify = undefined
 
-class ProgressNotificationView {
+class ProgressNotificationView extends NotificationView {
   /**
    * 
    * @param {ProgressNotification} notification 
    */
-  constructor(notification) {
-    notification
+  constructor(model) {
+    super(model)
   }
 }
 

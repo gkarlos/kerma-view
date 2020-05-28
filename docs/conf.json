@@ -1,5 +1,8 @@
 {
-  "plugins"   : ["plugins/markdown", "node_modules/better-docs/category"],
+  "plugins"   : [
+    "plugins/markdown", 
+    "node_modules/better-docs/category",
+    "jsdoc-mermaid"],
   "templates" : {
     "tabNames": {
       "api": "API",
@@ -30,7 +33,7 @@
     "tutorials": "docs/tutorials"
   },
   "tags": {
-    "allowUnknownTags": ["category", "subcategory"]
+    "allowUnknownTags": ["category", "subcategory", "mermaid"]
   }
 }
 

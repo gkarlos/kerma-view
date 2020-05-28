@@ -153,7 +153,6 @@ class InputModeSelection extends Component {
 }
 
 /**
- * @class
  */
 class InputToolbar extends Component {
   constructor( id, container, app) {

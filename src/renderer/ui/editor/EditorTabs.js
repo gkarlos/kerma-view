@@ -14,7 +14,6 @@ function searchTabs(tabs, title) {
 }
 
 /**
- * @class
  * @memberof module:renderer/components/editor
  */
 class EditorTabs extends Component {

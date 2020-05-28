@@ -45,9 +45,12 @@ class NotificationService {
         view.onShow(props.onShow)
       if ( props.onHide)
         view.onHide(props.onHide)
+      if ( props.onChange)
+        view.onChange(props.onChange)
     }
     
     view.show()
+    
     return view
   }
 

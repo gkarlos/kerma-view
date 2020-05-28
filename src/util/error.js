@@ -26,8 +26,6 @@ class CLError extends Error {
 /** Error indicating a file wasn't found */
 class FileNotFoundError extends CLError {
   /**
-   * @constructor
-   * @class FileNotFoundError
    * @param {*} filename - the name of the file
    */
   constructor(filename) { 
