@@ -1,9 +1,10 @@
-const path = require('path')
-require('app-module-path').addPath(path.join(__dirname, "..", "..", "src"))
+require('module-alias/register')
 
 const expect = require('chai').expect
 
-const Service = require('renderer/services').Service
+const Service = require('@renderer/services').Service
+
+// const Service = require('../../src/renderer/services').Service
 
 describe("Service", () => {
   describe("Constructor", () => {
@@ -27,6 +28,7 @@ describe("Service", () => {
     it("init,start :: Enabled, Started, Not Stopped", () => {
       let service = new Service("AService")
       service.start()
+      service.onD
       expect(service.isEnabled()).to.be.true
       expect(service.isDisabled()).to.be.false
       expect(service.hasStarted()).to.be.true
@@ -372,8 +374,23 @@ describe("Service", () => {
     })
 
     describe("onStateChange", () => {
-      it("todo", () => {
-
+      // it("should register if valid", () => {
+      //   let service = new Service("AService")
+      //   expect(service.
+      // })
+  
+      it("should not register if invalid", () => {
+        let service = new Service("AService")
+        expect(service.onDisable(10)).to.be.false
+      })
+  
+      it("should have the correct argument", () => {
+        let result = false
+        let service = new Service("AService")
+        service.onDisable((self) => result = self === service)
+        service.start()
+        service.disable()
+        expect(result).to.be.true
       })
     })
   })

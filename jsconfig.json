@@ -3,7 +3,14 @@
     "target" : "es6",
     "module" : "commonjs",
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators":true
+    "experimentalDecorators":true,
+    "baseUrl": "./src",
+    "noLib": true,
+    "paths" : {
+      "@renderer/*" : ["renderer/*"],
+      "@main/*" : ["main/*"],
+      "@common/*" : ["common/*"]
+    }
   },
   "exclude" : [
     "node_modules"

@@ -1,4 +1,4 @@
-const Component = require('renderer/ui/component/Component')
+const Component = require("@renderer/ui/component").Component
 
 class NotificationButton extends Component {
 

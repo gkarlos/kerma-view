@@ -28,10 +28,18 @@
     "clean:linux": "rm -rf docs/dev && rm -rf node_modules",
     "clean:windows": "rm node_modules",
     "test": "npm run test:unit",
-    "test:list": "mocha -R list -w test/unit/**/*.test.js",
-    "test:single": "mocha $1",
+    "test:list": "mocha -r ts-node/register -r tsconfig-paths/register -R list -w test/unit/**/*.test.js",
+    "test:single": "mocha -r node_modules/tsconfig-paths/register $1",
     "test:unit": "mocha --recursive test/unit/**/*.test.js",
     "deps": "node scripts/build-external-deps.js"
+  },
+  "_moduleAliases": {
+    "@root"      : ".",
+    "@src"       : "src",
+    "@test"      : "test",
+    "@renderer"  : "src/renderer",
+    "@main"      : "src/main",
+    "@common"    : "src/common"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
@@ -56,9 +64,8 @@
     "lodash": "^4.17.15",
     "mocha": "^7.1.2",
     "mocha-list-tests": "^1.0.2",
+    "module-alias": "^2.2.2",
     "monaco-editor": "^0.20.0",
-    "node-plantuml": "^0.9.0",
-    "node-plantuml-include-vizjs": "^0.1.0",
     "npm-scripts-tree": "^1.4.1",
     "pace-js": "^1.0.2",
     "popper.js": "^1.16.0",
@@ -71,8 +78,7 @@
     "vizjs": "^2.1.1",
     "vscode-jsonrpc": "^5.0.1",
     "xterm": "^4.5.0",
-    "xterm-addon-fit": "^0.3.0",
-    "yuidocjs": "^0.10.2"
+    "xterm-addon-fit": "^0.3.0"
   },
   "devDependencies": {
     "@types/node": "^14.0.5",

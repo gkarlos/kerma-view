@@ -6,6 +6,15 @@
  * 
  */
 class Service {
+
+  onEnableCallbacks = []
+
+  /** @protected */
+  onDisableCallbacks = []
+  onStartCallbacks = []
+  onStopCallbacks = []
+  onStateChangeCallbacks = []
+  
   /**
    * Create a new Service. Initially the state is **Disabled**, following
    * this state machine
@@ -42,11 +51,6 @@ class Service {
     this.enabled = false
     this.started = false
     this.stopped = false
-    this.onEnableCallbacks = []
-    this.onDisableCallbacks = []
-    this.onStartCallbacks = []
-    this.onStopCallbacks = []
-    this.onStateChangeCallbacks = []
   }
 
   /**
