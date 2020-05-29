@@ -28,7 +28,6 @@ describe("Service", () => {
     it("init,start :: Enabled, Started, Not Stopped", () => {
       let service = new Service("AService")
       service.start()
-      service.onD
       expect(service.isEnabled()).to.be.true
       expect(service.isDisabled()).to.be.false
       expect(service.hasStarted()).to.be.true
@@ -374,24 +373,66 @@ describe("Service", () => {
     })
 
     describe("onStateChange", () => {
-      // it("should register if valid", () => {
-      //   let service = new Service("AService")
-      //   expect(service.
-      // })
+      it("should register if valid", () => {
+        let service = new Service("AService")
+        expect(service.onStateChange(() => console.log("ok"))).to.be.true
+      })
   
       it("should not register if invalid", () => {
         let service = new Service("AService")
-        expect(service.onDisable(10)).to.be.false
+        expect(service.onStateChange(10)).to.be.false
       })
   
       it("should have the correct argument", () => {
         let result = false
         let service = new Service("AService")
-        service.onDisable((self) => result = self === service)
+        service.onStateChange((self) => result = self === service)
         service.start()
-        service.disable()
         expect(result).to.be.true
       })
+
+      it("should not fire on: stop()", () => {
+        let result = 0
+        let service = new Service("AService")
+        service.onStateChange(() => result++)
+        service.stop()
+        expect(result).to.equal(0)
+      }) 
+
+      it("should fire 1 time on: start(), start(), ... ", () => {
+        let result = 0
+        let service = new Service("AService")
+        service.onStateChange(() => result++)
+        service.start()
+        service.start()
+        service.start()
+        service.start()
+        service.start()
+        expect(result).to.equal(1)
+      }) 
+
+
+      it("should fire 2 times on: start(), stop(), ... ", () => {
+        let result = 0
+        let service = new Service("AService")
+        service.onStateChange(() => result++)
+        service.start()
+        service.stop()
+        expect(result).to.equal(2)
+      }) 
+
+
+      it("should fire 2 times on on start(), stop(), stop(), stop(), ... ", () => {
+        let result = 0
+        let service = new Service("AService")
+        service.onStateChange(() => result++)
+        service.start()
+        service.stop()
+        service.stop()
+        service.stop()
+        service.stop()
+        expect(result).to.equal(2)
+      }) 
     })
   })
 })

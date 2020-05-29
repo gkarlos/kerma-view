@@ -112,12 +112,17 @@ class Service {
   start() {
     if ( !this.stopped && !this.started) {
       
-      this.enable()
+      let wasEnabled = this.isEnabled()
+
+      if ( !wasEnabled) // was disabled but not started. State change: Disabled -> Started.Enabled
+        this.enable()
       
       this.started = true
       let self = this
       this.onStartCallbacks.forEach(callback => callback(self))
-      
+
+      if ( wasEnabled) // was enabled but not started. State change: Enabled -> Started.Enabled
+        this.onStateChangeCallbacks.forEach(callback => callback(self))
     }
     return this;
   }
