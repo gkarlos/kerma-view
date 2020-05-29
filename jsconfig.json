@@ -9,7 +9,8 @@
     "paths" : {
       "@renderer/*" : ["renderer/*"],
       "@main/*" : ["main/*"],
-      "@common/*" : ["common/*"]
+      "@common/*" : ["common/*"],
+      "@mock/*" : ["mock/*"]
     }
   },
   "exclude" : [

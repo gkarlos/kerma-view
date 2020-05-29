@@ -39,7 +39,8 @@
     "@test"      : "test",
     "@renderer"  : "src/renderer",
     "@main"      : "src/main",
-    "@common"    : "src/common"
+    "@common"    : "src/common",
+    "@mock"      : "src/mock"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
