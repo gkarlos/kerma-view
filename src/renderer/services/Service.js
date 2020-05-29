@@ -82,9 +82,9 @@ class Service {
    * @returns {Service}
    */
   disable() {
+
     if ( !this.stopped) {
       let wasEnabled = this.enabled
-
       this.enabled = false
 
       if ( wasEnabled) {
@@ -107,11 +107,13 @@ class Service {
    */
   start() {
     if ( !this.stopped && !this.started) {
+      
+      this.enable()
+      
       this.started = true
-
       let self = this
       this.onStartCallbacks.forEach(callback => callback(self))
-      this.enable()
+      
     }
     return this;
   }
@@ -125,11 +127,13 @@ class Service {
    */
   stop() {
     if (!this.stopped) {
-      this.stopped = true
 
+      this.disable()
+
+      this.stopped = true
       let self = this
       this.onStopCallbacks.forEach(callback => callback(self))
-      this.disable()
+      
     }
     return this
   }
@@ -221,7 +225,7 @@ class Service {
    * @param {ServiceOnStateChangeCallback} callback A callback
    * @returns {Boolean} Whether the callback was registered correctly
    */
-  onDisable(callback) {
+  onStateChange(callback) {
     if (typeof callback === 'function') {
       this.onStateChangeCallbacks.push(callback)
       return true

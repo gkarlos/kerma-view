@@ -29,7 +29,7 @@ const perf            = require('./perf')
 const devtools        = require('../util/devtools')
 const ProgressBar     = require('electron-progressbar')
 
-app.allowRendererProcessReuse = false
+// app.allowRendererProcessReuse = false
 app.root     = path.join(__dirname, "../../")
 app.iconPath = path.join(app.root, "assets", "icon-48.png")
 app.version  = require('../../package.json').version
