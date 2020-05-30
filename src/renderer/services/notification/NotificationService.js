@@ -1,4 +1,4 @@
-const Service             = require('../Service')
+const Service             = require('@renderer/services/Service')
 const NotificationModel   = require('./NotificationModel')
 const NotificationView    = require('./NotificationView')
 
@@ -70,9 +70,16 @@ class NotificationService extends Service {
    * @returns {NotificationView}
    */
   info(title, msg, details, props) {
-    let model= new NotificationModel(NotificationModel.Info, title, msg, details)
+    
+    let model= new NotificationModel({
+      type: NotificationModel.Info, 
+      title: title, 
+      message: msg, 
+      details: details})
     let view = new NotificationView(model)
 
+    console.log(view)
+    
     if ( props) {
       if ( props.onShow)
         view.onShow(props.onShow)

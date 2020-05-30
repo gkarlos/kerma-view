@@ -60,16 +60,19 @@ class App {
   }
 
   start() {
+    
+  }
+
+  main() {
     this.initPreUiServices()
     this.initUI();
 
     this.on(Events.UI_READY, () => {
-
       this.initPostUiServices();
+      this.start()
     })
-
-
   } 
 }
 
-module.exports = App
+const app = new App()
+module.exports = app
