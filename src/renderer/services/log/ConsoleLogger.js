@@ -6,7 +6,8 @@ function now() {
 }
 
 /**
- * @augments module:log.Logger
+ * @extends Logger
+ * @memberof module:log
  */
 class ConsoleLogger extends Logger {
 	/**
@@ -23,56 +24,68 @@ class ConsoleLogger extends Logger {
   }
 
   trace(message, ...args) {
-		if (this.getLevel() <= LogLevel.Trace) {
-			if ( this.color )
-				console.log('%cTRACE', 'color: #888', message, ...args);
-			else
-				console.log('%cTRACE', message, ...args)
+		if ( this.isEnabled()) {
+			if (this.getLevel() <= LogLevel.Trace) {
+				if ( this.color )
+					console.log('%cTRACE', 'color: #888', message, ...args);
+				else
+					console.log('%cTRACE', message, ...args)
+			}
 		}
 	}
 
 	debug(message, ...args) {
-		if (this.getLevel() <= LogLevel.Debug) {
-			if ( this.color)
-				console.log('%cDEBUG', 'background: #eee; color: #888', message, ...args);
-			else
-				console.log('%cDEBUG', message, ...args);
+		if( this.isEnabled()) {
+			if (this.getLevel() <= LogLevel.Debug) {
+				if ( this.color)
+					console.log('%cDEBUG', 'background: #eee; color: #888', message, ...args);
+				else
+					console.log('%cDEBUG', message, ...args);
+			}
 		}
 	}
 
 	info(message, ...args) {
-		if (this.getLevel() <= LogLevel.Info) {
-			if ( this.color)
-				console.log('%c INFO', 'color: #33f', message, ...args);
-			else
-				console.log('INFO', message, ...args);
+		if ( this.isEnabled()) {
+			if (this.getLevel() <= LogLevel.Info) {
+				if ( this.color)
+					console.log('%c INFO', 'color: #33f', message, ...args);
+				else
+					console.log('INFO', message, ...args);
+			}
 		}
 	}
 
 	warn(message, ...args) {
-		if (this.getLevel() <= LogLevel.Warning) {
-			if ( this.color)
-				console.log('%c WARN', 'color: #993', message, ...args);
-			else
-				console.log('%c WARN',  message, ...args);
+		if ( this.isEnabled()) {
+			if (this.getLevel() <= LogLevel.Warning) {
+				if ( this.color)
+					console.log('%c WARN', 'color: #993', message, ...args);
+				else
+					console.log('%c WARN',  message, ...args);
+			}
 		}
 	}
 
 	error(message, ...args) {
-		if (this.getLevel() <= LogLevel.Error) {
-			if ( this.color)
-				console.log('%c  ERR', 'color: #f33', message, ...args);
-			else
-				console.log('%c  ERR', message, ...args);
+		if ( this.isEnabled()) {
+			if (this.getLevel() <= LogLevel.Error) {
+				if ( this.color)
+					console.log('%c  ERR', 'color: #f33', message, ...args);
+				else
+					console.log('%c  ERR', message, ...args);
+			}
 		}
 	}
 
 	critical(message, ...args) {
-		if (this.getLevel() <= LogLevel.Critical) {
-			if ( this.color)
-				console.log('%cCRITI', 'background: #f33; color: white', message, ...args);
-			else
-				console.log('%cCRITI', message, ...args);
+		if ( this.isEnabled()) {
+			if (this.getLevel() <= LogLevel.Critical) {
+				if ( this.color)
+					console.log('%cCRITI', 'background: #f33; color: white', message, ...args);
+				else
+					console.log('%cCRITI', message, ...args);
+			}
 		}
 	}
 }

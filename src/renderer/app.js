@@ -5,10 +5,17 @@ const UI                  = require('./ui')
 const Events              = require('./events')
 
 class App {
+
+  // Services
+  Logger = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
+  Notifier = new NotificationService()
+
   constructor() {
     this.electron = {}
     this.electron.remote = require('electron').remote
     this.electron.app = require('electron').remote.app
+
+    this.events = Events
 
     this.input    = {
       path : null,
@@ -16,11 +23,7 @@ class App {
     }
 
     this.mock     = require(`../mock/cuda-source`)
-    this.log      = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
     this.emitter  = new EventEmitter()
-
-    this.notifier = new NotificationService();
-    
     this.ui       = undefined
   }
 
@@ -36,27 +39,34 @@ class App {
   get removeAllListeners() { return this.emitter.removeAllListeners }
   get removeListener()     { return this.emitter.removeListener     }
 
-  enableNotifications() { this.notifier.enable; }
-  disableNotifications() { this.notifier.disable; }
+  enableLogging() { this.Logger.enable() }
+  disableLogging() { this.Logger.disable() }
+
+  enableNotifications() { this.Notifier.enable; }
+  disableNotifications() { this.Notifier.disable; }
 
   reload() { this.window.reload() }
 
+  initPreUiServices() {
+    this.Logger.enable()
+  }
 
   initUI() {
     this.ui = UI.init(this);
   }
 
-  initServices() {
-    
+  initPostUiServices() {
+    this.Notifier.enable()
   }
 
   start() {
-
+    this.initPreUiServices()
+    this.Logger.info("Hello")
     this.initUI();
 
     this.on(Events.UI_READY, () => {
 
-      this.initServices();
+      this.initPostUiServices();
     })
 
 

@@ -1,22 +1,25 @@
 const LogLevel = require('./LogLevel')
 const random = require('renderer/util/random')
 
+const Service = require('@renderer/services/Service')
+
 /**
  * Base class for all loggers
  * 
  * @public
  * @memberof module:log
  * @abstract
+ * @extends Service
  */
-class Logger {
+class Logger extends Service {
   /**
    * 
    * @param {Integer} level The level of this logger. See {@link module:log.LogLevel} 
    * @param {String} name A name for this logger. If none provided one will be generated
    */
   constructor(level, name) {
+    super(name || `LoggerService-${random.uuid(4)}`)
     this.level = level | Logger.DEFAULT_LEVEL
-    this.name = name | `${this.constructor.name}-${random.uuid(5)}`
   }
 
   /**
@@ -31,30 +34,12 @@ class Logger {
   }
 
   /**
-   * Set the name of this logger
-   * @param {String} name A new name for this logger
-   * @returns {void}
-   */
-  setName(name) {
-    if ( this.name != name)
-      this.name = name
-  }
-
-  /**
    * Get the level of this logger
    * See {@link module:log.LogLevel}
    * @returns {Integer}
    */
   getLevel() {
     return this.level
-  }
-
-  /**
-   * Get the name of this logger
-   * @return {String}
-   */
-  getName() {
-    return this.name
   }
 
   /**
