@@ -1,3 +1,5 @@
+const ServiceState = require('@renderer/services/ServiceState')
+
 /**
  * Base class for all services
  * 
@@ -7,40 +9,12 @@
  */
 class Service {
 
-  onEnableCallbacks = []
-
-  /** @protected */
-  onDisableCallbacks = []
-  onStartCallbacks = []
-  onStopCallbacks = []
+  onEnableCallbacks      = []
+  onDisableCallbacks     = []
   onStateChangeCallbacks = []
   
   /**
-   * Create a new Service. Initially the state is **Disabled**, following
-   * this state machine
-   * 
-   * @mermaid
-   * graph LR
-   *  Disabled -- enable --> Enabled
-   *  Disabled -- disable --> Disabled
-   *  Disabled -- start --> Started.Enabled
-   *  Disabled -- stop --> Stopped.Disabled
-   *  Enabled -- start --> Started.Enabled
-   *  Enabled -- stop --> Stopped.Disabled
-   *  Enabled -- disable --> Disabled
-   *  Enabled -- enable --> Enabled
-   *  Started.Enabled -- disable --> Started.Disabled
-   *  Started.Enabled -- enable --> Started.Enabled
-   *  Started.Enabled -- start --> Started.Enabled
-   *  Started.Enabled -- stop --> Stopped.Disabled
-   *  Started.Disabled -- start --> Started.Disabled
-   *  Started.Disabled -- stop --> Stopped.Disabled
-   *  Started.Disabled -- enable --> Started.Enabled
-   *  Started.Disabled -- disable --> Started.Disabled
-   *  Stopped.Disabled -- enable --> Stopped.Disabled
-   *  Stopped.Disabled -- disable --> Stopped.Disabled
-   *  Stopped.Disabled --  start --> Stopped.Disabled
-   *  Stopped.Disabled --  stop --> Stopped.Disabled
+   * Create a new Service. Initially the state is **Disabled**
    * 
    * @param {String} name A name for the service
    */
@@ -48,37 +22,45 @@ class Service {
     if ( !name)
       throw new Error("Service.constructor: Parameter 'name' is required")
     this.name = name
-    this.enabled = false
-    this.started = false
-    this.stopped = false
+    this.state = ServiceState.Disabled;
   }
 
   /**
    * Retrieve the name of this service
    * @returns {String}
    */
-  getName() {
-    return this.name
-  }
+  getName() { return this.name }
 
   /**
-   * Enable the service. If the service is stopped this is a no-op
+   * Retrieve the state of the Service
+   * @returns {ServiceState.Enabled|ServiceState.Disabled}
+   */
+  getState() { return this.state}
+
+  /**
+   * Check if the service is enabled
+   * @returns {Boolean}
+   */
+  isEnabled() { return this.state === ServiceState.Enabled }
+
+  /**
+   * Check if the service is disabled
+   * @returns {Boolean}
+   */
+  isDisabled() { return this.state === ServiceState.Disabled }
+
+  /**
+   * Enable the service. Triggers state change if 
    * @returns {Service}
    */
   enable() { 
-    if ( !this.stopped) {
-      let wasDisabled = !this.enabled
-
-      this.enabled = true
-      
-      if ( wasDisabled) {
-        let self = this
-        this.onStateChangeCallbacks.forEach(callback => callback(self));
-        this.onEnableCallbacks.forEach(callback => callback(self));
-      }
+    if ( this.isDisabled()) {
+      let self = this
+      this.onStateChangeCallbacks.forEach(callback => callback(self));
+      this.onEnableCallbacks.forEach(callback => callback(self));
+      this.state = ServiceState.Enabled
     }
-
-    return this
+    return this;
   }
 
   /**
@@ -86,118 +68,12 @@ class Service {
    * @returns {Service}
    */
   disable() {
-
-    if ( !this.stopped) {
-      let wasEnabled = this.enabled
-      this.enabled = false
-
-      if ( wasEnabled) {
-        let self = this
-        this.onStateChangeCallbacks.forEach(callback => callback(self));
-        this.onDisableCallbacks.forEach(callback => callback(self));
-      }
-    }
-      
-    return this
-  }
-
-  /**
-   * Start the service. Implicitely enables the service if disabled.
-   * 
-   * If the service was stopped, it a no-op
-   * 
-   * This operation is idempotent
-   * @returns {Service}
-   */
-  start() {
-    if ( !this.stopped && !this.started) {
-      
-      let wasEnabled = this.isEnabled()
-
-      if ( !wasEnabled) // was disabled but not started. State change: Disabled -> Started.Enabled
-        this.enable()
-      
-      this.started = true
+    if ( this.isEnabled()) {
       let self = this
-      this.onStartCallbacks.forEach(callback => callback(self))
-
-      if ( wasEnabled) // was enabled but not started. State change: Enabled -> Started.Enabled
-        this.onStateChangeCallbacks.forEach(callback => callback(self))
-    }
-    return this;
-  }
-
-  /**
-   * Stop the service. A stopped service is also disabled.
-   * This operation is irreversible. A stopped service
-   * cannot be restarted.
-   * This operation is idempotent
-   * @returns {Service}
-   */
-  stop() {
-    if (!this.stopped) {
-
-      this.disable()
-
-      this.stopped = true
-      let self = this
-      this.onStopCallbacks.forEach(callback => callback(self))
-      
-    }
+      this.onStateChangeCallbacks.forEach(callback => callback(self));
+      this.onDisableCallbacks.forEach(callback => callback(self));
+    } 
     return this
-  }
-
-  /**
-   * Check if the service is enabled
-   * @returns {Boolean}
-   */
-  isEnabled() { return this.enabled }
-
-  /**
-   * Check if the service is disabled
-   * @returns {Boolean}
-   */
-  isDisabled() { return !this.isEnabled() }
-
-  /**
-   * Check if the service was ever started. That is {@link Service#start} was called at least once
-   * @returns {Boolean}
-   */
-  hasStarted() { return this.started; }
-
-  /**
-   * Check if the service was stopped. That is {@link Service#stop} was called at least once
-   * @returns {Boolean}
-   */
-  hasStopped() { return this.stopped; }
-
-  /**
-   * Register a callback to be called when the service starts
-   * 
-   * @param {ServiceOnStartCallback} callback A callback
-   * @returns {Boolean} Whether the callback was registered correctly
-   */
-  onStart(callback) {
-    if (typeof callback === 'function') {
-      this.onStartCallbacks.push(callback)
-      return true
-    }
-    
-    return false
-  }
-
-  /**
-   * Register a callback to be called when the service stops
-   * 
-   * @param {ServiceOnStopCallback} callback A callback
-   * @returns {Boolean} Whether the callback was registered correctly
-   */
-  onStop(callback) {
-    if (typeof callback === 'function') {
-      this.onStopCallbacks.push(callback)
-      return true
-    }
-    return false
   }
 
   /**
@@ -242,20 +118,6 @@ class Service {
     return false
   }
 }
-
-/**
- * This callback is fired when the Service starts
- * @callback ServiceOnStartCallback
- * @param {Service} self Reference to the relevant Service
- * @returns {void}
- */
-
-/**
- * This callback is fired when the Service stops
- * @callback ServiceOnStopCallback
- * @param {Service} self Reference to the relevant Service
- * @returns {void}
- */
 
  /**
  * This callback is fired when the Service gets enabled

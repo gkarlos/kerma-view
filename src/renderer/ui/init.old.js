@@ -178,13 +178,6 @@ module.exports = (app) => {
     // ui.initNotification = app.notifier.info("Initializing:", null, true)
     const NotificationService = require('renderer/services/notification/NotificationService')
 
-    let notifier = new NotificationService(app)
-
-    notifier.success("TITLE", "MESSAGE", "DETAILS")
-    notifier.info("TITLE", "MESSAGE", "DETAILS")
-    notifier.warning("TITLE", "MESSAGE", "DETAILS")
-    notifier.error("TITLE", "MESSAGE", "DETAILS")
-
     renderComponents()
 
     app.on(Events.UI_READY, () => {

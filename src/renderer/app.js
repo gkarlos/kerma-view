@@ -61,7 +61,6 @@ class App {
 
   start() {
     this.initPreUiServices()
-    this.Logger.info("Hello")
     this.initUI();
 
     this.on(Events.UI_READY, () => {
