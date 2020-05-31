@@ -10,10 +10,11 @@
     },
     "name": "KermaView",
     "monospaceLinks" : true,
-    "cleverlinks": true,
+    "cleverLinks": true,
     "showInheritedInNav": true,
-    "useLongnameInNav" : true,
+    "useLongnameInNav" : false,
     "useCollapsibles": true,
+    "sort": true,
     "logo": {
       "url": "https://miro.medium.com/max/1400/1*OtfM8fdvOaIT3OlaUfZBjw.jpeg",
       "width": "150px",

@@ -1,6 +1,6 @@
 const MemoryShape = require('./MemoryShape')
-const {InternalError} = require('util/error')
-const {isString} = require('util/traits')
+const {InternalError} = require('@common/util/error')
+const {isString} = require('@common/util/traits')
 
 var crypto = null;
 /**

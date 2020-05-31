@@ -1,6 +1,6 @@
 const app      = require('electron').app
-const cl       = require('../util/cl')
-const settings = require('../common/settings') 
+const cl       = require('@main/cl')
+const settings = require('@common/settings') 
 
 function dumpPerformanceStats() {
   if ( !app.args)

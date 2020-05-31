@@ -1,31 +1,33 @@
 'use strict';
 
-const NotificationModel = require('./NotificationModel')
+const NotificationModel = require('@renderer/services/notification/NotificationModel')
 
-// we will lazily load the module the first time render is called
-var BootstrapNotify = undefined
+var BootstrapNotify = require('bootstrap-notify')
 
 /**
- * This callback is part of the {@link module:notification~NotificationHandler} class.
+ * This callback is part of the {@link module:notification.NotificationView} class.
  * Fired when the notification is shown
- * @callback NotificationViewOnShowCallback
+ * @callback NotificationOnShowCallback
  * @param {NotificationModel} model The notification model instance
+ * @memberof module:notification
  * @returns void
  */
 
 /**
- * This callback is part of the {@link module:notification~NotificationHandler} class.
+ * This callback is part of the {@link module:notification.NotificationView} class.
  * Fired when the notification is manually closed
- * @callback NotificationViewOnHideCallback
+ * @callback NotificationOnHideCallback
  * @param {NotificationModel} model The notification model instance
+ * @memberof module:notification
  * @returns void
  */
 
 /**
- * This callback is part of the {@link module:notification~NotificationHandler} class.
+ * This callback is part of the {@link module:notification.NotificationView} class.
  * Fired when the notification data is changed
- * @callback NotificationViewOnChangeCallback
+ * @callback NotificationOnChangeCallback
  * @param {NotificationModel} model The notification model instance
+ * @memberof module:notification
  * @returns void
  */
 
@@ -40,23 +42,42 @@ var BootstrapNotify = undefined
  * In the future we may explicitely add a NotificationHandler if the use cases
  * get more complicated
  * 
+ * @class
  * @memberof module:notification
+ * @requires module:notification.NotificationModel
+ * @requires module:notification.NotificationView
+ * @requires bootstrap-notify<external>
  */
 class NotificationView {
+
+  /** 
+   * @static
+   * @protected
+   */
+  static Icon = {
+    Info    : 'fa fa-info-circle',
+    Error   : 'fa fa-info-circle',
+    Success : 'fa fa-info-circle',
+    Warning : 'fa fa-info-circle'
+  }
+  static Animation = { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' }
+  static Position  = { from: "bottom", align: "right" }
+  static Duration  = 1500
+  static Dismissable = true
 
   /**
    * @param {NotificationModel} model The model of this view
    */
   constructor(model) {
+    /** @private */
     this.model = model
     this.viewimpl = undefined
-    /** @type {Array.<NotificationViewOnShowCallback>}  */
+    /** @type {Array.<NotificationOnShowCallback>}   */
     this.onShowCallbacks = []
-    /** @type {Array.<NotificationViewOnHideCallback>}  */
+    /** @type {Array.<NotificationOnHideCallback>}  */
     this.onHideCallbacks = []
-    /** @type {Array.<NotificationViewOnChangeCallback>} */
+    /** @type {Array.<NotificationOnChangeCallback>} */
     this.onChangeCallbacks = []
-
   }
 
   /**
@@ -74,7 +95,7 @@ class NotificationView {
     this.model.setTitle(title)
     if ( this.viewimpl)
       this.viewimpl.update('title', title)
-    this.onChangeCallbacks.forEach(callback => callback(model))
+    this.onChangeCallbacks.forEach(callback => callback(this.model))
     return this;
   }
 
@@ -98,21 +119,17 @@ class NotificationView {
    */
   updateDetails(details) {
     this.model.setDetails(details)
-    //todo update viewimpl details
+    //TODO update viewimpl details
     this.onChangeCallbacks.forEach(callback => callback(this.model))
     return this;
   }
 
   /** Show the notification */
-  show() {  
-    if ( !BootstrapNotify)
-      BootstrapNotify = require('bootstrap-notify')
-
+  show() { 
     if ( this.viewimpl)
       delete this.viewimpl
-
     this.viewimpl = this._renderNotification()
-
+    console.log(this.viewimpl)
     this.onShowCallbacks.forEach(callback => callback(this.model))
     return this;
   }
@@ -125,32 +142,59 @@ class NotificationView {
   }
 
   /**
-   * Register a callback to fired when the notification is displayed
-   * @param {NotificationViewOnShowCallback} callback 
+   * Register a callback to be invoked when the notification is displayed
+   * That is, the callback will be called when {@link NotificationView#show} is called
+   * 
+   * @param {NotificationOnShowCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered successfully
    */
-  onShow(callback) { this.onShowCallbacks.push(callback) }
+  onShow(callback) { 
+    if ( typeof callback === 'function') {
+      this.onShowCallbacks.push(callback) 
+      return true
+    }
+    return false
+  }
 
   /**
-   * Register a callback to be fired when the notification gets (manually) closed
-   * That is, the callback will only be called when {@link NotificationHandler#hide} is called
-   * @param {NotificationViewOnHideCallback} callback 
+   * Register a callback to be invoked when the notification gets (manually) closed
+   * That is, the callback will be called when {@link NotificationView#show} is called
+   * 
+   * @param {NotificationOnHideCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered successfully
    */
-  onHide(callback) { this.onHideCallbacks.push(callback) }
+  onHide(callback) { 
+    if ( typeof callback === 'function') {
+      this.onHideCallbacks.push(callback) 
+      return true
+    }
+    return false
+  }
 
   /**
    * Register a callback to be fired when the notification data changes
    * e.g on {@link NotificationHandler#updateTitle}
-   * @param {NotificationViewOnChangeCallback} callback 
+   * @param {NotificationOnChangeCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered successfully
    */
-  onChange(callback) { this.onChangeCallbacks.push(callback) } 
+  onChange(callback) {
+    if ( typeof callback === 'function') {
+      this.onChangeCallbacks.push(callback) 
+      return true
+    }
+    return false
+  } 
 
-  /// inner methods
-
+  /** 
+   * @protected 
+   * @inner 
+   */
   _renderNotification() {
+    console.log("Switching")
     switch(this.model.type) {
       case NotificationModel.Error:
         return this._renderError()
-      case NotificationModel.Info:
+      case NotificationModel.Info: 
         return this._renderInfo()
       case NotificationModel.Success:
         return this._renderSuccesss()
@@ -161,13 +205,17 @@ class NotificationView {
     }
   }
 
+  /**
+   * @protected 
+   * @inner
+   */
   _renderError() {
     return $.notify(
       {
         icon: 'fa fa-info-circle',
         newest_on_top: true,
         allow_dismiss: true,
-        title: `<strong>${this.model.getTitle()}</strong>`,
+        title: `<strong>asdasdasd${this.model.getTitle()}</strong>`,
         message: this.model.getMessage()
       }
       ,
@@ -187,8 +235,15 @@ class NotificationView {
     )
   }
 
+  /**
+   * @protected 
+   * @inner
+   */
   _renderInfo() {
-    return $.notify(
+    console.log("RENDER INFO")
+    console.log(this.model)
+    console.log(this.model.getMessage())
+    let x = $.notify(
       {
         icon: 'fa fa-info-circle',
         newest_on_top: true,
@@ -213,6 +268,10 @@ class NotificationView {
     )
   }
 
+  /**
+   * @protected 
+   * @inner
+   */
   _renderSuccesss() {
     return $.notify(
       {
@@ -239,6 +298,10 @@ class NotificationView {
     )
   }
 
+  /**
+   * @protected 
+   * @inner
+   */
   _renderWarning() {
     return $.notify(
       {

@@ -11,8 +11,8 @@
 
 'use-strict'
 
-const {InternalError} = require('../../../util/error')
-const Events = require('../../events')
+const {InternalError} = require('@common/util/error')
+const Events = require('@renderer/events')
 require('selectize')
 
 function renderSelected(kernel, escape) {

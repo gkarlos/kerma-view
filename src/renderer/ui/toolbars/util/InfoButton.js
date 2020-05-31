@@ -1,8 +1,8 @@
-const Component = require('../../component/Component')
-const Events = require('../../../events')
+const Component = require('@renderer/ui/component/Component')
+const Events = require('@renderer/events')
 const openAboutWindow = require('electron-about-window').default
 const path = require('path')
-const {InternalError} = require('../../../../util/error')
+const {InternalError} = require('@common/util/error')
 
 class InfoButton extends Component {
   constructor(id, container, app) {

@@ -1,5 +1,5 @@
 
-const {InternalError} = require("util/error")
+const {InternalError} = require("@common/util/error")
 
 function __validateShape(x,y,z) {
   if ( x <= 0 || y <= 0 || z <= 0)

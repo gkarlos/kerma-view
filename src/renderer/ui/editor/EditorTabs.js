@@ -2,9 +2,9 @@
  * 
  */
 
-const Component = require('../component/Component')
-const InternalError = require('../../../util/error')
-const Events = require('../../events')
+const Component     = require('@renderer/ui/component').Component
+const Events        = require('@renderer/app').Events
+const InternalError = require('@common/util/error')
 
 function searchTabs(tabs, title) {
   for ( let i = 0; i < tabs.length; ++i)

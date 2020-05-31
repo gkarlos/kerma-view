@@ -1,8 +1,8 @@
 
-const Component  = require('renderer/ui/component/Component')
-const EditorTabs = require('renderer/ui/editor/EditorTabs')
-const CodeNavToolbar = require('renderer/ui/toolbars/CodeNavToolbar')
-const Events     = require('renderer/events')
+const Component      = require('@renderer/ui/component/Component')
+const EditorTabs     = require('@renderer/ui/editor/EditorTabs')
+const CodeNavToolbar = require('@renderer/ui/toolbars/CodeNavToolbar')
+const Events         = require('@renderer/events')
 
 class EditorToolbar extends Component {
   constructor(id, container, app) {

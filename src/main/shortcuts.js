@@ -1,7 +1,7 @@
-const electron = require('electron')
-const globalShortcut = electron.globalShortcut
-const {InternalError} = require('../util/error')
-const cl = require('../util/cl')
+const electron        = require('electron')
+const globalShortcut  = electron.globalShortcut
+const {InternalError} = require('@common/util/error')
+const cl              = require('@main/cl')
 
 module.exports = (app) => {
   if ( !app.windows.main)

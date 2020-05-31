@@ -11,10 +11,12 @@
 'use-string'
 
 const BaseLayout      = require('./BaseLayout')
-const {InternalError} = require('util/error')
+
+const {InternalError} = require('@common/util/error')
+const Events          = require('@renderer/events')
+
 const Split           = require('split.js')
 
-const Events          = require('renderer/events')
 
 
 /**

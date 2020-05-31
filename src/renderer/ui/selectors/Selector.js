@@ -1,6 +1,6 @@
 
 
-const Component = require('../component/Component')
+const Component = require('@renderer/ui/component/Component')
 
 /**
  * Base (abstract) class for the selectors
@@ -53,7 +53,7 @@ class Selector extends Component {
   }
 
   render() {
-    const {InternalError} = require('../../../util/error')
+    const {InternalError} = require('../../../common/util/error')
     throw new InternalError(`Cannot invoke abstract method Selector.render: Class '${this.constructor.name}' must implement render()`)
   }
 }

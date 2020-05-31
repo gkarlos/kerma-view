@@ -1,8 +1,8 @@
 const app              = require('electron').remote.app
-const {InternalError}  = require('../../util/error')
+const {InternalError}  = require('@common/util/error')
 const d3               = require('d3')
 const CalendarHeatmap  = require('calendar-heatmap-mini')
-const {isString}       = require('../../util/traits')
+const {isString}       = require('@common/util/traits')
 const _ = require('lodash');
 
 function validShape(shape) {
@@ -21,8 +21,7 @@ let countDimensions = (shape) => 1 + (shape[1] > 1) + (shape[2] > 1)
  * Check if a location exists in the DOM
  * 
  * @param   {String} location A DOMString
- * @returns {@link location} if the location exists
- *          {@link null} if {@link location} is not a String
+ * @returns {String|null} The location if the location exists. {@link null} otherwise
  * @throws InternalError if {@link location} is not null but the location
  *         is not a valid DOM element
  */

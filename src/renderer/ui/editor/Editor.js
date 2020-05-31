@@ -1,13 +1,15 @@
 /**
- * @module renderer/components/editor
+ * @module ui/editor
+ * @category ui
  */
-const fs        = require('../../../util/fs')
-const mock = require('../../../mock/cuda-source')
-const Component = require('../component/Component')
-const Events    = require('../../events')
-const {InternalError} = require('../../../util/error')
-const path = require('path')
+const fs              = require('@common/util/fs')
+const {InternalError} = require('@common/util/error')
 
+const mock      = require('@mock/cuda-source')
+const Component = require('@renderer/ui/component').Component
+const Events    = require('@renderer/App').Events
+
+const path = require('path')
 
 const EditorTabs = require('./EditorTabs')
 

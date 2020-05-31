@@ -1,6 +1,6 @@
 const LogLevel = require('./LogLevel')
-const random = require('renderer/util/random')
 
+const random  = require('@renderer/util/random')
 const Service = require('@renderer/services/Service')
 
 /**

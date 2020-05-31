@@ -1,8 +1,8 @@
 'use-strict'
 
-const Component = require('../component/Component')
+const Component        = require('@renderer/ui/component/Component')
 const MemoryVisualizer = require('./MemoryVisualizer')
-const Memory = require('renderer/model/memory').Memory
+const Memory           = require('@renderer/model/memory').Memory
 
 /**
  * The body of the memory are. This is roughly a collection

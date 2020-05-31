@@ -13,12 +13,12 @@
  *-----------------------------------------------------------------*/
 'use strict'
 
-const settings = require("../common/config").settings
+const settings = require("@common/config").settings
 
 
 
 function dumpLaunchConfiguration() {
-  const cl = require('../util/cl')
+  const cl = require('./cl')
 
   let fn = settings.debug? cl.debug : cl.info;
   fn("Configuration: ", {

@@ -1,10 +1,10 @@
 /**
  * @file input-file-dialog.js
  */
-const Component = require('../../component/Component')
-const Events = require('../../../events')
-const {dialog} = require('electron').remote
-const {InternalError} = require('../../../../util/error')
+const Component = require('@renderer/ui/component/Component')
+const Events    = require('@renderer/events')
+const {dialog}  = require('electron').remote
+const {InternalError} = require('@common/util/error')
 
 class InputModeSelectionItem extends Component {
   constructor(container, app) {

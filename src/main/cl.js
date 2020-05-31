@@ -23,16 +23,16 @@ const release    = require('../common/release')
 const settings   = require('../common/settings')
 const defaults   = settings.defaults
 const build      = settings.Builds
-const fileExists = require('../util/fs').fileExists
-const dirExists  = require('../util/fs').dirExists
+const fileExists = require('../common/util/fs').fileExists
+const dirExists  = require('../common/util/fs').dirExists
 const {isNumber, 
        isString,
        isArray, 
-       isObject} = require('./traits')
+       isObject} = require('../common/util/traits')
 const inspect    = require('util').inspect
 const {
   CLError,
-  FileNotFoundError }  = require('../util/error')
+  FileNotFoundError }  = require('../common/util/error')
 
 /**
  * Construct a default command-line parser

@@ -1,9 +1,9 @@
-const Component      = require('../../component/Component')
+const Component      = require('@renderer/ui/component/Component')
 const SettingsButton = require('./SettingsButton')
 const NotificationsButton = require('./NotificationButton')
 const InfoButton     = require('./InfoButton')
-const Events         = require('renderer/events')
-const MenuSeparator  = require('renderer/ui/MenuSeparator')
+const Events         = require('@renderer/events')
+const MenuSeparator  = require('@renderer/ui/MenuSeparator')
 
 class UtilityToolbar extends Component {
   constructor(id, container, app) {

@@ -1,8 +1,8 @@
 /**
  * @file console-button.js
  */
-const Component = require('../component/Component')
-const Events = require('renderer/events')
+const Component = require('@renderer/ui/component/Component')
+const Events    = require('@renderer/events')
 
 class ConsoleButton extends Component {
   constructor(id, container, app) {

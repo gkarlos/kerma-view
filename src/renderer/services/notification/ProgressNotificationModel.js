@@ -16,8 +16,8 @@ class ProgressNotificationModel extends NotificationModel {
 
   /**
    * @param {Object} [options]
-   * @param {String} [options.type] A title for the notification
-   * @param {String} [options.title]
+   * @param {String} [options.type] The notification type
+   * @param {String} [options.title] A title for the notification
    * @param {String} [options.message] The actual notification message
    * @param {String} [options.details] Additional details
    * @param {Integer|Infinity} [options.total] Total progress value. If {@link Infinity} progress ends only when {@link ProgressNotification#complete} is called

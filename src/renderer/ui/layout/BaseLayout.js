@@ -12,7 +12,7 @@
  'use-strict'
 
 // const Component = require('../component')
-const {InternalError} = require('util/error')
+const {InternalError} = require('@common/util/error')
 
 /**
  * @abstract

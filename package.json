@@ -14,7 +14,7 @@
     "node": ">=12",
     "npm": ">=6"
   },
-  "main": "./src/main/main.js",
+  "main": "./src/main/main",
   "scripts": {
     "start": "electron .",
     "docs": "npm run docs:build && npm run docs:read",

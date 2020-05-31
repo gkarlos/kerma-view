@@ -9,10 +9,10 @@
  * @author gkarlos 
  * @description 
  *   This module includes all the available events
- *  
- *//*--------------------------------------------------------------*/
+ *-----------------------------------------------------------------*/
 
-module.exports = {
+/** */
+const Events = {
   /** @event */UI_READY : "ui:ready",
   /** @event */UI_RESIZE : "ui:resize",
   /** @event */UI_COMPONENT_READY : "ui:component-ready",
@@ -31,3 +31,5 @@ module.exports = {
   /** @event */SESSION_NEW : "session:new",
   /** @event */SESSION_KILLED : "session:killed"
 }
+
+module.exports = Events

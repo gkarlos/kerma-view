@@ -15,8 +15,8 @@
 
 const BrowserWindow = require("electron").BrowserWindow
 
-const cl       = require('./cl')
-const settings = require('../common/settings')
+const cl       = require('@main/cl')
+const settings = require('@common/settings')
 
 /**
  * Open dev tools relative to a window. An invalid {@link window} param

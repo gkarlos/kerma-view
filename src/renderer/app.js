@@ -4,7 +4,12 @@ const NotificationService = require('./services/notification/NotificationService
 const UI                  = require('./ui')
 const Events              = require('./events')
 
+/**
+ * Main class of the application
+ */
 class App {
+
+  Events = require('./events')
 
   // Services
   Logger = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
@@ -46,27 +51,33 @@ class App {
   disableNotifications() { this.Notifier.disable; }
 
   reload() { this.window.reload() }
-
-  initPreUiServices() {
-    this.Logger.enable()
-  }
-
+  
   initUI() {
     this.ui = UI.init(this);
   }
 
+  /**
+   * Initialize the services that do not depend on UI to be rendered
+   */
+  initPreUiServices() {
+    this.Logger.enable()
+  }
+
+  /**
+   * Initialize the services that require the UI to be rendered
+   */
   initPostUiServices() {
     this.Notifier.enable()
   }
 
   start() {
-    
+    console.log("in start")
+    this.Notifier.info("hello world")
   }
 
   main() {
     this.initPreUiServices()
     this.initUI();
-
     this.on(Events.UI_READY, () => {
       this.initPostUiServices();
       this.start()
@@ -74,5 +85,5 @@ class App {
   } 
 }
 
-const app = new App()
-module.exports = app
+const instance = new App()
+module.exports = instance

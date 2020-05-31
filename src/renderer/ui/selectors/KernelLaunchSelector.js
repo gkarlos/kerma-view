@@ -10,9 +10,9 @@
 *------------------------------------------------------------------*/
 
 
-const {InternalError} = require('../../../util/error')
-const mock = require('../../../mock/cuda-source')
-const Events = require('../../events')
+const {InternalError} = require('@common/util/error')
+const mock = require('@mock/cuda-source')
+const Events = require('@renderer/events')
 require('selectize')
 
 
