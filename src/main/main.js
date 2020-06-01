@@ -13,6 +13,7 @@
  *-----------------------------------------------------------------*/
 'use strict';
 require('v8-compile-cache')
+require('module-alias/register')
 
 const electron        = require('electron');
 const path            = require('path');
@@ -21,7 +22,7 @@ const BrowserWindow   = electron.BrowserWindow;
 const menu            = electron.Menu;
 const dialog          = electron.dialog;
 const ipcMain         = electron.ipcMain;
-const release         = require('@common/release')
+// const release         = require('@common/release')
 const settings        = require('@common/settings')
 const fs              = require('@common/util/fs')
 const cl              = require('@main/cl')

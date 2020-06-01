@@ -29,18 +29,33 @@ const NotificationView          = require('@renderer/services/notification/Notif
   * @requires module:notification.NotificationView
   */
 class ProgressNotificationView extends NotificationView {
+
+  static Template = `
+    <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">
+      <button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>
+      <span data-notify="icon"></span>
+      <span data-notify="title">{1}</span>
+      <span data-notify="message">{2}</span>
+      <div class="progress" data-notify="progressbar">
+      <div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+      </div>
+    </div>`
+  
+  static CloseDelay = 350
+
   /**
    * @param {ProgressNotificationModel} model 
    */
   constructor(model) {
     super(model)
-    this.viewimpl = undefined
 
     /** @type {Array.<ProgressNotificationOnProgressChangeCallback>} */
     this.onProgressChangeCallbacks = []
     
     /** @type {Array.<ProgressNotificationOnProgressCompleteCallback>} */
     this.onProgressCompleteCallbacks = []
+
+    this.updates = []
   }
 
   /**
@@ -49,34 +64,67 @@ class ProgressNotificationView extends NotificationView {
    * @returns {Boolean} Whether the callback was registered successfully
    */
   onProgress(callback) {
-    if ( typeof callback === 'function') {
+    if ( typeof callback === 'function')
       this.onProgressChangeCallbacks.push(callback)
-      return true
-    }
-    return false;
+    return this;
+  }
+
+  onComplete(callback) {
+    if ( typeof callback === 'function')
+      this.onProgressCompleteCallbacks.push(callback)
+    return this;
   }
 
   /**
    * 
-   * @param {*} value 
-   * @param {*} info 
+   * @param {Integer} value 
+   * @param {String} info 
    */
   progress(value, info) {
-    
+    if ( !this.model.isCompleted()) {
+      if ( !this.viewimpl)
+        this.show()
+
+      this.model.progress(value)
+      this.model.setDetails(info)
+
+      this.viewimpl.update('progress', this.model.getCurrentProgress())
+      if ( info) this.viewimpl.update('message', this._renderMessage())
+      
+      this.onProgressChangeCallbacks.forEach(callback => callback(this.model))  
+
+      if ( this.model.isCompleted()) {
+        setTimeout(() => {
+          this.onProgressCompleteCallbacks.forEach(callback => callback(this.model))
+          setTimeout(() => this.hide(), ProgressNotificationView.CloseDelay)
+        }, ProgressNotificationView.CloseDelay)
+      }  
+    }
+
+    return this
   }
 
   _renderError() { 
-    return $.notify({
-      icon: NotificationView.Icon,
-      title: `<strong>${this.model.getTitle()}</strong>`,
-      message: this.model.getMessage(),
-      newest_on_top: true,
-      allow_dismiss: true
-    }, {
+  
+  }
 
+  _renderInfo() { 
+    return $.notify({
+      icon: NotificationView.Icon.Info,
+      title: this._renderTitle(),
+      message: this._renderMessage(),
+      newest_on_top: true,
+      allow_dismiss: NotificationView.Dismissable,
+    }, {
+      type   : 'info',
+      delay  : Infinity,
+      offset : 2,
+      showProgressbar: true,
+      animate   : NotificationView.Animation,
+      placement : NotificationView.Position,
+      template  : ProgressNotificationView.Template
     })
   }
-  _renderInfo() { }
   _renderSuccesss() { }
   _renderWarning() { } 
 }

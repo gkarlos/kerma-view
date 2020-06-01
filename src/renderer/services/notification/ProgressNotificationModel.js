@@ -31,10 +31,7 @@ class ProgressNotificationModel extends NotificationModel {
     })
 
     this.total = options.total || 100
-
-    this.currentProgress = this.total === Infinity
-        ? ProgressNotificationModel.INFINITE_NO_PROGRESS
-        : ProgressNotificationModel.FINITE_NO_PROGRESS
+    this.currentProgress = 0;
 
     this.currentProgressInfo = undefined
 
@@ -97,31 +94,27 @@ class ProgressNotificationModel extends NotificationModel {
   isCompleted() { return this.completed }
 
   /**
-   * Update the progress. No-op if the notification has not started.
+   * Update the notifications progress.
+   * The notification is considered "started" after the first progress call.
+   * A progress call that will result is {@link ProgressNotificationModel#getCurrentProgress() >= 100}
+   * is considered completed.
+   * 
    * See {@link hasStarted()}
    * 
-   * If this is an infinite notification {@link ProgressNotification#isInfinite} the
-   * *value* parameter is ignored
-   * 
    * @param {Number} [value]
-   * @param {String} [info] 
    */
-  progress(value, info) {
-    if ( this.isInfinite()) {
-      if ( this.currentProgress !== ProgressNotificationModel.INFINITE_IN_PROGRESS)
-        this.currentProgress = ProgressNotificationModel.INFINITE_IN_PROGRESS
-    } else {
-      if (value === undefined || value === null)
-        value = 0
+  progress(value) {
+    if (value === undefined || value === null)
+      value = 0
 
-      let newValue = Math.min(this.currentProgress + value, this.total);
-      this.currentProgress = newValue;
-      this.currentProgressInfo = info || undefined
+    let newValue = Math.min(this.currentProgress + value, this.total);
+    
+    this.currentProgress = newValue;
+    
+    if ( this.currentProgress >= this.total)
+      this.completed = true
 
-      if ( this.currentProgress >= this.total)
-        this.completed = true
-    }
-    this.started = true
+    if ( !this.started) this.started = true
   }
 };
 

@@ -48,34 +48,43 @@ class NotificationService extends Service {
    * Show an info notification
    * If the service is disabled this is a no-op
    * 
-   * @param {String}  message The main message of the notification
-   * @param {Object}  [opts] Additional options
-   * @param {String}  [opts.title] A title for the notification
-   * @param {String}  [opts.details] Additional info for the notification
-   * @param {Integer} [opts.progress] If non-zero the notification will have progress
-   * @param {module:notification~NotificationViewOnShowCallback} [opts.onShow] A callback to be invoked when the notification shows
-   * @param {NotificationViewOnHideCallback} [opts.onHide] A callback to be invoked when the notification hides
-   * @param {NotificationViewOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
+   * @param {String}  message         The main message of the notification
+   * @param {Object}  [opts]          Additional options
+   * @param {String}  [opts.title]    A title for the notification
+   * @param {String}  [opts.details]  Additional info for the notification
+   * @param {Boolean} [opts.progress] If set the notification will be a {@link module:notification.ProgressNotificationView}
+   * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
+   * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
+   * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
+   * @param {module:notification.ProgressNotificationOnProgressCallback} [opts.onProgress] A callback to be invoked when progress changes. Ignored if not {opts.progress}
+   * @param {module:notification.ProgressNotificationOnCompleteCallback} [opts.onComplete] A callback to be invoked when progress completes Ignored if not {opts.progress}
    */
   info(message="", opts={}) {
     console.log(message)
-    let model= new NotificationModel({ 
-      type: NotificationModel.Info, 
-      message: message, 
-      title: opts.title, 
-      details: opts.details})
-    let view = opts.progress? new ProgressNotificationView(model) : new NotificationView(model)
-    
-    console.log(view)
-    // if ( props) {
-    //   if ( props.onShow)
-    //     view.onShow(props.onShow)
-    //   if ( props.onHide)
-    //     view.onHide(props.onHide)
-    // }
-    
+
+    let model, view
+
+    if ( opts.progress) {
+      model = new ProgressNotificationModel({ type: NotificationModel.Info, message: message, title: opts.title,  details: opts.details, total: opts.total})
+      view = new ProgressNotificationView(model)
+    } else {
+      model = new NotificationModel({ type: NotificationModel.Info, message: message, title: opts.title,  details: opts.details})
+      view = new NotificationView(model)
+    }
+
+    if ( opts.onShow && typeof opts.onShow === 'function') view.onShow(props.onShow)
+    if ( opts.onHide && typeof opts.onHide === 'function') view.onHide(opts.onHide)
+    if ( opts.onChange && typeof opts.onChange === 'function') view.onChange(opts.onChange)
+
+    if ( opts.progress) {
+      if (opts.onProgress && typeof opts.onProgress === 'function')
+        view.onProgress(opts.onProgress)
+      if ( opts.onComplete && typeof opts.onComplete === 'function')
+        view.onComplete(opts.onComplete)
+      view.onComplete(() => view.updateType(NotificationModel.Success))
+    }
+
     view.show()
-    console.log(view)
     return view
   }
 

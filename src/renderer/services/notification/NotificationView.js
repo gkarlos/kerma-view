@@ -57,13 +57,21 @@ class NotificationView {
   static Icon = {
     Info    : 'fa fa-info-circle',
     Error   : 'fa fa-info-circle',
-    Success : 'fa fa-info-circle',
+    Success : 'fa fa-check-circle',
     Warning : 'fa fa-info-circle'
   }
+  static Template = `
+    <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">
+      <button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>
+      <span data-notify="icon"></span>
+      <span data-notify="title">{1}</span>
+      <span data-notify="message">{2}</span>
+    </div>`
   static Animation = { enter: 'animated fadeInDown', exit: 'animated fadeOutUp' }
   static Position  = { from: "bottom", align: "right" }
   static Duration  = 1500
   static Dismissable = true
+  static CloseDelay = 250
 
   /**
    * @param {NotificationModel} model The model of this view
@@ -99,6 +107,22 @@ class NotificationView {
     return this;
   }
 
+  updateType(type) {
+    this.model.setType(type)
+    if ( this.viewimpl) {
+      this.viewimpl.update('type', this.model.getType())
+      switch(type) {
+        case NotificationModel.Info    : this.viewimpl.update('icon', NotificationView.Icon.Info); break;
+        case NotificationModel.Error   : this.viewimpl.update('icon', NotificationView.Icon.Error); break;
+        case NotificationModel.Success : this.viewimpl.update('icon', NotificationView.Icon.Success); break;
+        case NotificationModel.Warning : this.viewimpl.update('icon', NotificationView.Icon.Warning); break;
+        default : throw new Error(`Unknown Notification type: ${type}`)
+      }
+    }
+    this.onChangeCallbacks.forEach(callback => callback(this.model))
+    return this;
+  }
+
   /**
    * Update the message of the notification
    * 
@@ -110,6 +134,13 @@ class NotificationView {
       this.viewimpl.update('message', message)
     this.onChangeCallbacks.forEach(callback => callback(this.model))
     return this;
+  }
+
+  makeSuccess() {
+    this.model.setType(NotificationModel.Success)
+    if ( this.viewimpl) {
+
+    }
   }
 
   /**
@@ -129,15 +160,16 @@ class NotificationView {
     if ( this.viewimpl)
       delete this.viewimpl
     this.viewimpl = this._renderNotification()
-    console.log(this.viewimpl)
     this.onShowCallbacks.forEach(callback => callback(this.model))
     return this;
   }
 
   /** Hide the notification */
   hide() { 
-    this.viewimpl.close() 
-    this.onHideCallbacks.forEach(callback => callback(this.model))
+    setTimeout(() => {
+      this.viewimpl.close()
+      this.onHideCallbacks.forEach(callback => callback(this.model))
+    }, NotificationView.CloseDelay)
     return this;
   }
 
@@ -151,9 +183,8 @@ class NotificationView {
   onShow(callback) { 
     if ( typeof callback === 'function') {
       this.onShowCallbacks.push(callback) 
-      return true
     }
-    return false
+    return this
   }
 
   /**
@@ -166,23 +197,21 @@ class NotificationView {
   onHide(callback) { 
     if ( typeof callback === 'function') {
       this.onHideCallbacks.push(callback) 
-      return true
     }
-    return false
+    return this
   }
 
   /**
    * Register a callback to be fired when the notification data changes
    * e.g on {@link NotificationHandler#updateTitle}
    * @param {NotificationOnChangeCallback} callback A callback
-   * @returns {Boolean} Whether the callback was registered successfully
+   * @returns {NotificationView}
    */
   onChange(callback) {
     if ( typeof callback === 'function') {
       this.onChangeCallbacks.push(callback) 
-      return true
     }
-    return false
+    return this
   } 
 
   /** 
@@ -190,7 +219,6 @@ class NotificationView {
    * @inner 
    */
   _renderNotification() {
-    console.log("Switching")
     switch(this.model.type) {
       case NotificationModel.Error:
         return this._renderError()
@@ -203,6 +231,18 @@ class NotificationView {
       default:
         throw new Error(`Unknown type: '${this.model.type}'`)
     }
+  }
+
+  _renderTitle() {
+    return `<strong>${this.model.getTitle()}</strong>`
+  }
+
+  _renderDetails() {
+    return this.model.hasDetails()? ` <span class="text-muted"> ${this.model.getDetails()}</span>` : ""
+  }
+
+  _renderMessage() {
+    return this.model.getMessage() + this._renderDetails()
   }
 
   /**
@@ -263,6 +303,9 @@ class NotificationView {
         placement : {
           from: "bottom",
           align: "right"
+        },
+        onClose : () => {
+          this.onHideCallbacks.forEach(callback => callback(this.model))
         }
       }
     )

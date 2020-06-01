@@ -29,6 +29,12 @@ class NotificationModel {
   
   /** Get the details of the notification */
   getDetails() { return this.details }
+
+  /** 
+   * Check if there are details
+   * @returns {Boolean}
+   */
+  hasDetails() { return this.details && this.details.length > 0 }
   
   /** Get the type of the notification    */
   getType()    { return this.type    }

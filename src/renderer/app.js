@@ -30,6 +30,9 @@ class App {
     this.mock     = require(`../mock/cuda-source`)
     this.emitter  = new EventEmitter()
     this.ui       = undefined
+
+    /// notifications
+    this.initNotification = null
   }
 
   get root()    { return this.electron.app.root;     }
@@ -42,7 +45,7 @@ class App {
   get once()    { return this.emitter.once }
   get eventNames()         { return this.emitter.eventNames }
   get removeAllListeners() { return this.emitter.removeAllListeners }
-  get removeListener()     { return this.emitter.removeListener     }
+  get removeListener()     { return this.emitter.removeListener     } 
 
   enableLogging() { this.Logger.enable() }
   disableLogging() { this.Logger.disable() }
@@ -71,15 +74,18 @@ class App {
   }
 
   start() {
-    console.log("in start")
-    this.Notifier.info("hello world")
+    
   }
 
   main() {
     this.initPreUiServices()
     this.initUI();
+
     this.on(Events.UI_READY, () => {
+      this.initNotification = this.Notifier.info("Initializing...", { progress: true, onComplete: () => this.initNotification.updateMessage('App is ready')}).progress(50, "ui ready")
+
       this.initPostUiServices();
+      this.initNotification.progress(50, "services ready")
       this.start()
     })
   } 
