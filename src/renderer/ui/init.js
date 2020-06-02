@@ -21,6 +21,7 @@ ui.toolbar.main    = null
 ui.toolbar.input   = null
 ui.toolbar.code    = null
 ui.toolbar.session = null
+ui.toolbar.util    = null
 
 /// Console
 ui.console = {}

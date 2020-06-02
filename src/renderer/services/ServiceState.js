@@ -11,12 +11,7 @@ class ServiceState {
   
   /** @static */
   static Disabled = 1;
-
-  constructor() {}
 }
 
-const instance = new ServiceState()
 
-Object.freeze(instance)
-
-module.exports = instance
+module.exports = ServiceState

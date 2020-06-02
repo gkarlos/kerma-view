@@ -72,6 +72,7 @@ class Service {
       let self = this
       this.onStateChangeCallbacks.forEach(callback => callback(self));
       this.onDisableCallbacks.forEach(callback => callback(self));
+      this.state = ServiceState.Disabled
     } 
     return this
   }

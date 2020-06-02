@@ -11,9 +11,10 @@ class App {
 
   Events = require('./events')
 
-  // Services
+  // Services pre-ui
   Logger = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
-  Notifier = new NotificationService()
+  // Services post-ui
+  Notifier = null
 
   constructor() {
     this.electron = {}
@@ -50,8 +51,8 @@ class App {
   enableLogging() { this.Logger.enable() }
   disableLogging() { this.Logger.disable() }
 
-  enableNotifications() { this.Notifier.enable; }
-  disableNotifications() { this.Notifier.disable; }
+  enableNotifications() { this.Notifier && this.Notifier.enable; }
+  disableNotifications() { this.Notifier && this.Notifier.disable; }
 
   reload() { this.window.reload() }
   
@@ -70,6 +71,7 @@ class App {
    * Initialize the services that require the UI to be rendered
    */
   initPostUiServices() {
+    this.Notifier = new NotificationService(this)
     this.Notifier.enable()
   }
 
@@ -82,9 +84,9 @@ class App {
     this.initUI();
 
     this.on(Events.UI_READY, () => {
-      this.initNotification = this.Notifier.info("Initializing...", { progress: true, onComplete: () => this.initNotification.updateMessage('App is ready')}).progress(50, "ui ready")
-
       this.initPostUiServices();
+      this.initNotification = this.Notifier.info("Initializing...", { progress: true, onComplete: () => this.initNotification.updateMessage('App is ready')}).progress(50, "ui ready")
+      
       this.initNotification.progress(50, "services ready")
       this.start()
     })
