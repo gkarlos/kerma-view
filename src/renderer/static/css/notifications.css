@@ -22,7 +22,7 @@
 	font-weight: 400;
 } */
 
-[data-notify="container"][class*="alert-pastel-"] {
+/* [data-notify="container"][class*="alert-pastel-"] {
 	background-color: rgb(255, 255, 238);
 	border-width: 0px;
 	border-left: 15px solid rgb(255, 240, 106);
@@ -45,4 +45,13 @@
 }
 [data-notify="container"][class*="alert-pastel-"] > [data-notify="message"] {
 	font-weight: 400;
+} */
+
+/* Remove decorations from the notification's close button */
+[data-notify="dismiss"][class="close"]:focus {
+	outline: 0;
+	border: none;
+	text-decoration: none;
+}
+
 }

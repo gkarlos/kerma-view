@@ -40,8 +40,12 @@ class ProgressNotificationView extends NotificationView {
       <div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
       </div>
     </div>`
-  
-  static CloseDelay = 350
+
+  /**
+   * @static
+   * Delay (in ms) after the progress is completed and before hide() is called 
+   */
+  static OnCompleteDelay = 1000
 
   /**
    * @param {ProgressNotificationModel} model 
@@ -88,16 +92,16 @@ class ProgressNotificationView extends NotificationView {
       this.model.progress(value)
       this.model.setDetails(info)
 
+      if ( info) 
+        this.viewimpl.update('message', this._renderMessage())
       this.viewimpl.update('progress', this.model.getCurrentProgress())
-      if ( info) this.viewimpl.update('message', this._renderMessage())
+      this.onProgressChangeCallbacks.forEach(callback => callback(this.model)) 
       
-      this.onProgressChangeCallbacks.forEach(callback => callback(this.model))  
-
       if ( this.model.isCompleted()) {
         setTimeout(() => {
           this.onProgressCompleteCallbacks.forEach(callback => callback(this.model))
-          setTimeout(() => this.hide(), ProgressNotificationView.CloseDelay)
-        }, ProgressNotificationView.CloseDelay)
+          this.hide()
+        }, ProgressNotificationView.OnCompleteDelay)
       }  
     }
 

@@ -71,7 +71,12 @@ class NotificationView {
   static Position  = { from: "bottom", align: "right" }
   static Duration  = 1500
   static Dismissable = true
-  static CloseDelay = 250
+  /**
+   * @static
+   * @protected 
+   * Delay (in ms) for when the notification dissappers after hide() is called 
+   */
+  static HideDelay = 350
 
   /**
    * @param {NotificationModel} model The model of this view
@@ -169,7 +174,7 @@ class NotificationView {
     setTimeout(() => {
       this.viewimpl.close()
       this.onHideCallbacks.forEach(callback => callback(this.model))
-    }, NotificationView.CloseDelay)
+    }, NotificationView.HideDelay)
     return this;
   }
 

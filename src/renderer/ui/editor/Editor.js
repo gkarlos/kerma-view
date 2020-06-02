@@ -7,7 +7,7 @@ const {InternalError} = require('@common/util/error')
 
 const mock      = require('@mock/cuda-source')
 const Component = require('@renderer/ui/component').Component
-const Events    = require('@renderer/App').Events
+const Events    = require('@renderer/events')
 
 const path = require('path')
 

@@ -4,12 +4,15 @@ const NotificationService = require('./services/notification/NotificationService
 const UI                  = require('./ui')
 const Events              = require('./events')
 
+
+const services = {}
+
+
+
 /**
  * Main class of the application
  */
 class App {
-
-  Events = require('./events')
 
   // Services pre-ui
   Logger = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
@@ -22,6 +25,7 @@ class App {
     this.electron.app = require('electron').remote.app
 
     this.events = Events
+    this.Events = Events
 
     this.input    = {
       path : null,
@@ -71,8 +75,13 @@ class App {
    * Initialize the services that require the UI to be rendered
    */
   initPostUiServices() {
-    this.Notifier = new NotificationService(this)
-    this.Notifier.enable()
+    this.Notifier = new NotificationService(this).enable()
+    this.initNotification = this.Notifier.info("Initializing...", { progress: true, successOnComplete: true})
+                                         .onComplete( () => this.initNotification.updateMessage('App is ready'))
+    
+    setTimeout(() => this.initNotification.progress(50, "ui ready"), 1000)
+
+    setTimeout(() => this.initNotification.progress(50, "services ready"), 2000)
   }
 
   start() {
@@ -82,16 +91,13 @@ class App {
   main() {
     this.initPreUiServices()
     this.initUI();
-
     this.on(Events.UI_READY, () => {
       this.initPostUiServices();
-      this.initNotification = this.Notifier.info("Initializing...", { progress: true, onComplete: () => this.initNotification.updateMessage('App is ready')}).progress(50, "ui ready")
-      
-      this.initNotification.progress(50, "services ready")
       this.start()
     })
   } 
 }
 
 const instance = new App()
+
 module.exports = instance

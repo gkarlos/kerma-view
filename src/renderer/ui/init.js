@@ -55,6 +55,9 @@ ui.perf.render = {
 ui.onReadyCallbacks = []
 ui.onReady = (callback) => { if ( typeof callback === 'function') ui.onReadyCallbacks.push(callback) }
 
+ui.onDocumentReadyCallbacks = []
+ui.onDocumentReady = (callback) => { if (typeof callback === 'function') ui.onDocumentReadyCallbacks.push(callback); }
+
 /** Register a component to the UI */
 function registerComponent(component) {
   ui.components.set(component, {ready: false})
@@ -151,6 +154,7 @@ function init(app) {
   registerListeners(app)
 
   $(() => {
+    ui.onDocumentReadyCallbacks.forEach(callback => callback())
     ui.layout.render()
     createComponents(app)
     renderComponents()

@@ -21,13 +21,15 @@ class NotificationService extends Service {
   /** enable the service  */
   enable() { 
     super.enable(); 
-    Log.info("Notifications enabled") 
+    Log.info("Notifications enabled")
+    return this;
   }
   
   /** disable the service */
   disable() { 
     super.disable(); 
     Log.info("Notifications disabled")
+    return this;
   }
 
   /** 
@@ -68,6 +70,7 @@ class NotificationService extends Service {
    * @param {String}  [opts.title]    A title for the notification
    * @param {String}  [opts.details]  Additional info for the notification
    * @param {Boolean} [opts.progress] If set the notification will be a {@link module:notification.ProgressNotificationView}
+   * @param {Boolean} [opts.successOnComplete] If set and {@link opts.progress} is set, the notification will change to a Sucess notification once the progress completes.
    * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
    * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
    * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
@@ -85,7 +88,8 @@ class NotificationService extends Service {
         view.onProgress(opts.onProgress)
       if ( opts.onComplete && typeof opts.onComplete === 'function')
         view.onComplete(opts.onComplete)
-      view.onComplete(() => view.updateType(NotificationModel.Success))
+      if ( opts.successOnComplete)
+        view.onComplete(() => view.updateType(NotificationModel.Success))
     } else {
       model = new NotificationModel({ type: NotificationModel.Info, message: message, title: opts.title,  details: opts.details})
       view = new NotificationView(model)
