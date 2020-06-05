@@ -1,123 +1,141 @@
-/**
- * @module app
+/** 
+ * @module 
+ * @category main
  */
-const ConsoleLogger       = require('./services/log').ConsoleLogger
-const EventEmitter        = require('events')
-const NotificationService = require('./services/notification/NotificationService')
-const UI                  = require('./ui')
-const Events              = require('./events')
 
-
-const services = {}
-
-
-
-/**
- * Main class of the application
- * @memberof module:app
+/** 
+ * @namespace App
  */
-class App {
+const App = {}
 
-  // Services pre-ui
-  Logger = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
-  // Services post-ui
+// function start() {
+//   const NotificationService = require('./services/notification/NotificationService')
+//   const ConsoleLogger       = require('./services/log').ConsoleLogger
+//   const EventEmitter        = require('events') 
+//   const UI                  = require('./ui')
+//   const Events              = require('./events')
 
-  /** @type {NotificationService} */
-  Notifier = null
+//   /** @namespace */
+//   App.Electron = {}
+//   App.Electron.remote = require('electron').remote
+//   App.Electron.app    = App.Electron.remote.app
 
-  constructor() {
-    this.electron = {}
-    this.electron.remote = require('electron').remote
-    this.electron.app = require('electron').remote.app
-
-    this.events = Events
-    this.Events = Events
-
-    this.input    = {
-      path : null,
-      contents : null
-    }
-
-    this.mock     = require(`../mock/cuda-source`)
-    this.emitter  = new EventEmitter()
-    this.ui       = undefined
-
-    /// notifications
-    this.initNotification = null
-  }
-
-  get root()    { return this.electron.app.root;     }
-  get icon()    { return this.electron.app.iconPath; }
-  get version() { return this.electron.app.version;  }
-  get window()  { return this.electron.remote.getCurrentWindow() }
-
-  get on()      { return this.emitter.on   }
-  get emit()    { return this.emitter.emit }
-  get once()    { return this.emitter.once }
-  get eventNames()         { return this.emitter.eventNames }
-  get removeAllListeners() { return this.emitter.removeAllListeners }
-  get removeListener()     { return this.emitter.removeListener     } 
-
-  enableLogging() { this.Logger.enable() }
-  disableLogging() { this.Logger.disable() }
-
-  enableNotifications() { this.Notifier && this.Notifier.enable; }
-  disableNotifications() { this.Notifier && this.Notifier.disable; }
-
-  reload() { this.window.reload() }
+//   App.Events     = Events
+//   App.events     = App.Events
+//   /** */
+//   App.Emitter    = new EventEmitter()
   
-  initUI() {
-    this.ui = UI.init(this);
+//   App.on         = App.Emitter.on
+//   App.emit       = App.Emitter.emit
+//   App.once       = App.Emitter.once
+//   App.eventNames = App.Emitter.eventNames
+
+//   App.Mock = require('@mock/cuda-source')
+
+//   /** @namespace */
+//   App.Services = {}
+
+//   App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true}).enable()
+//   App.Logger = App.Services.Log
+
+//   /** */
+//   App.enableLogging  = () => { App.Services.Log.enable() }
+//   /** */
+//   App.disableLogging = () => { App.Services.Log.disable() }
+
+//   App.ui = UI.init(App)
+  
+//   App.on(Events.UI_READY, () => {
+//     App.Services.Notification = new NotificationService(App).enable() 
+//   })
+
+//   return true
+// }
+
+// App.main = ( () => { 
+//   let started = false; 
+//   return () => started = !started? start() : started
+// })()
+
+/** 
+ * Entry point of the app
+ * This is only meant to be called once. Subsequent calls are a no-op 
+ */
+App.main = function() {
+  if ( App.started) return false 
+  
+  App.started = true
+
+  const NotificationService = require('./services/notification/NotificationService')
+  const ConsoleLogger       = require('./services/log').ConsoleLogger
+  const EventEmitter        = require('events')  
+  const UI                  = require('./ui')
+  const Events              = require('./events')
+
+  
+  App.Electron = {
+    /** */remote : require('electron').remote,
+    /** */app    : require('electron').remote.app
   }
 
-  /**
-   * Initialize the services that do not depend on UI to be rendered
-   */
-  initPreUiServices() {
-    this.Logger.enable()
+  App.Events     = Events
+  App.events     = App.Events
+  App.Emitter    = new EventEmitter()
+
+  /** @method */
+  App.on         = App.Emitter.on
+  /** @method */
+  App.emit       = App.Emitter.emit
+  /** @method */
+  App.once       = App.Emitter.once
+  
+  App.eventNames = App.Emitter.eventNames
+
+  App.Mock = require('@mock/cuda-source')
+
+  /** @namespace */
+  App.Services = {
+    /** */
+    Log: undefined,
+    /** */
+    Notification : undefined
+  }
+  
+  App.ui = undefined
+
+  /** @method */
+  App.enableLogging  = () => { App.Services.Log.enable() }
+  /** @method */
+  App.disableLogging = () => { App.Services.Log.disable() }
+
+
+  function initUI() {
+    App.ui = UI.init(App)
   }
 
-  /**
-   * Initialize the services that require the UI to be rendered
-   */
-  initPostUiServices() {
-    this.Notifier = new NotificationService(this).enable()
-    // this.initNotification = this.Notifier.error("Initializing...", { progress: true, changeOnComplete: this.Notifier.NotificationType.Success})
-                                        //  .onComplete( () => this.initNotification.updateMessage('App is ready'))
-    
-    // this.Notifier.notify("Initializing...", { progress: true, changeOnComplete: this.Notifier.NotificationType.Success})
-    
-    let notification2 = this.Notifier.warning("Initializing...", { progress: true, sticky: true})
-    let notification3 = this.Notifier.error("Initializing...", { sticky: true})
-    let notification4 = this.Notifier.notify("Initializing...")
-    
-    // // setTimeout(() => notification1.progress(50, "ui ready"), 250)
-    setTimeout(() => notification2.progress(50, "ui ready"), 500)
-    setTimeout(() => notification3.progress(50, "ui ready"), 750)
-    setTimeout(() => notification4.progress(50, "ui ready"), 1000)
+  function initPreUiServices() {
+    App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true}).enable()
+    App.Logger = App.Services.Log
+  }
 
+  function initPostUiServices() {
+    App.Services.Notification = new NotificationService(App).enable() 
+  }
 
-    // // // setTimeout(() => notification1.progress(49, "services ready"), 1250)
-    setTimeout(() => notification2.progress(50, "services ready"), 1000)
-    setTimeout(() => notification3.progress(50, "services ready"), 2250)
-    setTimeout(() => notification4.progress(50, "services ready"), 3500)
+  function start() {
 
   }
 
-  start() {
-    
-  }
+  initPreUiServices()
+  initUI()
+  App.on(Events.UI_READY, () => {
+    initPostUiServices()  
+    start()
+  })
 
-  main() {
-    this.initPreUiServices()
-    this.initUI();
-    this.on(Events.UI_READY, () => {
-      this.initPostUiServices();
-      this.start()
-    })
-  } 
+  return true
 }
 
-const instance = new App()
+module.exports = App
 
-module.exports = instance
+

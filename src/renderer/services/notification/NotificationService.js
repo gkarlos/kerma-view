@@ -1,3 +1,5 @@
+const App = require('@renderer/app')
+
 const Service                   = require('@renderer/services/Service')
 const NotificationModel         = require('@renderer/services/notification/NotificationModel')
 const ProgressNotificationModel = require('@renderer/services/notification/ProgressNotificationModel')
@@ -25,7 +27,7 @@ class NotificationService extends Service {
     Log = this.app.Logger
 
     // Toggle the service when the notification button is pressed
-    app.ui.toolbar.util.notificationButton.onClick( () => this.isEnabled()? this.disable() : this.enable())
+    App.ui.toolbar.util.notificationButton.onClick( () => this.isEnabled()? this.disable() : this.enable())
   }
 
   /** enable the service  */
