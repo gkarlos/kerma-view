@@ -14,7 +14,12 @@ class CodeNavToolbar extends Component {
   }
 
   render() {
-    this.node = $(`<div class='' id='${this.id}-wrapper'></div>`).css('border-bottom', '1px solid #dee2e6').appendTo(this.container).css('width', '50%').css('float', 'right')
+    this.node = $(`<div class='' id='${this.id}-wrapper'></div>`)
+        .appendTo(this.container)
+        .css('position', 'absolute')
+        .css('right', '2px')
+        .css('width', '50%')
+        .css('float', 'right')
 
     this.navButtons = $(`
       <div class="btn-group btn-group" role="group" aria-label="Second group">

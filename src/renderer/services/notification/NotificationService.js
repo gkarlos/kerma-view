@@ -4,14 +4,24 @@ const ProgressNotificationModel = require('@renderer/services/notification/Progr
 const NotificationView          = require('@renderer/services/notification/NotificationView')
 const ProgressNotificationView  = require('@renderer/services/notification/ProgressNotificationView')
 
+
 var Log = null
 
 /** @memberof module:notification */
 class NotificationService extends Service {
-  /** @param {import("@renderer/app")} app */
+  
+  /**
+   * @param {module:app.App} app A reference to the App instance
+   */
   constructor(app) {
     super("NotificationService")
+    
+    /** @ignore @type {import("@renderer/app")} */
     this.app = app;
+
+    /** @type {NotificationService.NotificationType} */
+    this.NotificationType = NotificationService.NotificationType
+
     Log = this.app.Logger
 
     // Toggle the service when the notification button is pressed
@@ -28,72 +38,46 @@ class NotificationService extends Service {
   /** disable the service */
   disable() { 
     super.disable(); 
+    $.notifyClose();
     Log.info("Notifications disabled")
     return this;
   }
 
-  /** 
-   * Show a success notification
-   * If the service is disabled this is a no-op
-   * 
-   * @param {String} msg
-   * @param {String} details
-   * @param {int} progress 
-   * @returns {NotificationView}
+  /**
+   * @private
+   * @param {module:notification.NotificationService.NotificationType} type 
+   * @param {String} message 
+   * @param {Object} opts 
    */
-  success(title, msg, details, props) {
-    let model= new NotificationModel(NotificationModel.Success, title, msg, details)
-    let view = new NotificationView(model)
-
-    if ( props) {
-      if ( props.onShow)
-        view.onShow(props.onShow)
-      if ( props.onHide)
-        view.onHide(props.onHide)
-      if ( props.onChange)
-        view.onChange(props.onChange)
-    }
-    
-    view.show()
-    
-    return view
-  }
-
-  
-  /** 
-   * Show an info notification, optionally with progress bar
-   * 
-   * If the service is disabled this is a no-op
-   * 
-   * @param {String}  message         The main message of the notification
-   * @param {Object}  [opts]          Additional options
-   * @param {String}  [opts.title]    A title for the notification
-   * @param {String}  [opts.details]  Additional info for the notification
-   * @param {Boolean} [opts.progress] If set the notification will be a {@link module:notification.ProgressNotificationView}
-   * @param {Boolean} [opts.successOnComplete] If set and {@link opts.progress} is set, the notification will change to a Sucess notification once the progress completes.
-   * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
-   * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
-   * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
-   * @param {module:notification.ProgressNotificationOnProgressCallback} [opts.onProgress] A callback to be invoked when progress changes. Ignored if not {opts.progress}
-   * @param {module:notification.ProgressNotificationOnCompleteCallback} [opts.onComplete] A callback to be invoked when progress completes Ignored if not {opts.progress}
-   * @returns {(NotificationView|ProgressNotificationView)} A handle for the notification if one was created, otherwise {@link null}
-   */
-  info(message="", opts={}) {
+  _doNotify(type, message, opts) {
     let model, view
+    console.log(type, opts)
 
-    if ( opts.progress) {
-      model = new ProgressNotificationModel({ type: NotificationModel.Info, message: message, title: opts.title,  details: opts.details, total: opts.total})
+    if( opts.progress) {
+      model = new ProgressNotificationModel({ type: type, message: message, title: opts.title,  details: opts.details, total: opts.total, sticky: opts.sticky})
       view = new ProgressNotificationView(model)
       if (opts.onProgress && typeof opts.onProgress === 'function')
         view.onProgress(opts.onProgress)
       if ( opts.onComplete && typeof opts.onComplete === 'function')
         view.onComplete(opts.onComplete)
-      if ( opts.successOnComplete)
-        view.onComplete(() => view.updateType(NotificationModel.Success))
+      if ( opts.changeOnComplete) {
+        switch ( opts.changeOnComplete) {
+          case NotificationService.NotificationType.Info:
+          case NotificationService.NotificationType.Success:
+          case NotificationService.NotificationType.Error:
+          case NotificationService.NotificationType.Warning:
+            view.onComplete(() => view.updateType(opts.changeOnComplete)); break;
+          default:
+            throw new Error(`Invalid value for opts.changeOnCopmlete '${opts.changeOnComplete}'`); break;
+        }   
+      }
     } else {
-      model = new NotificationModel({ type: NotificationModel.Info, message: message, title: opts.title,  details: opts.details})
+      model = new NotificationModel({ type: type, message: message, title: opts.title, details: opts.details, sticky: opts.sticky})
       view = new NotificationView(model)
     }
+
+    if ( opts.sticky)
+      view.stick()
 
     if ( opts.onShow   && typeof opts.onShow   === 'function') view.onShow(opts.onShow)
     if ( opts.onHide   && typeof opts.onHide   === 'function') view.onHide(opts.onHide)
@@ -105,114 +89,136 @@ class NotificationService extends Service {
     return view
   }
 
+  
   /** 
-   * Show a warning notification
+   * Show an info notification, optionally with progress bar
+   * 
    * If the service is disabled this is a no-op
    * 
-   * @param {String} msg
-   * @param {String} details
-   * @param {int} progress 
-   * @returns {NotificationView}
+   * @param {String}  message         The main message of the notification
+   * @param {Object}  opts            Additional options
+   * @param {String}  [opts.title]    A title for the notification
+   * @param {String}  [opts.details]  Additional info for the notification
+   * @param {Boolean} [opts.sticky]   If set, the notification will stay open until manually closed
+   * @param {Boolean} [opts.progress] If set, the notification will display a progress bar. Progress can be then updated throw the return value handle.
+   * @param {module:notification.NotificationService.NotificationType}  [opts.changeOnComplete] If set and {@link opts.progress} is set, the notification will change type upon progress completion.
+   * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
+   * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
+   * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
+   * @param {module:notification.ProgressNotificationOnProgressCallback} [opts.onProgress] A callback to be invoked when progress changes. Ignored if not {opts.progress}
+   * @param {module:notification.ProgressNotificationOnCompleteCallback} [opts.onComplete] A callback to be invoked when progress completes Ignored if not {opts.progress}
+   * @returns {(NotificationView|ProgressNotificationView)} A handle for the notification if one was created, otherwise {@link null}
    */
-  warning(title, msg, details, props) {
-    let model= new NotificationModel(NotificationModel.Warning, title, msg, details)
-    let view = new NotificationView(model)
-
-    if ( props) {
-      if ( props.onShow)
-        view.onShow(props.onShow)
-      if ( props.onHide)
-        view.onHide(props.onHide)
-    }
-    
-    view.show()
-    return view
+  info(message="", opts={}) {
+    return this._doNotify(NotificationService.NotificationType.Info, message, opts)
   }
 
   /** 
-   * Show an error notification
+   * Show warning notification, optionally with progress bar
+   * 
    * If the service is disabled this is a no-op
    * 
-   * @param {String} msg
-   * @param {String} details
-   * @param {int} progress 
-   * @returns {NotificationView}
+   * @param {String}  message         The main message of the notification
+   * @param {Object}  opts            Additional options
+   * @param {String}  [opts.title]    A title for the notification
+   * @param {String}  [opts.details]  Additional info for the notification
+   * @param {Boolean} [opts.sticky]   If set, the notification will stay open until manually closed
+   * @param {Boolean} [opts.progress] If set the notification will display a progress bar. Progress can be then updated throw the return value handle.
+   * @param {module:notification.NotificationService.NotificationType}  [opts.changeOnComplete] If set and {@link opts.progress} is set, the notification will change type upon progress completion.
+   * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
+   * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
+   * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
+   * @param {module:notification.ProgressNotificationOnProgressCallback} [opts.onProgress] A callback to be invoked when progress changes. Ignored if not {opts.progress}
+   * @param {module:notification.ProgressNotificationOnCompleteCallback} [opts.onComplete] A callback to be invoked when progress completes Ignored if not {opts.progress}
+   * @returns {(NotificationView|ProgressNotificationView)} A handle for the notification if one was created, otherwise {@link null}
    */
-  error(title, msg, details, props) {
-    let model= new NotificationModel(NotificationModel.Error, title, msg, details)
-    let view = new NotificationView(model)
-
-    if ( props) {
-      if ( props.onShow)
-        view.onShow(props.onShow)
-      if ( props.onHide)
-        view.onHide(props.onHide)
-    }
-    
-    view.show()
-    return view
+  warning(message="", opts={}) {
+    return this._doNotify(NotificationService.NotificationType.Warning, message, opts)
   }
 
-  // successProgress(msg, details, total=100) {
+  /** 
+   * Show an error notification, optionally with progress bar
+   * 
+   * If the service is disabled this is a no-op
+   * 
+   * @param {String}  message         The main message of the notification
+   * @param {Object}  opts            Additional options
+   * @param {String}  [opts.title]    A title for the notification
+   * @param {String}  [opts.details]  Additional info for the notification
+   * @param {Boolean} [opts.sticky]   If set, the notification will stay open until manually closed
+   * @param {Boolean} [opts.progress] If set the notification will display a progress bar. Progress can be then updated throw the return value handle.
+   * @param {module:notification.NotificationService.NotificationType}  [opts.changeOnComplete] If set and {@link opts.progress} is set, the notification will change type upon progress completion.
+   * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
+   * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
+   * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
+   * @param {module:notification.ProgressNotificationOnProgressCallback} [opts.onProgress] A callback to be invoked when progress changes. Ignored if not {opts.progress}
+   * @param {module:notification.ProgressNotificationOnCompleteCallback} [opts.onComplete] A callback to be invoked when progress completes Ignored if not {opts.progress}
+   * @returns {(NotificationView|ProgressNotificationView)} A handle for the notification if one was created, otherwise {@link null}
+   */
+  error(message="", opts={}) {
+    return this._doNotify(NotificationService.NotificationType.Error, message, opts)
+  }
 
-  // }
+  /** 
+   * Show an error notification, optionally with progress bar
+   * 
+   * If the service is disabled this is a no-op
+   * 
+   * @param {String}  message         The main message of the notification
+   * @param {Object}  opts            Additional options
+   * @param {String}  [opts.title]    A title for the notification
+   * @param {String}  [opts.details]  Additional info for the notification
+   * @param {Boolean} [opts.sticky]   If set, the notification will stay open until manually closed
+   * @param {Boolean} [opts.progress] If set the notification will display a progress bar. Progress can be then updated throw the return value handle.
+   * @param {module:notification.NotificationService.NotificationType}  [opts.changeOnComplete] If set and {@link opts.progress} is set, the notification will change type upon progress completion.
+   * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
+   * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
+   * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
+   * @param {module:notification.ProgressNotificationOnProgressCallback} [opts.onProgress] A callback to be invoked when progress changes. Ignored if not {opts.progress}
+   * @param {module:notification.ProgressNotificationOnCompleteCallback} [opts.onComplete] A callback to be invoked when progress completes Ignored if not {opts.progress}
+   * @returns {(NotificationView|ProgressNotificationView)} A handle for the notification if one was created, otherwise {@link null}
+   */
+  success(message="", opts={}) {
+    return this._doNotify(NotificationService.NotificationType.Success, message, opts)
+  }
 
-  
-  // /** 
-  //  * Display an error notification
-  //  * If the service is disabled this is a no-op
-  //  * 
-  //  * @param {String} msg
-  //  * @param {String} details
-  //  * @param {int} progress 
-  //  * @returns {NotificationView}
-  //  */
-  // error(msg, details, progress=0) {
-  //   let notification = createNotification(Notification.Error, msg, details, progress)
+  /** 
+   * Show a notification, optionally with progress bar
+   * 
+   * If the service is disabled this is a no-op
+   * 
+   * @param {String}  message         The main message of the notification
+   * @param {Object}  opts            Additional options
+   * @param {String}  [opts.title]    A title for the notification
+   * @param {String}  [opts.details]  Additional info for the notification
+   * @param {Boolean} [opts.sticky]   If set, the notification will stay open until manually closed
+   * @param {Boolean} [opts.progress] If set the notification will display a progress bar. Progress can be then updated throw the return value handle.
+   * @param {module:notification.NotificationService.NotificationType}  [opts.changeOnComplete] If set and {@link opts.progress} is set, the notification will change type upon progress completion.
+   * @param {module:notification.NotificationOnShowCallback}   [opts.onShow]   A callback to be invoked when the notification shows
+   * @param {module:notification.NotificationOnHideCallback}   [opts.onHide]   A callback to be invoked when the notification hides
+   * @param {module:notification.NotificationOnChangeCallback} [opts.onChange] A callback to be invoked when the notification data changes
+   * @param {module:notification.ProgressNotificationOnProgressCallback} [opts.onProgress] A callback to be invoked when progress changes. Ignored if not {opts.progress}
+   * @param {module:notification.ProgressNotificationOnCompleteCallback} [opts.onComplete] A callback to be invoked when progress completes Ignored if not {opts.progress}
+   * @returns {NotificationView|ProgressNotificationView} A handle for the notification if one was created, otherwise {@link null}
+   */
+  notify(message="", opts={}) {
+    return this._doNotify(NotificationService.NotificationType.Default, message, opts)
+  }
+}
 
-  //   if ( this.enabled)
-  //     this.viewer.show(notification)
 
-  //   return notification
-  // }
-
-  // /** 
-  //  * Display a warning notification
-  //  * If the service is disabled this is a no-op
-  //  * 
-  //  * @param {String} msg
-  //  * @param {String} details
-  //  * @param {int} progress 
-  //  * @returns {NotificationView}
-  //  */
-  // warning(msg, details, progress=0) {
-  //   let notification = createNotification(Notification.Warning, msg, details, progress)
-    
-  //   if ( this.enabled)
-  //     this.viewer.show(notification)
-    
-  //   return notification
-  // }
-
-  // /** 
-  //  * Display a success notification
-  //  * If the service is disabled this is a no-op
-  //  * 
-  //  * @param {String} msg
-  //  * @param {String} details
-  //  * @param {int} progress 
-  //  * @returns {NotificationView}
-  //  */
-  // info(msg, details, progress=0) {
-  //   if ( this.enabled) {
-  //     let notification = createNotification(Notification.Info, msg, details, progress)
-  //     let notificationView = new NotificationView(notification)
-  //     return notificationView.render()
-  //   }
-
-  //   return null
-  // }
-  
+/**
+ * Enum for the allowed notification types
+ * @static
+ * @readonly
+ * @enum {String}
+ */
+NotificationService.NotificationType = {
+  Success : NotificationModel.Type.Success,
+  Info    : NotificationModel.Type.Info,
+  Warning : NotificationModel.Type.Warning,
+  Error   : NotificationModel.Type.Error,
+  Default  : NotificationModel.Type.Default
 }
 
 module.exports = NotificationService

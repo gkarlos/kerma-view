@@ -113,8 +113,6 @@ class ProgressNotificationModel extends NotificationModel {
     
     if ( this.currentProgress >= this.total)
       this.completed = true
-
-    if ( !this.started) this.started = true
   }
 };
 

@@ -1,3 +1,13 @@
+#notification-area {
+	position: absolute;
+	width: 500px;
+	height: 100%;
+	top: 0;
+	right: 0;
+	padding: 5px;
+	background-color: transparent;
+  }
+
 /* [data-notify="container"][class*="alert-pastel-"] {
 	background-color: rgb(255, 255, 238);
 	border-width: 0px;

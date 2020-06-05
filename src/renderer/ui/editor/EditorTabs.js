@@ -26,7 +26,7 @@ class EditorTabs extends Component {
     this.selected = null
     this.app = app
     this.subcomponent = subcomponent
-    this.node = $(`<ul id="${this.id}" role="tablist"> </ul>`).addClass("nav").addClass("nav-tabs").css('width', '50%')
+    this.node = $(`<ul id="${this.id}" role="tablist"> </ul>`).addClass("nav").addClass("nav-tabs").css('width', '100%')
   }
 
   /**

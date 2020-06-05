@@ -1,3 +1,6 @@
+/**
+ * @module app
+ */
 const ConsoleLogger       = require('./services/log').ConsoleLogger
 const EventEmitter        = require('events')
 const NotificationService = require('./services/notification/NotificationService')
@@ -11,12 +14,15 @@ const services = {}
 
 /**
  * Main class of the application
+ * @memberof module:app
  */
 class App {
 
   // Services pre-ui
   Logger = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true})
   // Services post-ui
+
+  /** @type {NotificationService} */
   Notifier = null
 
   constructor() {
@@ -76,12 +82,26 @@ class App {
    */
   initPostUiServices() {
     this.Notifier = new NotificationService(this).enable()
-    this.initNotification = this.Notifier.info("Initializing...", { progress: true, successOnComplete: true})
-                                         .onComplete( () => this.initNotification.updateMessage('App is ready'))
+    // this.initNotification = this.Notifier.error("Initializing...", { progress: true, changeOnComplete: this.Notifier.NotificationType.Success})
+                                        //  .onComplete( () => this.initNotification.updateMessage('App is ready'))
     
-    setTimeout(() => this.initNotification.progress(50, "ui ready"), 1000)
+    // this.Notifier.notify("Initializing...", { progress: true, changeOnComplete: this.Notifier.NotificationType.Success})
+    
+    let notification2 = this.Notifier.warning("Initializing...", { progress: true, sticky: true})
+    let notification3 = this.Notifier.error("Initializing...", { sticky: true})
+    let notification4 = this.Notifier.notify("Initializing...")
+    
+    // // setTimeout(() => notification1.progress(50, "ui ready"), 250)
+    setTimeout(() => notification2.progress(50, "ui ready"), 500)
+    setTimeout(() => notification3.progress(50, "ui ready"), 750)
+    setTimeout(() => notification4.progress(50, "ui ready"), 1000)
 
-    setTimeout(() => this.initNotification.progress(50, "services ready"), 2000)
+
+    // // // setTimeout(() => notification1.progress(49, "services ready"), 1250)
+    setTimeout(() => notification2.progress(50, "services ready"), 1000)
+    setTimeout(() => notification3.progress(50, "services ready"), 2250)
+    setTimeout(() => notification4.progress(50, "services ready"), 3500)
+
   }
 
   start() {

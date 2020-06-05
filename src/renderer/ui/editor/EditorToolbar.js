@@ -19,6 +19,8 @@ class EditorToolbar extends Component {
     if ( ! this.rendered ) {
       this.node = $(`<div id=${this.id} class="nav"></div>`).appendTo(this.container)
                     .css('display', 'flex')
+                    // .css('position', 'absolute')
+                    // .css('right', '0px')
 
       this.tabs.render()
       this.codenav.render()
