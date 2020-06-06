@@ -13,13 +13,22 @@ const Service = require('@renderer/services/Service')
  */
 class Logger extends Service {
   /**
-   * 
    * @param {Integer} level The level of this logger. See {@link module:log.LogLevel} 
-   * @param {String} name A name for this logger. If none provided one will be generated
+   * @param {String}  name  A name for this logger. If none provided one will be generated
+   * @param {Boolean} timestamps Whether the logger messages will include timestamps
    */
-  constructor(level, name) {
-    super(name || `LoggerService-${random.uuid(4)}`)
-    this.level = level | Logger.DEFAULT_LEVEL
+  constructor(level, name, timestamps=false) {
+    super(name || `Logger-${random.uuid(4)}`)
+    this.level      = level || Logger.DEFAULT_LEVEL
+    this.timestamps = timestamps
+  }
+
+  /** 
+   * Retrieve a timestamp
+   * @returns {String}
+   */
+  static timestamp() {
+    return new Date().toISOString();
   }
 
   /**

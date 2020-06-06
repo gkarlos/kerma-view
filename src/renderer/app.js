@@ -114,7 +114,7 @@ App.main = function() {
   }
 
   function initPreUiServices() {
-    App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Info, color: true}).enable()
+    App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Trace, color: true, timestamps: true}).enable()
     App.Logger = App.Services.Log
   }
 
@@ -123,7 +123,12 @@ App.main = function() {
   }
 
   function start() {
-
+    App.Logger.info("Hello World")
+    App.Logger.trace("Hello World")
+    App.Logger.debug("Hello World")
+    App.Logger.warn("Hello World")
+    App.Logger.error("Hello World")
+    App.Logger.critical("Hello World")
   }
 
   initPreUiServices()
@@ -132,7 +137,7 @@ App.main = function() {
     initPostUiServices()  
     start()
   })
-
+  
   return true
 }
 

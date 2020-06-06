@@ -9,6 +9,7 @@ class LogLevel {
     Info    : "Info",
     Warning : "Warning",
     Error   : "Error",
+    Critical : "Critical",
     None    : "None",
 
     short : {
@@ -18,6 +19,7 @@ class LogLevel {
       Info    : "Inf",
       Warning : "Wrn",
       Error   : "Err",
+      Critical : "Crit",
       None    : "None",
     }
   }
@@ -43,9 +45,9 @@ class LogLevel {
     if ( str === LogLevel.str.Warning.toLowerCase() || str === LogLevel.str.short.Warning.toLowerCase())
       return LogLevel.Warning
     if ( str === LogLevel.str.Error.toLowerCase() || str === LogLevel.str.short.Error.toLowerCase())
-      return LogLevel.Warning
+      return LogLevel.Error
     if ( str === LogLevel.str.None.toLowerCase() || str === LogLevel.str.short.None.toLowerCase())
-      return LogLevel.Warning
+      return LogLevel.None
   } 
 }
 
@@ -68,7 +70,10 @@ LogLevel.Warning = 4
 LogLevel.Error   = 5
 
 /** */
-LogLevel.None    = 6
+LogLevel.Critical = 6
+
+/** */
+LogLevel.None    = 7
 
 module.exports = LogLevel
 
