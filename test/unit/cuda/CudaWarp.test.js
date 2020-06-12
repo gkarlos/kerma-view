@@ -6,6 +6,26 @@ const CudaLimits = require('@renderer/cuda').Limits
 const expect = require('chai').expect
 
 describe('renderer/cuda/CudaWarp', () => {
+
+  describe("equals", () => {
+    it("should be equal (1)", () => {
+      expect(new CudaWarp(new CudaBlock(1), 0).equals(new CudaWarp(new CudaBlock(1), 0))).to.be.true
+    })
+
+    it("should be equal (2)", () => {
+      expect(new CudaWarp(new CudaBlock(256, 256), 2).equals(new CudaWarp(new CudaBlock(256,256), 2))).to.be.true
+    })
+
+    it("should not be equal (1)", () => {
+      expect(new CudaWarp(new CudaBlock(1), 0).equals(new CudaWarp(new CudaBlock(2), 0))).to.be.false
+    })
+
+    it("should not be equal (2)", () => {
+      expect(new CudaWarp(new CudaBlock(256, 256), 1).equals(new CudaWarp(new CudaBlock(256,256), 2))).to.be.false
+    })
+  })
+
+
   describe("getNumUsableThreads", () => {
     it("should return the right value [warpSize multiple] (1) ", () => {
       let block = new CudaBlock(1024)

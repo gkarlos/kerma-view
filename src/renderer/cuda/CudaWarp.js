@@ -82,6 +82,14 @@ class CudaWarp {
   }
 
   /**
+   * Retrieve the index of the last usable thread
+   * @returns {Number}
+   */
+  getLastUsableThread() {
+    return this.getNumUnusableThreads() - 1
+  }
+
+  /**
    * Retrieve the indices of the usable threads in the block
    * @returns {number[]}
    */
@@ -98,6 +106,28 @@ class CudaWarp {
     for ( let i = Limits.warpSize - 1; i >= this.#usableThreads; i-- )
       res.unshift(i)
     return res;
+  }
+
+  /**
+   * Compare warps for value-equality
+   * @param {CudaWarp} other 
+   * @return {Boolean}
+   */
+  equals(other) {
+    if ( !(other instanceof CudaWarp))
+      return false
+    return this.getBlock().equals(other.getBlock())
+        && this.getIndex() === other.getIndex()
+        && this.getNumUsableThreads() === other.getNumUsableThreads()
+        && this.getNumUnusableThreads() === other.getNumUnusableThreads()  
+  }
+
+  /**
+   * String representation of the warp
+   * @returns {String}
+   */
+  toString() {
+    return `CudaWarp(block: ${this.#block.toString()}, id: ${this.getIndex()}, usable: ${this.getNumUsableThreads()})`
   }
 }
 
