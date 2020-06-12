@@ -28,7 +28,7 @@ class CudaBlock {
    * @param {Number} z 
    */
   constructor(x, y=1, z=1) {
-    if ( !Limits.validGridDims(x, y, z))
+    if ( !Limits.validBlockDims(x, y, z))
       throw new Error(`Invalid Block dimensions : ${x},${y},${z}`)
     this.#x = x
     this.#y = y
@@ -37,25 +37,37 @@ class CudaBlock {
 
   /** 
    * Retrieve the size of the x-dimension of the block 
-   * @type {Integer}
+   * @type {Number}
    */
   get x() { return this.#x }
 
-  /** Retrieve the size of the y-dimension of the block */
+  /** 
+   * Retrieve the size of the y-dimension of the block
+   * @type {Number}
+   */
   get y() { return this.#y }
 
-  /** Retrieve the size of the z-dimension of the block */
+  /** Retrieve the size of the z-dimension of the block
+   * @returns {Number}
+   */
   get z() { return this.#z }
 
-  /** Retrieve the number of threads in the block */
-  get size() { return this.x * this.y * this.z }
+  /** 
+   * Retrieve the number of threads in the block
+   * @returns {Number}
+   */
+  get size() { return this.#x * this.#y * this.#z }
 
-  /** Retrieve the number of warps in the block */
+  /** 
+   * Retrieve the number of warps in the block
+   * @returns {Number}
+   */
   get numWarps() { return Math.floor(this.size / Limits.warpSize) + (this.size % Limits.warpSize > 0 ? 1 : 0) }
 
   /** 
    * Check if there are unused lanes in the last warp of the block.
    * That is the size of the block is not a multiple of {@link CudaLimits.warpSize}
+   * @returns {Boolean}
    */
   hasWarpWithInactiveLanes() { return this.size % Limits.warpSize != 0 }
 
@@ -90,7 +102,7 @@ class CudaBlock {
    * @returns {String}
    */
   toString() {
-    return `(${this.#y}x${this.#x}, #threads: ${this.size}, #warps: ${this.numWarps})`
+    return `(${this.#x}x${this.#y}, #threads: ${this.size}, #warps: ${this.numWarps})`
   }
 
   /**
@@ -101,7 +113,7 @@ class CudaBlock {
   equals(other) {
     if ( !(other instanceof CudaBlock))
       return false
-    return this.x === other.x && this.y === other.y && this.z === other.z
+    return this.#x === other.x && this.#y === other.y && this.#z === other.z
   }
 }
 
