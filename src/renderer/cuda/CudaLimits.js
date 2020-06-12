@@ -33,7 +33,7 @@ class CudaLimits {
   /** Min total number of threads in a Cuda block */
   static minBlockSize = 1
   /** Max total number of threads in a Cuda block */
-  static maxBlockSize = 64
+  static maxBlockSize = 1024
 
   /** Min number of blocks in the x-dimension */
   static minGridX = 1
@@ -65,7 +65,8 @@ class CudaLimits {
     if ( !x || !Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(z)) 
       return false
     
-    if ( x < CudaLimits.minBlockX || x > CudaLimits.maxBlockX || y < CudaLimits.minBlockY || y > CudaLimits.maxBlockY || z < CudaLimits.minBlockZ || z > CudaLimits.maxBlockZ )
+    if ( x < CudaLimits.minBlockX || x > CudaLimits.maxBlockX || y < CudaLimits.minBlockY || y > CudaLimits.maxBlockY 
+      || z < CudaLimits.minBlockZ || z > CudaLimits.maxBlockZ )
       return false
 
     let total = x * y * z

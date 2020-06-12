@@ -1,4 +1,5 @@
 const Limits = require('./CudaLimits')
+const CudaWarp = require('./CudaWarp')
 
 /**
  * Represents a Cuda Block
@@ -21,6 +22,11 @@ class CudaBlock {
    * @private
    */
   #z
+  /**
+   * @type {Array<CudaWarp>}
+   * @private
+   */
+  #warps
   
   /**
    * @param {Number} x 
@@ -33,6 +39,7 @@ class CudaBlock {
     this.#x = x
     this.#y = y
     this.#z = z
+    this.#warps = Array.apply(null, Array(this.numWarps)).map(function () {})
   }
 
   /** 
@@ -70,6 +77,21 @@ class CudaBlock {
    * @returns {Boolean}
    */
   hasWarpWithInactiveLanes() { return this.size % Limits.warpSize != 0 }
+
+  /**
+   * Retrieve a warp from this block
+   * @param {Number} index
+   * @returns {CudaWarp}
+   */
+  getWarp(index) {
+    if ( !Number.isInteger(index))
+      throw new Error("Invalid argument. Integer required")
+    if ( index < 0 || index > this.numWarps)
+      throw new Error()
+    if ( this.#warps[index] === undefined)
+      this.#warps[index] = new CudaWarp(this, index)
+    return this.#warps[index]
+  }
 
 
   /**
