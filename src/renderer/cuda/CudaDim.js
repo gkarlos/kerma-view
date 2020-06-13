@@ -1,62 +1,85 @@
+/**
+ * @memberof module:cuda
+ */
 class CudaDim {
   /** @type {Number} */
-  #rows
+  #x
   /** @type {Number} */
-  #cols
+  #y
+  /** @type {Number} */
+  #z
 
   /**
    * Create a new CudaDim instance
-   * @param {Number} cols Number of columns (x-dimension)
-   * @param {Number} rows Number of rows (y-dimension)
+   * @param {Number} x Size of the x-dimension (Number of columns)
+   * @param {Number} [y] Size of the y-dimension (Number of rows)
+   * @param {Number} [z] Size of the z-dimension (Number of layers)
    */
-  constructor(cols, rows=1) {
-    if ( !Number.isInteger(cols))
-      throw new Error('Invalid argument `cols`. Must be integer')
-    if ( !Number.isInteger(cols))
-      throw new Error('Invalid argument `cols`. Must be integer')
-    if ( cols === 0 || rows === 0)
-      throw new Error('Arguments cannot be 0')
-      
-    this.#cols = cols
-    this.#rows = rows
+  constructor(x, y=1, z=1) {
+    if ( !Number.isInteger(x))
+      throw new Error('Invalid argument `x`. Must be integer')
+    if ( !Number.isInteger(y))
+      throw new Error('Invalid argument `y`. Must be integer')
+    if ( !Number.isInteger(z))
+      throw new Error('Invalid argument `z`. Must be integer')
+    if ( x < 1 || y < 1 || z < 1)
+      throw new Error('Arguments cannot be < 1')
+    this.#x = x
+    this.#y = y
+    this.#z = z
   }
+
+  /** 
+   * Size of the x-dimension (Number of columns)
+   * @returns {Number}
+   */
+  get x() { return this.#x}
+
+  /** 
+   * Size of the y-dimension (Number of rows)
+   * @returns {Number}
+   */
+  get y() { return this.#y}
+
+  /** 
+   * Size of the z-dimension (Number of layers)
+   * @returns {Number}
+   */
+  get y() { return this.#y}
   
   /** 
-   * Number of rows. Size of the y-dimension
+   * Number of rows (y-dimension)
+   * @alias y
    * @returns {Number}
    */
-  get rows() { return this.#rows}
+  get rows() { return this.#y}
 
   /** 
-   * Number of rows. Size of the y-dimension
+   * Number of columns (x-dimension)
+   * @alias x
    * @returns {Number}
    */
-  get y() { return this.#rows}
+  get cols() { return this.#x}
 
   /** 
-   * Number of columns. Size of the x-dimension
+   * Number of layers (z-dimension)
+   * @alias x
    * @returns {Number}
    */
-  get cols() { return this.#cols}
-
-  /** 
-   * Number of rows. Size of the y-dimension
-   * @returns {Number}
-   */
-  get x() { return this.#cols}
+  get layers() { return this.#z}
 
   /**
    * Total number of elements
    * @returns {Number}
    */
-  get size() { return this.#rows * this.#cols }
+  get size() { return this.#x * this.#y * this.#z}
 
   /**
    * Create a copy of this CudaDim object
-   * @returns {CudaDIm}
+   * @returns {CudaDim}
    */
   clone() {
-    return new CudaDim(this.#cols, this.#rows)
+    return new CudaDim(this.#x, this.#y, this.#z)
   }
 
   /**
@@ -64,7 +87,10 @@ class CudaDim {
    * @returns {String}
    */
   toString() {
-    return `${this.cols}x${this.rows}`
+    let str = `${this.#y}x${this.$x}`
+    if (this.z > 1)
+      str += `x${this.#z}`
+    return str
   }
 
   /**
@@ -75,15 +101,15 @@ class CudaDim {
   equals(other) {
     if ( !other || !(other instanceof CudaDim))
       return false
-    return this.rows === other.rows && this.cols === other.cols
+    return this.#x === other.x && this.y === other.y && this.z === other.z
   }
 
   /**
-   * Returns an array with the size of the y and x dimensions (in that order)
+   * Returns an array with the size of the y,x and z dimensions (in that order)
    * @returns {Array.<Number>}
    */
   toArray() {
-    return [this.#cols, this.#rows]
+    return [this.#y, this.#x, this.#z]
   }
 }
 
