@@ -45,7 +45,7 @@ class CudaDim {
    * Size of the z-dimension (Number of layers)
    * @returns {Number}
    */
-  get y() { return this.#y}
+  get z() { return this.#z}
   
   /** 
    * Number of rows (y-dimension)
@@ -87,8 +87,8 @@ class CudaDim {
    * @returns {String}
    */
   toString() {
-    let str = `${this.#y}x${this.$x}`
-    if (this.z > 1)
+    let str = `${this.#x}x${this.#y}`
+    if (this.#z > 1)
       str += `x${this.#z}`
     return str
   }
@@ -105,11 +105,11 @@ class CudaDim {
   }
 
   /**
-   * Returns an array with the size of the y,x and z dimensions (in that order)
+   * Returns an array with the size of the x,y and z dimensions (in that order)
    * @returns {Array.<Number>}
    */
   toArray() {
-    return [this.#y, this.#x, this.#z]
+    return [this.#x, this.#y, this.#z]
   }
 }
 
