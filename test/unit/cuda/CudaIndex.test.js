@@ -4,7 +4,7 @@ const Dim = require('@renderer/cuda').Dim
 
 const expect = require('chai').expect
 
-describe('renderer/cuda/CudaIndex', () => {
+describe('renderer/cuda/Index', () => {
   describe('(static) delinearize', () => {
     it('should throw with missing args', () => {
       expect(() => Index.delinearize()).to.throw
@@ -174,6 +174,32 @@ describe('renderer/cuda/CudaIndex', () => {
     it('should compute the right values (6)', () => {
       let index = new Index(20, 5)
       expect(Index.linearize(index, new Dim(100, 10000))).to.equal(2005)
+    })
+  })
+
+  describe("is1D", () => {
+    it('should be 1D', () => {
+      expect(new Index(0).is1D()).to.be.true
+      expect(new Index(1234).is1D()).to.be.true
+    })
+
+    it('should not be 1D', () => {
+      expect(new Index(0,1).is1D()).to.be.false
+      expect(new Index(1234,0).is1D()).to.be.false
+      expect(new Index(12,34).is1D()).to.be.false
+    })
+  })
+
+  describe("is2D", () => {
+    it('should be 2D', () => {
+      expect(new Index(0,0).is2D()).to.be.true
+      expect(new Index(1234,1234).is2D()).to.be.true
+    })
+
+    it('should not be 2D', () => {
+      expect(new Index(0).is2D()).to.be.false
+      expect(new Index(1234).is2D()).to.be.false
+      expect(new Index(1).is2D()).to.be.false
     })
   })
 })

@@ -1,6 +1,8 @@
 const Limits = require('@renderer/cuda/CudaLimits')
+const CudaIndex = require('@renderer/cuda/CudaIndex')
 
 /** @ignore @typedef {import("@renderer/cuda/CudaBlock")} CudaBlock */
+/** @ignore @typedef {import("@renderer/cuda/CudaIndex")} CudaIndex */
 
 /**
  * Represents a Cuda Warp
@@ -16,11 +18,21 @@ class CudaWarp {
   /**
    * 
    * @param {CudaBlock} block The CudaBlock this warp is part of 
-   * @param {Number} index Linear index for the position of the warp in its block
+   * @param {CudaIndex|Number} index Linear index for the position of the warp in its block
    */
   constructor(block, index) {
-    if ( index >= block.numWarps)
-      throw new Error(`Invalid warp index '${index}' for block '[$]'`)
+    if (index instanceof CudaIndex) {
+      if (!index.is1D())
+        throw new Error("Invalid index. Must be 1D")
+      if ( index.x >= block.numWarps)
+        throw new Error(`Invalid warp index '${index.toString()}' for block ${block.toString()}`)
+    } else if (Number.isInteger(index)) {
+      if ( index >= block.numWarps)
+        throw new Error(`Invalid warp index '${index}' for block ${block.toString()}`)
+    } else {
+      throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
+    }
+
     this.#block = block
     this.#index = index
     this.#usableThreads = this._computeUsableThreads(block, index)
@@ -31,13 +43,16 @@ class CudaWarp {
    * Compute the number of usable threads in a warp
    * @protected 
    * @param {CudaBlock} block
-   * @param {Number} warpIndex
+   * @param {Number|CudaIndex} warpIndex
    * */
   _computeUsableThreads(block, warpIndex) {
     if ( block.hasWarpWithInactiveLanes()) {
-      if ( warpIndex == block.numWarps - 1) {
-        return block.size % Limits.warpSize
-      }
+      if ( Number.isInteger(warpIndex))
+        if ( warpIndex == block.numWarps - 1)
+          return block.size % Limits.warpSize
+      else
+        if ( warpIndex.x == block.numWarps - 1)
+          return block.size % Limits.warpSize
     }
     return Limits.warpSize
   }
@@ -49,10 +64,10 @@ class CudaWarp {
   getBlock() { return this.#block } 
 
   /**
-   * Retrieve the linear index of this warp8 in its block
+   * Retrieve the linear index of this warp in its block
    * @returns {Number}
    */
-  getIndex() { return this.#index}  
+  getIndex() { return this.#index }  
 
   /**
    * Get the number of usable threads in this warp

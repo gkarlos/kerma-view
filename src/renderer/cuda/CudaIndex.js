@@ -12,6 +12,8 @@ class CudaIndex {
   #col
   /** @type {Number} */
   #row
+  /** @type {Boolean} */
+  #onedimensional
 
   /**
    * Transform 2D index to 1D index
@@ -95,11 +97,15 @@ class CudaIndex {
    *  let index5 = new Index(0,9) // Equivalent to index4
    */
   constructor(row, col) {
+    this.#onedimensional = false
+
     // if one argument passed treat it as col index
     if ( col === undefined) {
       col = row
       row = 0
+      this.#onedimensional = true
     }
+    
     this._argCheck(row, col)
     this.#col = col
     this.#row = row
@@ -154,6 +160,9 @@ class CudaIndex {
     if ( row === undefined)
       return this;
 
+    if ( this.is1D() && col !== undefined) 
+      throw new Error('Index in 1-Dimensional')
+    
     if ( col === undefined) {
       col = row
       row = 0
@@ -196,6 +205,9 @@ class CudaIndex {
     if ( row === undefined)
       return this;
 
+    if ( this.is1D() && col !== undefined) 
+      throw new Error('Index in 1-Dimensional')
+    
     if ( col === undefined) {
       col = row
       row = 0
@@ -211,6 +223,19 @@ class CudaIndex {
 
     return this
   }
+
+  /**
+   * Check if the index is 1D
+   * @returns {Boolean}
+   */
+  is1D() { return this.#onedimensional }
+
+  /**
+   * Check if index is 2D
+   * @returns {Boolean}
+   */
+  is2D() { return !this.#onedimensional }
+
   /**
    * Compare equality with another index
    * @param {Index} other 

@@ -1,7 +1,7 @@
 const path = require('path')
 require('app-module-path').addPath(path.join(__dirname, "..", "..", "..", "src"))
 
-const MemoryShape = require('renderer/model/memory').MemoryShape
+const MemoryShape = require('@renderer/models/memory').MemoryShape
 const expect = require('chai').expect
 
 describe("MemoryShape", () => {

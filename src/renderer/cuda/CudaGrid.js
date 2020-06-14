@@ -59,6 +59,10 @@ class CudaGrid {
    */
   get size() { return this.#x * this.#y * this.#z }
 
+  hasIndex() {
+    // TODO
+  }
+
   /**
    * Check if the grid is 1-dimensional. i.e Exactly one dimension has size > 1
    * @returns {Boolean}

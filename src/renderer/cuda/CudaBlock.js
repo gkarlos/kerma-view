@@ -1,69 +1,63 @@
 const Limits = require('./CudaLimits')
 const CudaWarp = require('./CudaWarp')
+const CudaDim = require('./CudaDim')
+
+/** @ignore @typedef {import("@renderer/cuda/CudaDim")} CudaDim */
 
 /**
  * Represents a Cuda Block
  * @memberof module:cuda
  */
 class CudaBlock {
+  /** @type {CudaDim} */ #dim
+  /** @type {Array<CudaWarp>} */ #warps 
 
   /**
-   * @type {Number} 
-   * @private
+   * @param {CudaDim|Number} dim The dimensions of the block
    */
-  #x
-  /**
-   * @type {Number} 
-   * @private
-   */
-  #y
-  /**
-   * @type {Number} 
-   * @private
-   */
-  #z
-  /**
-   * @type {Array<CudaWarp>}
-   * @private
-   */
-  #warps
-  
-  /**
-   * @param {Number} x 
-   * @param {Number} y 
-   * @param {Number} z 
-   */
-  constructor(x, y=1, z=1) {
-    if ( !Limits.validBlockDims(x, y, z))
-      throw new Error(`Invalid Block dimensions : ${x},${y},${z}`)
-    this.#x = x
-    this.#y = y
-    this.#z = z
+  constructor(dim) {
+    if ( Number.isInteger(dim)) {
+      this.#dim = new CudaDim(dim)
+    }else {
+      if ( dim.is3D())
+        throw new Error("3D Blocks are not currently supported")
+      this.#dim = dim
+    }
+
+    if ( !Limits.validBlockDims(this.#dim.x, this.#dim.y, this.#dim.z))
+      throw new Error(`Invalid Block dimensions : ${this.#dim.toString()}`)
+    
     this.#warps = Array.apply(null, Array(this.numWarps)).map(function () {})
   }
+
+  /**
+   * Retrieve the dimensions of this block
+   * @returns {CudaDim}
+   */
+  get dim() { return this.#dim}
 
   /** 
    * Retrieve the size of the x-dimension of the block 
    * @type {Number}
    */
-  get x() { return this.#x }
+  get x() { return this.#dim.x }
 
   /** 
    * Retrieve the size of the y-dimension of the block
    * @type {Number}
    */
-  get y() { return this.#y }
+  get y() { return this.#dim.y }
 
   /** Retrieve the size of the z-dimension of the block
    * @returns {Number}
    */
-  get z() { return this.#z }
+  get z() { return this.#dim.z }
 
   /** 
    * Retrieve the number of threads in the block
    * @returns {Number}
    */
-  get size() { return this.#x * this.#y * this.#z }
+  get size() { return this.#dim.size }
 
   /** 
    * Retrieve the number of warps in the block
@@ -98,33 +92,25 @@ class CudaBlock {
    * Check if the block is 1-dimensional. i.e Exactly one dimension has size > 1
    * @returns {Boolean}
    */
-  is1D() { 
-    return (this.#y == 1 && this.#z == 1) 
-        || (this.#y > 1  && this.#x == 1 && this.#z == 1) 
-        || (this.#z > 1  && this.#x == 1 && this.#y == 1)
-  }
+  is1D() { return this.#dim.is1D() }
   
   /**
    * Check if the block is 2-dimensional. i.e Exactly two dimensions have size > 1
    */
-  is2D() { 
-    return (this.#x > 1 && this.#y > 1 && this.#z == 1)
-     || (this.#x > 1 && this.#y == 1 && this.#z > 1)
-     || (this.#x == 1 && this.#y > 1 && this.#z > 1)
-  } 
+  is2D() { return this.#dim.is1D() } 
 
   /**
    * Check if the block is 3-dimensional. i.e All dimensions have size > 1
    * @returns {Boolean}
    */
-  is3D() { return (this.#x > 1 && this.#y > 1 && this.#z > 1) }
+  is3D() { return this.#dim.is3D() }
 
   /**
    * String representation of the block
    * @returns {String}
    */
   toString() {
-    return `(${this.#x}x${this.#y}, #threads: ${this.size}, #warps: ${this.numWarps})`
+    return `(${this.#dim.x}x${this.#dim.y}, #threads: ${this.size}, #warps: ${this.numWarps})`
   }
 
   /**
@@ -135,7 +121,7 @@ class CudaBlock {
   equals(other) {
     if ( !(other instanceof CudaBlock))
       return false
-    return this.#x === other.x && this.#y === other.y && this.#z === other.z
+    return this.#dim.equals(other.dim)
   }
 }
 

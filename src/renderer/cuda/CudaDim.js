@@ -75,6 +75,32 @@ class CudaDim {
   get size() { return this.#x * this.#y * this.#z}
 
   /**
+   * Check if 1-dimensional
+   * @returns {Boolean}
+   */
+  is1D() { 
+    return (this.#y == 1 && this.#z == 1) 
+        || (this.#y > 1  && this.#x == 1 && this.#z == 1) 
+        || (this.#z > 1  && this.#x == 1 && this.#y == 1)
+  }
+  
+  /**
+   * Check if 2-dimensional
+   * @returns {Boolean}
+   */
+  is2D() { 
+    return (this.#x > 1 && this.#y > 1 && this.#z == 1)
+     || (this.#x > 1 && this.#y == 1 && this.#z > 1)
+     || (this.#x == 1 && this.#y > 1 && this.#z > 1)
+  } 
+
+  /**
+   * Check if 3-dimensional
+   * @returns {Boolean}
+   */
+  is3D() { return (this.#x > 1 && this.#y > 1 && this.#z > 1) }
+
+  /**
    * Create a copy of this CudaDim object
    * @returns {CudaDim}
    */

@@ -1,8 +1,8 @@
 const path = require('path')
 require('app-module-path').addPath(path.join(__dirname, "..", "..", "..", "src"))
 
-const Memory = require('renderer/model/memory').Memory
-const Shape  = require('renderer/model/memory').MemoryShape
+const Memory = require('@renderer/models/memory').Memory
+const Shape  = require('@renderer/models/memory').MemoryShape
 
 const expect = require('chai').expect
 

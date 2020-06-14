@@ -1,3 +1,5 @@
+/** @ignore @typedef {import("@renderer/cuda/CudaDim")} CudaDim */
+
 /** 
  * @class 
  * @memberof module:cuda
@@ -57,6 +59,14 @@ class CudaLimits {
 
   /**
    * 
+   * @param {CudaDim} dim 
+   */
+  static validBlockDim(dim) {
+    return CudaLimits.validBlockDims(dim.x, dim.y, dim.z)
+  }
+
+  /**
+   * 
    * @param {Integer}  x  Value of block's x-dimension
    * @param {Integer} [y] Value of block's y-dimension
    * @param {Integer} [z] Value of block's z-dimension
@@ -75,6 +85,14 @@ class CudaLimits {
       return false
     
     return true
+  }
+
+  /**
+   * 
+   * @param {CudaDim} dim 
+   */
+  static validGridDim(dim) {
+    return CudaLimits.validGridDims(dim.x, dim.y, dim.z)
   }
 
   /**
