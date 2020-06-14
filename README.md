@@ -9,11 +9,13 @@ TODO:
 - Replace jquery
     - https://github.com/atom/etch
     - https://github.com/atom/atom/blob/master/src/text-editor-component.js
+    - https://redom.js.org/#api
 ------
 ## Snippets
 - https://bootsnipp.com/snippets/gv6Pe
 - https://bootsnipp.com/snippets/xrKXW
 - https://bootsnipp.com/snippets/O5mM8
+- https://bootsnipp.com/snippets/KXQEW
 
 ------
 IDEAS:
