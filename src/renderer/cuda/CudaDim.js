@@ -1,3 +1,5 @@
+const CudaIndex = require('./CudaIndex')
+
 /**
  * @memberof module:cuda
  */
@@ -73,6 +75,17 @@ class CudaDim {
    * @returns {Number}
    */
   get size() { return this.#x * this.#y * this.#z}
+
+  /**
+   * Check if an index exists in these dimensions
+   * @param {CudaIndex|Number} index 
+   */
+  hasIndex(index) {
+    if ( !(index instanceof CudaIndex) && !Number.isInteger(index))
+      throw new Error("index must be a CudaIndex or Integer")
+    let idx = Number.isInteger(index)? new CudaIndex(index) : index
+    return  !( idx.x >= this.#x ||  idx.y >= this.#y)
+  }
 
   /**
    * Check if 1-dimensional

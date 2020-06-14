@@ -1,5 +1,6 @@
 require('module-alias/register')
 const CudaDim = require('@renderer/cuda').Dim
+const CudaIndex = require('@renderer/cuda').Index
 
 const expect = require('chai').expect
 
@@ -78,6 +79,66 @@ describe('renderer/cuda/CudaDim', () => {
         expect(new CudaDim(10,10,10).size).to.equal(1000)
         expect(new CudaDim(10,1,10).size).to.equal(100)
       })
+    })
+  })
+
+  describe("hasIndex", () => {
+    it("should throw on invalid index (1)", () => {
+      let dim = new CudaDim(1024)
+      expect(() => dim.hasIndex(-10)).to.throw()
+    })
+
+    it("should throw on invalid index (2)", () => {
+      let dim = new CudaDim(1024)
+      expect(() => dim.hasIndex(new CudaIndex(-15))).to.throw()
+    })
+
+    it("should throw on invalid index (3)", () => {
+      let dim = new CudaDim(1024)
+      expect(() => dim.hasIndex(undefined)).to.throw()
+    })
+
+    it("should throw on invalid index (4)", () => {
+      let dim = new CudaDim(1024)
+      expect(() => dim.hasIndex(null)).to.throw()
+    })
+
+    it("should not throw on valid index (1)", () => {
+      let dim = new CudaDim(1024)
+      expect(() => dim.hasIndex(10)).to.not.throw()
+    })
+
+    it("should not throw on valid index (2)", () => {
+      let dim = new CudaDim(1024)
+      expect(() => dim.hasIndex(new CudaIndex(1024))).to.not.throw()
+    })
+
+    it("should return false (1)", () => {
+      expect(new CudaDim(1024).hasIndex(1024)).to.be.false
+    })
+
+    it("should return false (2)", () => {
+      expect(new CudaDim(1024).hasIndex(new CudaIndex(1023,0))).to.be.false
+    })
+
+    it("should return true (1)", () => {
+      expect(new CudaDim(1024).hasIndex(1023)).to.be.true
+    })
+
+    it("should return true (2)", () => {
+      expect(new CudaDim(1024).hasIndex(new CudaIndex(0,1023))).to.be.true
+    })
+
+    it("should return true (3)", () => {
+      expect(new CudaDim(1024).hasIndex(new CudaIndex(0))).to.be.true
+    })
+
+    it("should return true (4)", () => {
+      expect(new CudaDim(1024).hasIndex(0)).to.be.true
+    })
+
+    it("should return true (5)", () => {
+      expect(new CudaDim(1024).hasIndex(new CudaIndex(0,0))).to.be.true
     })
   })
 
