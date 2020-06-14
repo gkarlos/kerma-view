@@ -98,7 +98,7 @@ class CudaDim {
   }
   
   /**
-   * Check if 2-dimensional
+   * Check if 2-dimensional, i.e exactly 2 dimensions > 1
    * @returns {Boolean}
    */
   is2D() { 
@@ -108,7 +108,7 @@ class CudaDim {
   } 
 
   /**
-   * Check if 3-dimensional
+   * Check if 3-dimensional, i.e all 3 dimensions > 1
    * @returns {Boolean}
    */
   is3D() { return (this.#x > 1 && this.#y > 1 && this.#z > 1) }

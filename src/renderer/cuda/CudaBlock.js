@@ -23,7 +23,9 @@ class CudaBlock {
    * @param {CudaIndex|Number} [index] An optional index for the position of this block in the grid. Can be set later
    */
   constructor(dim, index=undefined) {
-
+    if ( !(dim instanceof CudaDim) && !Number.isInteger(dim))
+      throw new Error("dim must be a CudaDim or Integer")
+      
     this.#dim = Number.isInteger(dim)? new CudaDim(dim) : dim
 
     if ( this.#dim.is3D())
@@ -103,6 +105,12 @@ class CudaBlock {
    */
   get numWarps() { return Math.floor(this.size / Limits.warpSize) + (this.size % Limits.warpSize > 0 ? 1 : 0) }
 
+  /**
+   * Check if an index exists in this block
+   * @param {CudaIndex|Number} index 
+   */
+  hasIndex(index) { return this.#dim.hasIndex(index) }
+
   /** 
    * Check if there are unused lanes in the last warp of the block.
    * That is the size of the block is not a multiple of {@link CudaLimits.warpSize}
@@ -141,7 +149,7 @@ class CudaBlock {
    * Check if the block is 3-dimensional. i.e All dimensions have size > 1
    * @returns {Boolean}
    */
-  is3D() { return this.#dim.is3D() }
+  is3D() { return false }
 
   /**
    * String representation of the block

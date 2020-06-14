@@ -1,99 +1,91 @@
 const Limits = require('./CudaLimits')
+const CudaDim = require('./CudaDim')
+
+/** @ignore @typedef {import("@renderer/cuda/CudaDim")} CudaDim */
 
 /**
  * Represents a Cuda Grid
  * @memberof module:cuda
  */
 class CudaGrid {
+  /** @type {CudaDim} */ #dim
 
   /**
-   * @type {Number} 
-   * @private
+   * 
+   * @param {CudaDim} dim 
    */
-  #x
-  /**
-   * @type {Number} 
-   * @private
-   */
-  #y
-  /**
-   * @type {Number} 
-   * @private
-   */
-  #z
+  constructor(dim) {
+    if ( !(dim instanceof CudaDim) && !Number.isInteger(dim))
+      throw new Error("dim must be a CudaDim or Integer")
 
-  /**
-   * @param {Number} x 
-   * @param {Number} y 
-   * @param {Number} z 
-   */
-  constructor(x, y=1, z=1) {
-    if ( !Limits.validGridDims(x, y, z))
-      throw new Error(`Invalid Grid dimensions : ${x},${y},${z}`)
-    this.#x = x
-    this.#y = y
-    this.#z = z
+    this.#dim = Number.isInteger(dim)? new CudaDim(dim) : dim
+
+    if ( this.#dim.is3D())
+      throw new Error("3D Grids are not currently supported")    
+   
+    if ( !Limits.validGridDims(this.#dim.x, this.#dim.y, this.#dim.z))
+      throw new Error(`Invalid Grid dimensions : ${this.#dim.toString()}`)
   }
+
+  /**
+   * Retrieve the dimensions of this grid
+   * @returns {CudaDim}
+   */
+  get dim() { return this.#dim}
 
   /** 
    * Retrieve the size of the x-dimension of the grid 
    * @returns {Number}
    */
-  get x() { return this.#x }
+  get x() { return this.#dim.x }
 
   /** 
    * Retrieve the size of the y-dimension of the grid
    * @returns {Number}
    */
-  get y() { return this.#y }
+  get y() { return this.#dim.y }
 
-  /** 
-   * Retrieve the size of the z-dimension of the grid
-   * @returns {Number}
-   */
-  get z() { return this.#z }
+  // /** 
+  //  * Retrieve the size of the z-dimension of the grid
+  //  * @returns {Number}
+  //  */
+  // get z() { return this.#z }
 
   /**
    * Retrieve the number of blocks in the grid
    * @returns {Number}
    */
-  get size() { return this.#x * this.#y * this.#z }
-
-  hasIndex() {
-    // TODO
-  }
+  get size() { return this.#dim.size }
 
   /**
-   * Check if the grid is 1-dimensional. i.e Exactly one dimension has size > 1
+   * Check if an index exists in this grid
+   * @param {CudaIndex|Number} index 
+   */
+  hasIndex(index) { return this.#dim.hasIndex(index) }
+
+  /**
+   * Check if the grid is 1-dimensional
    * @returns {Boolean}
    */
-  is1D() { 
-    return (this.#y == 1 && this.#z == 1) 
-        || (this.#y > 1  && this.#x == 1 && this.#z == 1) 
-        || (this.#z > 1  && this.#x == 1 && this.#y == 1)
-  }
+  is1D() { return this.#dim.is1D() }
   
   /**
-   * Check if the grid is 2-dimensional. i.e Exactly two dimensions have size > 1
+   * Check if the grid is 2-dimensional
    */
-  is2D() { 
-    return (this.#x > 1 && this.#y > 1 && this.#z == 1)
-     || (this.#x > 1 && this.#y == 1 && this.#z > 1)
-     || (this.#x == 1 && this.#y > 1 && this.#z > 1)
-  } 
+  is2D() { return this.#dim.is2D() } 
 
   /**
    * Check if the grid is 3-dimensional. i.e All dimensions have size > 1
    * @returns {Boolean}
    */
-  is3D() { return (this.#x > 1 && this.#y > 1 && this.#z > 1) }
+  is3D() { return false }
 
   /**
    * String representation of the grid
    * @returns {String}
    */
   toString() {
-    return `(${this.#x}x${this.#y}x${this.#z}, #blocks: ${this.size})`
+    return `(${this.#dim.x}x${this.#dim.y}, #blocks: ${this.size})`
   }
 
   
@@ -105,7 +97,7 @@ class CudaGrid {
   equals(other) {
     if ( !(other instanceof CudaGrid))
       return false
-    return this.#x === other.x && this.#y === other.y && this.#z === other.z
+    return this.#dim.equals(other.dim)
   }
 }
 
