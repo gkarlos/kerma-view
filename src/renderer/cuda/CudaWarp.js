@@ -28,7 +28,7 @@ class CudaWarp {
         throw new Error(`Invalid warp index '${index.toString()}' for block ${block.toString()}`)
     } else if (Number.isInteger(index)) {
       if ( index >= block.numWarps)
-        throw new Error(`Invalid warp index '${index}' for block ${block.toString()}`)
+        throw new Error(`Invalid index '${index}' for block ${block.toString()}`)
     } else {
       throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
     }

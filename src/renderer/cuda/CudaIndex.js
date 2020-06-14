@@ -71,9 +71,9 @@ class CudaIndex {
   /** @protected */
   _argCheck(row,col) {
     if ( row && (!Number.isInteger(row) || row < 0))
-      throw new Error('Invalid argument `row`: must be integer > 0')
+      throw new Error('Invalid index `row`: must be integer > 0')
     if ( col && (!Number.isInteger(col) || col < 0))
-      throw new Error('Invalid argument `col`: must be integer > 0')
+      throw new Error('Invalid index `col`: must be integer > 0')
   }
 
   /**
@@ -105,7 +105,7 @@ class CudaIndex {
       row = 0
       this.#onedimensional = true
     }
-    
+
     this._argCheck(row, col)
     this.#col = col
     this.#row = row

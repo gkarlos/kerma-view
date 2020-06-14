@@ -1,8 +1,10 @@
 const Limits = require('./CudaLimits')
 const CudaWarp = require('./CudaWarp')
 const CudaDim = require('./CudaDim')
+const CudaIndex = require('./CudaIndex')
 
 /** @ignore @typedef {import("@renderer/cuda/CudaDim")} CudaDim */
+/** @ignore @typedef {import("@renderer/cuda/CudaIndex")} CudaIndex */
 
 /**
  * Represents a Cuda Block
@@ -10,24 +12,60 @@ const CudaDim = require('./CudaDim')
  */
 class CudaBlock {
   /** @type {CudaDim} */ #dim
-  /** @type {Array<CudaWarp>} */ #warps 
+  /** @type {CudaIndex} */ #index
+  /** @type {Array<CudaWarp>} */ #warps
+
 
   /**
+   * Create new CudaBlock. A dim is required. An index may be assigned later.
+   * **No checks are performed on the index**. That is the index may be invalid for the grid this block is part of.
    * @param {CudaDim|Number} dim The dimensions of the block
+   * @param {CudaIndex|Number} [index] An optional index for the position of this block in the grid. Can be set later
    */
-  constructor(dim) {
-    if ( Number.isInteger(dim)) {
-      this.#dim = new CudaDim(dim)
-    }else {
-      if ( dim.is3D())
-        throw new Error("3D Blocks are not currently supported")
-      this.#dim = dim
-    }
+  constructor(dim, index=undefined) {
 
+    this.#dim = Number.isInteger(dim)? new CudaDim(dim) : dim
+
+    if ( this.#dim.is3D())
+      throw new Error("3D Blocks are not currently supported")
     if ( !Limits.validBlockDims(this.#dim.x, this.#dim.y, this.#dim.z))
       throw new Error(`Invalid Block dimensions : ${this.#dim.toString()}`)
-    
+
+    if( index === undefined || index === null) 
+      this.#index = null
+    else {
+      this.#index = Number.isInteger(index)? new CudaIndex(index) : index
+    }
+
     this.#warps = Array.apply(null, Array(this.numWarps)).map(function () {})
+  }
+
+  /**
+   * Check if this block has been assigned an index
+   * @returns {Boolean}
+   */
+  hasIndex() { return this.#index !== null }
+
+  /**
+   * Assign an index to this block. Not checks are performed on the index.
+   * Whether the index is valid within the grid must be checked externally
+   * @param {CudaIndex|Number} index 
+   * @returns {CudaBlock} this
+   */
+  setIndex(index) {
+    if ( !(index instanceof CudaIndex) && !Number.isInteger(index))
+      throw new Error("Index must be CudaIndex or Integer")
+    this.#index = Number.isInteger(index)? new CudaIndex(index) : index
+    return this;
+  }
+
+  /**
+   * Retrieve the index of this block (if one exists) <br/>
+   * If no index is assigned `null` is returned
+   * @returns {CudaIndex} 
+   */
+  getIndex() {
+    return this.#index === undefined? null: this.#index
   }
 
   /**
@@ -48,10 +86,10 @@ class CudaBlock {
    */
   get y() { return this.#dim.y }
 
-  /** Retrieve the size of the z-dimension of the block
-   * @returns {Number}
-   */
-  get z() { return this.#dim.z }
+  // /** Retrieve the size of the z-dimension of the block
+  //  * @returns {Number}
+  //  */
+  // get z() { return this.#dim.z }
 
   /** 
    * Retrieve the number of threads in the block
