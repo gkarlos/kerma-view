@@ -25,7 +25,7 @@ class CudaDim {
     if ( !Number.isInteger(z))
       throw new Error('Invalid argument `z`. Must be integer')
     if ( x < 1 || y < 1 || z < 1)
-      throw new Error('Arguments cannot be < 1')
+      throw new Error('Dim value cannot be < 1')
     this.#x = x
     this.#y = y
     this.#z = z
