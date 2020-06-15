@@ -58,6 +58,12 @@ class CudaGrid {
   get size() { return this.#dim.size }
 
   /**
+   * Retrieve the dimensions of this grid
+   * @returns {CudaDim}
+   */
+  getDim() { return this.#dim}
+
+  /**
    * Check if an index exists in this grid
    * @param {CudaIndex|Number} index 
    */
