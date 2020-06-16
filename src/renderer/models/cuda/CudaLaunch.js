@@ -2,6 +2,8 @@
 /** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaBlock */
 /** @ignore @typedef {import("@renderer/models/source/FunctionCallInfo")} FunctionCallInfo */
 
+const FunctionInfo = require("../source/FunctionInfo")
+
 /**
  * Model for a Cuda kernel launch
  */
@@ -9,7 +11,8 @@ class CudaLaunch {
 
   /** @type {CudaGrid}         */ #grid
   /** @type {CudaBlock}        */ #block
-  /** @type {FunctionCallInfo} */ #srcInfo
+  /** @type {FunctionCallInfo} */ #source
+  /** @type {FunctionInfo}     */ #callerSource
 
   /** 
    * @param {CudaGrid} grid The Grid used by the kernel launch
@@ -17,15 +20,25 @@ class CudaLaunch {
    * @param {FunctionCallInfo} srcInfo
    */
 
-  constructor(grid, block, srcInfo) {
+  constructor(grid, block, source, callerSource) {
     this.#grid = grid
     this.#block = block
-    this.#srcInfo = srcInfo
+    this.#source = source
+    this.#callerSource = callerSource
   }
 
+  /** @type {CudaGrid} */
+  get grid() { return this.#grid }
+
+  /** @type {CudaBlock} */
+  get block() { return this.#block }
+
+  /** @type {FunctionCallInfo} */
+  get source() { return this.#source }
+
+  /** @type {FunctionInfo} */
+  get callerSource() { return this.#callerSource }
 
 }
-
-
 
 module.exports = CudaLaunch
