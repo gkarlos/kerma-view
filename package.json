@@ -31,6 +31,11 @@
     "test:list": "mocha -R list -w test/unit/**/*.test.js",
     "test:single": "mocha",
     "test:unit": "mocha --recursive test/unit/**/*.test.js",
+    "test-report" : "npm run test-report:run && test-report:open",
+    "test-report:run" : "mocha --reporter mochawesome --reporter-options reportDir=test/report,reportFilename=index.html --recursive test/unit/**/*.test.js",
+    "test-report:open" : "run-script-os",
+    "test-report:open:linux" : "xdg-open test/report/index.html",
+    "test-report:open:windows" : "powershell Invoke-Item test/report/index.html",
     "deps": "node scripts/build-external-deps.js"
   },
   "_moduleAliases": {
@@ -66,6 +71,7 @@
     "lodash": "^4.17.15",
     "mocha": "^7.1.2",
     "mocha-list-tests": "^1.0.2",
+    "mochawesome": "^6.1.1",
     "module-alias": "^2.2.2",
     "monaco-editor": "^0.20.0",
     "npm-scripts-tree": "^1.4.1",
