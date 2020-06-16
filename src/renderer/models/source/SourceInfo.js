@@ -13,7 +13,6 @@ class SourceInfo {
 
   /**
    * @param {Object} opts 
-   * @param {Number} opts.id
    * @param {String} opts.filename
    * @param {SourceRange} opts.range
    */
@@ -21,9 +20,6 @@ class SourceInfo {
     this.#filename = opts.filename || null
     this.#range = opts.range || null
   }
-
-  /** @type {Number} */
-  get id() { return this.#id }
 
   /** @type {String} */
   get filename() { return this.#filename }

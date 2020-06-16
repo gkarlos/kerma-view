@@ -13,7 +13,6 @@ class FunctionInfo extends SourceInfo {
   /**
    * Create a new FunctionInfo instance
    * @param {Object}      opts
-   * @param {Number}      opts.id
    * @param {String}      opts.filename
    * @param {SourceRange} opts.range
    * @param {String}      opts.name
@@ -31,7 +30,7 @@ class FunctionInfo extends SourceInfo {
   get name() { return this.#name }
 
   /** @type {String} */
-  get arguments() { return this.arguments }
+  get arguments() { return this.#arguments }
 
   /** @returns {Boolean} */
   isKernel() { return this.#isKernel }

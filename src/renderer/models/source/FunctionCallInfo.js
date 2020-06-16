@@ -17,7 +17,6 @@ class FunctionCallInfo extends SourceInfo {
   /**
    * Create a new FunctionCallInfo instance
    * @param {Object}       opts
-   * @param {Number}       opts.id
    * @param {String}       opts.filename
    * @param {SourceRange}  opts.range
    * @param {String}       opts.arguments
