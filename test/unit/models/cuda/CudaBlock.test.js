@@ -1,9 +1,10 @@
 require('module-alias/register')
-const CudaBlock  = require('@renderer/cuda').Block
-const CudaWarp  = require('@renderer/cuda').Warp
-const CudaLimits = require('@renderer/cuda').Limits
-const CudaDim = require('@renderer/cuda').Dim
-const CudaIndex = require('@renderer/cuda').Index
+
+const CudaBlock  = require('@renderer/models/cuda').Block
+const CudaWarp  = require('@renderer/models/cuda').Warp
+const CudaLimits = require('@renderer/models/cuda').Limits
+const CudaDim = require('@renderer/models/cuda').Dim
+const CudaIndex = require('@renderer/models/cuda').Index
 
 const expect = require('chai').expect
 

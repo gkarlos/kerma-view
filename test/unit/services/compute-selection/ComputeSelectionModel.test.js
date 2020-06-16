@@ -1,10 +1,10 @@
 require('module-alias/register')
 const expect = require('chai').expect
 
-const CudaDim = require('@renderer/cuda/CudaDim')
-const CudaGrid = require('@renderer/cuda/CudaGrid')
-const CudaBlock = require('@renderer/cuda/CudaBlock')
-const CudaIndex = require('@renderer/cuda/CudaIndex')
+const CudaDim = require('@renderer/models/cuda/CudaDim')
+const CudaGrid = require('@renderer/models/cuda/CudaGrid')
+const CudaBlock = require('@renderer/models/cuda/CudaBlock')
+const CudaIndex = require('@renderer/models/cuda/CudaIndex')
 const ComputeSelectionModel = require('@renderer/services/compute-selection').ComputeSelectionModel
 const ComputeSelectionMode = require('@renderer/services/compute-selection').ComputeSelectionMode
 

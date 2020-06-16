@@ -3,8 +3,8 @@ const CudaWarp = require('./CudaWarp')
 const CudaDim = require('./CudaDim')
 const CudaIndex = require('./CudaIndex')
 
-/** @ignore @typedef {import("@renderer/cuda/CudaDim")} CudaDim */
-/** @ignore @typedef {import("@renderer/cuda/CudaIndex")} CudaIndex */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
 /**
  * Represents a Cuda Block

@@ -1,5 +1,5 @@
-/** @ignore @typedef {import("@renderer/cuda/CudaDim")} CudaDim */
-/** @ignore @typedef {import("@renderer/cuda/CudaIndex")} CudaIndex */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
 
 /**

@@ -1,8 +1,8 @@
-const Limits = require('@renderer/cuda/CudaLimits')
-const CudaIndex = require('@renderer/cuda/CudaIndex')
+const Limits = require('@renderer/models/cuda/CudaLimits')
+const CudaIndex = require('@renderer/models/cuda/CudaIndex')
 
-/** @ignore @typedef {import("@renderer/cuda/CudaBlock")} CudaBlock */
-/** @ignore @typedef {import("@renderer/cuda/CudaIndex")} CudaIndex */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
 /**
  * Represents a Cuda Warp

@@ -1,6 +1,6 @@
 require('module-alias/register')
-const Index = require('@renderer/cuda').Index
-const Dim = require('@renderer/cuda').Dim
+const Index = require('@renderer/models/cuda').Index
+const Dim = require('@renderer/models/cuda').Dim
 
 const expect = require('chai').expect
 

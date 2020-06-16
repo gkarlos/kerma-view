@@ -1,8 +1,6 @@
-
-/** @ignore @typedef {import("./CudaLimits").} CudaLimits */
-
 /** 
  * @module cuda
+ * @category models
  * @property {module:cuda.CudaLimits} Limits
  * @property {module:cuda.CudaBlock} Block
  * @property {module:cuda.CudaGrid} Grid
@@ -17,6 +15,7 @@ module.exports = {
   Warp : require('./CudaWarp'),
   Index : require('./CudaIndex'),
   Dim : require('./CudaDim'),
+  Launch : require('./CudaLaunch'),
   CudaLimits : require('./CudaLimits'),
   CudaBlock : require('./CudaBlock'),
   CudaGrid : require('./CudaGrid'),

@@ -1,7 +1,7 @@
 const Limits = require('./CudaLimits')
 const CudaDim = require('./CudaDim')
 
-/** @ignore @typedef {import("@renderer/cuda/CudaDim")} CudaDim */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
 
 /**
  * Represents a Cuda Grid

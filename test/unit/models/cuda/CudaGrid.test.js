@@ -1,8 +1,8 @@
 require('module-alias/register')
-const CudaGrid  = require('@renderer/cuda').Grid
-const CudaDim = require('@renderer/cuda').Dim
-const CudaIndex = require('@renderer/cuda').Index
-const CudaLimits = require('@renderer/cuda').Limits
+const CudaGrid  = require('@renderer/models/cuda').Grid
+const CudaDim = require('@renderer/models/cuda').Dim
+const CudaIndex = require('@renderer/models/cuda').Index
+const CudaLimits = require('@renderer/models/cuda').Limits
 
 const expect = require('chai').expect
 
