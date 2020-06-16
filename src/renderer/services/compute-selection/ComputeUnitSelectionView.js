@@ -1,5 +1,5 @@
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeUnitSelection").} ComputeUnitSelection */
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeUnitSelectionMode").} ComputeUnitSelectionMode */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeUnitSelectionMode */
 
 
 /**

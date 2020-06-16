@@ -1,8 +1,8 @@
-const ComputeUnitSelectionMode = require('./ComputeUnitSelectionMode')
+const ComputeUnitSelectionMode = require('./ComputeSelectionMode')
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeUnitSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeUnitSelectionView")} ComputeUnitSelectionView */
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeUnitSelectionMode")} ComputeUnitSelectionMode */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeUnitSelectionMode */
 
 /**
  * This callback is fired when the compute unit selection changes mode

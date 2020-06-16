@@ -1,7 +1,7 @@
 /**
  * @memberof module:compute-unit-selection
  */
-class ComputeUnitSelectionMode {
+class ComputeSelectionMode {
   /* @type {String} */#name
 
   /**
@@ -18,7 +18,7 @@ class ComputeUnitSelectionMode {
    * Retrieve the name of the mode
    * @returns {String}
    */
-  get name() { return this.name}
+  get name() { return this.#name}
 
   /**
    * Compare two modes for equality
@@ -26,19 +26,19 @@ class ComputeUnitSelectionMode {
    * @return {Boolean} Whether the modes are equal or not
    */
   equals(mode) {
-    if ( typeof mode !== ComputeUnitSelectionMode)
+    if ( ! (mode instanceof ComputeSelectionMode))
       return false
     return this.#name === mode.name
   }
 }
 
 /** */
-ComputeUnitSelectionMode.Thread  = new ComputeUnitSelectionMode('thread')
+ComputeSelectionMode.Thread  = new ComputeSelectionMode('thread')
 
 /** */
-ComputeUnitSelectionMode.Warp    = new ComputeUnitSelectionMode('warp')
+ComputeSelectionMode.Warp    = new ComputeSelectionMode('warp')
 
 /** */
-ComputeUnitSelectionMode.Unknown = new ComputeUnitSelectionMode('unknown')
+ComputeSelectionMode.Unknown = new ComputeSelectionMode('unknown')
 
-module.exports = ComputeUnitSelectionMode
+module.exports = ComputeSelectionMode

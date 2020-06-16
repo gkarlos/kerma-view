@@ -1,10 +1,11 @@
-const Mode = require('@renderer/services/compute-selection/ComputeUnitSelectionMode')
+const Mode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 const CudaIndex = require('@renderer/cuda').Index
+const CudaBlock = require('@renderer/cuda').Block
 
 /** @ignore @typedef {import("@renderer/cuda/CudaIndex")} CudaIndex */
 /** @ignore @typedef {import("@renderer/cuda/CudaGrid")} CudaGrid */
 /** @ignore @typedef {import("@renderer/cuda/CudaBlock")} CudaBlock */
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeUnitSelectionMode").} ComputeUnitSelectionMode */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeSelectionMode */
 
 /**
  * A model for a selection of a thread or warp in a Cuda block
@@ -13,55 +14,82 @@ const CudaIndex = require('@renderer/cuda').Index
 class ComputeSelectionModel {
 
   /** @type {CudaGrid} */
-  #grid
+  #gridDescription
   /** @type {CudaBlock} */
-  #block
-  /** @type {ComputeUnitSelectionMode} */
+  #blockDescription
+  /** @type {ComputeSelectionMode} */
   #mode
-  /** @type {Index} */
+  /** @type {CudaIndex} */
   #blockSelection
-  /** @type {Index} */
+  /** @type {CudaIndex} */
   #unitSelection
 
   /**
    * Create a new ComputeSelectionModel
    * @param {CudaGrid} grid A Cuda grid description
    * @param {CudaBlock} block A Cuda block description
-   * @param {ComputeUnitSelectionMode} [mode] 
+   * @param {ComputeSelectionMode} [mode] Optionally set the mode upon creation. {@link module:compute-unit-selection~ComputeUnitSelectionMode.Thread} by default
    */
   constructor(grid, block, mode=Mode.Thread) {
-    if ( !grid) throw new Error('Required argument `grid` is missing')
-    if ( !block) throw new Error('Required argument `block` is missing')
-    this.#grid = grid
-    this.#block = block
+    // if ( !grid) throw new Error('Required argument `grid` is missing')
+    // if ( !block) throw new Error('Required argument `block` is missing')
+    this.#gridDescription = grid
+    this.#blockDescription = block
     this.#mode = mode
     this.#blockSelection = null
     this.#unitSelection  = null
   }
 
   /**
-   * Retrieve the grid
+   * The grid description this selection is relevant for
+   * @readonly
    * @returns {CudaGrid}
    */
-  get grid() { return this.#grid}
+  get grid() { return this.#gridDescription}
 
   /** 
-   * Retrieve the block 
+   * The grid description this selection is relevant for
+   * @readonly
    * @returns {CudaBlock}
    */
-  get block() { return this.#block}
+  get block() { return this.#blockDescription}
 
   /** 
-   * Retrieve the mode
-   * @returns {ComputeUnitSelectionMode}
+   * The mode of this selection. Thread or Warp
+   * @readonly
+   * @type {ComputeSelectionMode}
    */
   get mode() { return this.#mode }
-  
-  /** Check if in thread mode. If so, the selected unit is a thread in the block */
-  inThreadMode() { return this.#mode == Mode.Thread}
 
-  /** Check if in warp mode. If so, the selected unit is a warp in the block */
-  inWarpMode() { return this.#mode == Mode.Warp}
+  /**
+   * Get the grid description this selection is relevant for
+   * @returns {CudaGrid}
+   */
+  getGrid() { return this.#gridDescription }
+
+  /**
+   * Get the block description this selection is relevant for
+   * @returns {CudaBlock}
+   */
+  getBlock() { return this.#blockDescription }
+
+  /**
+   * Get the selection mode
+   * @returns {ComputeSelectionMode}
+   */
+  getMode() { return this.#mode }
+
+  /** 
+   * Check if in thread mode. If so, the selected unit is a thread in the block
+   * @returns {Boolean}
+   */
+  inThreadMode() { return this.#mode.equals(Mode.Thread)}
+
+  /** 
+   * Check if in warp mode. If so, the selected unit is a warp in the block
+   * @returns {Boolean}
+   */
+  inWarpMode() { return this.#mode.equals(Mode.Warp)}
 
   /**
    * Check if there is a block currently selected
@@ -70,113 +98,114 @@ class ComputeSelectionModel {
   hasBlockSelected() { return this.#blockSelection != null }
 
   /**
+   * Check if there is a warp currently selected
+   * @returns {Boolean}
+   */
+  hasWarpSelected() { return this.#unitSelection != null && this.inWarpMode() }
+
+  /**
+   * Check if there is a thread currently selected
+   * @returns {Boolean}
+   */
+  hasThreadSelected() { return this.#unitSelection != null && this.inThreadMode() }
+
+
+  /**
    * Remove the the currently selected block
    * @returns {ComputeUnitSelectionModel}
    */
-  clearSelectedBlock() { 
+  clearBlockSelection() { 
     this.#blockSelection = null 
     return this
   }
 
-  /**
-   * 
-   * @param {CudaIndex|Number} index  
-   */
-  selectBlock(index) {
-    /** @type {CudaIndex} */
-    let idx
-    if ( Number.isInteger(index)) {
-      idx = CudaIndex.delinearize(index, xDim)
-    } else {
-      idx = index
-    }
-    if ( !this.#grid.hasIndex(idx))
-      throw new Error(`Invalid index '${idx.toString()}'`)
-    this.#blockSelection = idx
-  }
-
-  selectWarp(index) {
-
-  }
-
-  selectThread(index) {
-    
-  }
-
-  getSelectedBlock() {
-
-  }
-
-  getSelectedThread() {
-
-  }
-
-  getSelectedWarp() {
-
-  }
-
-  /**
-   * Select a thread
-   * 
-   * Multidimensional indexing is only available for threads
-   * 
-   * @param {Integer}  x  The x-coordinate
-   * @param {Integer} [y] The y-coordinate
-   * @param {Integer} [z] The z-coordinate
-   * @returns {ComputeUnitSelectionModel}
-   */
-  select(x, y = 0, z = 0) {
-    if ( x === undefined )
-      throw new Error("Missing required argument `x`")
-    if ( this.#mode == Mode.Warp)
-      throw new Error("Multidimensional selection is only available in thread-mode")
-    if ( x < 0 || x >= this.#block.x)
-      throw new Error("Invalid Selection: x-value out of range")
-    if ( y < 0 || y >= this.#block.y)
-      throw new Error("Invalid Selection: y value out of range")
-    if ( z < 0 || z >= this.#block.z)
-      throw new Error("Invalid Selection: z value out of range")
-    // this.#selection = new Point(x, y, z)
+  clearUnitSelection() {
+    this.#unitSelection = null
     return this
   }
 
   /**
-   * Check if there is currently a selection
-   * This function is usefull after the mode changed whether the selection is invalidated
-   * @returns {Boolean}
+   * Select a block from the grid
+   * @param {CudaIndex|Number} index  
    */
-  hasSelection() {  }
-
-  getSelection() { }
-
-  /**
-   * Select a thread/warp
-   * @param {Integer} idx A linear index 
-   */
-  selectLinear(idx) {
-
+  selectBlock(index) {
+    this.#blockSelection = Number.isInteger(index)? CudaIndex.delinearize(index, this.#gridDescription.dim) : index
+    return this
   }
 
   /**
-   * Change the selection mode
-   * A mode
-   * @param {ComputeUnitSelectionMode} mode
+   * Select a warp in the selected block
+   * @param {CudaIndex|Number} index  
+   */
+  selectWarp(index) {
+    this.#unitSelection = Number.isInteger(index) ? new CudaIndex(index) : index
+    if ( this.inThreadMode())
+      this.#mode = Mode.Warp
+    return this
+  }
+
+  /**
+   * Select a thread in the selected block
+   * @param {CudaIndex|Number} index  
+   */
+  selectThread(index) {
+    this.#unitSelection = Number.isInteger(index) ? CudaIndex.delinearize(index, this.#blockDescription.dim) : index
+    if ( this.inWarpMode())
+      this.#mode = Mode.Thread
+    return this
+  }
+
+
+  /**
+   * Select a compute unit from the block (wapr/thread)
+   * @param {CudaIndex} index 
+   * @param {ComputeUnitSelectionMode} [mode] Choose the Selection mode. If present the current mode is overriden
+   * @returns {ComputeSelectionModel} this
+   */
+  selectUnit(index, mode=null) {
+    if ( mode != null && (mode instanceof ComputeUnitSelectionMode))
+      this.#mode = mode
+    return this.inWarpMode()? this.selectWap(index) : this.selectThread(index)
+  }
+
+
+  /**
+   * Retrieve the selected block
+   * @returns {CudaIndex}
+   */
+  getBlockSelection() { return this.#blockSelection }
+
+  /** 
+   * Retrieve the selected warp index if a warp selection has been made. `null` otherwise
+   * @returns {CudaIndex} 
+   */
+  getWarpSelection() { return this.inWarpMode()? this.#unitSelection : null}
+
+  /** 
+   * Retrieve the selected thread index if a thread selection has been made. `null` otherwise
+   * @returns {CudaIndex} 
+   */
+  getThreadSelection() { return this.inThreadMode()? this.#unitSelection : null}
+
+  /** 
+   * Retrieve the selected warp index if a warp selection has been made. `null` otherwise
+   * @returns {CudaIndex} 
+   */
+  getSelection() { return this.inWarpMode()? this.#unitSelection : null}
+
+  /**
+   * Change the selection mode. If a different mode is passed, the current unit-selection is invalidated
+   * @param {ComputeUnitSelectionMode} mode A selection mode
+   * @returns {Boolean} `true` if the mode is changed. `false` otherwise
    */
   setMode(mode) {
-    if (typeof mode !== Mode || !(mode instanceof Mode))
-      throw new Error("Invalid argument type")
     if ( !this.#mode.equals(mode)) {
       this.#mode = mode
+      this.clearUnitSelection()
       return true
     }
     return false
   }
-
-  /**
-   * Retrieve the number of threads in a block
-   * @returns {Integer}
-   */
-  getBlockSize() { return this.#block.size; }
 }
 
-module.exports = ComputeUnitSelectionModel
+module.exports = ComputeSelectionModel
