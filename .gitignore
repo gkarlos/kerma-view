@@ -8,3 +8,5 @@ docs/*
 !docs/README.md
 
 *.log
+
+test/report/
