@@ -6,25 +6,17 @@ const ProgressNotificationModel = require('@renderer/services/notification/Progr
 const NotificationView          = require('@renderer/services/notification/NotificationView')
 const ProgressNotificationView  = require('@renderer/services/notification/ProgressNotificationView')
 
-
-var Log = null
+var Log = undefined
 
 /** @memberof module:notification */
 class NotificationService extends Service {
-  
-  /**
-   * @param {module:app.App} app A reference to the App instance
-   */
-  constructor(app) {
+  constructor() {
     super("NotificationService")
-    
-    /** @ignore @type {import("@renderer/app")} */
-    this.app = app;
 
+    Log = App.Logger
+    
     /** @type {NotificationService.NotificationType} */
     this.NotificationType = NotificationService.NotificationType
-
-    Log = this.app.Logger
 
     // Toggle the service when the notification button is pressed
     App.ui.toolbar.util.notificationButton.onClick( () => this.isEnabled()? this.disable() : this.enable())

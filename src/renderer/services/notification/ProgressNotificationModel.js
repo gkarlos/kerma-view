@@ -31,9 +31,8 @@ class ProgressNotificationModel extends NotificationModel {
     })
 
     this.total = options.total || 100
-    this.currentProgress = 0;
-
-    this.currentProgressInfo = undefined
+    this.currentProgress = options.total === Infinity
+      ? ProgressNotificationModel.INFINITE_NO_PROGRESS : ProgressNotificationModel.FINITE_NO_PROGRESS;
 
     this.started = false
     this.completed = false
@@ -53,21 +52,10 @@ class ProgressNotificationModel extends NotificationModel {
   getCurrentProgress() { return this.currentProgress }
 
   /**
-   * Retrieve the info string associated with the last progress update (if any)
-   * @returns {String|null}
-   */
-  getCurrentProgressInfo() { return this.currentProgressInfo }
-
-  /**
    * Check if this notification is infinite
    * @returns {Boolean}
    */
   isInfinite() { return this.total === Infinity }
-
-  /**
-   * Check if the progress has started
-   */
-  hasStarted() { return this.started != Number.NEGATIVE_INFINITY && this.started > 0}
 
   /**
    * Force complete the progress.
@@ -107,12 +95,19 @@ class ProgressNotificationModel extends NotificationModel {
     if (value === undefined || value === null)
       value = 0
 
-    let newValue = Math.min(this.currentProgress + value, this.total);
+    this.started = true
+      
+    if ( this.isInfinite()) {
+      this.currentProgress = ProgressNotificationModel.INFINITE_IN_PROGRESS
+      //TODO
+    } else {
+      let newValue = Math.min(this.currentProgress + value, this.total);
     
-    this.currentProgress = newValue;
-    
-    if ( this.currentProgress >= this.total)
-      this.completed = true
+      this.currentProgress = newValue;
+      
+      if ( this.currentProgress >= this.total)
+        this.completed = true
+    }
   }
 };
 

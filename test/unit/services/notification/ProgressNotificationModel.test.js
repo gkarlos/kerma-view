@@ -51,21 +51,6 @@ describe("ProgressNotificationModel", () => {
       })
     })
 
-    describe("getCurrentProgressInfo", () => {
-      it("should return a string if one was passed last time progress was updated", () => {
-        let notification2 = new ProgressNotificationModel({total:100})
-        notification2.progress(10, "hello")
-        expect(notification2.getCurrentProgressInfo()).to.equal("hello")
-        notification2.progress(100, "hello2")
-        expect(notification2.getCurrentProgressInfo()).to.equal("hello2")
-      })
-      it("should return undefined if no info was passed last time progress was updated", () => {
-        let notification2 = new ProgressNotificationModel({total:100})
-        notification2.progress(20)
-        expect(notification2.getCurrentProgressInfo()).to.be.undefined
-      })
-    })
-
     describe("isInfinite", () => {
       it("should return true if total is Infinity", () => {
         let notification2 = new ProgressNotificationModel({total: Infinity})
@@ -78,10 +63,10 @@ describe("ProgressNotificationModel", () => {
       })
     })
 
-    describe("hasStarted", () => {
+    describe("isStarted", () => {
       it("should return false before progress() is called", () => {
         let notification2 = new ProgressNotificationModel()
-        expect(notification2.hasStarted()).to.be.false
+        expect(notification2.isStarted()).to.be.false
       })
 
       it("should return true after the first progress() call", () => {
@@ -90,8 +75,8 @@ describe("ProgressNotificationModel", () => {
         
         notification2.progress(10);
         notification3.progress(10);
-        expect(notification2.hasStarted()).to.be.true
-        expect(notification3.hasStarted()).to.be.true
+        expect(notification2.isStarted()).to.be.true
+        expect(notification3.isStarted()).to.be.true
       })
     })
   })

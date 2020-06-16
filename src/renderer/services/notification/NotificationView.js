@@ -395,8 +395,8 @@ NotificationView.Icon = {
 }
 
 /**
- * @static
  * The notification template
+ * @static
  */
 NotificationView.Template = `
   <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">
@@ -416,9 +416,9 @@ NotificationView.Duration  = 5000
 NotificationView.Dismissable = true
 
 /**
+ * Delay (in ms) for when the notification dissappers after hide() is called 
  * @static
  * @protected 
- * Delay (in ms) for when the notification dissappers after hide() is called 
  */
 NotificationView.HideDelay = 350
 
