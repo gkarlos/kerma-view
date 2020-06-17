@@ -53,6 +53,16 @@ class SourceRange {
    * @returns {Boolean}
    */
   hasEndColumn() { return this.#toColumn !== Infinity }
+
+  /**
+   * Compare with another SourceRange for equality
+   * @param {SourceRange} other 
+   */
+  equals(other) {
+    if ( !(other instanceof SourceRange))
+      return false
+    return this.from.equals(other.from) && this.to.equals(other.to)
+  }
 }
 
 module.exports = SourceRange

@@ -44,14 +44,30 @@ class FunctionCallInfo extends SourceInfo {
   /** @type {FunctionInfo} */
   get caller() { return this.#caller }
 
-  /** @type {Boolean} */
-  get isKernelLaunch() { return this.#isKernelLaunch }
-
   /** @type {String} */
   get launchParams() { return this.#launchParams }
 
   /** @type {Boolean} */
   get inLoop() { return this.#inLoop }
+
+  /** @returns {Boolean} */
+  isKernelLaunch() { return this.#isKernelLaunch }
+
+  /**
+   * Compare with another FunctionCallInfo for equality
+   * @param {FunctionCallInfo} other Another FunctionCallInfo 
+   */
+  equals(other) {
+    return (other instanceof FunctionCallInfo) 
+      && super.equals(other)
+      && this.#name === other.name
+      && this.#arguments === other.arguments
+      && this.caller.equals(other.caller)
+      && this.launchParams === other.launchParams
+      && this.inLoop === other.inLoop
+      && this.isKernelLaunch() === other.isKernelLaunch()
+
+  }
 }
 
 module.exports = FunctionCallInfo

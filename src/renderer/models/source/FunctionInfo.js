@@ -19,11 +19,11 @@ class FunctionInfo extends SourceInfo {
    * @param {String}      opts.arguments
    * @param {Boolean}     opts.isKernel
    */
-  constructor(opts={}, isKernel=false) {
+  constructor(opts={}) {
     super(opts)
     this.#name = opts.name || null
     this.#arguments = opts.arguments || null
-    this.#isKernel = isKernel
+    this.#isKernel = opts.isKernel || false
   }
 
   /** @type {String} */
@@ -34,6 +34,17 @@ class FunctionInfo extends SourceInfo {
 
   /** @returns {Boolean} */
   isKernel() { return this.#isKernel }
+
+  /**
+   * Compare with another FunctionInfo for equality
+   * @param {FunctionInfo} other Another FunctionInfo 
+   */
+  equals(other) {
+    return (other instanceof FunctionInfo ) && super.equals(other)
+      && this.#name === other.name 
+      && this.#arguments === other.arguments
+      && this.#isKernel === other.isKernel()
+  }
 }
 
 module.exports = FunctionInfo

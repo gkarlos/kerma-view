@@ -6,8 +6,8 @@ class SourceLoc {
   /** @type {Number} */ #column
 
   constructor(line, column) {
-    this.#line = line
-    this.#column = column
+    this.#line = line || 0
+    this.#column = column || 0
   }
 
   /** @type {Number} */
@@ -15,6 +15,16 @@ class SourceLoc {
 
   /** @type {Number} */
   get column() { return this.#column }
+
+  /**
+   * Compare with another SourceLoc for equality
+   * @param {SourceLoc} other Another SourceLoc
+   */
+  equals(other) {
+    if ( !(other instanceof SourceLoc))
+      return false
+    return this.#line === other.line && this.#column === other.column
+  }
 }
 
 module.exports = SourceLoc
