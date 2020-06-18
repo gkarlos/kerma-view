@@ -4,7 +4,7 @@ const Dim = require('@renderer/models/cuda').Dim
 
 const expect = require('chai').expect
 
-describe('renderer/cuda/CudaIndex', () => {
+describe('renderer/models/cuda/CudaIndex', () => {
   describe('(static) delinearize', () => {
     it('should throw with missing args', () => {
       expect(() => Index.delinearize()).to.throw

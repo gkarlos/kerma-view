@@ -6,7 +6,7 @@ const CudaLimits = require('@renderer/models/cuda').Limits
 
 const expect = require('chai').expect
 
-describe('renderer/cuda/CudaGrid', () => {
+describe('renderer/models/cuda/CudaGrid', () => {
 
   describe("constructor", () => {
     it("should not throw on 1D", () => {

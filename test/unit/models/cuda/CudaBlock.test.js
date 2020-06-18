@@ -8,7 +8,7 @@ const CudaIndex = require('@renderer/models/cuda').Index
 
 const expect = require('chai').expect
 
-describe('renderer/cuda/CudaBlock', () => {
+describe('renderer/models/cuda/CudaBlock', () => {
 
   describe("constructor", () => {
     it("should not throw on 1D", () => {

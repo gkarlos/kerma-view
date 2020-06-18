@@ -4,7 +4,7 @@ const CudaIndex = require('@renderer/models/cuda').Index
 
 const expect = require('chai').expect
 
-describe('renderer/cuda/CudaDim', () => {
+describe('renderer/models/cuda/CudaDim', () => {
   describe('constructor', () => {
     it('should throw with missing args', () => {
       expect(() => new CudaDim()).to.throw

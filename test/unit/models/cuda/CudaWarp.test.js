@@ -7,7 +7,7 @@ const { CudaIndex } = require('@renderer/models/cuda')
 
 const expect = require('chai').expect
 
-describe('renderer/cuda/CudaWarp', () => {
+describe('renderer/models/cuda/CudaWarp', () => {
 
   describe("constructor", () => {
 
