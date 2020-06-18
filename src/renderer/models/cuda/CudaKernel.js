@@ -18,7 +18,7 @@ class CudaKernel {
    */
   constructor(id,source) {
     this.#id = id
-    this.#source = source
+    this.#source = source || null
     this.#launches = []
   }
 
@@ -31,9 +31,14 @@ class CudaKernel {
   /** @type {Array.<CudaLaunch>} */
   get launches() { return this.#launches }
 
+  /**
+   * Compare with another kernel for equality
+   * @param {CudaKernel} other 
+   */
   equals(other) {
     return (other instanceof CudaKernel)
       && this.#id === other.id
+      && !(this.#source === null || other.source === null)
       && this.#source.equals(other.source)
       && ((self) => {
         if ( self.#launches.length !== other.launches.length)
