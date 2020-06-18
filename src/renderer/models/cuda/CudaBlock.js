@@ -106,10 +106,20 @@ class CudaBlock {
   get numWarps() { return Math.floor(this.size / Limits.warpSize) + (this.size % Limits.warpSize > 0 ? 1 : 0) }
 
   /**
-   * Check if an index exists in this block
+   * Check if a thread index exists in this block
    * @param {CudaIndex|Number} index 
    */
-  hasIndex(index) { return this.#dim.hasIndex(index) }
+  hasThreadIndex(index) { return this.#dim.hasIndex(index) }
+
+  /**
+   * Check if a warp index exists in this block
+   * @param {CudaIndex|Number} index 
+   */
+  hasWarpIndex(index) { 
+    return Number.isInteger(index) 
+      ? (index >= 0 && index < this.numWarps)
+      : (index.y >= 0 && index.y < this.numWarps)
+  }
 
   /** 
    * Check if there are unused lanes in the last warp of the block.
@@ -165,9 +175,7 @@ class CudaBlock {
    * @return {Boolean}
    */
   equals(other) {
-    if ( !(other instanceof CudaBlock))
-      return false
-    return this.#dim.equals(other.dim)
+    return (other instanceof CudaBlock) && this.#dim.equals(other.dim)
   }
 }
 

@@ -113,67 +113,67 @@ describe('renderer/cuda/CudaBlock', () => {
     })
   })
 
-  describe("hasIndex", () => {
+  describe("hasThreadIndex", () => {
     it("should throw on invalid index (1)", () => {
       let dim = new CudaDim(1024)
-      expect(() => new CudaBlock(dim).hasIndex(-10)).to.throw()
+      expect(() => new CudaBlock(dim).hasThreadIndex(-10)).to.throw()
     })
 
     it("should throw on invalid index (2)", () => {
       let dim = new CudaDim(1024)
-      expect(() => new CudaBlock(dim).hasIndex(new CudaIndex(-15))).to.throw()
+      expect(() => new CudaBlock(dim).hasThreadIndex(new CudaIndex(-15))).to.throw()
     })
 
     it("should throw on invalid index (3)", () => {
       let dim = new CudaDim(1024)
-      expect(() => new CudaBlock(dim).hasIndex(undefined)).to.throw()
+      expect(() => new CudaBlock(dim).hasThreadIndex(undefined)).to.throw()
     })
 
     it("should throw on invalid index (4)", () => {
       let dim = new CudaDim(1024)
-      expect(() => new CudaBlock(dim).hasIndex(null)).to.throw()
+      expect(() => new CudaBlock(dim).hasThreadIndex(null)).to.throw()
     })
 
     it("should not throw on valid index (1)", () => {
       let dim = new CudaDim(1024)
-      expect(() => new CudaBlock(dim).hasIndex(10)).to.not.throw()
+      expect(() => new CudaBlock(dim).hasThreadIndex(10)).to.not.throw()
     })
 
     it("should not throw on valid index (2)", () => {
       let dim = new CudaDim(1024)
-      expect(() => new CudaBlock(dim).hasIndex(new CudaIndex(1024))).to.not.throw()
+      expect(() => new CudaBlock(dim).hasThreadIndex(new CudaIndex(1024))).to.not.throw()
     })
 
     it("should return false (1)", () => {
-      expect(new CudaBlock(1024).hasIndex(1024)).to.be.false
+      expect(new CudaBlock(1024).hasThreadIndex(1024)).to.be.false
     })
 
     it("should return false (2)", () => {
-      expect(new CudaBlock(1024).hasIndex(new CudaIndex(1023,0))).to.be.false
+      expect(new CudaBlock(1024).hasThreadIndex(new CudaIndex(1023,0))).to.be.false
     })
 
     it("should return false (3)", () => {
-      expect(new CudaBlock(new CudaDim(10,10)).hasIndex(new CudaIndex(10,10))).to.be.false
+      expect(new CudaBlock(new CudaDim(10,10)).hasThreadIndex(new CudaIndex(10,10))).to.be.false
     })
 
     it("should return true (1)", () => {
-      expect(new CudaBlock(1024).hasIndex(1023)).to.be.true
+      expect(new CudaBlock(1024).hasThreadIndex(1023)).to.be.true
     })
 
     it("should return true (2)", () => {
-      expect(new CudaBlock(1024).hasIndex(new CudaIndex(0,1023))).to.be.true
+      expect(new CudaBlock(1024).hasThreadIndex(new CudaIndex(0,1023))).to.be.true
     })
 
     it("should return true (3)", () => {
-      expect(new CudaBlock(1024).hasIndex(new CudaIndex(0))).to.be.true
+      expect(new CudaBlock(1024).hasThreadIndex(new CudaIndex(0))).to.be.true
     })
 
     it("should return true (4)", () => {
-      expect(new CudaBlock(1024).hasIndex(0)).to.be.true
+      expect(new CudaBlock(1024).hasThreadIndex(0)).to.be.true
     })
 
     it("should return true (5)", () => {
-      expect(new CudaBlock(1024).hasIndex(new CudaIndex(0,0))).to.be.true
+      expect(new CudaBlock(1024).hasThreadIndex(new CudaIndex(0,0))).to.be.true
     })
   })
 
