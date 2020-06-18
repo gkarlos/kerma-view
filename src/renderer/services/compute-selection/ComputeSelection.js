@@ -1,16 +1,19 @@
-const ComputeUnitSelectionMode = require('./ComputeSelectionMode')
+const ComputeSelectionMode = require('./ComputeSelectionMode')
 
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeUnitSelectionModel */
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeUnitSelectionView")} ComputeUnitSelectionView */
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeUnitSelectionMode */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionView")} ComputeSelectionView */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
 
 /**
  * This callback is fired when the compute unit selection changes mode
- * @callback ComputeUnitSelectionOnModeChange
- * @param {ComputeUnitSelectionMode} oldMode The previous mode
- * @param {ComputeUnitSelectionMode} newMode The new mode
+ * @callback ComputeSelectionOnModeChangeCallback
+ * @param {ComputeSelectionMode} oldMode The previous mode
+ * @param {ComputeSelectionMode} newMode The new mode
  * @returns {void}
  */
+
+const ThreadMode = ComputeSelectionMode.Thread
+const WarpMode = ComputeSelectionMode.Warp
 
 /**
  * A compute unit selection controller.
@@ -18,36 +21,43 @@ const ComputeUnitSelectionMode = require('./ComputeSelectionMode')
  * Instances of this class are meant to only be created by ComputeUnitSelectionService
  * and are returned by the service to be used as handlers.
  * 
- * @memberof module:compute-unit-selection
+ * @memberof module:compute-selection
  */
-class ComputeUnitSelection {
-  static ThreadMode = new ComputeUnitSelectionMode('thread')
-  static WarpMode = new ComputeUnitSelectionMode('warp')
+class ComputeSelection {
   
-  /**@type {ComputeUnitSelectionModel}*/ #model
-  /**@type {ComputeUnitSelectionView} */ #view
-  /**@type {ComputeUnitSelectionMode} */ #mode
-  /**@type {Array.<ComputeUnitSelectionOnModeChange>}*/#onModeChangeCallbacks
+  /**@type {ComputeSelectionModel}*/ #model
+  /**@type {ComputeSelectionView} */ #view
+  /**@type {ComputeSelectionMode} */ #mode
+  /**@type {Array.<ComputeSelectionOnModeChangeCallback>}*/#onModeChangeCallbacks
 
   /**
-   * Create a new ComputeUnitSelection
-   * @param {ComputeUnitSelectionModel} model The ComputeUnitSelection model
+   * Create a new ComputeSelection
+   * @param {ComputeSelectionModel} model The ComputeUnitSelection model
    * @param {ComputeUnitSelectionView} view The ComputeUnitSelection view
    */
-  constructor(  mode=ComputeUnitSelection.ThreadMode) {
+  constructor(model, view, mode=ThreadMode) {
     this.#model = model
     this.#view  = view
     this.#onModeChangeCallbacks = []
   }
 
   /** Retrieve the model */
-  get model() { return this.#model}
+  get model() { 
+    return this.#model
+  }
 
   /** Retrieve the view */
-  get view() { return this.#view}
+  get view() { 
+    return this.#view
+  }
 
-  /** Retrieve the current mode */
-  get mode() { return this.#mode}
+  /** 
+   * The current mode 
+   * @type {ComputeSelectionMode}
+   */
+  get mode() { 
+    return this.#model.getMode()
+  }
 
 
   /** 
@@ -65,12 +75,14 @@ class ComputeUnitSelection {
 
   /**
    * Change the mode of this compute unit selection
-   * @param {ComputeUnitSelectionMode} mode A new mode
+   * @param {ComputeSelectionMode} mode A new mode
    * @returns {Boolean} True if the new mode is successfully changed. False otherwise
    */
   setMode(mode) {
+    if ( !(mode instanceof ComputeSelectionMode))
+      throw new Error("Invalid argument 'mode'. Must be a ComputeSelectionMode")
     let oldMode = this.#model.mode
-    if ( this.#mode.setMode(mode)) {
+    if ( this.#model.setMode(mode)) {
       let newMode = mode
       this.view.setMode(newmode)
       this.#onModeChangeCallbacks.forEach(callbackfn => callbackfn( oldMode, newMode))
@@ -103,4 +115,4 @@ class ComputeUnitSelection {
   }
 }
 
-module.exports = ComputeUnitSelection
+module.exports = ComputeSelection

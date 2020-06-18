@@ -1,20 +1,22 @@
 /**
- * @module compute-unit-selection
+ * @module compute-selection
  * @category services
- * @property {module:compute-unit-selection.GridInfoView} GridInfoView
- * @property {module:compute-unit-selection.BlockInfoView} BlockInfoView
- * @property {module:compute-unit-selection.ComputeSelection} ComputeSelection
+ * @property {module:compute-selection~GridInfoView} GridInfoView
+ * @property {module:compute-selection~BlockInfoView} BlockInfoView
+ * @property {module:compute-selection~ComputeSelectionView} ComputeSelectionView
+ * @property {module:compute-selection~ComputeSelectionService} ComputeSelectionService
  * 
- * @property {module:compute-unit-selection.ComputeUnitSelectionView} ComputeUnitSelectionView
- * @property {module:compute-unit-selection.ComputeUnitSelectionService} ComputeUnitSelectionService
+ * @property {module:compute-selection.ComputeSelection} ComputeSelection
+ * @property {module:compute-selection.ComputeSelectionModel} ComputeSelectionModel
  */
 module.exports = {
   GridInfoView : require('./GridInfoView'),
   BlockInfoView : require('./BlockInfoView'),
-  ComputeSelection : require('./ComputeSelection'),
+  
   ComputeUnitSelectionView : require('./ComputeUnitSelectionView'),
   ComputeUnitSelectionService : require('./ComputeUnitSelectionService'),
 
+  ComputeSelection : require('./ComputeSelection'),
   ComputeSelectionModel : require('./ComputeSelectionModel'),
   ComputeSelectionMode : require('./ComputeSelectionMode')
 }

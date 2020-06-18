@@ -1,6 +1,6 @@
 const Service         = require('@renderer/services').Service
 
-const ComputeUnitSelection  = require('@renderer/services/compute-selection').ComputeUnitSelection
+const ComputeSelection  = require('@renderer/services/compute-selection').ComputeSelection
 
 const App     = require('@renderer/app')
 
@@ -9,10 +9,10 @@ const App     = require('@renderer/app')
  * ComputeUnitSelection objects are created and stored internally.
  * At any gived time a single selection can be activated.
  * 
- * @memberof module:compute-unit-selection
+ * @memberof module:compute-selection
  * @extends Service
  */
-class ComputeUnitSelectionService extends Service {
+class ComputeSelectionService extends Service {
   constructor() {
     super('ComputeUnitSelectionService')
     this.selections = []
@@ -34,7 +34,7 @@ class ComputeUnitSelectionService extends Service {
   createNew(grid, block) {
     let model // TODO Create the model
     let view  // TODO Create the view
-    let newSelection = new ComputeUnitSelection(model, view)
+    let newSelection = new ComputeSelection(model, view)
     this.selections.push(newSelection)
     return newSelection
   }
@@ -63,4 +63,4 @@ class ComputeUnitSelectionService extends Service {
 
 }
 
-module.exports = ComputeUnitSelectionService
+module.exports = ComputeSelectionService

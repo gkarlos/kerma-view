@@ -1,6 +1,6 @@
 const Service = require('@renderer/services').Service
-const CudaGrid = require('@renderer/cuda').Grid
-const CudaBlock = require('@renderer/cuda').Block
+const CudaGrid = require('@renderer/models/cuda').Grid
+const CudaBlock = require('@renderer/models/cuda').Block
 const App = require('@renderer/app')
 
 /**

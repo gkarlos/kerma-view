@@ -1,5 +1,5 @@
 /**
- * @memberof module:compute-unit-selection
+ * @memberof module:compute-selection
  */
 class ComputeSelectionMode {
   /* @type {String} */#name

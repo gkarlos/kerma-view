@@ -1,9 +1,9 @@
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeUnitSelection").} ComputeUnitSelection */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").} ComputeUnitSelection */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeUnitSelectionMode */
 
 
 /**
- * @memberof module:compute-unit-selection
+ * @memberof module:compute-selection
  */
 class ComputeUnitSelectionView {
 
