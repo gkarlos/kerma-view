@@ -16,14 +16,19 @@ App.main = function() {
   if ( App.started) return false 
   
   App.started = true
-
-  const NotificationService = require('./services/notification/NotificationService')
-  const ConsoleLogger       = require('./services/log').ConsoleLogger
+  
   const EventEmitter        = require('events')  
   const UI                  = require('./ui')
   const Events              = require('./events')
 
-  
+  const NotificationService          = require('./services/notification').NotificationService
+  const ConsoleLogger                = require('./services/log').ConsoleLogger
+
+  const ComputeUnitSelectionService  = require('./services/compute-selection').ComputeUnitSelectionService
+
+
+  // const CudaLimits  = require('@renderer/cuda').limits.
+
   App.Electron = {
     /** */remote : require('electron').remote,
     /** */app    : require('electron').remote.app
@@ -71,19 +76,25 @@ App.main = function() {
   function initPostUiServices() {
     App.Services.Notification = new NotificationService(App).enable()
     App.Notifier = App.Services.Notification
+
+    App.Services.ComputeUnitSelection = new ComputeUnitSelectionService().enable()
+    App.ComputeUnitSelector = App.Services.ComputeUnitSelection
   }
 
   function start() {
 
   }
 
+  initPreUiServices()
+
+  
   App.on(Events.UI_READY, () => {
     initPostUiServices()  
     start()
   })
 
-  initPreUiServices()
   App.ui.init()
+
   
   return true
 }
