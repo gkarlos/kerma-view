@@ -138,9 +138,7 @@ class CudaDim {
    * @returns {Boolean}
    */
   equals(other) {
-    if ( !other || !(other instanceof CudaDim))
-      return false
-    return this.#x === other.x && this.y === other.y && this.z === other.z
+    return (other instanceof CudaDim) && this.#x === other.x && this.y === other.y && this.z === other.z
   }
 
   /**

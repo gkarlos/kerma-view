@@ -243,9 +243,8 @@ class CudaIndex {
    * @return {Boolean}
    */
   equals(other) {
-    if ( !other || !(other instanceof CudaIndex))
-      return false
-    return this.x == other.x && this.y == other.y
+    return (other instanceof CudaIndex)
+      && this.x == other.x && this.y == other.y
   }
 
   /**

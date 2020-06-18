@@ -39,6 +39,18 @@ class CudaLaunch {
   /** @type {FunctionInfo} */
   get callerSource() { return this.#callerSource }
 
+  /**
+   * Compare with another CudaLaunch for equality
+   * @param {CudaLaunch} other 
+   */
+  equals(other) {
+    return ( other instanceof CudaLaunch)
+      && this.#grid.equals(other.grid)
+      && this.#block.equals(other.block)
+      && this.#source.equals(other.source)
+      && this.#callerSource.equals(other.callerSource)
+  }
+
 }
 
 module.exports = CudaLaunch

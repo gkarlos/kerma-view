@@ -101,9 +101,7 @@ class CudaGrid {
    * @return {Boolean}
    */
   equals(other) {
-    if ( !(other instanceof CudaGrid))
-      return false
-    return this.#dim.equals(other.dim)
+    return (other instanceof CudaGrid) && this.#dim.equals(other.dim)
   }
 }
 

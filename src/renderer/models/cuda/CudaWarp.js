@@ -129,9 +129,8 @@ class CudaWarp {
    * @return {Boolean}
    */
   equals(other) {
-    if ( !(other instanceof CudaWarp))
-      return false
-    return this.getBlock().equals(other.getBlock())
+      return (other instanceof CudaWarp) 
+        && this.getBlock().equals(other.getBlock())
         && this.getIndex() === other.getIndex()
         && this.getNumUsableThreads() === other.getNumUsableThreads()
         && this.getNumUnusableThreads() === other.getNumUnusableThreads()  
