@@ -21,9 +21,14 @@ function isObject(v) {
   return v instanceof Object; 
 }
 
+function isFunction(v) {
+  return !!(v && v.constructor && v.call && v.apply);
+}
+
 module.exports = {
   isNumber,
   isString,
   isArray,
-  isObject
+  isObject,
+  isFunction
 }
