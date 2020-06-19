@@ -50,6 +50,7 @@ class KernelSelectionModel {
         this.#options.splice(i, 1)
         if ( kernel.equals(this.#selection))
           this.clearSelection()
+        break
       }
     return this
   }
@@ -99,11 +100,15 @@ class KernelSelectionModel {
    * @returns {Boolean} `true` if the kernel was found. `false` otherwise
    */
   selectKernelById(id) {
-    for ( const opt of this.#options)
+    for ( const opt of this.#options) {
+      console.log(opt, id, opt.id)
       if ( opt.id === id) {
+        console.log("YESSS")
         this.#selection = opt
         return true
       }
+
+    }
     return false
   }
 
