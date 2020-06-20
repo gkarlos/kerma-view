@@ -3,16 +3,14 @@ const Component      = require('@renderer/ui/component/Component')
 const EditorTabs     = require('@renderer/ui/editor/EditorTabs')
 const CodeNavToolbar = require('@renderer/ui/toolbars/CodeNavToolbar')
 const Events         = require('@renderer/events')
+const App            = require('@renderer/app')
 
 class EditorToolbar extends Component {
-  constructor(id, container, app) {
-    super(`EditorToolbar[${id}]`)
-    this.id = id
-    this.container = container
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
     this.node = null
-    this.tabs = new EditorTabs('editor-tabs', `#${this.id}`, this.app, true)
-    this.codenav = new CodeNavToolbar('codenav-toolbar', `#${this.id}`, this.app, true)
+    this.tabs = new EditorTabs('editor-tabs', `#${this.id}`, App, true)
+    this.codenav = new CodeNavToolbar('codenav-toolbar', `#${this.id}`, App, true)
   }
 
   render() {
@@ -26,7 +24,7 @@ class EditorToolbar extends Component {
       this.codenav.render()
 
       this.rendered = true
-      this.app.emit(Events.UI_COMPONENT_READY, this)
+      App.emit(Events.UI_COMPONENT_READY, this)
     } 
     return this;
   }

@@ -1,23 +1,35 @@
+/** @ignore @typedef {import("@renderer/ui/containers/Container")} Container */
+
 /**
  * Base class for ui components
- * @memberof module:ui/component
+ * @memberof module:component
  */
 class Component {
+  /** @type {String} */
+  #name
+  /** @type {String} */
+  #id
+  /** @type {Boolean} */
+  #rendered
+  /** @type {Component} */
+  #container
+  
   /**
    * @param {String} name A name for this component
+   * @param {String} id
+   * @param {Container} container
    */
-  constructor(name="UnnamedComponent") {
-    /** 
-     * The name of this component 
+  constructor(id, container) {
+
+    /**
      * @type {String}
      */
-    this.name = name;
+    this.#id = id
+
     /**
-     * Whether this component has been rendered at least once 
-     * @type {boolean} 
-     * @default false
+     * @type {Container}
      */
-    this.rendered = false
+    this.#container = container
 
     /** 
      * A DOM node that is the root of this component.  <br/>
@@ -26,8 +38,6 @@ class Component {
      * (e.g [document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)) <br/>
      * So for now users must know what kind of node is used. <br/>
      * This is meant to be changed as we progressively move away from jQuery
-     * 
-     * 
      */
     this.node = null;
   }
@@ -40,8 +50,28 @@ class Component {
    * @abstract
    */
   render() {
-    throw new Error(`render() function for component '${this.name}' not implemented`)
+    throw new Error(`render() function for component '${this.name}' is not implemented`)
   }
+  
+  /**
+   * Check if the component renderer
+   * 
+   * Each components must implement this method
+   * 
+   * Base implementation just throws
+   * 
+   * @abstract
+   * @returns {Boolean}
+   */
+  isRendered() {
+    throw new Error(`isRendererd() function for Component '${this.id}' is not implemented`)
+  }
+
+  /** @type {String} */
+  get id() { return this.#id}
+
+  /** @type {Container} */
+  get container() { return this.#container}
 }
 
 module.exports = Component

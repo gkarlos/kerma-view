@@ -3,17 +3,18 @@
  */
 const Component = require('@renderer/ui/component/Component')
 const Events    = require('@renderer/events')
+const App       = require('@renderer/app')
 
 class ConsoleButton extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
+    // this.id = id
+    // this.app = app
     this.name = `ConsoleButton[${this.id}]`
     this.tooltip = "Open the terminal"
     this.classList = ["btn", "btn-sm", "btn-secondary"]
-    this.container = container
-    this.rendered = false
+    // this.container = container
+    // this.rendered = false
   }
 
   render() {
@@ -32,7 +33,7 @@ class ConsoleButton extends Component {
     
     // ready
     this.rendered = true
-    this.app.emit(Events.UI_COMPONENT_READY, this)
+    App.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
 

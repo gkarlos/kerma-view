@@ -1,12 +1,12 @@
-
-const App = require('@renderer/app')
-
 /**
  * @module init
  * @category ui
  */
 
-/** The UI Object */
+/** 
+ * The UI Object 
+ * @class
+ */
 const ui = {}
 
 ui.ready = false
@@ -148,15 +148,16 @@ function init(app) {
   const EventEmitter   = require('events')
   const ElectronLayout = require('@renderer/ui/layout').ElectronLayout
   const Events         = require('@renderer/events')
+  const App = require('@renderer/app')
 
-  ui.layout     = new ElectronLayout(app)
+  ui.layout     = new ElectronLayout(App)
 
-  registerListeners(app)
+  registerListeners(App)
 
   $(() => {
     ui.onDocumentReadyCallbacks.forEach(callback => callback())
     ui.layout.render()
-    createComponents(app)
+    createComponents(App)
     renderComponents()
   })
 

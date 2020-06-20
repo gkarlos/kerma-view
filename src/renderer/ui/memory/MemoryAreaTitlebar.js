@@ -9,11 +9,9 @@ const Component = require('../component/Component')
  * @memberof module:ui/memory
  */
 class AddRandomMemoryButton extends Component {
-  constructor(id, container, app) {
-    super(`AddRandomMemoryButton[${id}]`)
-    this.id = id;
-    this.container = container;
-    this.app = app;
+  constructor(id, container) {
+    super(id, container)
+    this.name = `AddRandomMemoryButton[${id}]`
   }
 
   render() {
@@ -43,13 +41,10 @@ class AddRandomMemoryButton extends Component {
  * @memberof module:renderer/components/memory
  */
 class MemoryAreaTitleBar extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
-    this.container = container
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
     this.name = `MemoryAreaTitlebar[${this.id}]`
-    this.addButton = new AddRandomMemoryButton("button-add-memory", `#${this.id}`, this.app);
+    this.addButton = new AddRandomMemoryButton("button-add-memory", `#${this.id}`);
   }
 
   render() {

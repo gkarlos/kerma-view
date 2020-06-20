@@ -8,7 +8,7 @@
  *  
  *//*--------------------------------------------------------------*/
 const Component               = require('@renderer/ui/component/Component')
-const Memory                  = require('@renderer/model/memory').Memory
+const Memory                  = require('@renderer/models/memory').Memory
 const MemoryVisualizerToolbar = require('./MemoryVisualizerToolbar')
 const {InternalError}         = require('@common/util/error')
 
@@ -27,17 +27,14 @@ class MemoryVisualizer extends Component {
    * @param {Memory} memory The memory to visualize
    * @param {String} id An id for the DOM element
    * @param {String} container A selector string for the container of this MemoryVisualizer
-   * @param {Object} app A reference to the app
    */
-  constructor(memory, id, container, app) {
+  constructor(memory, id, container) {
     if ( !memory)
       throw new InternalError("MemoryVisualizer.contructor() requried argument memory is missing")
     if ( !memory instanceof Memory)
       throw new InternalError("MemoryVisualizer.constructor() first argument must be an instance of Memory")
-    super(`MemoryVisualizer[${id}]`)
-    this.id_ = id
-    this.container_ = container
-    this.app = app
+    super(id, container)
+    this.name = `MemoryVisualizer[${id}]`
     this.memory_ = memory
     this.reads_ = []
     this.writes_ = []

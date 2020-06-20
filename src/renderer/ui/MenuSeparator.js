@@ -6,11 +6,8 @@
 const Component = require('./component/Component')
 
 class MenuSeparator extends Component {
-  constructor(id, container, app) {
-    super(`MenuSeparator[${id}]`)
-    this.id = id
-    this.container = container
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
   }
 
   render() {

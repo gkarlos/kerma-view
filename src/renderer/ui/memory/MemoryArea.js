@@ -2,21 +2,19 @@ const Component = require('../component/Component')
 const MemoryAreaTitleBar = require('./MemoryAreaTitlebar')
 const MemoryAreaBody = require('./MemoryAreaBody')
 const Events = require('../../events')
+const App = require('@renderer/app')
 
 /**
  * The main container for memory visualizations
- * @memberof module:ui/memory
+ * @memberof module:memory
  */
 class MemoryArea extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
-    this.container = container
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
     this.name = `MemoryArea[${this.id}]`
     this.node = null
-    this.title = new MemoryAreaTitleBar("memory-area-titlebar", `#${this.id}`, this.app)
-    this.body = new MemoryAreaBody("memory-area-body", `#${this.id}`, this.app)
+    this.title = new MemoryAreaTitleBar("memory-area-titlebar", `#${this.id}`)
+    this.body = new MemoryAreaBody("memory-area-body", `#${this.id}`)
   }
 
   render() {
@@ -28,7 +26,7 @@ class MemoryArea extends Component {
     // $("#heatmap-example").css("height", "100%").css("width", "100%")
 
 
-    this.app.emit(Events.UI_COMPONENT_READY, this);
+    App.emit(Events.UI_COMPONENT_READY, this);
     return this;
   }
 

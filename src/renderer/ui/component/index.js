@@ -1,6 +1,6 @@
 /**
  * @file component/component.js 
- * @module ui/component
+ * @module component
  * @category ui
  */
 module.exports = {

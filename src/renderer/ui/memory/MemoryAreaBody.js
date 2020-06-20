@@ -2,7 +2,7 @@
 
 const Component        = require('@renderer/ui/component/Component')
 const MemoryVisualizer = require('./MemoryVisualizer')
-const Memory           = require('@renderer/model/memory').Memory
+const Memory           = require('@renderer/models/memory').Memory
 
 /**
  * The body of the memory are. This is roughly a collection
@@ -13,11 +13,8 @@ const Memory           = require('@renderer/model/memory').Memory
  * @memberof module:ui/memory
  */
 class MemoryAreaBody extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id;
-    this.container = container;
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
     this.name = `MemoryAreaBody[${this.id}]`
     this.visualizers = []
     this.rendered = false;
@@ -59,7 +56,7 @@ class MemoryAreaBody extends Component {
    */
   addMemory(memory,forceRender=true) {
     
-    let viz = new MemoryVisualizer(memory, `mem-viz-${memory.getName()}`, `#${this.id}`, this.app)
+    let viz = new MemoryVisualizer(memory, `mem-viz-${memory.getName()}`, `#${this.id}`)
 
     this.visualizers.push(viz)
 

@@ -5,6 +5,7 @@
 const Component     = require('@renderer/ui/component').Component
 const Events        = require('@renderer/app').Events
 const InternalError = require('@common/util/error')
+const App           = require('@renderer/app')
 
 function searchTabs(tabs, title) {
   for ( let i = 0; i < tabs.length; ++i)
@@ -18,13 +19,10 @@ function searchTabs(tabs, title) {
  */
 class EditorTabs extends Component {
   constructor(id, container, app, subcomponent=false) {
-    super()
-    this.id = id
-    this.container = container
+    super(id, container)
     this.tabs = []
     this.size = 0;
     this.selected = null
-    this.app = app
     this.subcomponent = subcomponent
     this.node = $(`<ul id="${this.id}" role="tablist"> </ul>`).addClass("nav").addClass("nav-tabs").css('width', '100%')
   }
@@ -54,7 +52,7 @@ class EditorTabs extends Component {
     newTab.node.on('click', () => {
       this.select(newTab.title)
       console.log(`[info] User selected editor tab: ${newTab.title}`)
-      this.app.ui.emit(Events.EDITOR_TAB_SELECTED, title)
+      App.ui.emit(Events.EDITOR_TAB_SELECTED, title)
     })
     return this;
   }
@@ -84,7 +82,7 @@ class EditorTabs extends Component {
     this.node.appendTo(this.container)
     this.rendered = true;
     if ( !this.subcomponent)
-      this.app.emit(Events.UI_COMPONENT_READY, this)
+      App.emit(Events.UI_COMPONENT_READY, this)
     return this;
   }
 

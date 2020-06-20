@@ -14,6 +14,11 @@ ui.ready = false
 
 /// Layout
 ui.layout     = null
+
+/// Containers
+ui.containers = {}
+ui.containers.mainSelection = null
+
 ui.components = new Map()
 
 /// Toolbars
@@ -71,13 +76,22 @@ function registerComponent(component) {
 }
 
 /**
+ * Create all the UI containers
+ */
+function createContainers(app) {
+  const MainSelection = require('@renderer/ui/containers/MainSelectionArea')
+  ui.containers.mainSelection = new MainSelection('main-toolbar', ui.layout.body.left.bottom).render()
+}
+
+/**
  * Create all the UI components
  */
 function createComponents(app) {
   const ConsoleButton         = require('@renderer/ui/console/ConsoleButton')
   const RefreshButton         = require('@renderer/ui/RefreshButton')
   /*====================================================================================*/
-  const MainToolbar           = require('@renderer/ui/toolbars/MainToolbar')
+
+
   const InputToolbar          = require('@renderer/ui/toolbars/input/InputToolbar')
   const UtilityToolbar        = require('@renderer/ui/toolbars/util/UtilityToolbar')
   const SessionControlToolbar = require('@renderer/ui/toolbars/SessionControlToolbar')
@@ -90,12 +104,15 @@ function createComponents(app) {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////  
   ///////////////////////////////////////////////////////////////////////////////////////
-  
+  ///////////////////////////////////////////////////////////////////////////////////////
+
   ui.console.button  = registerComponent(new ConsoleButton("console-toggle-button", `#${ui.layout.header.left.id}`, app))
   ui.refresh.button  = registerComponent(new RefreshButton("top-refresh-button", `#${ui.layout.header.left.id}`, app))
   /*====================================================================================*/
-  ui.toolbar.main    = registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))
+  // ui.toolbar.main    = registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))
+
   ui.toolbar.input   = registerComponent(new InputToolbar("file-select-group", `#${ui.layout.header.right.id}`, app))
   ui.toolbar.util    = registerComponent(new UtilityToolbar('utility-toolbar', `#${ui.layout.header.right.id}`, app))
   ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${ui.layout.header.right.id}`, app))
@@ -162,6 +179,7 @@ ui.init = function() {
     ui.perf.render.layout.start = now()
     ui.layout.render()
     ui.perf.render.layout.stop = now()
+    createContainers(app)
     createComponents(app)
     renderComponents()
   })

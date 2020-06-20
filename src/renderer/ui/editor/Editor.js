@@ -8,6 +8,7 @@ const {InternalError} = require('@common/util/error')
 const mock      = require('@mock/cuda-source')
 const Component = require('@renderer/ui/component').Component
 const Events    = require('@renderer/events')
+const App       = require('@renderer/app')
 
 const path = require('path')
 
@@ -18,14 +19,11 @@ const EditorTabs = require('./EditorTabs')
 class Editor extends Component {
 
   /** */
-  constructor( id, container, app) {
-    super()
-    this.id = id
+  constructor( id, container) {
+    super(id, container)
     this.name = `Editor[${this.id}]`
-    this.container = container  
     this.monaco = null
     this.instance = null
-    this.app = app
 
     // this.tabs = new EditorTabs("editor-tabs", this.container, app)
 
@@ -40,13 +38,13 @@ class Editor extends Component {
     });
   }
 
-  get tabs() { return this.app.ui.toolbar.editor.tabs }
+  get tabs() { return App.ui.toolbar.editor.tabs }
 
   selectTab(title) { this.tabs.select(title) }
 
   setValue(s) { 
     this.instance.setValue(s) 
-    this.app.emit(Events.EDITOR_VALUE_CHANGED)
+    App.emit(Events.EDITOR_VALUE_CHANGED)
   }
 
   markLineRead(lineno) {
@@ -95,16 +93,16 @@ class Editor extends Component {
         readOnly: true
       });
 
-      this.app.emit(Events.EDITOR_LOADED, monaco)
+      App.emit(Events.EDITOR_LOADED, monaco)
       this.tabs.select('Cuda')
     });
 
-    let on = (event, cb) => this.app.on(event, cb)
+    let on = (event, cb) => App.on(event, cb)
 
     on(Events.UI_RESIZE, () => this.updateLayout())
     window.onresize = () => this.updateLayout()
 
-    on(Events.EDITOR_LOADED, () => this.app.emit(Events.UI_COMPONENT_READY, this))
+    on(Events.EDITOR_LOADED, () => App.emit(Events.UI_COMPONENT_READY, this))
     this.rendered = true;
     return this;
   }
@@ -113,19 +111,19 @@ class Editor extends Component {
     if ( !this.rendered)
       throw new InternalError('Component must be rendered before calling defaultControls()')
 
-    let on = (event, cb) => this.app.on(event, cb)
+    let on = (event, cb) => App.on(event, cb)
     
     // User selected a file so load it to the editor
     on(Events.INPUT_FILE_SELECTED, path => {
-      this.app.input.path = path
+      App.input.path = path
       fs.readFile(path, 'utf-8', (err, data) => {
         if ( err)
           console.log('[error] failed to load file to the editor')
           
-        this.app.input.content = data
+        App.input.content = data
         this.setValue(data);
         // TODO this delay is not really needed
-        setTimeout(() => this.app.emit(Events.EDITOR_INPUT_LOADED), 500)
+        setTimeout(() => App.emit(Events.EDITOR_INPUT_LOADED), 500)
       })
     })
 

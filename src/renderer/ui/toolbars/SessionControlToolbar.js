@@ -1,14 +1,13 @@
 const Component = require('../component/Component')
 const Events = require('../../events')
+const App = require('@renderer/app')
 
 class SessionRestartButton extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
+  constructor(id, container) {
+    super(id, container)
     this.name = `RestartSessionButton[${this.id}]`
-    this.container = container
-    this.app = app
   }
+
   render() {
     if ( this.rendered )
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
@@ -27,13 +26,10 @@ class SessionRestartButton extends Component {
 }
 
 class SessionControlToolbar extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
+  constructor(id, container) {
+    super(id, container)
     this.name = `SessionControlToolbar[${this.id}]`
-    this.container = container
-    this.app = app
-    this.sessionRestartButton = new SessionRestartButton("top-restart-session-button", `#${this.id}`, this.app)
+    this.sessionRestartButton = new SessionRestartButton("top-restart-session-button", `#${this.id}`, App)
   }
   
 
@@ -49,7 +45,7 @@ class SessionControlToolbar extends Component {
     // TODO add more button
     
     this.rendered = true
-    this.app.emit(Events.UI_COMPONENT_READY, this)
+    App.emit(Events.UI_COMPONENT_READY, this)
     return this
   }
 

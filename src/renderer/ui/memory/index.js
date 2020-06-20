@@ -5,7 +5,7 @@
  *------------------------------------------------------------------/
  * 
  * @file renderer/ui/memory/index.js
- * @module ui/memory
+ * @module memory
  * @category ui
  * @author gkarlos 
  * @description 

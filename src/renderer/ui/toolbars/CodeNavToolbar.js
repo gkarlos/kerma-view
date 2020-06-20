@@ -1,12 +1,10 @@
 const Component = require('../component/Component')
 const Events = require('../../events')
+const App = require('@renderer/app')
 
 class CodeNavToolbar extends Component {
   constructor(id, container, app, subcomponent=false) {
-    super()
-    this.id = id,
-    this.container = container,
-    this.app = app
+    super(id, container)
     this.name = `CodeNavToolbar[${this.id}]`
     this.rendered = false
     this.subcomponent = subcomponent
@@ -58,7 +56,7 @@ class CodeNavToolbar extends Component {
     this.rendered = true
 
     if ( !this.subcomponent)
-      this.app.emit(Events.UI_COMPONENT_READY, this)
+      App.emit(Events.UI_COMPONENT_READY, this)
   }
 
   useDefaultControls() {

@@ -3,16 +3,14 @@
  */
 const Component = require('./component/Component')
 const Events = require('../events')
+const App = require('@renderer/app')
 
 /**
  * @category ui
  */
 class RefreshButton extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
-    this.app = app
-    this.container = container
+  constructor(id, container) {
+    super(id, container)
     /** */
     this.classList = ["btn", "btn-sm", "btn-secondary"]
     /** */
@@ -58,13 +56,13 @@ class RefreshButton extends Component {
     this.node.tooltip()
     this.node.appendTo(this.container)
 
-    this.app.emit(Events.UI_COMPONENT_READY, this)
+    App.emit(Events.UI_COMPONENT_READY, this)
     this.rendered = true
     return this
   }
 
   useDefaultControls() {
-    this.node.on('click', () => this.app.reload())
+    this.node.on('click', () => App.reload())
   }
 }
 

@@ -4,18 +4,15 @@ const NotificationsButton = require('./NotificationButton')
 const InfoButton     = require('./InfoButton')
 const Events         = require('@renderer/events')
 const MenuSeparator  = require('@renderer/ui/MenuSeparator')
+const App            = require('@renderer/app')
 
 class UtilityToolbar extends Component {
-  constructor(id, container, app) {
-    super(`UtilityToolbar[${id}]`)
-
-    this.id = id
-    this.container = container
-    this.app = app
-    this.notificationButton = new NotificationsButton('notifications-button', `#${this.id}`, this.app)
-    this.separator = new MenuSeparator('utility-bar-separator', `#${this.id}`, this.app)
-    this.settingsButton = new SettingsButton('settings-button', `#${this.id}`, this.app)
-    this.infoButton = new InfoButton('info-button', `#${this.id}`, this.app)
+  constructor(id, container) {
+    super(id,container)
+    this.notificationButton = new NotificationsButton('notifications-button', `#${this.id}`, App)
+    this.separator = new MenuSeparator('utility-bar-separator', `#${this.id}`, App)
+    this.settingsButton = new SettingsButton('settings-button', `#${this.id}`, App)
+    this.infoButton = new InfoButton('info-button', `#${this.id}`, App)
   }
 
   render() {
@@ -30,7 +27,7 @@ class UtilityToolbar extends Component {
     this.settingsButton.render()
     this.infoButton.render()
     this.rendered = true;
-    this.app.emit(Events.UI_COMPONENT_READY, this)
+    App.emit(Events.UI_COMPONENT_READY, this)
     return this;
   }
 

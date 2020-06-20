@@ -5,11 +5,8 @@ const path = require('path')
 const {InternalError} = require('@common/util/error')
 
 class InfoButton extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
-    this.container = container
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
     this.node = null
     this.name = `InfoButton[${this.id}]`
     this.rendered = false

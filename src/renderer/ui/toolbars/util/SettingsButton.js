@@ -1,11 +1,8 @@
 const Component = require('@renderer/ui/component/Component')
 
 class SettingsButton extends Component {
-  constructor(id, container, app) {
-    super(`SettingsButton[${id}]`)
-    this.container = container
-    this.app = app
-    this.id = id
+  constructor(id, container) {
+    super(id, container)
     this.tooltip = "Settings"
   }
 

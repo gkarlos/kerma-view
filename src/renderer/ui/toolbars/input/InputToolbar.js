@@ -5,12 +5,12 @@ const Component = require('@renderer/ui/component/Component')
 const Events    = require('@renderer/events')
 const {dialog}  = require('electron').remote
 const {InternalError} = require('@common/util/error')
+const App = require('@renderer/app')
 
 class InputModeSelectionItem extends Component {
-  constructor(container, app) {
-    super(`InputTypeSelectionItem.@${container}`)
-    this.container = container
-    this.app = app
+  constructor(id, container) { 
+    super(id, container)
+    this.containerSelector = `#${this.container.id}`
     this.shortValue = null
     this.value = null
     this.enabled = true
@@ -47,13 +47,13 @@ class InputModeSelectionItem extends Component {
   render() {
     this.node = $(`<li class="dropdown-item input-type-option" href="#"></li>`)
       .text(this.value)
-      .appendTo(this.container)
+      .appendTo(this.container.node)
     this.__style()
       // .on('mouseover', () => this.node.css("background-color", "#138496"))
       // .on('mouseoute')
     this.enabled && this.enable()
     this.node.on('click', () => {
-      this.app.emit(Events.INPUT_TYPE_SELECTED, this)
+      App.emit(Events.INPUT_TYPE_SELECTED, this)
     })
 
     this.rendered = true;
@@ -66,11 +66,8 @@ class InputModeSelectionItem extends Component {
 }
 
 class InputModeSelection extends Component {
-  constructor(id, container, app) {
-    super()
-    this.id = id
-    this.container = container
-    this.app = app
+  constructor(id, container) {
+    super(id,container)
     this.options = []
     this.node = {
       button : null,
@@ -90,7 +87,7 @@ class InputModeSelection extends Component {
   }
 
   addOption(value, shortValue=null) {
-    let opt = new InputModeSelectionItem(this.node.dropdown, this.app).setValue(value, shortValue);
+    let opt = new InputModeSelectionItem(this.node.dropdown, App).setValue(value, shortValue);
     this.options.push(opt)
     if ( this.rendered) {
       opt.render()
@@ -112,7 +109,7 @@ class InputModeSelection extends Component {
     if ( !found)
       throw new InternalError(`Could not find option ${value}`)
 
-    this.app.emit(Events.INPUT_TYPE_SELECTED, this.selected)
+    App.emit(Events.INPUT_TYPE_SELECTED, this.selected)
   }
 
   enable() {
@@ -130,7 +127,7 @@ class InputModeSelection extends Component {
   render() {
     this.node.button = $(`
       <button id="${this.id} type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      </button>`).appendTo(this.container)
+      </button>`).appendTo(this.container.node)
 
     this.node.dropdown = $(`
       <ul class="dropdown-menu" id="type-selection-dropdown">
@@ -146,7 +143,7 @@ class InputModeSelection extends Component {
 
   useDefaultControls() {
     this.options.forEach( opt => opt.useDefaultControls())
-    this.app.on(Events.INPUT_TYPE_SELECTED, (opt) => {
+    App.on(Events.INPUT_TYPE_SELECTED, (opt) => {
       this.node.button.html(`<span>${opt.shortValue} </span>`)
     })
   }
@@ -155,12 +152,9 @@ class InputModeSelection extends Component {
 /**
  */
 class InputToolbar extends Component {
-  constructor( id, container, app) {
-    super()
-    this.id = id;
-    this.container = container;
+  constructor( id, container) {
+    super(id, container)
     this.prompt = "Select a *.cu file..."
-    this.app = app
     this.node = null;  
     this.enabled = true
     this.name = `InputFileDialog[${id}]`
@@ -259,7 +253,7 @@ class InputToolbar extends Component {
         <button class="btn btn-secondary" type="button" id="${this.browseButtonId}">Browse&hellip;</button>
       </div>`).appendTo(this.node)
 
-    this.mode = new InputModeSelection('input-mode', '#input-browse-mode-prepend', this.app).render()
+    this.mode = new InputModeSelection('input-mode', '#input-browse-mode-prepend', App).render()
 
     this.input  = $(`
       <input type="text" class="form-control" id="${this.browseInputId}" placeholder="${this.prompt}" aria-label="" aria-describedby="">
@@ -297,11 +291,11 @@ class InputToolbar extends Component {
 
     this.__renderParts()
 
-    let ui = this.app.ui
+    let ui = App.ui
 
     // open file dialog when clicking "browse"
     this.browseButton.addEventListener('click', e => {
-      // this.app.ui.ready && 
+      // App.ui.ready && 
       dialog
         .showOpenDialog({ 
           properties: ['openFile']
@@ -318,12 +312,12 @@ class InputToolbar extends Component {
       this.disableBrowseButton()
       this.disableBrowseInput()
       this.okButtonLoadingStart()
-      this.app.emit(Events.INPUT_FILE_SELECTED, this.selectedFile)
+      App.emit(Events.INPUT_FILE_SELECTED, this.selectedFile)
     })
 
-    this.app.on(Events.EDITOR_LOADED, () => this.enable())
+    App.on(Events.EDITOR_LOADED, () => this.enable())
 
-    this.app.on(Events.EDITOR_INPUT_LOADED, () => {
+    App.on(Events.EDITOR_INPUT_LOADED, () => {
       this.okButtonLoadingStop()
       this.disableOkButton()
       this.mode.disable()
@@ -335,7 +329,7 @@ class InputToolbar extends Component {
     this.disable()
 
     // ready
-    this.app.emit(Events.UI_COMPONENT_READY, this)
+    App.emit(Events.UI_COMPONENT_READY, this)
     return this;
   }
 

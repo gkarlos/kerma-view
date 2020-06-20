@@ -5,11 +5,8 @@ class NotificationButton extends Component {
   static enabledTooltip = "Disable notifications"
   static disabledTooltip = "Enable notifications"
 
-  constructor(id, container, app) {
-    super(`NotificationButton[${id}]`)
-    this.id = id
-    this.container = container
-    this.app = app
+  constructor(id, container) {
+    super(id, container)
     this.node = null;
     this.enabled = true;
     this.tooltip = NotificationButton.enabledTooltip
