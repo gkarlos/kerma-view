@@ -1,7 +1,5 @@
 'use-strict';
 
-require('lobibox/js/lobibox')
-
 const NotificationView          = require('@renderer/services/notification/NotificationView')
 
 /** @ignore @typedef {import("./ProgressNotificationModel").} ProgressNotificationModel */
