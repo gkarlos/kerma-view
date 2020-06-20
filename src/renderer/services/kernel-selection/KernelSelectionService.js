@@ -24,25 +24,29 @@ class KernelSelectionService extends Service {
     return selection
   }
 
-  createNewMock() {
+  /**
+   * 
+   * @param {KernelSelection} selection 
+   */
+  createNewMock(selection=null) {
     const CudaKernel = require('@renderer/models/cuda/CudaKernel')
     const FunctionInfo = require('@renderer/models/source/FunctionInfo')
     const Mock = require('@mock/cuda-source')
 
-    let selection = this.createNew()
-    for ( let i = 0; i < Mock.kernels.length; ++i) {
-      console.log(Mock.kernels[i].source)
-      selection.addKernel(new CudaKernel(i, new FunctionInfo({
-        filename : Mock.kernels[i].source.filename,
-        name : Mock.kernels[i].source.name,
-        arguments : Mock.kernels[i].source.signature,
-        range : SourceRange.fromArray(Mock.kernels[i].source.range),
-        isKernel : true
-      })))
-    }
+    let kernels = []
 
-    // selection.addKernel(new CudaKernel(2, new FunctionInfo({name: "kernelC", arguments: "()"})))
-    return selection
+    Mock.kernels.forEach( (kernel, i) => {
+      let fi = new FunctionInfo({
+        filename : kernel.source.filename,
+        name : kernel.source.name,
+        arguments : kernel.source.signature,
+        range : SourceRange.fromArray(kernel.source.range),
+        isKernel : true
+      })
+      kernels.push( new CudaKernel(i, fi))
+    })
+
+    return selection? selection.addKernels(kernels) : this.createNew(kernels)
   }
 
   activate(kernelSelection) {

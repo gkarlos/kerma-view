@@ -29,7 +29,6 @@ const Component = require('@renderer/ui/component/Component')
 class KernelSelectionView extends Component {
   /** @type {KernelSelectionModel} */
   #model
-  #container
   #viewimpl
   /** @type {Boolean} */
   #enabled
@@ -46,7 +45,7 @@ class KernelSelectionView extends Component {
    * @param {KernelSelectionModel} model 
    */
   constructor(model) {
-    super('kernel-selector', App.ui.containers.mainSelection)
+    super('kernel-selector', App.ui.containers.mainSelection.firstRow)
     this.#model = model
     this.#enabled = false
     this.#rendered = false

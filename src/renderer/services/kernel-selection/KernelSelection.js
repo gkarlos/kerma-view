@@ -15,10 +15,15 @@ class KernelSelection {
   /** @type {KernelSelectionView} */
   #view
   
-  constructor() {
+  /**
+   * 
+   * @param {Array.<CudaKernel>} [kernels] An array of CudaKernel objects to be used as options
+   */
+  constructor(kernels=[]) {
     this.#model = new KernelSelectionModel()
     this.#view = new KernelSelectionView(this.#model).render()
     this.#view.onSelect(kernel => this.#model.selectKernel(kernel))
+    kernels.forEach(kernel => this.addKernel(kernel))
   }
 
   /**
@@ -39,9 +44,18 @@ class KernelSelection {
   addKernel(kernel) {
     this.#model.addKernel(kernel)
     this.#view.addKernel(kernel)
-    console.log("Added kernel", kernel.toString())
     if ( !this.#view.isEnabled())
       this.#view.enable()
+    return this
+  }
+
+  /**
+   * Add multiple kernel options
+   * @param {Array.<CudaKernel>} kernels An array of CudaKernel objects
+   * @returns {KernelSelectionModel} this
+   */
+  addKernels(kernels=[]) {
+    kernels.forEach(kernel => this.addKernel(kernel))
     return this
   }
 
@@ -98,6 +112,7 @@ class KernelSelection {
    */
   onSelect(callback) {
     this.#view.onSelect(callback)
+    return this;
   }
 
   /**
@@ -105,6 +120,7 @@ class KernelSelection {
    */
   onEnable(callback) {
     this.#view.onEnable(callback)
+    return this
   }
 
   /**
@@ -112,6 +128,7 @@ class KernelSelection {
    */
   onDisable(callback) {
     this.#view.onDisable(callback)
+    return this
   }
 }
 
