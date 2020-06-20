@@ -20,10 +20,25 @@ class SourceRange {
    * @param {Number} opts.toColumn 
    */
   constructor(opts={}) {
+    console.log(opts)
     this.#fromLine   = opts.fromLine || 0
     this.#fromColumn = opts.fromColumn || 0
     this.#toLine = opts.toLine || Infinity
     this.#toColumn = opts.toColumn || Infinity
+  }
+
+  /**
+   * Create a Source Range from an array. The array must have the form
+   * [fromLine, fromColumn, toLine, toColumn]
+   * @param {Number[]} arr 
+   */
+  static fromArray(arr) {
+    return new SourceRange({
+      fromLine : arr[0] || 0,
+      fromColumn : arr[1] || 0,
+      toLine : arr[2].toLine || Infinity,
+      toColumn : arr[2].toColumn || Infinity
+    })
   }
 
   /** @type {SourceLoc} */

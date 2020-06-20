@@ -49,6 +49,14 @@ class CudaKernel {
         return true
       })(this)
   }
+
+  /**
+   * String representation of this kernel
+   * @returns {String}
+   */
+  toString() {
+    return `kernel(id: ${this.#id}, name: ${this.#source.name}, ${this.launches.length} launches)`
+  }
   
 }
 
