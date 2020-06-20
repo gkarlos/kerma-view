@@ -1,86 +1,126 @@
-/** @module ui */
- 
-const App = require('@renderer/app')
 
-/**
- * @module init
- * @category ui
- */
+class Ui {
+  static onReadyCallbacks = []
+  static onDocumentReadyCallbacks = []
+  static ready = false
 
-/** The UI Object */
-const ui = {}
+  static layout = null
+  
+  static containers = {
+    mainSelection : null  
+  }
 
-ui.ready = false
+  static components = new Map()
+  
+  static toolbar = {
+    main : null,
+    input : null,
+    code : null,
+    session : null,
+    util : null
+  }
 
-/// Layout
-ui.layout     = null
+  static console = {}
 
-/// Containers
-ui.containers = {}
-ui.containers.mainSelection = null
+  static refresh = {}
 
-ui.components = new Map()
+  static editor = {}
 
-/// Toolbars
-ui.toolbar = {}
-ui.toolbar.main    = null
-ui.toolbar.input   = null
-ui.toolbar.code    = null
-ui.toolbar.session = null
-ui.toolbar.util    = null
+  static memory = {}
 
-/// Console
-ui.console = {}
+  static window = window
 
-/// Refresh
-ui.refresh = {}
+  static perf = {
+    render : {}
+  }
 
-/// Editor
-ui.editor = null
+  static onReady(callback) { 
+    if ( typeof callback === 'function') 
+      Ui.onReadyCallbacks.push(callback) 
+  }
 
-/// Memory area
-ui.memory = null
+  static onDocumentReady(callback) { 
+    if (typeof callback === 'function') 
+      Ui.onDocumentReadyCallbacks.push(callback)
+  }
 
-/// Selectors
-ui.selector = {}
-ui.selector.kernel = null
-ui.selector.launch = null
+  static init() {
+    if ( Ui.ready) return Ui;
+  
+    Ui.perf.render.components.start = new Date().getTime()
+    
+    const Popper         = require('popper.js')
+    const Bootstrap      = require('bootstrap')
+    const EventEmitter   = require('events')
+    const ElectronLayout = require('@renderer/ui/layout').ElectronLayout
+    const Events         = require('@renderer/events')
+    const App            = require('@renderer/app')
 
-/// Window
-ui.window  = window
-
-/// Perf
-ui.perf     = {}
-ui.perf.render = {
-  components : {
-    start: null, stop: null,
-    get totalTime() { return ui.perf.render.components.stop - ui.perf.render.components.start}
-  },
-  layout : {
-    start: null, stop: null,
-    get totalTime() { return ui.perf.render.layout.stop - ui.perf.render.layout.start}
+    console.log(App)
+    
+    Ui.layout     = new ElectronLayout(App)
+  
+    App.on(Events.UI_COMPONENT_READY, (component,ms=0) => {
+      if ( !Ui.components.has(component))
+        throw new InternalError(`Unregistered component '${component.name}' is ready`)
+      
+      Ui.components.get(component).ready = true
+      
+      if ( uiComponentsReady()) {
+        useDefaultControls()
+        Ui.perf.render.components.stop = now()
+        Ui.ready = true
+        App.Logger.info(`ui ready after ${Ui.perf.render.components.totalTime + Ui.perf.render.layout.totalTime}ms`,
+                        `[layout:${Ui.perf.render.layout.totalTime}, components:${Ui.perf.render.components.totalTime}]`)
+        Ui.onReadyCallbacks.forEach(callback => callback())
+        App.emit(Events.UI_READY)
+      }
+    })
+  
+    $(() => {
+      Ui.onDocumentReadyCallbacks.forEach(callback => callback())
+      Ui.perf.render.layout.start = now()
+      Ui.layout.render()
+      Ui.perf.render.layout.stop = now()
+      createContainers()
+      createComponents()
+      renderComponents()
+    })
   }
 }
 
-/// Callbacks
-ui.onReadyCallbacks = []
-ui.onReady = (callback) => { if ( typeof callback === 'function') ui.onReadyCallbacks.push(callback) }
 
-ui.onDocumentReadyCallbacks = []
-ui.onDocumentReady = (callback) => { if (typeof callback === 'function') ui.onDocumentReadyCallbacks.push(callback); }
+// const ui = new Ui()
+
+Ui.perf.render.components = {
+  start: 0, stop: 0,
+  get totalTime() { return Ui.perf.render.components.stop - Ui.perf.render.components.start}
+}
+
+Ui.perf.render.layout = {
+  start: 0, stop: 0,
+  get totalTime() { return Ui.perf.render.layout.stop - Ui.perf.render.layout.start}
+}
+
+
+/// Selectors
+Ui.selector = {}
+Ui.selector.kernel = null
+Ui.selector.launch = null
+
 
 /** Register a component to the UI */
 function registerComponent(component) {
-  ui.components.set(component, {ready: false})
+  Ui.components.set(component, {ready: false})
   return component
 }
 
 /**
  * Create all the UI containers
  */
-function createContainers(app) {
+function createContainers() {
   const MainSelection = require('@renderer/ui/containers/MainSelectionArea')
-  ui.containers.mainSelection = new MainSelection('main-toolbar', ui.layout.body.left.bottom).render()
+  Ui.containers.mainSelection = new MainSelection('main-toolbar', Ui.layout.body.left.bottom).render()
 }
 
 /**
@@ -108,32 +148,32 @@ function createComponents(app) {
   ///////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////
 
-  ui.console.button  = registerComponent(new ConsoleButton("console-toggle-button", `#${ui.layout.header.left.id}`, app))
-  ui.refresh.button  = registerComponent(new RefreshButton("top-refresh-button", `#${ui.layout.header.left.id}`, app))
+  Ui.console.button  = registerComponent(new ConsoleButton("console-toggle-button", `#${Ui.layout.header.left.id}`, app))
+  Ui.refresh.button  = registerComponent(new RefreshButton("top-refresh-button", `#${Ui.layout.header.left.id}`, app))
   /*====================================================================================*/
   // ui.toolbar.main    = registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))
 
-  ui.toolbar.input   = registerComponent(new InputToolbar("file-select-group", `#${ui.layout.header.right.id}`, app))
-  ui.toolbar.util    = registerComponent(new UtilityToolbar('utility-toolbar', `#${ui.layout.header.right.id}`, app))
-  ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${ui.layout.header.right.id}`, app))
+  Ui.toolbar.input   = registerComponent(new InputToolbar("file-select-group", `#${Ui.layout.header.right.id}`, app))
+  Ui.toolbar.util    = registerComponent(new UtilityToolbar('utility-toolbar', `#${Ui.layout.header.right.id}`, app))
+  Ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${Ui.layout.header.right.id}`, app))
   /*====================================================================================*/
-  ui.toolbar.editor  = registerComponent(new EditorToolbar('editor-toolbar', `#${ui.layout.body.left.top.id}`, app))
-  ui.toolbar.codenav = ui.toolbar.editor.codenav
-  ui.editor          = registerComponent(new Editor('editor', `#${ui.layout.body.left.top.id}`, app))
+  Ui.toolbar.editor  = registerComponent(new EditorToolbar('editor-toolbar', `#${Ui.layout.body.left.top.id}`, app))
+  Ui.toolbar.codenav = Ui.toolbar.editor.codenav
+  Ui.editor          = registerComponent(new Editor('editor', `#${Ui.layout.body.left.top.id}`, app))
   /*====================================================================================*/
-  ui.memory          = registerComponent(new MemoryArea("memory-area", "#right", app))
+  Ui.memory          = registerComponent(new MemoryArea("memory-area", "#right", app))
 }
 
 function renderComponents() {
-  Array.from(ui.components.keys()).forEach(component => component.render())
+  Array.from(Ui.components.keys()).forEach(component => component.render())
 }
 
 function useDefaultControls() {
-  Array.from(ui.components.keys()).forEach(component => component.useDefaultControls())
+  Array.from(Ui.components.keys()).forEach(component => component.useDefaultControls())
 }
 
 function uiComponentsReady() {
-  return [...ui.components.values()].reduce((accu, component) => accu & component.ready, true)
+  return [...Ui.components.values()].reduce((accu, component) => accu & component.ready, true)
 }
 
 function now() {
@@ -143,55 +183,10 @@ function now() {
 /**
  * Entry point for UI initialization
  */
-ui.init = function() {
-  if ( ui.ready) return ui;
 
-  ui.perf.render.components.start = new Date().getTime()
-  
-  const Popper         = require('popper.js')
-  const Bootstrap      = require('bootstrap')
-  const EventEmitter   = require('events')
-  const ElectronLayout = require('@renderer/ui/layout').ElectronLayout
-  const Events         = require('@renderer/events')
-  const app            = require('@renderer/app')
 
-  ui.layout     = new ElectronLayout(app)
-
-  App.on(Events.UI_COMPONENT_READY, (component,ms=0) => {
-    if ( !ui.components.has(component))
-      throw new InternalError(`Unregistered component '${component.name}' is ready`)
-    
-    ui.components.get(component).ready = true
-    
-    if ( uiComponentsReady()) {
-      useDefaultControls()
-      ui.perf.render.components.stop = now()
-      ui.ready = true
-      App.Logger.info(`ui ready after ${ui.perf.render.components.totalTime + ui.perf.render.layout.totalTime}ms`,
-                      `[layout:${ui.perf.render.layout.totalTime}, components:${ui.perf.render.components.totalTime}]`)
-      ui.onReadyCallbacks.forEach(callback => callback())
-      App.emit(Events.UI_READY)
-    }
-  })
-
-  $(() => {
-    ui.onDocumentReadyCallbacks.forEach(callback => callback())
-    ui.perf.render.layout.start = now()
-    ui.layout.render()
-    ui.perf.render.layout.stop = now()
-    createContainers(app)
-    createComponents(app)
-    renderComponents()
-  })
-}
-
-module.exports = {
-  console : require('./console'),
-  editor : require('./editor'),
-  layout : require('./layout'),
-  memory : require('./memory'),
-  toolbars : require('./toolbars'),
-  component : require('./component/Component'),
-  /** The ui init module */
-  instance : ui
-}
+module.exports = Ui
+// {
+//   Ui : Ui,
+//   init : Ui.init()
+// }

@@ -8,6 +8,5 @@
 'use-strict'
 require('v8-compile-cache')
 require('module-alias/register')
-
 const App = require('@renderer/app')
 App.main()
