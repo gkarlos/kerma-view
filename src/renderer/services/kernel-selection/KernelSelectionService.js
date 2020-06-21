@@ -62,14 +62,7 @@ class KernelSelectionService extends Service {
       kernels.push( new CudaKernel(i, fi))
     })
 
-    if ( selection ) {
-      selection.addKernels(kernels)
-      return selection
-    } else {
-      let selection = this.createNew()
-      selection.addKernels(kernels)
-      return selection
-    }
+    return selection? selection.addKernels(kernels) : this.createNew().addKernels(kernels)
   }
 
   /**
@@ -94,15 +87,7 @@ class KernelSelectionService extends Service {
       kernels.push( new CudaKernel(i, fi))
     })
 
-    if ( selection ) {
-      selection.addKernels(kernels)
-      return selection
-    } else {
-      let selection = this.createNew()
-      console.log(selection.isEnabled())
-      selection.addKernels(kernels)
-      return selection
-    }
+    return selection? selection.addKernels(kernels) : this.createNew().addKernels(kernels)
   }
 
   /**
