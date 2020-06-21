@@ -1,18 +1,8 @@
-/**-renderer/components/selectors/KernelSelector.js-----------------/
-*
-* Part of the kerma project
-* 
-*-------------------------------------------------------------------/
-* 
-* @file renderer/components/selectors/KernelSelector.js
-* @author gkarlos 
-*  
-*------------------------------------------------------------------*/
 'use-strict'
 
-const Events = require('@renderer/events')
 const Selectize = require('selectize')
 const App = require('@renderer/app')
+const Events = App.Events
 const { isFunction } = require('@common/util/traits')
 
 const Component = require('@renderer/ui/component/Component')
@@ -29,7 +19,6 @@ const Component = require('@renderer/ui/component/Component')
 class KernelSelectionView extends Component {
   /** @type {KernelSelectionModel} */
   #model
-  #viewimpl
   /** @type {Boolean} */
   #enabled
   /** @type {Boolean} */
@@ -40,6 +29,9 @@ class KernelSelectionView extends Component {
   #onEnabledCallbacks
   /** @type {Array.<KernelSelectionOnDisabledCallback>} */
   #onDisabledCallbacks
+  /** @type {JQuery} */
+  #node
+  #viewimpl
 
   /**
    * @param {KernelSelectionModel} model 
@@ -49,7 +41,7 @@ class KernelSelectionView extends Component {
     this.#model = model
     this.#enabled = false
     this.#rendered = false
-    this.node = $(`
+    this.#node = $(`
       <div class="editor-toolbar-group d-flex" id="kernel-selection-group">
         <div class="input-group-prepend pre" id="kernel-list-dropdown-pre">
           <div class="input-group-text" id="kernel-list-dropdown-pre-text">Kernel</div>
@@ -69,7 +61,7 @@ class KernelSelectionView extends Component {
    */
   render() {
     if ( !this.isRendered()) {
-      this.node.appendTo(this.container.node)
+      this.#node.appendTo(this.container.node)
 
       this.#viewimpl = $(`#${this.id}`).selectize({
         valueField: 'id',
@@ -81,10 +73,12 @@ class KernelSelectionView extends Component {
         }
       })[0].selectize
 
-      if ( !this.#viewimpl) throw new InternalError(`Failed to create KernelSelector '${this.id}'`)
+      if ( !this.#viewimpl) throw new InternalError(`Failed to create KernelSelectionView`)
 
-      if ( this.#model.numOptions === 0)
-        this.disable()
+      // if ( this.#model.numOptions === 0)
+      //   this.disable()
+
+      this.#model.options.forEach(kernel => this.#viewimpl.addOption(kernel))
 
       /**
        * We need this indirection because the selectize callback accepts a String argument but
@@ -94,13 +88,31 @@ class KernelSelectionView extends Component {
         if ( id.length > 0)
           this.#onSelectCallbacks.forEach( callback => callback(this.#model.findKernelWithId(parseInt(id))) )
       })
+
+      this.#rendered = true
     }
-
     
-    if ( !this.#enabled) this.#viewimpl.disable()
-
-    this.#rendered = true
+    if ( !this.isEnabled()) 
+      this.#viewimpl.disable()
     
+    return this
+  }
+
+  /**
+   * Dispose the view and optionally remove it from the DOM
+   * @param {Boolean} [remove] Remove the view from the DOM
+   * @return {KernelSelectionView} this 
+   */
+  dispose(remove=false) {
+    if ( remove ) {
+      this.#viewimpl && this.#viewimpl.destroy()
+      this.#node && this.#node.remove()
+    } else {
+      this.#viewimpl && this.#viewimpl.clearOptions()
+      this.#viewimpl && this.#viewimpl.clear()
+      this.disable()
+    }
+    this.#rendered = false
     return this
   }
 
@@ -138,7 +150,8 @@ class KernelSelectionView extends Component {
    * @param {CudaKernel} kernel 
    */
   addKernel(kernel) {
-    this.#viewimpl.addOption(kernel)
+    if ( this.isRendered())
+      this.#viewimpl.addOption(kernel)
   }
 
   /**
@@ -169,23 +182,6 @@ class KernelSelectionView extends Component {
    */
   clearSelection() {
     this.#viewimpl.clear(true)
-  }
-
-  useDefaultControls() {
-    let mock = require('../../../mock/cuda-source')
-
-    this.disable()
-
-      //highlight the kernels in the editor
-    this.selectize.on('change', id => {
-      App.ui.editor.instance.revealLinesInCenter( mock.kernels[id].source.range[0], mock.kernels[id].source.range[2])
-      this.app.emit(Events.INPUT_KERNEL_SELECTED, id)
-    })
-      
-    App.on(Events.EDITOR_INPUT_LOADED, () => {
-      this.enable()
-      mock.kernels.forEach(kernel => this.addOption(kernel)) 
-    })
   }
 
   /** 

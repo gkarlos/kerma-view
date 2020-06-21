@@ -4,25 +4,41 @@ const KernelSelectionView  = require('@renderer/services/kernel-selection/Kernel
 const SourceRange          = require('@renderer/models/source').SourceRange
 const Service              = require('@renderer/services/Service')
 
-
 /**
  * @memberof module:kernel-selection
  */
 class KernelSelectionService extends Service {
 
-  /** @type {Array.<KernelSelection>} */
+  /** @type {KernelSelection[]} */
   #selections
+  /** @type {KernelSelection} */
+  #current
 
   constructor() {
     super("KernelSelectionService")
     this.#selections = []
+    this.#current = null
   }
 
-  createNew() {
+  /**
+   * Create a new KernelSelection and optionally make it the current one
+   * @param {Boolean} [makeCurrent] Make the selection the current displayed selection
+   * @returns {KernelSelection}
+   */
+  createNew(makeCurrent=false) {
     const selection = new KernelSelection()
     this.#selections.push(selection)
+    if ( makeCurrent) {
+      this.activate(selection)
+    }
     return selection
   }
+
+  /**
+   * Retrieve the currently displaying selection
+   * @returns {KernelSelection}
+   */
+  getCurrent() { return this.#current }
 
   /**
    * 
@@ -46,23 +62,96 @@ class KernelSelectionService extends Service {
       kernels.push( new CudaKernel(i, fi))
     })
 
-    return selection? selection.addKernels(kernels) : this.createNew(kernels)
+    if ( selection ) {
+      selection.addKernels(kernels)
+      return selection
+    } else {
+      let selection = this.createNew()
+      selection.addKernels(kernels)
+      return selection
+    }
   }
 
+  /**
+   * 
+   * @param {KernelSelection} selection 
+   */
+  createNewMock2(selection=null) {
+    const CudaKernel = require('@renderer/models/cuda/CudaKernel')
+    const FunctionInfo = require('@renderer/models/source/FunctionInfo')
+    const Mock = require('@mock/cuda-source')
+
+    let kernels = []
+
+    Mock.kernels.forEach( (kernel, i) => {
+      let fi = new FunctionInfo({
+        filename : kernel.source.filename,
+        name : kernel.source.name + "SECOND",
+        arguments : kernel.source.signature,
+        range : SourceRange.fromArray(kernel.source.range),
+        isKernel : true
+      })
+      kernels.push( new CudaKernel(i, fi))
+    })
+
+    if ( selection ) {
+      selection.addKernels(kernels)
+      return selection
+    } else {
+      let selection = this.createNew()
+      console.log(selection.isEnabled())
+      selection.addKernels(kernels)
+      return selection
+    }
+  }
+
+  /**
+   * 
+   * @param {KernelSelection} kernelSelection 
+   */
   activate(kernelSelection) {
-
+    if ( kernelSelection && this.#current !== kernelSelection) {
+      if ( !this.#selections.find(sel => sel === kernelSelection))
+        this.#selections.push(kernelSelection)
+      this.#current && this.#current.dispose(true)
+      this.#current = kernelSelection
+      this.#current.view.render()
+    }
   }
 
+  /**
+   * Dispose a KernelSelection. A disposed selection
+   * is not currently displayed but may be chosed later on
+   * @param {KernelSelection} kernelSelection 
+   * @retusn {KernelSelectionService} this
+   */
+  dispose(kernelSelection) {
+    if ( this.#current === kernelSelection)
+      this.#current = null
+    kernelSelection.dispose(true)
+    return this
+  }
+
+  /**
+   * Enable the Service
+   * @returns {KernelSelectionService} this
+   */
   enable() {
     super.enable()
     for ( let selection of this.#selections)
       selection.enable()
+    return this
   }
 
+  /**
+   * Disable the Service
+   * @returns {KernelSelectionService} this
+   */
   disable() {
     super.disable()
     for ( let selection of this.#selections)
       disable.enable()
+    return this
   }
 
 }

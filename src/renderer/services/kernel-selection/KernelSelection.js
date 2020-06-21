@@ -6,8 +6,11 @@ const KernelSelectionModel = require('@renderer/services/kernel-selection/Kernel
 const KernelSelectionView = require('@renderer/services/kernel-selection/KernelSelectionView')
 
 /**
+ * A controller for a kernel selection
+ * 
+ * A KernelSelection is **disabled** by defaults and needs to be explicitely enabled
+ * (see {@link module:kernel-selection.KernelSelection#enable})
  * @memberof module:kernel-selection
- * A controller for kernel selection
  */
 class KernelSelection {
   /** @type {KernelSelectionModel} */
@@ -21,10 +24,26 @@ class KernelSelection {
    */
   constructor(kernels=[]) {
     this.#model = new KernelSelectionModel()
-    this.#view = new KernelSelectionView(this.#model).render()
+    this.#view = new KernelSelectionView(this.#model)
     this.#view.onSelect(kernel => this.#model.selectKernel(kernel))
     kernels.forEach(kernel => this.addKernel(kernel))
   }
+  
+  ///                     ///
+  /// Computed Properties ///
+  ///                     ///
+  
+  /**
+   * The model of this KernelSelection 
+   * @type {KernelSelectionModel} 
+   */
+  get model() { return this.#model }
+  
+  /** 
+   * The view of this KernelSelection
+   * @type {KernelSelectionView}
+   */
+  get view() { return this.#view }
 
   /**
    * @type {Array.<CudaKernel>}
@@ -36,15 +55,20 @@ class KernelSelection {
    */
   get numOptions() { return this.#model.options.length }
 
+  ///           ///
+  /// Methods   ///
+  ///           ///
+  
   /**
-   * Add a kernel option
+   * Add a kernel to the options
    * @param {CudaKernel} kernel A CudaKernel
-   * @returns {KernelSelectionModel} this
+   * @param {Boolean} [enable] If set, the selection will be enabled after the kernel is added
+   * @returns {KernelSelection} this
    */
-  addKernel(kernel) {
+  addKernel(kernel, enable=false) {
     this.#model.addKernel(kernel)
     this.#view.addKernel(kernel)
-    if ( !this.#view.isEnabled())
+    if ( enable && !this.#view.isEnabled())
       this.#view.enable()
     return this
   }
@@ -52,15 +76,19 @@ class KernelSelection {
   /**
    * Add multiple kernel options
    * @param {Array.<CudaKernel>} kernels An array of CudaKernel objects
+   * @param {Boolean} enable If set, the selection will be enabled after the kernels are added
    * @returns {KernelSelectionModel} this
    */
-  addKernels(kernels=[]) {
+  addKernels(kernels=[], enable) {
     kernels.forEach(kernel => this.addKernel(kernel))
+    if ( enable) 
+      this.enable()
     return this
   }
 
   /**
    * Remove a kernel from the options
+   * If there are no options left the selection gets disabled
    * @param {CudaKernel} kernel 
    * @returns {KernelSelectionModel} this
    */
@@ -84,11 +112,10 @@ class KernelSelection {
   }
 
   /**
-   * Retrieve the current selection, if one exists
+   * Retrieve the current selected option, if one exists
+   * @returns {CudaKernel} The select CudaKernel if it exists. `null` otherwise
    */
-  getSelection() {
-    return this.#model.getSelection()
-  }
+  getSelection() { return this.#model.getSelection() }
 
   /**
    * Unselect the current kernel
@@ -105,6 +132,35 @@ class KernelSelection {
    */
   hasKernel(kernel) {
     return this.#model.hasKernel(kernel)
+  }
+
+  /**
+   * Enable the selection. i.e allow the user to select an option
+   * @returns {KernelSelection} this
+   */
+  enable() {
+    this.#view.enable()
+    return this
+  }
+
+  /**
+   * Disable the selection. i.e disallow the user to select an option
+   * @returns {KernelSelection} this
+   */
+  disable() {
+    this.#view.disable()
+    return this;
+  }
+
+  isEnabled() {
+    return this.#view.isEnabled()
+  }
+
+  /**
+   * 
+   */
+  dispose(remove) {
+    this.#view.dispose(remove)
   }
 
   /**
@@ -135,7 +191,7 @@ class KernelSelection {
 /**
  * @callback KernelSelectionOnSelectCallback
  * @memberof module:kernel-selection
- * @param {CudaKernel} kernel The identifier of the selected kernel
+ * @param {CudaKernel} kernel The selected kernel
  */
 
 /**

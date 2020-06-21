@@ -1,5 +1,7 @@
 /** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
 
+const { CudaKernel } = require("@renderer/models/cuda")
+
 /**
  * @memberof module:kernel-selection
  */
@@ -19,6 +21,13 @@ class KernelSelectionModel {
   }
 
   /**
+   * @param {KernelSelectionModel}
+   */
+  equals() {
+
+  }
+
+  /**
    * @type {Array.<CudaKernel>}
    */
   get options() { return this.#options }
@@ -34,13 +43,14 @@ class KernelSelectionModel {
    * @returns {KernelSelectionModel} this
    */
   addKernel(kernel) {
-    this.#options.push(kernel)
+    if ( kernel instanceof CudaKernel)
+      this.#options.push(kernel)
     return this
   }
 
   /**
-   * Remove a kernel from the available options. 
-   * If the kernel is currectly selected, the selection is cleared
+   * Remove a kernel from the available options
+   * If the kernel is currently selected, the selection is cleared
    * @param {CudaKernel} kernel A CudaKernel
    * @returns {KernelSelectionModel} this
    */
@@ -57,7 +67,7 @@ class KernelSelectionModel {
 
   /**
    * Remove all kernel options.
-   * Currently selection (if any) gets cleared
+   * Currentl selection (if any) gets cleared
    * @returns {KernelSelectionModel} this
    */
   removeAllKernels() {
@@ -101,13 +111,11 @@ class KernelSelectionModel {
    */
   selectKernelById(id) {
     for ( const opt of this.#options) {
-      console.log(opt, id, opt.id)
       if ( opt.id === id) {
         console.log("YESSS")
         this.#selection = opt
         return true
       }
-
     }
     return false
   }
@@ -141,8 +149,7 @@ class KernelSelectionModel {
   hasKernel(kernel) {
     if ( this.findKernel(kernel) )
       return true
-    else
-      return false
+    return false
   } 
 
   /**
@@ -165,8 +172,7 @@ class KernelSelectionModel {
   hasKernelWithId(id) {
     if ( this.findKernelWithId(id) )
       return true
-    else
-      return false  
+    return false  
   }
 
   /**
