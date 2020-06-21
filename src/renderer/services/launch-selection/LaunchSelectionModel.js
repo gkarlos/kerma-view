@@ -1,8 +1,7 @@
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
 
-const { CudaKernel } = require("@renderer/models/cuda")
-const CudaKernel = require("@renderer/models/cuda/CudaKernel")
+const CudaLaunch = require("@renderer/models/cuda/CudaLaunch")
 
 /**
  * @memberof module:launch-selection
@@ -59,7 +58,7 @@ class LaunchSelectionModel {
    * @returns {LaunchSelectionModel} this
    */ 
   addLaunch(launch) {
-    if ( launch instanceof CudaKernel)
+    if ( launch instanceof CudaLaunch)
       this.#options.push(launch)
     return this
   }
