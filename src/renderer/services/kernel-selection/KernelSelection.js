@@ -138,8 +138,8 @@ class KernelSelection {
    * Enable the selection. i.e allow the user to select an option
    * @returns {KernelSelection} this
    */
-  enable() {
-    this.#view.enable()
+  enable(silent=false) {
+    this.#view.enable(silent)
     return this
   }
 
@@ -147,8 +147,8 @@ class KernelSelection {
    * Disable the selection. i.e disallow the user to select an option
    * @returns {KernelSelection} this
    */
-  disable() {
-    this.#view.disable()
+  disable(silent=false) {
+    this.#view.disable(silent)
     return this;
   }
 

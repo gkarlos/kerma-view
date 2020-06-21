@@ -75,9 +75,6 @@ class KernelSelectionView extends Component {
 
       if ( !this.#viewimpl) throw new InternalError(`Failed to create KernelSelectionView`)
 
-      // if ( this.#model.numOptions === 0)
-      //   this.disable()
-
       this.#model.options.forEach(kernel => this.#viewimpl.addOption(kernel))
 
       /**
@@ -124,24 +121,32 @@ class KernelSelectionView extends Component {
 
   /** 
    * Enable the view
-   * @param {Boolean} triggerEvent Whether an "enabled" event should be triggered
+   * @param {Boolean} silent If set, the "enabled" event will not be triggered
    * @return {KernelSelectionView} this 
    */
-  enable(triggerEvent=true) {
-    if ( this.isRendered() && !this.isEnabled())
-      this.#viewimpl.enable()
+  enable(silent=false) {
+    let wasEnabed = !this.isEnabled()
+
     this.#enabled = true
+
+    if ( this.isRendered() && !wasEnabed) 
+      this.#viewimpl.enable(silent)
+    
     return this;
   }
 
   /**
    * Disable the view
-   * @param {Boolean} triggerEvent Whether a "disabled" event should be triggered
+   * @param {Boolean} silent If set, the "disabled" event will not be triggered
    */
-  disable(triggerEvent=true) {
-    if ( this.isRendered() && this.isEnabled())
-      this.#viewimpl.disable()
+  disable(silent=true) {
+    let wasEnabled = this.isEnabled()
+
     this.#enabled = false
+    
+    if ( this.isRendered() && wasEnabled)
+      this.#viewimpl.disable(silent)
+    
     return this
   }
 

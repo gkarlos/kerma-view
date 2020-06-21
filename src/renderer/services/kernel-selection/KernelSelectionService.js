@@ -135,7 +135,7 @@ class KernelSelectionService extends Service {
   disable() {
     super.disable()
     for ( let selection of this.#selections)
-      disable.enable()
+      selection.disable()
     return this
   }
 
