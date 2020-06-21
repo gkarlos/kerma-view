@@ -13,18 +13,11 @@ class KernelSelectionModel {
   #selection
 
   /**
-   * 
+   * Create a new KernelSelectionModel instance
    */
   constructor() {
     this.#options = []
     this.#selection = null
-  }
-
-  /**
-   * @param {KernelSelectionModel}
-   */
-  equals() {
-
   }
 
   /**
@@ -112,7 +105,6 @@ class KernelSelectionModel {
   selectKernelById(id) {
     for ( const opt of this.#options) {
       if ( opt.id === id) {
-        console.log("YESSS")
         this.#selection = opt
         return true
       }
@@ -139,7 +131,7 @@ class KernelSelectionModel {
    * Check if there is a selection currently
    * @returns {Boolean}
    */
-  hasSelection() { return this.#selection != null}
+  hasSelection() { return this.#selection !== null}
 
   /**
    * Check if a kernel exists in the available options

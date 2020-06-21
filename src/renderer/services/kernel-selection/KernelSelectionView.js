@@ -1,8 +1,13 @@
 'use-strict'
 
-const Selectize = require('selectize')
-const App = require('@renderer/app')
-const Events = App.Events
+/**
+ * Selectize is used by both KernelSelectionView and LaunchSelectionView.
+ * However, since these two are always(?) included together and the
+ * kernel selection always precedes the launch selection we only require
+ * it here once
+ */
+const Selectize      = require('selectize')
+const App            = require('@renderer/app')
 const { isFunction } = require('@common/util/traits')
 
 const Component = require('@renderer/ui/component/Component')
@@ -95,24 +100,6 @@ class KernelSelectionView extends Component {
     return this
   }
 
-  /**
-   * Dispose the view and optionally remove it from the DOM
-   * @param {Boolean} [remove] Remove the view from the DOM
-   * @return {KernelSelectionView} this 
-   */
-  dispose(remove=false) {
-    if ( remove ) {
-      this.#viewimpl && this.#viewimpl.destroy()
-      this.#node && this.#node.remove()
-    } else {
-      this.#viewimpl && this.#viewimpl.clearOptions()
-      this.#viewimpl && this.#viewimpl.clear()
-      this.disable()
-    }
-    this.#rendered = false
-    return this
-  }
-
   /** @returns {Boolean} */
   isRendered() { return this.#rendered }
 
@@ -121,7 +108,7 @@ class KernelSelectionView extends Component {
 
   /** 
    * Enable the view
-   * @param {Boolean} silent If set, the "enabled" event will not be triggered
+   * @param {Boolean} [silent] If set, the "enabled" event will not be triggered
    * @return {KernelSelectionView} this 
    */
   enable(silent=false) {
@@ -151,42 +138,79 @@ class KernelSelectionView extends Component {
   }
 
   /**
+   * Dispose the view and optionally remove it from the DOM
+   * @param {Boolean} [remove] Remove the view from the DOM
+   * @return {KernelSelectionView} this 
+   */
+  dispose(remove=false) {
+    if ( remove ) {
+      this.#viewimpl && this.#viewimpl.destroy()
+      this.#node && this.#node.remove()
+    } else {
+      this.#viewimpl && this.#viewimpl.clearOptions()
+      this.#viewimpl && this.#viewimpl.clear()
+      this.disable()
+    }
+    this.#rendered = false
+    return this
+  }
+
+  /**
    * Add a kernel to the options
-   * @param {CudaKernel} kernel 
+   * @param {CudaKernel} kernel A CudaKernel object
+   * @returns {KernelSelectionView} this
    */
   addKernel(kernel) {
     if ( this.isRendered())
       this.#viewimpl.addOption(kernel)
+    return this
   }
 
   /**
    * Remove a kernel from the options
-   * @param {CudaKernel} kernel 
+   * @param {CudaKernel} kernel A CudaKernel object
+   * @returns {KernelSelectionView} this
    */
   removeKernel(kernel) {
     this.#viewimpl.removeOption(kernel.id)
+    return this
   }
 
   /**
    * Remove all kernel options
-   * @returns {KernelSelectionModel} this
+   * @returns {KernelSelectionView} this
    */
   removeAllKernels() {
     this.#viewimpl.clearOptions()
+    return this
   }
 
   /**
-   * Retrieve the current selection, if one exists
+   * Retrieve the current selected kernel, if one exists
+   * @returns {CudaKernel} The selected kernel, `undefined` otherwise
    */
   getSelection() {
-    return this.#viewimpl.getValue()
+    return this.#model.findKernelWithId( parseInt(this.#viewimpl.getValue()))
+  }
+
+  /**
+   * Retrieve the value field of the selected kernel used in the selector drop down
+   * In this case we are using the kernel's id (see {@link module:cuda.CudaKernel#id}) 
+   * to make the selection
+   * @returns {Number} The id of the selected kernel. `-1` otherwise
+   */
+  getSelectionId() {
+    return this.#viewimpl.getValue() !== undefined || this.#viewimpl.getValue() !== null
+      ? parseInt(this.#viewimpl.getValue()) : -1
   }
 
   /**
    * Unselect the current kernel
+   * @returns {KernelSelectionView} this
    */
   clearSelection() {
     this.#viewimpl.clear(true)
+    return this
   }
 
   /** 
@@ -197,7 +221,7 @@ class KernelSelectionView extends Component {
   onSelect(callback) {
     if ( isFunction(callback))
       this.#onSelectCallbacks.push(callback)
-    return this;
+    return this
   }
 
   /** 

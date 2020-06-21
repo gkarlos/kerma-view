@@ -92,7 +92,8 @@ class KernelSelectionService extends Service {
 
   /**
    * 
-   * @param {KernelSelection} kernelSelection 
+   * @param {KernelSelection} kernelSelection
+   * @returns {KernelSelectionService} this
    */
   activate(kernelSelection) {
     if ( kernelSelection && this.#current !== kernelSelection) {
@@ -102,6 +103,7 @@ class KernelSelectionService extends Service {
       this.#current = kernelSelection
       this.#current.view.render()
     }
+    return this
   }
 
   /**
