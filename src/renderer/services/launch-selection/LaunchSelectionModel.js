@@ -81,8 +81,8 @@ class LaunchSelectionModel {
   }
 
   /**
-   * Remove all kernel launch options
-   * Currentl selection (if any) gets cleared
+   * Remove all kernel launch options.
+   * Current selection (if any) gets cleared
    * @returns {LaunchSelectionModel} this
    */
   removeAllLaunches() {
