@@ -8,5 +8,7 @@
 'use-strict'
 require('v8-compile-cache')
 require('module-alias/register')
+require('./extensions/jquery')
+
 const App = require('@renderer/app')
 App.main()
