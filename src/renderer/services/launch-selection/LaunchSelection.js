@@ -202,8 +202,8 @@ class LaunchSelection {
 
   /**
    * Register a callback to be invoked when the user selects an option
-   * @param {KernelSelectionOnSelectCallback} callback
-   * @returns {KernelSelection} this
+   * @param {LaunchSelectionOnSelectCallback} callback
+   * @returns {LaunchSelection} this
    */
   onSelect(callback) {
     this.#view.onSelect(callback)
@@ -212,8 +212,8 @@ class LaunchSelection {
 
   /**
    * Register a callback to be invoked when the selection gets enabled
-   * @param {KernelSelectionOnEnabledCallback} callback
-   * @returns {KernelSelection} this
+   * @param {LaunchSelectionOnEnabledCallback} callback
+   * @returns {LaunchSelection} this
    */
   onEnable(callback) {
     this.#view.onEnable(callback)
@@ -222,8 +222,8 @@ class LaunchSelection {
 
   /** 
    * Register a callback to be invoked when the selection gets disabled
-   * @param {KernelSelectionOnDisabledCallback} callback
-   * @returns {KernelSelection} this
+   * @param {LaunchSelectionOnDisabledCallback} callback
+   * @returns {LaunchSelection} this
    */
   onDisable(callback) {
     this.#view.onDisable(callback)
