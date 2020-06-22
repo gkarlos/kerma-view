@@ -127,6 +127,11 @@ class Editor extends Component {
       })
     })
 
+    on(Events.INPUT_KERNEL_SELECTED, () => {
+      let kernel = App.Services.KernelSelection.getCurrent().getSelection()
+      this.instance.revealLinesInCenter(kernel.source.range.from.line, kernel.source.range.to.line)
+    })
+
     // Monaco finished loading the input file
     on(Events.EDITOR_INPUT_LOADED, () => { 
       if ( mock.kernels.length == 0)

@@ -1,8 +1,9 @@
 const KernelSelection      = require('@renderer/services/kernel-selection/KernelSelection')
-const KernelSelectionModel = require('@renderer/services/kernel-selection/KernelSelectionModel')
-const KernelSelectionView  = require('@renderer/services/kernel-selection/KernelSelectionView')
 const SourceRange          = require('@renderer/models/source').SourceRange
 const Service              = require('@renderer/services/Service')
+const CudaKernel           = require('@renderer/models/cuda/CudaKernel')
+
+/**@ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback*/
 
 /**
  * @memberof module:kernel-selection
@@ -13,24 +14,39 @@ class KernelSelectionService extends Service {
   #selections
   /** @type {KernelSelection} */
   #current
+  /** @type {KernelSelectionOnSelectCallback[]} */
+  #defaultOnSelectCallbacks
 
   constructor() {
     super("KernelSelectionService")
     this.#selections = []
     this.#current = null
+    this.#defaultOnSelectCallbacks = []
   }
 
   /**
-   * Create a new KernelSelection and optionally make it the current one
-   * @param {Boolean} [makeCurrent] Make the selection the current displayed selection
+   * Create a new KernelSelection for a given list of kernels
+   * @param {CudaKernel[]} kernels An array of CudaKernel objects
+   * @param {Coolean} [makeCurrent] Make the selection the currently displayed selection
    * @returns {KernelSelection}
    */
-  createNew(makeCurrent=false) {
+  create(kernels, makeCurrent=false) {
+    const selection = this.createEmpty(makeCurrent)
+    kernels.forEach(kernel => selection.addKernel(kernel))
+    return selection
+  }
+
+  /**
+   * Create an empty KernelSelection and optionally make it the current one
+   * @param {Boolean} [makeCurrent] Make the selection the currently displayed selection
+   * @returns {KernelSelection}
+   */
+  createEmpty(makeCurrent=false) {
     const selection = new KernelSelection()
+    this.#defaultOnSelectCallbacks.forEach(callback => selection.onSelect(callback))
     this.#selections.push(selection)
-    if ( makeCurrent) {
+    if ( makeCurrent)
       this.activate(selection)
-    }
     return selection
   }
 
@@ -44,7 +60,7 @@ class KernelSelectionService extends Service {
    * 
    * @param {KernelSelection} selection 
    */
-  createNewMock(selection=null) {
+  createMock(selection=null) {
     const CudaKernel = require('@renderer/models/cuda/CudaKernel')
     const FunctionInfo = require('@renderer/models/source/FunctionInfo')
     const Mock = require('@mock/cuda-source')
@@ -62,14 +78,14 @@ class KernelSelectionService extends Service {
       kernels.push( new CudaKernel(i, fi))
     })
 
-    return selection? selection.addKernels(kernels) : this.createNew().addKernels(kernels)
+    return selection? selection.addKernels(kernels) : this.createEmpty().addKernels(kernels)
   }
 
   /**
    * 
    * @param {KernelSelection} selection 
    */
-  createNewMock2(selection=null) {
+  createMock2(selection=null) {
     const CudaKernel = require('@renderer/models/cuda/CudaKernel')
     const FunctionInfo = require('@renderer/models/source/FunctionInfo')
     const Mock = require('@mock/cuda-source')
@@ -99,7 +115,7 @@ class KernelSelectionService extends Service {
     if ( kernelSelection && this.#current !== kernelSelection) {
       if ( !this.#selections.find(sel => sel === kernelSelection))
         this.#selections.push(kernelSelection)
-      this.#current && this.#current.dispose(true)
+      this.#current && this.#current.dispose(false)
       this.#current = kernelSelection
       this.#current.view.render()
     }
@@ -140,6 +156,18 @@ class KernelSelectionService extends Service {
       selection.disable()
     return this
   }
+
+  /**
+   * Register a callback that will be hooken to every KernelSelection created by the service
+   * @param {...KernelSelectionOnSelectCallback} callbacks
+   * @returns {KernelSelectionService} this
+   */
+  defaultOnSelect(...callbacks) {
+    callbacks.forEach(callback => this.#defaultOnSelectCallbacks.push(callback))
+    return this
+  }
+
+
 
 }
 

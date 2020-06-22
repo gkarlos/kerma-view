@@ -66,7 +66,12 @@ class KernelSelectionView extends Component {
    */
   render() {
     if ( !this.isRendered()) {
-      this.#node.appendTo(this.container.node)
+      // let self = this
+      // console.log(typeof self.container)
+      // $(self.container).insertAt(0, self.#node)
+
+      $(this.container.node).insertAt(0, this.#node)
+
 
       this.#viewimpl = $(`#${this.id}`).selectize({
         valueField: 'id',
@@ -87,8 +92,10 @@ class KernelSelectionView extends Component {
        * we want our API to accept a CudaKernel argument
        */
       this.#viewimpl.on('change', (id) => {
-        if ( id.length > 0)
+        if ( id.length > 0) {
           this.#onSelectCallbacks.forEach( callback => callback(this.#model.findKernelWithId(parseInt(id))) )
+          App.emit(App.Events.INPUT_KERNEL_SELECTED)
+        }
       })
 
       this.#rendered = true

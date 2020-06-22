@@ -188,11 +188,10 @@ class KernelSelection {
 
   /**
    * Dispose the selection
-   * @param {Boolean} [remove] Remove from the DOM
    * @return {KernelSelection} this
    */
-  dispose(remove=true) {
-    this.#view.dispose(remove)
+  dispose() {
+    this.#view.dispose(true)
     return this
   }
 
