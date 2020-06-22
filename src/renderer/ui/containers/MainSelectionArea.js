@@ -26,7 +26,6 @@ class MainSelectionArea extends Container {
    * 
    */
   constructor(id, location) {
-    console.log(id, location)
     super(id, location)
     this.#locationSelector = `#${location.id}`
     this.#firstRow = null
