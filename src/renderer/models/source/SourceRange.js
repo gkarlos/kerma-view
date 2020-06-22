@@ -33,10 +33,10 @@ class SourceRange {
    */
   static fromArray(arr) {
     return new SourceRange({
-      fromLine   : arr[0] || 0,
-      fromColumn : arr[1] || 0,
-      toLine     : arr[2].toLine || Infinity,
-      toColumn   : arr[2].toColumn || Infinity
+      fromLine   : (arr[0] === undefined || arr[0] === null)? 0 : arr[0],
+      fromColumn : (arr[1] === undefined || arr[1] === null)? 0 : arr[1],
+      toLine     : (arr[2] === undefined || arr[2] === null)? Infinity : arr[2],
+      toColumn   : (arr[3] === undefined || arr[3] === null)? Infinity : arr[3]
     })
   }
 
