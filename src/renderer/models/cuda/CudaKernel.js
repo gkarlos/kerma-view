@@ -32,6 +32,16 @@ class CudaKernel {
   get launches() { return this.#launches }
 
   /**
+   * @param {CudaLaunch} launch 
+   * @returns {CudaKernel} this
+   */
+  addLaunch(launch) {
+    if (launch)
+      this.#launches.push(launch)
+    return this
+  }
+
+  /**
    * Compare with another kernel for equality
    * @param {CudaKernel} other 
    */

@@ -4,8 +4,8 @@
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionView")} LaunchSelectionView */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 
-const LaunchSelectionModel = require('@renderer/services/kernel-selection/LaunchSelectionModel')
-const LaunchSelectionView = require('@renderer/services/kernel-selection/LaunchSelectionView')
+const LaunchSelectionModel = require('@renderer/services/launch-selection/LaunchSelectionModel')
+const LaunchSelectionView = require('@renderer/services/launch-selection/LaunchSelectionView')
 
 /**
  * A controller for a kernel selection
@@ -26,7 +26,7 @@ class LaunchSelection {
    */
   constructor(launches=[]) {
     this.#model = new LaunchSelectionModel()
-    this.#view = new LaunchSelectionView()
+    this.#view = new LaunchSelectionView(this.#model)
     this.#view.onSelect(launch => this.#model.selectLaunch(launch))
     if ( Array.isArray(launches))
       launches.forEach(launch => this.addLaunch(launch))
