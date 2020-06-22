@@ -1,7 +1,3 @@
-/** 
- * @module 
- * @category main
- */
 
 /// Some typedef imports for vscode intellisence :
 /** @ignore @typedef {import("@renderer/services/log/ConsoleLogger")}                       ConsoleLogger          */
@@ -9,8 +5,16 @@
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionService")} KernelSelectionService */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
-
+/** 
+ * @exports App
+ * @category main
+ */
 const App = {}
+
+App.Electron = {
+  remote : require('electron').remote,
+  app    : require('electron').remote.app
+}
 
 App.Emitter    = new (require('events'))()
 /** @method */
@@ -21,8 +25,17 @@ App.emit       = App.Emitter.emit
 App.once       = App.Emitter.once
 App.eventNames = App.Emitter.eventNames
 
+App.Events = require('./events')
+App.events = App.Events
+
+App.ui = require('@renderer/ui')
+
+App.Mock = require('@mock/cuda-source')
+
 /**
- * @property {KernelSelectionService} KernelSelection
+ * @property {module:log.ConsoleLogger} Log
+ * @property {module:notification.NotificationService} Notification
+ * @property {module:kernel-selection.KernelSelectionService} KernelSelection
  */
 App.Services = {
   /** @type {ConsoleLogger} */          
@@ -35,37 +48,33 @@ App.Services = {
 
 App.Electron = { remote : undefined, app : undefined}
 
+
+App.input = {
+  path : undefined
+}
+
+/** @method */
+App.enableLogging  = () => { App.Services.Log.enable() }
+/** @method */
+App.disableLogging = () => { App.Services.Log.disable() }
+
 /** 
  * Entry point of the app
  * This is only meant to be called once. Subsequent calls are a no-op 
+ * @method
  */
 App.main = function() {
   if ( App.started) return false 
   
   App.started = true
 
-  const Events = require('./events')
   const NotificationService          = require('./services/notification').NotificationService
   const ConsoleLogger                = require('./services/log').ConsoleLogger
   const KernelSelectionService       = require('./services/kernel-selection').KernelSelectionService
+  const LaunchSelectionService       = require('./services/launch-selection').LaunchSelectionService
   const ComputeUnitSelectionService  = require('./services/compute-selection').ComputeUnitSelectionService
-  
 
-  App.Events          = Events
-  App.events          = App.Events
-  App.Electron.remote = require('electron').remote,
-  App.Electron.app    = require('electron').remote.app
-  App.Mock            = require('@mock/cuda-source')
-  App.input           = {
-    path : undefined
-  }
-
-  /** @method */
-  App.enableLogging  = () => { App.Services.Log.enable() }
-  /** @method */
-  App.disableLogging = () => { App.Services.Log.disable() }
-
-  App.ui = require('@renderer/ui')
+  const Events = App.Events
 
   function initPreUiServices() {
     App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Trace, color: true, timestamps: true}).enable()
@@ -74,7 +83,8 @@ App.main = function() {
 
   function initPostUiServices() {
     App.Services.Notification         = new NotificationService().enable()
-    App.Services.KernelSelection      = new KernelSelectionService()
+    App.Services.KernelSelection      = new KernelSelectionService().enable()
+    App.Services.LaunchSelection      = new LaunchSelectionService().enable()
     App.Services.ComputeUnitSelection = new ComputeUnitSelectionService().enable()
 
     App.Notifier = App.Services.Notification
@@ -82,11 +92,27 @@ App.main = function() {
   }
 
   function start() {
-    let kernelSelection = App.Services.KernelSelection.createNew().onSelect( kernel => App.Notifier.info( kernel.toString()))
-    let launchSelection =
-    
+    App.Services.KernelSelection.defaultOnSelect(
+      kernel => App.Notifier.info(kernel.toString(), {title: "Kernel Selection"})
+    )
+
+    App.Services.KernelSelection.createEmpty(true)
+    App.Services.LaunchSelection.createEmpty(true)
+
     App.on( Events.INPUT_FILE_SELECTED, () => {
-      App.Services.KernelSelection.createNewMock(kernelSelection)
+      App.Services.KernelSelection.activate(App.Services.KernelSelection.createMock().enable())
+      // App.ui.editor
+      //   .getCurrent().onSelect(() => console.log(typeof App.Services.KernelSelection.getCurrent().view.getSelection()))
+
+
+      
+      // setTimeout( () => App.Services.KernelSelection.getCurrent().dispose(true), 3000)
+      // setTimeout( () => {
+      //   App.Services.KernelSelection.activate(App.Services.KernelSelection.createNewMock2())
+      //   setTimeout( () => {
+      //     App.Services.KernelSelection.getCurrent().enable()
+      //   }, 3000)
+      // }, 5000)
     })
 
     App.on( Events.INPUT_KERNEL_SELECTED, () => {
