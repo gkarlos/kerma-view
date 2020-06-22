@@ -16,6 +16,11 @@ class SourceLoc {
   /** @type {Number} */
   get column() { return this.#column }
 
+  /** @returns {Number[]} */
+  toArray() {
+    return [this.#line, this.#column]
+  }
+
   /**
    * Compare with another SourceLoc for equality
    * @param {SourceLoc} other Another SourceLoc
