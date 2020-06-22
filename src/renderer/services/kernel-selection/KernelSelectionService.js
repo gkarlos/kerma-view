@@ -108,7 +108,7 @@ class KernelSelectionService extends Service {
 
   /**
    * Dispose a KernelSelection. A disposed selection
-   * is not currently displayed but may be chosed later on
+   * is not currently displayed but may be chosen later on
    * @param {KernelSelection} kernelSelection 
    * @returns {KernelSelectionService} this
    */
