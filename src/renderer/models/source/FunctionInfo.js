@@ -9,10 +9,12 @@ class FunctionInfo extends SourceInfo {
   /** @type {String} */ #name
   /** @type {String} */ #arguments 
   /** @type {Boolean} */ #isKernel
+  /** @type {String}  */ #type
 
   /**
    * Create a new FunctionInfo instance
    * @param {Object}      opts
+   * @param {String}      opts.type
    * @param {String}      opts.filename
    * @param {SourceRange} opts.range
    * @param {String}      opts.name
@@ -21,6 +23,7 @@ class FunctionInfo extends SourceInfo {
    */
   constructor(opts={}) {
     super(opts)
+    this.#type = opts.type || "void"
     this.#name = opts.name || null
     this.#arguments = opts.arguments || null
     this.#isKernel = opts.isKernel || false
@@ -28,6 +31,9 @@ class FunctionInfo extends SourceInfo {
 
   /** @type {String} */
   get name() { return this.#name }
+
+  /** @type {String} */
+  get type() { return this.#type }
 
   /** @type {String} */
   get arguments() { return this.#arguments }
