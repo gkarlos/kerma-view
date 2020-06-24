@@ -11,8 +11,10 @@
  *   This module includes all the available events
  *-----------------------------------------------------------------*/
 
-/** */
-const Events = {
+/** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
+
+
+module.exports = {
   /** @event */UI_READY : "ui:ready",
   /** @event */UI_RESIZE : "ui:resize",
   /** @event */UI_COMPONENT_READY : "ui:component-ready",
@@ -23,13 +25,22 @@ const Events = {
   /** @event */EDITOR_TAB_SELECTED : "editor:tab-selected",
   /** @event */EDITOR_VALUE_CHANGED: "editor:value-changed",
 
-  /** @event */INPUT_FILE_SELECTED : "input:selected",
+  /** 
+   * @event 
+   * @param {String} filename
+   */
+  INPUT_FILE_SELECTED : "input:selected",
+  
   /** @event */INPUT_TYPE_SELECTED : "input:type-selected",
-  /** @event */INPUT_KERNEL_SELECTED : "input:kernel-selected",
+  
+  /** 
+   * @event 
+   * @param {CudaKernel} kernel
+   */
+  INPUT_KERNEL_SELECTED : "input:kernel-selected",
+
   /** @event */INPUT_KERNEL_LAUNCH_SELECTED : "input:kernel-launch-selected",
   
   /** @event */SESSION_NEW : "session:new",
   /** @event */SESSION_KILLED : "session:killed"
 }
-
-module.exports = Events
