@@ -28,6 +28,9 @@ class CudaKernel {
   /** @type {FunctionInfo} */
   get source() { return this.#source }
 
+  /** @type {String} */
+  get name() { return this.#source.name }
+
   /** @type {Array.<CudaLaunch>} */
   get launches() { return this.#launches }
 
