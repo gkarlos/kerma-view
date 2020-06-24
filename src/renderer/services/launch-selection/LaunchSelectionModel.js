@@ -2,6 +2,7 @@
 /** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
 
 const CudaLaunch = require("@renderer/models/cuda/CudaLaunch")
+const App = require('@renderer/app')
 
 /**
  * @memberof module:launch-selection
@@ -58,6 +59,7 @@ class LaunchSelectionModel {
    * @returns {LaunchSelectionModel} this
    */ 
   addLaunch(launch) {
+    // App.Logger.trace("LaunchSelectionModel","Adding launch: ", launch.toString())
     if ( launch instanceof CudaLaunch)
       this.#options.push(launch)
     return this

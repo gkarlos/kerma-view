@@ -11,7 +11,7 @@ const { isFunction } = require('@common/util/traits')
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 
 /**
- * @memberof mdule:kernel-selection
+ * @memberof module:launch-selection
  */
 class LaunchSelectionView extends Component {
   /** @type {LaunchSelectionModel} */
@@ -52,7 +52,8 @@ class LaunchSelectionView extends Component {
 
   render() {
     if ( !this.isRendered()) {
-      this.#node.appendTo(this.container.node)
+
+      $(this.container.node).insertAt(1, this.#node)
 
       this.#viewimpl = $(`#${this.id}`).selectize({
         valueField: 'id',
@@ -70,11 +71,14 @@ class LaunchSelectionView extends Component {
 
       /**
        * We need this indirection because the selectize callback accepts a String argument but
-       * we want our API to accept a CudaKernel argument
+       * we want our API to accept a CudaLaunch argument
        */
       this.#viewimpl.on('change', (id) => {
-        if ( id.length > 0)
-          this.#onSelectCallbacks.forEach( callback => callback(this.#model.findLaunchWithId(parseInt(id))) )
+        if ( id.length > 0) {
+          let launch = this.#model.findLaunchWithId(parseInt(id))
+          this.#onSelectCallbacks.forEach( callback => callback(launch) )
+          App.emit(App.Events.INPUT_KERNEL_LAUNCH_SELECTED, launch)
+        }
       })
 
       this.#rendered = true
@@ -98,11 +102,11 @@ class LaunchSelectionView extends Component {
    * @return {LaunchSelectionView} this 
    */
   enable(silent=false) {
-    let wasEnabed = !this.isEnabled()
+    let wasDisabled = !this.isEnabled()
 
     this.#enabled = true
 
-    if ( this.isRendered() && !wasEnabed) 
+    if ( this.isRendered() && wasDisabled) 
       this.#viewimpl.enable(silent)
     
     return this;
@@ -147,6 +151,7 @@ class LaunchSelectionView extends Component {
    * @returns {LaunchSelectionView} this
    */
   addLaunch(launch) {
+    // App.Logger.debug("LaunchSelectionView", this.isRendered()? "(Rendered): " : "(Not Rendered): ","Adding launch: ", launch.toString())
     if ( this.isRendered())
       this.#viewimpl.addOption(launch)
     return this
@@ -232,30 +237,37 @@ class LaunchSelectionView extends Component {
     return this;
   }
 
-
+  /**
+   * @param {CudaLaunch} launch 
+   * @param {function(String)} escape 
+   */
   static #renderSelected = ( launch, escape) => {
     return `<span class="launch-selection-selected-item">
               <span class="launch-selection-selected-item-title"> @line </span> 
-              <span class="launch-selection-selected-item-value">${launch.source.range[0]}</span> -
-              <span class="launch-selection-selected-item-more">${escape(launch.source.params)}</span>
+              <span class="launch-selection-selected-item-value">${launch.source.range.fromLine}</span> -
+              <span class="launch-selection-selected-item-more">${escape(launch.source.launchParams)}</span>
             </span>`
   }
 
+  /**
+   * @param {CudaLaunch} launch 
+   * @param {function(String)} escape 
+   */
   static #renderOption = ( launch, escape) => {
     return `<div class="list-item">
               <div class="first-row">
                 <table>
                 <tr>
-                  <td><span class="launch-selection-launch-params"></i>${escape(launch.source.params)}</span></td>
+                  <td><span class="launch-selection-launch-params"></i>${escape(launch.source.launchParams)}</span></td>
                   <td><span class="launch-selection-launch-arguments">${launch.source.arguments}</span></td>
                 </tr>
                 </table>
               </div>
               <div class="second-row">
                 <span class="launch-selection-second-row-title">caller</span>
-                <span class="launch-caller" title="caller" >${launch.caller.source.name}</span>
+                <span class="launch-caller" title="caller" >${launch.source.caller.name}</span>
                 <span class="launch-selection-second-row-title">line</span>
-                <span class="kernel-source" title="src" >${launch.source.range[0]}</span>
+                <span class="kernel-source" title="line" >${launch.source.range.fromLine}</span>
               </div>
             </div>`
   }

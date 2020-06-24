@@ -6,6 +6,7 @@
 
 const LaunchSelectionModel = require('@renderer/services/launch-selection/LaunchSelectionModel')
 const LaunchSelectionView = require('@renderer/services/launch-selection/LaunchSelectionView')
+const App = require("@renderer/app")
 
 /**
  * A controller for a kernel selection
@@ -72,6 +73,7 @@ class LaunchSelection {
    * @returns {KernelSelection} this
    */
   addLaunch(launch, enable=false) {
+    // App.Logger.debug("LaunchSelection: Adding launch: ", launch.toString())
     this.#model.addLaunch(launch)
     this.#view.addLaunch(launch)
     if ( enable && !this.#view.isEnabled())
@@ -87,6 +89,7 @@ class LaunchSelection {
    * @returns {LaunchSelection} this
    */
   addLaunches(launches=[], enable) {
+    // App.Logger.debug("Adding Launches: ", launches)
     launches.forEach(launch => this.addLaunch(launch))
     if ( enable) 
       this.enable()
