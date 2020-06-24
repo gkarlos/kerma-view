@@ -93,8 +93,9 @@ class KernelSelectionView extends Component {
        */
       this.#viewimpl.on('change', (id) => {
         if ( id.length > 0) {
-          this.#onSelectCallbacks.forEach( callback => callback(this.#model.findKernelWithId(parseInt(id))) )
-          App.emit(App.Events.INPUT_KERNEL_SELECTED)
+          let kernel = this.#model.findKernelWithId(parseInt(id))
+          this.#onSelectCallbacks.forEach( callback => callback( kernel))
+          App.emit(App.Events.INPUT_KERNEL_SELECTED, kernel)
         }
       })
 
@@ -119,11 +120,11 @@ class KernelSelectionView extends Component {
    * @return {KernelSelectionView} this 
    */
   enable(silent=false) {
-    let wasEnabed = !this.isEnabled()
+    let wasDisabled = !this.isEnabled()
 
     this.#enabled = true
 
-    if ( this.isRendered() && !wasEnabed) 
+    if ( this.isRendered() && wasDisabled) 
       this.#viewimpl.enable(silent)
     
     return this;

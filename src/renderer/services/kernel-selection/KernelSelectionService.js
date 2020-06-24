@@ -2,6 +2,8 @@ const KernelSelection      = require('@renderer/services/kernel-selection/Kernel
 const SourceRange          = require('@renderer/models/source').SourceRange
 const Service              = require('@renderer/services/Service')
 const CudaKernel           = require('@renderer/models/cuda/CudaKernel')
+const { FunctionCallInfo } = require('@renderer/models/source')
+const CudaLaunch = require('@renderer/models/cuda/CudaLaunch')
 
 /**@ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback*/
 
@@ -27,7 +29,7 @@ class KernelSelectionService extends Service {
   /**
    * Create a new KernelSelection for a given list of kernels
    * @param {CudaKernel[]} kernels An array of CudaKernel objects
-   * @param {Coolean} [makeCurrent] Make the selection the currently displayed selection
+   * @param {Boolean} [makeCurrent] Make the selection the currently displayed selection
    * @returns {KernelSelection}
    */
   create(kernels, makeCurrent=false) {
@@ -63,19 +65,43 @@ class KernelSelectionService extends Service {
   createMock(selection=null) {
     const CudaKernel = require('@renderer/models/cuda/CudaKernel')
     const FunctionInfo = require('@renderer/models/source/FunctionInfo')
+    const FunctionCallInfo = require('@renderer/models/source/FunctionCallInfo')
     const Mock = require('@mock/cuda-source')
 
     let kernels = []
 
     Mock.kernels.forEach( (kernel, i) => {
-      let fi = new FunctionInfo({
+      let kernelFI = new FunctionInfo({
         filename : kernel.source.filename,
         name : kernel.source.name,
+        type : "void",
         arguments : kernel.source.signature,
         range : SourceRange.fromArray(kernel.source.range),
         isKernel : true
       })
-      kernels.push( new CudaKernel(i, fi))
+
+      let cudaKernel = new CudaKernel(i, kernelFI)
+
+      kernel.launches.forEach((launch, j) => {
+        let launchFCI = new FunctionCallInfo({
+          name : cudaKernel.name,
+          isKernelLaunch : true,
+          launchParams : launch.source.params,
+          range : SourceRange.fromArray(launch.source.range),
+          arguments : launch.source.arguments,
+          caller : new FunctionInfo({
+            name : launch.caller.source.name,
+            type : launch.caller.source.type,
+            arguments : launch.caller.source.signature
+          })
+        })
+
+        let cudaLaunch = new CudaLaunch(cudaKernel, {}, { id : j, source: launchFCI})
+
+        cudaKernel.addLaunch(cudaLaunch)
+      })
+
+      kernels.push(cudaKernel)
     })
 
     return selection? selection.addKernels(kernels) : this.createEmpty().addKernels(kernels)
