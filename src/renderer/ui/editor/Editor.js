@@ -151,10 +151,10 @@ class Editor extends Component {
       })
 
       mock.kernels.forEach(kernel => {
-        if ( kernel.statements.read.length == 0 && kernel.statements.write.length == 0 && kernel.statements.readwrite.length == 0)
-          console.log(`No statements found for kernel: ${kernel.source.name}`)
-        else
-          console.log(`Statements for kernel: ${kernel.source.name}`)
+        // if ( kernel.statements.read.length == 0 && kernel.statements.write.length == 0 && kernel.statements.readwrite.length == 0)
+        //   console.log(`No statements found for kernel: ${kernel.source.name}`)
+        // else
+        //   console.log(`Statements for kernel: ${kernel.source.name}`)
 
         kernel.statements.read.forEach(readStmt => {
           readStmt.reads.forEach(read => {
