@@ -56,7 +56,7 @@ class Ui {
     const Events         = require('@renderer/events')
     const App            = require('@renderer/app')
 
-    console.log(App)
+    // console.log(App)
     
     Ui.layout     = new ElectronLayout(App)
   
