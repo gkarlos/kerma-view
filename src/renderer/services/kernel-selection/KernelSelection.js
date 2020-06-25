@@ -228,7 +228,44 @@ class KernelSelection {
     this.#view.onDisable(callback)
     return this
   }
+
 }
+
+/// ------------------- ///
+///       Events        ///
+/// ------------------- ///
+
+/** 
+ * @static  
+ * @property {String} Select
+ * @property {String} Enabled
+ * @property {String} Disabled
+ */
+KernelSelection.Events = {
+  /** */
+  Select : "select",
+  /** */
+  Enabled : "enabled",
+  /** */
+  Disabled : "disabled"
+}
+
+/**
+ * Fires when a kernel is selected
+ * @event module:kernel-selection.KernelSelection.select
+ * @property {CudaKernel} kernel The selected kernel
+ */
+
+/**
+ * Fires when the selection gets enabled
+ * @event module:kernel-selection.KernelSelection.enabled
+ */
+
+/**
+ * Fires when the selection gets disabled
+ * @event module:kernel-selection.KernelSelection.disabled
+ */
+
 
 /// ------------------- ///
 ///  Callback Typedefs  ///
@@ -236,7 +273,7 @@ class KernelSelection {
 
 /**
  * @callback KernelSelectionOnSelectCallback
- * @memberof module:kernel-selection
+ * @memberof module:kernel-selection~KernelSelection
  * @param {CudaKernel} kernel The selected kernel
  */
 

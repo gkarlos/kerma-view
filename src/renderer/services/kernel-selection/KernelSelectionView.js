@@ -6,11 +6,11 @@
  * kernel selection always precedes the launch selection we only require
  * it here once
  */
-const Selectize      = require('selectize')
-const App            = require('@renderer/app')
-const { isFunction } = require('@common/util/traits')
-
-const Component = require('@renderer/ui/component/Component')
+const Selectize       = require('selectize')
+const App             = require('@renderer/app')
+const { isFunction }  = require('@common/util/traits')
+const EventEmitter    = require('events').EventEmitter
+const Component       = require('@renderer/ui/component/Component')
 
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnEnabledCallback} KernelSelectionOnEnabledCallback */
@@ -37,6 +37,8 @@ class KernelSelectionView extends Component {
   /** @type {JQuery} */
   #node
   #viewimpl
+  /** @type {EventEmitter} */
+  #emitter
 
   /**
    * @param {KernelSelectionModel} model 
@@ -56,9 +58,10 @@ class KernelSelectionView extends Component {
         </div>
       </div>
     `)
-    this.#onSelectCallbacks = []
-    this.#onEnabledCallbacks = []
-    this.#onDisabledCallbacks = []
+    // this.#onSelectCallbacks = []
+    // this.#onEnabledCallbacks = []
+    // this.#onDisabledCallbacks = []
+    this.#emitter = new EventEmitter()
   }
 
   /**
@@ -94,9 +97,11 @@ class KernelSelectionView extends Component {
       this.#viewimpl.on('change', (id) => {
         if ( id.length > 0) {
           let kernel = this.#model.findKernelWithId(parseInt(id))
-          this.#onSelectCallbacks.forEach( callback => callback( kernel))
+          this.#emitter.emit('select', kernel)
           App.emit(App.Events.INPUT_KERNEL_SELECTED, kernel)
         }
+          
+        
       })
 
       this.#rendered = true
@@ -117,6 +122,7 @@ class KernelSelectionView extends Component {
   /** 
    * Enable the view
    * @param {Boolean} [silent] If set, the "enabled" event will not be triggered
+   * @fires module:kernel-selection.KernelSelection.enabled
    * @return {KernelSelectionView} this 
    */
   enable(silent=false) {
@@ -124,24 +130,32 @@ class KernelSelectionView extends Component {
 
     this.#enabled = true
 
-    if ( this.isRendered() && wasDisabled) 
-      this.#viewimpl.enable(silent)
-    
+    if ( this.isRendered() && wasDisabled) {
+      this.#viewimpl.enable()
+      if ( !silent)
+        this.#emitter.emit('enabled')
+    }
+      
     return this;
   }
 
   /**
    * Disable the view
    * @param {Boolean} silent If set, the "disabled" event will not be triggered
+   * @fires module:kernel-selection.KernelSelection.disabled
+   * @returns {KernelSelectionView} this
    */
   disable(silent=true) {
     let wasEnabled = this.isEnabled()
 
     this.#enabled = false
     
-    if ( this.isRendered() && wasEnabled)
-      this.#viewimpl.disable(silent)
-    
+    if ( this.isRendered() && wasEnabled) {
+      this.#viewimpl.disable()
+      if ( !silent)
+        this.#emitter.emit('disabled')
+    }
+
     return this
   }
 
@@ -228,7 +242,8 @@ class KernelSelectionView extends Component {
    */
   onSelect(callback) {
     if ( isFunction(callback))
-      this.#onSelectCallbacks.push(callback)
+      this.#emitter.on( 'select', callback)
+      // this.#onSelectCallbacks.push(callback)
     return this
   }
 
@@ -239,7 +254,8 @@ class KernelSelectionView extends Component {
    */
   onEnabled(callback) {
     if ( isFunction(callback))
-      this.#onEnabledCallbacks.push(callback)
+      this.#emitter.on( 'enabled', callback)
+      // this.#onEnabledCallbacks.push(callback)
     return this;
   }
 
@@ -250,7 +266,8 @@ class KernelSelectionView extends Component {
    */
   onDisabled(callback) {
     if ( isFunction(callback))
-      this.#onDisabledCallbacks.push(callback)
+      this.#emitter.on( 'disabled', callback)
+      // this.#onDisabledCallbacks.push(callback)
     return this;
   }
 
