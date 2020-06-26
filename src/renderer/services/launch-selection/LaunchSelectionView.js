@@ -1,8 +1,9 @@
 'use-strict'
 
-const Component      = require('@renderer/ui/component/Component')
 const App            = require('@renderer/app')
 const { isFunction } = require('@common/util/traits')
+const EventEmitter   = require('events').EventEmitter
+const Component      = require('@renderer/ui/component/Component')
 
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelection").LaunchSelectionOnSelectCallback} LaunchSelectionOnSelectCallback */
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelection").LaunchSelectionOnEnabledCallback} LaunchSelectionOnEnabledCallback */
@@ -20,15 +21,11 @@ class LaunchSelectionView extends Component {
   #enabled
   /** @type {Boolean} */
   #rendered
-  /** @type {Array.<LaunchSelectionOnSelectCb>} */
-  #onSelectCallbacks
-  /** @type {Array.<LaunchSelectionOnEnabledCallback>} */
-  #onEnabledCallbacks
-  /** @type {Array.<LaunchSelectionOnDisabledCallback>} */
-  #onDisabledCallbacks
   /** @type {JQuery} */
   #node
   #viewimpl
+  /** @type {EventEmitter} */
+  #emitter
 
   constructor(model) {
     super("kernel-launch-selector", App.ui.containers.mainSelection.firstRow)
@@ -45,9 +42,7 @@ class LaunchSelectionView extends Component {
         </div>
       </div>
     `)
-    this.#onSelectCallbacks = []
-    this.#onEnabledCallbacks = []
-    this.#onDisabledCallbacks = []
+    this.#emitter = new EventEmitter()
   }
 
   render() {
@@ -76,7 +71,7 @@ class LaunchSelectionView extends Component {
       this.#viewimpl.on('change', (id) => {
         if ( id.length > 0) {
           let launch = this.#model.findLaunchWithId(parseInt(id))
-          this.#onSelectCallbacks.forEach( callback => callback(launch) )
+          this.#emitter.emit('select', launch)
           App.emit(App.Events.INPUT_KERNEL_LAUNCH_SELECTED, launch)
         }
       })
@@ -106,8 +101,12 @@ class LaunchSelectionView extends Component {
 
     this.#enabled = true
 
-    if ( this.isRendered() && wasDisabled) 
-      this.#viewimpl.enable(silent)
+    if ( this.isRendered() && wasDisabled) {
+      this.#viewimpl.enable()
+      if ( !silent)
+        this.#emitter.emit('enabled')
+    }
+      
     
     return this;
   }
@@ -121,9 +120,12 @@ class LaunchSelectionView extends Component {
 
     this.#enabled = false
     
-    if ( this.isRendered() && wasEnabled)
-      this.#viewimpl.disable(silent)
-    
+    if ( this.isRendered() && wasEnabled) {
+      this.#viewimpl.disable()
+      if ( !silent)
+        this.#emitter.emit('disabled')
+    }
+      
     return this
   }
 
@@ -211,7 +213,7 @@ class LaunchSelectionView extends Component {
    */
   onSelect(callback) {
     if ( isFunction(callback))
-      this.#onSelectCallbacks.push(callback)
+      this.#emitter.on( 'select', callback)
     return this
   }
 
@@ -222,7 +224,7 @@ class LaunchSelectionView extends Component {
    */
   onEnabled(callback) {
     if ( isFunction(callback))
-      this.#onEnabledCallbacks.push(callback)
+      this.#emitter.on( 'enabled', callback)
     return this;
   }
 
@@ -233,7 +235,7 @@ class LaunchSelectionView extends Component {
    */
   onDisabled(callback) {
     if ( isFunction(callback))
-      this.#onDisabledCallbacks.push(callback)
+      this.#emitter.on( 'disabled', callback)
     return this;
   }
 

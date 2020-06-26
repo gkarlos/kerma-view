@@ -235,6 +235,42 @@ class LaunchSelection {
 }
 
 /// ------------------- ///
+///       Events        ///
+/// ------------------- ///
+
+/** 
+ * @static  
+ * @property {String} Select
+ * @property {String} Enabled
+ * @property {String} Disabled
+ */
+LaunchSelection.Events = {
+  /** */
+  Select : "select",
+  /** */
+  Enabled : "enabled",
+  /** */
+  Disabled : "disabled"
+}
+
+
+/**
+ * Fires when a launch is selected
+ * @event module:launch-selection.KernelSelection.select
+ * @property {CudaKernel} kernel The selected kernel
+ */
+
+/**
+ * Fires when the selection gets enabled
+ * @event module:kernel-selection.KernelSelection.enabled
+ */
+
+/**
+ * Fires when the selection gets disabled
+ * @event module:kernel-selection.KernelSelection.disabled
+ */
+
+/// ------------------- ///
 ///  Callback Typedefs  ///
 /// ------------------- ///
 
