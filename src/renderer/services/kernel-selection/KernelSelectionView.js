@@ -28,12 +28,6 @@ class KernelSelectionView extends Component {
   #enabled
   /** @type {Boolean} */
   #rendered
-  /** @type {Array.<KernelSelectionOnSelectCb>} */
-  #onSelectCallbacks
-  /** @type {Array.<KernelSelectionOnEnabledCallback>} */
-  #onEnabledCallbacks
-  /** @type {Array.<KernelSelectionOnDisabledCallback>} */
-  #onDisabledCallbacks
   /** @type {JQuery} */
   #node
   #viewimpl
@@ -58,9 +52,6 @@ class KernelSelectionView extends Component {
         </div>
       </div>
     `)
-    // this.#onSelectCallbacks = []
-    // this.#onEnabledCallbacks = []
-    // this.#onDisabledCallbacks = []
     this.#emitter = new EventEmitter()
   }
 
@@ -69,9 +60,6 @@ class KernelSelectionView extends Component {
    */
   render() {
     if ( !this.isRendered()) {
-      // let self = this
-      // console.log(typeof self.container)
-      // $(self.container).insertAt(0, self.#node)
 
       $(this.container.node).insertAt(0, this.#node)
 

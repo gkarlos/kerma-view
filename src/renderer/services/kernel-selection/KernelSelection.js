@@ -124,6 +124,7 @@ class KernelSelection {
 
   /**
    * Remove all kernel options
+   * @fires module:kernel-selection.KernelSelection.disabled
    * @returns {KernelSelection} this
    */
   removeAllKernels() {
@@ -161,6 +162,7 @@ class KernelSelection {
   /**
    * Enable the selection. i.e allow the user to select an option
    * @param {Boolean} [silent] If set, the "enabled" event will not be triggered
+   * @fires module:kernel-selection.KernelSelection.enabled
    * @returns {KernelSelection} this
    */
   enable(silent=false) {
@@ -171,6 +173,7 @@ class KernelSelection {
   /**
    * Disable the selection. i.e disallow the user to select an option
    * @param {Boolean} [silent] If set, the "disabled" event will not be triggered
+   * @fires module:kernel-selection.KernelSelection.disabled
    * @returns {KernelSelection} this
    */
   disable(silent=false) {
