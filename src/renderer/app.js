@@ -4,6 +4,7 @@
 /** @ignore @typedef {import("@renderer/services/notification/NotificationService")}        NotificationService    */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionService")} KernelSelectionService */
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionService")} LaunchSelectionService */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionService")} ComputeSelectionService */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
 // const { app } = require("electron")
@@ -53,6 +54,8 @@ App.Services = {
   KernelSelection : undefined,
   /** @type {LaunchSelectionService} */
   LaunchSelection : undefined,
+  /** @type {ComputeSelectionService} */
+  ComputeSelection : undefined,
   
   /** @type {Boolean} */
   preUiReady : false,
@@ -134,7 +137,7 @@ App.main = function() {
     App.Services.LaunchSelection   = new LaunchSelectionService().enable()
     App.Services.ComputeSelection  = new ComputeSelectionService().enable()
     App.Notifier = App.Services.Notification
-    // App.ComputeUnitSelector = App.Services.ComputeUnitSelection
+    // App.ComputeUnitSelector = App.Services.ComputeUnitSelectione
 
     App.Services.postUiReady = true
   }
@@ -162,7 +165,9 @@ App.main = function() {
     })
 
     App.on( Events.INPUT_KERNEL_LAUNCH_SELECTED, (launch) => {
-
+      App.Services.ComputeSelection.activate(
+        App.Services.ComputeSelection.createForLaunch(launch)
+      )
     })
 
 

@@ -1,7 +1,12 @@
 const Service           = require('@renderer/services').Service
-const ComputeSelection  = require('@renderer/services/compute-selection').ComputeSelection
-
+const ComputeSelection  = require('@renderer/services/compute-selection/ComputeSelection')
 const App     = require('@renderer/app')
+
+/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection")} ComputeSelection */
 
 /**
  * This service handles compute unit selection.
@@ -12,13 +17,21 @@ const App     = require('@renderer/app')
  * @extends Service
  */
 class ComputeSelectionService extends Service {
+
+  /** @type {ComputeSelection[]} */
+  #selections
+  /** @type {ComputeSelection} */
+  #current
+
   constructor() {
     super('ComputeUnitSelectionService')
     this.selections = []
+    this.#current = undefined
   }
 
   enable() {
     super.enable()
+    return this
   }
 
   disable() {
@@ -26,16 +39,27 @@ class ComputeSelectionService extends Service {
   }
 
   /**
-   * Create a new ComputeUnitSelection for a given grid and block configuration.
+   * Create a new ComputeSelection for a given grid and block configuration
    * The ComputeUnitSelection is storred internally.
-   * @returns {ComputeUnitSelection}
+   * @param {CudaGrid} grid
+   * @param {CudaBlock} block
+   * @returns {ComputeSelection}
    */
-  createNew(grid, block) {
-    let model // TODO Create the model
-    let view  // TODO Create the view
-    let newSelection = new ComputeSelection(model, view)
-    this.selections.push(newSelection)
-    return newSelection
+  create(grid, block) {
+    let selection = new ComputeSelection(grid, block)
+    this.selections.push(selection)
+    return selection
+  }
+
+  /**
+   * Create a new ComputeSelection for a given kernel launch
+   * @param {CudaLaunch} launch
+   * @returns {ComputeSelection}
+   */
+  createForLaunch(launch) {
+    let selection = new ComputeSelection(launch.grid, launch.block)
+    this.selections.push(selection)
+    return selection
   }
 
   /**
@@ -51,11 +75,15 @@ class ComputeSelectionService extends Service {
   /**
    * Make a ComputeUnitSelection the current active one.
    * The selection will be activated only if it was created through the service
-   * @param {ComputeUnitSelection} computeUnitSelection
+   * @param {ComputeSelection} selection
    * @returns {Boolean} True if the selection was successfully activated. False otherwise
    */
-  activate(computeUnitSelection) {
+  activate(selection) {
+    selection.activate()
+  }
 
+  getCurrent() {
+    return this.#current
   }
 
 

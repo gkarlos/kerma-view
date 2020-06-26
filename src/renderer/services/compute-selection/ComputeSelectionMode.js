@@ -2,10 +2,11 @@
  * @memberof module:compute-selection
  */
 class ComputeSelectionMode {
-  /* @type {String} */#name
+  /* @type {String} */
+  #name
 
   /**
-   * Create a new ComputeUnitSelectionMode
+   * Create a new ComputeSelectionMode
    * @param {String} name 
    */
   constructor(name) {
@@ -40,5 +41,8 @@ ComputeSelectionMode.Warp    = new ComputeSelectionMode('warp')
 
 /** */
 ComputeSelectionMode.Unknown = new ComputeSelectionMode('unknown')
+
+/** */
+ComputeSelectionMode.Default = ComputeSelectionMode.Warp
 
 module.exports = ComputeSelectionMode

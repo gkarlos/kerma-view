@@ -1,3 +1,4 @@
+/** @ignore @typedef {import("@renderer/ui/containers/MainSelectionArea") MainSelectionArea} */
 
 class Ui {
   static onReadyCallbacks = []
@@ -7,6 +8,7 @@ class Ui {
   static layout = null
   
   static containers = {
+    /**@type {MainSelectionArea} */
     mainSelection : null  
   }
 

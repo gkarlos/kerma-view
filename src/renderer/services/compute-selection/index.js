@@ -13,7 +13,7 @@ module.exports = {
   GridInfoView : require('./GridInfoView'),
   BlockInfoView : require('./BlockInfoView'),
   
-  ComputeSelectionView : require('./ComputeUnitSelectionView'),
+  ComputeSelectionView : require('./ComputeSelectionView'),
   ComputeSelectionService : require('./ComputeSelectionService'),
 
   ComputeSelection : require('./ComputeSelection'),

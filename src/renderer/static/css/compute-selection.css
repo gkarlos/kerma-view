@@ -1,0 +1,14 @@
+#compute-selection-row {
+    max-height: 38vh;
+}
+
+#warp-view {
+    display: flex;
+    flex-flow: column;
+    max-height: inherit;
+    overflow-y: auto;
+}
+
+.warp {
+
+}

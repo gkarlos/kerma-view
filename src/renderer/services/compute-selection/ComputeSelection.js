@@ -1,4 +1,5 @@
-const ComputeSelectionMode = require('./ComputeSelectionMode')
+const ComputeSelectionMode = require('@renderer/services/compute-selection/ComputeSelectionMode')
+const ComputeSelectionView = require('@renderer/services/compute-selection/ComputeSelectionView')
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionView")} ComputeSelectionView */
@@ -35,10 +36,9 @@ class ComputeSelection {
    * @param {ComputeSelectionModel} model The ComputeUnitSelection model
    * @param {ComputeUnitSelectionView} view The ComputeUnitSelection view
    */
-  constructor(model, view, mode=ThreadMode) {
+  constructor(model) {
     this.#model = model
-    this.#view  = view
-    this.#onModeChangeCallbacks = []
+    this.#view  = new ComputeSelectionView(model)
   }
 
   /** Retrieve the model */
@@ -59,6 +59,9 @@ class ComputeSelection {
     return this.#model.getMode()
   }
 
+  activate() {
+    this.#view.render()
+  }
 
   /** 
    * Register a callback to be fired when the unit selection changes mode 
