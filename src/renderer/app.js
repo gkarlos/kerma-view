@@ -3,13 +3,20 @@
 /** @ignore @typedef {import("@renderer/services/log/ConsoleLogger")}                       ConsoleLogger          */
 /** @ignore @typedef {import("@renderer/services/notification/NotificationService")}        NotificationService    */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionService")} KernelSelectionService */
+/** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionService")} LaunchSelectionService */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
+
+// const { app } = require("electron")
 
 /** 
  * @exports App
  * @category main
  */
 const App = {}
+
+/// ------------------- ///
+///     Properties      ///
+/// ------------------- ///
 
 App.Electron = {
   remote : require('electron').remote,
@@ -43,7 +50,20 @@ App.Services = {
   /** @type {NotificationService} */
   Notification : undefined,
   /** @type {KernelSelectionService} */
-  KernelSelection : undefined
+  KernelSelection : undefined,
+  /** @type {LaunchSelectionService} */
+  LaunchSelection : undefined,
+  
+  /** @type {Boolean} */
+  preUiReady : false,
+
+  /** @type {Boolean} */
+  postUiReady : false,
+  
+  /** @type {Boolean} */
+  get ready() { 
+    return App.Services.preUiReady && app.Services.postUiReady 
+  }
 }
 
 App.Electron = { remote : undefined, app : undefined}
@@ -53,10 +73,29 @@ App.input = {
   path : undefined
 }
 
+
+/// ------------------- ///
+///      Shortcuts      ///
+/// ------------------- ///
+
+/** @type {NotificationService} */
+App.Notifier
+/** @type {ConsoleLogger} */   
+App.Logger
+
+/// ------------------- ///
+///       Methods       ///
+/// ------------------- ///
+
 /** @method */
 App.enableLogging  = () => { App.Services.Log.enable() }
 /** @method */
 App.disableLogging = () => { App.Services.Log.disable() }
+
+
+/// ------------------- ///
+///         Main        ///
+/// ------------------- ///
 
 /** 
  * Entry point of the app
@@ -72,60 +111,70 @@ App.main = function() {
   const ConsoleLogger                = require('./services/log').ConsoleLogger
   const KernelSelectionService       = require('./services/kernel-selection').KernelSelectionService
   const LaunchSelectionService       = require('./services/launch-selection').LaunchSelectionService
-  const ComputeUnitSelectionService  = require('./services/compute-selection').ComputeUnitSelectionService
+  const ComputeSelectionService      = require('./services/compute-selection').ComputeSelectionService
 
   const Events = App.Events
 
+  /// Initialize servises that don't require the UI
   function initPreUiServices() {
-    App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Trace, color: true, timestamps: true}).enable()
+    if ( App.Services.preUiReady) return
+    
+    App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Debug, color: true, timestamps: true}).enable()
     App.Logger = App.Services.Log
+
+    App.Services.preUiReady = true
   }
 
+  /// Initialize servises that require the UI
   function initPostUiServices() {
-    App.Services.Notification         = new NotificationService().enable()
-    App.Services.KernelSelection      = new KernelSelectionService().enable()
-    App.Services.LaunchSelection      = new LaunchSelectionService().enable()
-    App.Services.ComputeUnitSelection = new ComputeUnitSelectionService().enable()
+    if ( App.Services.postUiReady) return
 
+    App.Services.Notification      = new NotificationService().enable()
+    App.Services.KernelSelection   = new KernelSelectionService().enable()
+    App.Services.LaunchSelection   = new LaunchSelectionService().enable()
+    App.Services.ComputeSelection  = new ComputeSelectionService().enable()
     App.Notifier = App.Services.Notification
     // App.ComputeUnitSelector = App.Services.ComputeUnitSelection
+
+    App.Services.postUiReady = true
   }
 
   function start() {
-    App.Services.KernelSelection.defaultOnSelect(
-      kernel => App.Notifier.info(kernel.toString(), {title: "Kernel Selection"})
+    // Register some default callbacks for the kernel selection
+    App.Services.KernelSelection.defaultOnSelect (
+      kernel => App.Logger.debug("User selected kernel:", kernel.toString()), //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
+    )
+
+    App.Services.LaunchSelection.defaultOnSelect(
+      launch => App.Logger.debug("User selected launch:", launch.toString())
     )
 
     App.Services.KernelSelection.createEmpty(true)
     App.Services.LaunchSelection.createEmpty(true)
 
-    App.on( Events.INPUT_FILE_SELECTED, () => {
+    App.on( Events.INPUT_FILE_SELECTED, (filename) => {
+      App.Logger.debug("User selected file:", filename)
       App.Services.KernelSelection.activate(App.Services.KernelSelection.createMock().enable())
-      // App.ui.editor
-      //   .getCurrent().onSelect(() => console.log(typeof App.Services.KernelSelection.getCurrent().view.getSelection()))
-
-
-      
-      // setTimeout( () => App.Services.KernelSelection.getCurrent().dispose(true), 3000)
-      // setTimeout( () => {
-      //   App.Services.KernelSelection.activate(App.Services.KernelSelection.createNewMock2())
-      //   setTimeout( () => {
-      //     App.Services.KernelSelection.getCurrent().enable()
-      //   }, 3000)
-      // }, 5000)
     })
 
-    App.on( Events.INPUT_KERNEL_SELECTED, () => {
+    App.on( Events.INPUT_KERNEL_SELECTED, (kernel) => {
+      App.Services.LaunchSelection.activate(App.Services.LaunchSelection.createForKernel(kernel).enable())
+    })
+
+    App.on( Events.INPUT_KERNEL_LAUNCH_SELECTED, (launch) => {
 
     })
+
+
 
 
   }
 
+  /**
+   * 
+   */
   initPreUiServices()
-
   App.ui.init()
-  
   App.on(Events.UI_READY, () => {
     initPostUiServices()  
     start()

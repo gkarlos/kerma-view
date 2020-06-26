@@ -1,5 +1,4 @@
-const Service         = require('@renderer/services').Service
-
+const Service           = require('@renderer/services').Service
 const ComputeSelection  = require('@renderer/services/compute-selection').ComputeSelection
 
 const App     = require('@renderer/app')
