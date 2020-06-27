@@ -66,8 +66,14 @@ class CudaLaunch {
       && this.#id === other.id
   }
 
-  toString() {
-    return `launch(id: ${this.id}, ${this.source.name}, ${this.source.launchParams}, caller: ${this.#source.caller.name})`
+  /**
+   * String Representation of the launch
+   * @param {Boolean} [short=false] If set a compact String representation is returned
+   * @returns {String}
+   */
+  toString(short=false) {
+    return short? `#${this.id}, ${this.source.name}, <<<${this.grid.toString(true)},${this.block.toString(true)}>>>`
+      : `launch(id: ${this.id}, kernel: ${this.source.name}, caller: ${this.#source.caller.name}, params: <<<${this.grid.toString(true)},${this.block.toString(true)}>>>)`
   }
 
 }

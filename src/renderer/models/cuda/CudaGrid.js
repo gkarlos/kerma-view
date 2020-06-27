@@ -88,10 +88,11 @@ class CudaGrid {
 
   /**
    * String representation of the grid
+   * @param {Boolean} [short=false] If set a compact String representation is returned
    * @returns {String}
    */
-  toString() {
-    return `(${this.#dim.x}x${this.#dim.y}, #blocks: ${this.size})`
+  toString(short=false) {
+    return short ? `${this.#dim.y}x${this.#dim.x}` : `(${this.#dim.y}x${this.#dim.x}, #blocks: ${this.size})`
   }
 
   

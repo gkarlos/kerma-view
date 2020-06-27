@@ -163,10 +163,12 @@ class CudaBlock {
 
   /**
    * String representation of the block
+   * @param {Boolean} [short=false] If set a compact String representation is returned
    * @returns {String}
    */
-  toString() {
-    return `(${this.#dim.x}x${this.#dim.y}, #threads: ${this.size}, #warps: ${this.numWarps})`
+  toString(short=false) {
+    return short ? `${this.#dim.y}x${this.#dim.x}` 
+      : `(${this.#dim.y}x${this.#dim.x}, #threads: ${this.size}, #warps: ${this.numWarps})`
   }
 
   /**

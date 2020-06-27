@@ -65,10 +65,11 @@ class CudaKernel {
 
   /**
    * String representation of this kernel
+   * @param {Boolean} [short=false] If set a compact String representation is returned
    * @returns {String}
    */
-  toString() {
-    return `kernel(id: ${this.#id}, name: ${this.#source.name}, ${this.launches.length} launches)`
+  toString(short=false) {
+    return short? `#${this.id}, ${this.source.name} [x${this.launches.length}]` : `kernel(id: ${this.#id}, name: ${this.#source.name}, ${this.launches.length} launches)`
   }
   
 }
