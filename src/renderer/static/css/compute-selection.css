@@ -1,14 +1,51 @@
 #compute-selection-row {
-    max-height: 38vh;
+    height: 86%;
+    /* max-height: 92%; */
 }
 
-#warp-view {
+#warp-view-container {
+    display: inline-grid;
+    max-height: 99%;
+    height: 99%;
+    width: 49%;
+}
+
+#warp-container {
     display: flex;
     flex-flow: column;
-    max-height: inherit;
+    height: 98%;
+    /* max-height: 100%; */
     overflow-y: auto;
 }
 
-.warp {
-
+.warp-container-item {
+    padding: 3px;
+    height: 30px;
+    margin-bottom: 2px;
 }
+
+.warp-container-item #first-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.active-lanes-number, .inactive-lanes-number {
+    display: table-cell;
+    margin-left: 5px;
+    margin-top: 2px;
+    color: #6c757d;
+    font-size: x-small;
+}
+
+#active-lanes {
+    height: 8px;
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 10%;
+}
+
+#active-lanes .progress-bar {
+    vertical-align: middle;
+    /* height: 8px; */
+}
+

@@ -62,7 +62,7 @@ class LaunchSelectionService extends Service {
     return selection
   }
 
-  createMock(makeCurrent) {
+  createMockForKernel(kernel) {
     //todo
   }
 

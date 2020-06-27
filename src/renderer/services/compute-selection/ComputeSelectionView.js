@@ -5,28 +5,27 @@ const ComputeSelectionWarpView = require('@renderer/services/compute-selection/C
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeUnitSelectionMode */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel").} ComputeUnitSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionWarpView").} ComputeSelectionWarpView */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch*/
 
 /**
  * @memberof module:compute-selection
  */
 class ComputeSelectionView {
 
-  /** @type {ComputeSelectionModel} */
+  /** @type {ComputeUnitSelectionModel} model */
   #model
-  /** @type {ComputeSelectionMode} */
-  #mode
   /** @type {ComputeSelectionWarpView} */
   #viewimpl
 
   /**
-   * Creates a new ExecutionUnitSelectionView
-   * @param {ComputeSelectionModel} model 
+   * Creates a new ComputeSelectionView
+   * @param {ComputeUnitSelectionModel} model
    */
   constructor(model) {
     this.#model = model
-    this.#mode = ComputeSelectionMode.Default
     this.#viewimpl = new ComputeSelectionWarpView(model)
-    console.log(this.#viewimpl)
+    console.log(this.#model.grid.toString())
+    console.log(this.#model.block.toString())
   }
 
   /**
@@ -45,6 +44,7 @@ class ComputeSelectionView {
   }
 
   render() {
+    console.log()
     this.#viewimpl.render()
   }
 }

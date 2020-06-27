@@ -31,7 +31,7 @@ class ComputeSelectionModel {
    * @param {CudaBlock} block A Cuda block description
    * @param {ComputeSelectionMode} [mode] Optionally set the mode upon creation. {@link module:compute-selection.ComputeSelectionMode.Thread} by default
    */
-  constructor( grid, block, mode=Mode.Thread) {
+  constructor(grid, block, mode=Mode.Default) {
     // if ( !grid) throw new Error('Required argument `grid` is missing')
     // if ( !block) throw new Error('Required argument `block` is missing')
     this.#gridDescription = grid

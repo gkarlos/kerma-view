@@ -1,9 +1,11 @@
 const ComputeSelectionMode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 const ComputeSelectionView = require('@renderer/services/compute-selection/ComputeSelectionView')
+const ComputeSelectionModel = require('@renderer/services/compute-selection/ComputeSelectionModel')
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionView")} ComputeSelectionView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch*/
 
 /**
  * This callback is fired when the compute unit selection changes mode
@@ -33,12 +35,12 @@ class ComputeSelection {
 
   /**
    * Create a new ComputeSelection
-   * @param {ComputeSelectionModel} model The ComputeUnitSelection model
-   * @param {ComputeUnitSelectionView} view The ComputeUnitSelection view
+   * @param {CudaGrid} grid A CudaGrid
+   * @param {CudaBlock} block A CudaBlock
    */
-  constructor(model) {
-    this.#model = model
-    this.#view  = new ComputeSelectionView(model)
+  constructor(grid, block) {
+    this.#model = new ComputeSelectionModel(grid, block)
+    this.#view  = new ComputeSelectionView(this.#model)
   }
 
   /** Retrieve the model */
