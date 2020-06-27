@@ -1,6 +1,9 @@
 const CudaIndex = require('./CudaIndex')
 
 /**
+ * This class is used to describe dimensions of various Cuda objects.
+ * For instance CudaGrid, CudaBlock of even Arrays.
+ * 
  * @memberof module:cuda
  */
 class CudaDim {
@@ -126,7 +129,7 @@ class CudaDim {
    * @returns {String}
    */
   toString() {
-    let str = `${this.#x}x${this.#y}`
+    let str = `${this.#y}x${this.#x}`
     if (this.#z > 1)
       str += `x${this.#z}`
     return str

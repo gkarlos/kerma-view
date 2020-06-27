@@ -4,7 +4,7 @@ const CudaDim = require('./CudaDim')
 /** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
 
 /**
- * Represents a Cuda Grid
+ * A Cuda grid description
  * @memberof module:cuda
  */
 class CudaGrid {
@@ -56,6 +56,13 @@ class CudaGrid {
    * @returns {Number}
    */
   get size() { return this.#dim.size }
+
+  /**
+   * 
+   */
+  getBlock(index) {
+    //TODO implement me
+  }
 
   /**
    * Retrieve the dimensions of this grid

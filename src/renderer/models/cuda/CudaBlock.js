@@ -7,7 +7,11 @@ const CudaIndex = require('./CudaIndex')
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
 /**
- * Represents a Cuda Block
+ * A Cuda block. This class is meant to be used both as a description of the block
+ * dimensions used in a kernel launch as well ass to model specific block in a grid.
+ * The difference between the two (so far) lies at whether the CudaBlock object has
+ * been assigned an index or not. See {@link module:cuda.CudaBlock#hasIndex}
+ * 
  * @memberof module:cuda
  */
 class CudaBlock {

@@ -5,7 +5,9 @@ const CudaIndex = require('@renderer/models/cuda/CudaIndex')
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
 /**
- * Represents a Cuda Warp
+ * Represents a Cuda Warp. This class is meant to be used to 
+ * describe specific warps in a block.
+ * 
  * @memberof module:cuda
  */
 class CudaWarp {
@@ -121,6 +123,14 @@ class CudaWarp {
     for ( let i = Limits.warpSize - 1; i >= this.#usableThreads; i-- )
       res.unshift(i)
     return res;
+  }
+
+  /**
+   * Check if there are lanes in this warp  
+   * @returns {Boolean}
+   */
+  hasUnusableThreads() {
+    return this.getNumUnusableThreads() > 0
   }
 
   /**

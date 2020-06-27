@@ -68,7 +68,7 @@ class CudaLaunch {
 
   /**
    * String Representation of the launch
-   * @param {Boolean} [short=false] If set a compact String representation is returned
+   * @param {Boolean} [short=false] If set a compact String representation is return
    * @returns {String}
    */
   toString(short=false) {
