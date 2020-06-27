@@ -145,11 +145,11 @@ App.main = function() {
   function start() {
     // Register some default callbacks for the kernel selection
     App.Services.KernelSelection.defaultOnSelect (
-      kernel => App.Logger.debug("User selected kernel:", kernel.toString()), //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
+      kernel => App.Logger.debug("User selected kernel:", kernel.toString(true)), //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
     )
 
     App.Services.LaunchSelection.defaultOnSelect(
-      launch => App.Logger.debug("User selected launch:", launch.toString())
+      launch => App.Logger.debug("User selected launch:", launch.toString(true))
     )
 
     App.Services.KernelSelection.createEmpty(true)
