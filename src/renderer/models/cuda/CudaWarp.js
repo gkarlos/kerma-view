@@ -28,11 +28,11 @@ class CudaWarp {
         throw new Error("Invalid index. Must be 1D")
       if ( index.x >= block.numWarps)
         throw new Error(`Invalid warp index '${index.toString()}' for block ${block.toString()}`)
-      this.#index = index
+      this.#index = CudaIndex.linearize(index, block.dim)
     } else if (Number.isInteger(index)) {
       if ( index >= block.numWarps)
         throw new Error(`Invalid warp index '${index}' for block ${block.toString()}`)
-      this.#index = new CudaIndex(index)
+      this.#index = index
     } else {
       throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
     }
@@ -104,7 +104,7 @@ class CudaWarp {
    * @returns {Number}
    */
   getLastUsableLaneIndex() {
-    return this.getNumUnusableThreads() - 1
+    return this.getNumUnusableLanes() - 1
   }
 
   /**
@@ -123,7 +123,7 @@ class CudaWarp {
    * @returns {Boolean}
    */
   hasUnusableLanes() {
-    return this.getNumUnusableThreads() > 0
+    return this.getNumUnusableLanes() > 0
   }
 
   /**
@@ -134,7 +134,7 @@ class CudaWarp {
   equals(other) {
       return (other instanceof CudaWarp) 
         && this.getBlock().equals(other.getBlock())
-        && this.getIndex().equals(other.getIndex())
+        && this.getIndex() === other.getIndex()
         && this.getNumUsableLanes() === other.getNumUsableLanes()
         && this.getNumUnusableLanes() === other.getNumUnusableLanes()  
   }
