@@ -14,8 +14,8 @@ class CudaWarp {
   
   /** @type CudaBlock */ #block
   /** @type Number    */ #index
-  /** @type Number    */ #usableThreads
-  /** @type Number    */ #unusableThreads
+  /** @type Number    */ #usableLanes
+  /** @type Number    */ #unusableLanes
 
   /**
    * 
@@ -28,17 +28,18 @@ class CudaWarp {
         throw new Error("Invalid index. Must be 1D")
       if ( index.x >= block.numWarps)
         throw new Error(`Invalid warp index '${index.toString()}' for block ${block.toString()}`)
+      this.#index = index
     } else if (Number.isInteger(index)) {
       if ( index >= block.numWarps)
-        throw new Error(`Invalid index '${index}' for block ${block.toString()}`)
+        throw new Error(`Invalid warp index '${index}' for block ${block.toString()}`)
+      this.#index = new CudaIndex(index)
     } else {
       throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
     }
 
     this.#block = block
-    this.#index = index
-    this.#usableThreads = this._computeUsableThreads(block, index)
-    this.#unusableThreads = Limits.warpSize - this.#usableThreads
+    this.#usableLanes = this._computeUsableLanes(block, index)
+    this.#unusableLanes = Limits.warpSize - this.#usableLanes
   }
 
   /** 
@@ -47,7 +48,7 @@ class CudaWarp {
    * @param {CudaBlock} block
    * @param {Number|CudaIndex} warpIndex
    * */
-  _computeUsableThreads(block, warpIndex) {
+  _computeUsableLanes(block, warpIndex) {
     if ( block.hasWarpWithInactiveLanes()) {
       if ( Number.isInteger(warpIndex))
         if ( warpIndex == block.numWarps - 1)
@@ -78,7 +79,7 @@ class CudaWarp {
    * 
    * @return {Number}
    */
-  getNumUsableThreads() { return this.#usableThreads}
+  getNumUsableLanes() { return this.#usableLanes}
 
   /**
    * Get the number of unusable threads in this warp
@@ -87,40 +88,32 @@ class CudaWarp {
    * 
    * @return {Number}
    */
-  getNumUnusableThreads() { return this.#unusableThreads}
+  getNumUnusableLanes() { return this.#unusableLanes}
 
 
   /**
    * Retrieve the indices of the usable threads in the block
    * @returns {number[]}
    */
-  getUsableThreads() { 
-    return [...Array(this.#usableThreads).keys()]
+  getUsableLaneIndices() { 
+    return [...Array(this.#usableLanes).keys()]
   }
 
   /**
    * Retrieve the index of the last usable thread
    * @returns {Number}
    */
-  getLastUsableThread() {
+  getLastUsableLaneIndex() {
     return this.getNumUnusableThreads() - 1
-  }
-
-  /**
-   * Retrieve the indices of the usable threads in the block
-   * @returns {number[]}
-   */
-  getUsableThreads() { 
-    return [...Array(this.#usableThreads).keys()]
   }
 
   /**
    * Retrieve the indices of the unusable threads in the block
    * @returns {number[]}
    */
-  getUnusableThreads() {
+  getUnusableLaneIndices() {
     let res = []
-    for ( let i = Limits.warpSize - 1; i >= this.#usableThreads; i-- )
+    for ( let i = Limits.warpSize - 1; i >= this.#usableLanes; i-- )
       res.unshift(i)
     return res;
   }
@@ -129,7 +122,7 @@ class CudaWarp {
    * Check if there are lanes in this warp  
    * @returns {Boolean}
    */
-  hasUnusableThreads() {
+  hasUnusableLanes() {
     return this.getNumUnusableThreads() > 0
   }
 
@@ -141,17 +134,19 @@ class CudaWarp {
   equals(other) {
       return (other instanceof CudaWarp) 
         && this.getBlock().equals(other.getBlock())
-        && this.getIndex() === other.getIndex()
-        && this.getNumUsableThreads() === other.getNumUsableThreads()
-        && this.getNumUnusableThreads() === other.getNumUnusableThreads()  
+        && this.getIndex().equals(other.getIndex())
+        && this.getNumUsableLanes() === other.getNumUsableLanes()
+        && this.getNumUnusableLanes() === other.getNumUnusableLanes()  
   }
 
   /**
    * String representation of the warp
+   * @param {Boolean} [short=false] If set a compact String representation is return
    * @returns {String}
    */
-  toString() {
-    return `CudaWarp(block: ${this.#block.toString()}, id: ${this.getIndex()}, usable: ${this.getNumUsableThreads()})`
+  toString(short=false) {
+    return short ? `#${this.getIndex()}, ${this.getNumUsableThreads()}/${this.getNumUnusableThreads()}` 
+      : `CudaWarp(block: ${this.#block.toString()}, id: ${this.getIndex()}, usable: ${this.getNumUsableThreads()})`
   }
 }
 
