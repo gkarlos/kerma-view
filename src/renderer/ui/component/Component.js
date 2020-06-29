@@ -9,8 +9,8 @@ class Component {
   #name
   /** @type {String} */
   #id
-  /** @type {Boolean} */
-  #rendered
+  // /** @type {Boolean} */
+  // #rendered
   /** @type {Component} */
   #container
   

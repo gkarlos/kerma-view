@@ -1,22 +1,16 @@
 const ComputeSelectionMode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 const ComputeSelectionView = require('@renderer/services/compute-selection/ComputeSelectionView')
 const ComputeSelectionModel = require('@renderer/services/compute-selection/ComputeSelectionModel')
+const ThreadMode = ComputeSelectionMode.Thread
+const WarpMode = ComputeSelectionMode.Warp
+
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionView")} ComputeSelectionView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch*/
-
-/**
- * This callback is fired when the compute unit selection changes mode
- * @callback ComputeSelectionOnModeChangeCallback
- * @param {ComputeSelectionMode} oldMode The previous mode
- * @param {ComputeSelectionMode} newMode The new mode
- * @returns {void}
- */
-
-const ThreadMode = ComputeSelectionMode.Thread
-const WarpMode = ComputeSelectionMode.Warp
+/** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread*/
+/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp*/
 
 /**
  * A compute unit selection controller.
@@ -43,7 +37,10 @@ class ComputeSelection {
     this.#view  = new ComputeSelectionView(this.#model)
   }
 
-  /** Retrieve the model */
+  /** 
+   * The model of this selection
+   * @type {ComputeSelectionModel}
+   */
   get model() { 
     return this.#model
   }
@@ -51,6 +48,14 @@ class ComputeSelection {
   /** Retrieve the view */
   get view() { 
     return this.#view
+  }
+
+  get grid() { 
+    return this.#model.grid
+  }
+
+  get block() {
+    return this.#model.block
   }
 
   /** 
@@ -62,7 +67,16 @@ class ComputeSelection {
   }
 
   activate() {
-    this.#view.render()
+    this.#view.activate()
+  }
+
+  deactivate() {
+    console.log("DEACTIVATING")
+    this.#view.deactivate()
+  }
+
+  dispose() {
+    this.#view.dispose()
   }
 
   /** 
@@ -103,8 +117,8 @@ class ComputeSelection {
   select(x,y=1,z=1) {
   }
 
-  clearSelected() {
-    // this.#selection = undefined
+  clear() {
+    this.#view.clear()
   }
   
   getSelected() { 
@@ -117,6 +131,10 @@ class ComputeSelection {
 
   get() {
 
+  }
+
+  equals(other) {
+    return this.#model.equals(other.model)
   }
 }
 

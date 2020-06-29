@@ -234,6 +234,34 @@ class ComputeSelectionModel {
     }
     return false
   }
+
+  /**
+   * Compare with another ComputeSelectionModel for equality
+   * @param {ComputeSelectionModel} other
+   * @returns {Boolean}
+   */
+  equals(other) {
+    return ( other instanceof ComputeSelectionModel)
+      && this.grid.equals(other.grid)
+      && this.block.equals(other.block)
+      && this.mode === other.mode
+      && ( this.inThreadMode() 
+            ? this.hasThreadSelected() && this.getThreadSelection().equals(other.getThreadSelection())
+            : this.hasWarpSelected() && this.getWarpSelection().equals(other.getWarpSelection()))
+  }
+
+  /**
+   * Compare with another selection if both are selection for the same launch parameters (grid/block)
+   * Basically the same as `equals()` except that current selection and mode are not checked
+   * @param {ComputeSelectionModel} other
+   * @returns {Boolean} 
+   */
+  eql(other) {
+    return ( other instanceof ComputeSelectionModel)
+      && this.grid.equals(other.grid)
+      && this.block.equals(other.block)
+      && this.mode === other.mode
+  }
 }
 
 module.exports = ComputeSelectionModel

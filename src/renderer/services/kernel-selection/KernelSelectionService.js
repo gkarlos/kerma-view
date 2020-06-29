@@ -100,7 +100,7 @@ class KernelSelectionService extends Service {
 
         let cudaLaunch = new CudaLaunch(cudaKernel, {
           grid: new CudaGrid(1024),
-          block : new CudaBlock(930),
+          block : j % 2 == 0? new CudaBlock(935) : new CudaBlock(200),
         }, { id : j, source: launchFCI})
 
         cudaKernel.addLaunch(cudaLaunch)

@@ -24,8 +24,8 @@ class ComputeSelectionService extends Service {
   #current
 
   constructor() {
-    super('ComputeUnitSelectionService')
-    this.selections = []
+    super('ComputeSelectionService')
+    this.#selections = []
     this.#current = undefined
   }
 
@@ -43,23 +43,41 @@ class ComputeSelectionService extends Service {
    * The ComputeUnitSelection is storred internally.
    * @param {CudaGrid} grid
    * @param {CudaBlock} block
+   * @param {Boolean} activate immediate activate this selection upon creation
    * @returns {ComputeSelection}
    */
-  create(grid, block) {
-    let selection = new ComputeSelection(grid, block)
-    this.selections.push(selection)
+  create(grid, block, activate=false) {
+
+    let lookup = this.#selections.find(sel => sel.grid.equals(grid) && sel.block.equals(block))
+    let selection
+
+    if ( lookup) { // We found a cached selection that can be used for this launch...
+      if ( this.#current.equals(lookup)) { // But its the current one so just create a new one
+        selection = new ComputeSelection( grid, block)
+        this.#selections.push(selection)    
+      } else {
+        lookup.clear()
+        selection = lookup
+      }
+    } else { // We cant use any of the cached selections. Create a new one
+      selection = new ComputeSelection(grid, block)
+      this.#selections.push(selection)
+    } 
+
+    if ( activate)
+      this.activate(selection)
+
     return selection
   }
 
   /**
    * Create a new ComputeSelection for a given kernel launch
    * @param {CudaLaunch} launch
+   * @param {Boolean} activate immediately activate this selection upon creation
    * @returns {ComputeSelection}
    */
-  createForLaunch(launch) {
-    let selection = new ComputeSelection(launch.grid, launch.block)
-    this.selections.push(selection)
-    return selection
+  createForLaunch(launch, activate=false) {
+    return this.create(launch.grid, launch.block, activate)
   }
 
   /**
@@ -79,6 +97,8 @@ class ComputeSelectionService extends Service {
    * @returns {Boolean} True if the selection was successfully activated. False otherwise
    */
   activate(selection) {
+    this.#current && this.#current.deactivate()
+    this.#current = selection
     selection.activate()
   }
 
