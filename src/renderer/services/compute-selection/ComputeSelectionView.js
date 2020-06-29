@@ -1,5 +1,8 @@
-const ComputeSelectionMode     = require('@renderer/services/compute-selection/ComputeSelectionMode')
-const ComputeSelectionWarpView = require('@renderer/services/compute-selection/ComputeSelectionWarpView')
+const ComputeSelectionMode      = require('@renderer/services/compute-selection/ComputeSelectionMode')
+const ComputeSelectionWarpView  = require('@renderer/services/compute-selection/ComputeSelectionWarpView')
+const ComputeSelectionBlockView = require('@renderer/services/compute-selection/ComputeSelectionBlockView')
+const EventEmitter = require('events').EventEmitter
+const Events       = require('@renderer/services/compute-selection/Events')
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").ComputeSelectionOnWarpSelectCallback}   ComputeSelectionOnWarpSelectCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").ComputeSelectionOnThreadSelectCallback} ComputeSelectionOnThreadSelectCallback */
@@ -11,7 +14,8 @@ const ComputeSelectionWarpView = require('@renderer/services/compute-selection/C
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel").} ComputeUnitSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionWarpView").} ComputeSelectionWarpView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionThreadView").} ComputeSelectionThreadView */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch*/
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionBlockView")} ComputeSelectionBlockView */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 
 /**
  * @memberof module:compute-selection
@@ -26,20 +30,28 @@ class ComputeSelectionView {
   #threadViewImpl
   /** @type {JQuery} */
   #modeSelection
-  /** @type {JQuery} */
-  #blockSelection
+  /** @type {ComputeSelectionBlockView} */
+  #blockViewImpl
   /** @type {Boolean} */
   #active
   /** @type {Boolean} */
   #enabled
+  /** @type {EventEmitter} */
+  #emitter
 
   /**
    * Creates a new ComputeSelectionView
    * @param {ComputeUnitSelectionModel} model
    */
   constructor(model) {
+    this.#emitter = new EventEmitter()
     this.#model = model
+    this.#blockViewImpl = new ComputeSelectionBlockView(model)
     this.#warpViewImpl = new ComputeSelectionWarpView(model)
+
+
+    let self = this
+    this.#warpViewImpl.onSelect( warp => self.#emitter.emit(Events.UnitSelect, warp, ComputeSelectionMode.Warp))
     this.#active = false
   }
 
@@ -80,14 +92,14 @@ class ComputeSelectionView {
    * displaying ComputeSelection view
    */
   activate() {
-    console.log("activate")
     if ( !this.isActive()) {
       if ( this.inWarpMode())
         this.#warpViewImpl.activate()
       else
         this.#threadViewImpl.activate()
 
-      //TODO activate BlockSelection
+      this.#blockViewImpl.activate()
+
       //TODO activate ModeSelection
       this.#active = true
 
@@ -156,7 +168,7 @@ class ComputeSelectionView {
    * @returns {ComputeSelectionView} this 
    */
   onThreadSelect(callback) {
-    this.#threadViewImpl.onThreadSelect(callback)
+    // this.#threadViewImpl.onThreadSelect(callback)
   }
 
   /** 
@@ -164,8 +176,7 @@ class ComputeSelectionView {
    * @param {ComputeSelectionOnUnitSelectCallback} A callback
    */
   onUnitSelect(callback) { 
-    this.onWarpSelect(callback)
-    this.onThreadSelect(callback)
+    this.#emitter.on(Events.UnitSelect, callback)
     return this
   }
 }

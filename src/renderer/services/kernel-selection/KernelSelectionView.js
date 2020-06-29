@@ -250,7 +250,7 @@ class KernelSelectionView extends Component {
   /** 
    * Register a callback to be invoked when the selection gets disabled
    * @param {KernelSelectionOnDisabledCallback} callback
-   * @returns {KernelSelectionView} this
+   * @returns {KernelSelectionView} thise
    */
   onDisabled(callback) {
     if ( isFunction(callback))

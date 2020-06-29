@@ -71,12 +71,19 @@ class ComputeSelection {
   }
 
   deactivate() {
-    console.log("DEACTIVATING")
     this.#view.deactivate()
   }
 
   dispose() {
     this.#view.dispose()
+  }
+
+  onBlockSelect(callback) {
+
+  }
+
+  onUnitSelect(callback) {
+    this.#view.onUnitSelect(callback)
   }
 
   /** 

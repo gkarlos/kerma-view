@@ -55,13 +55,23 @@ class MainSelectionArea extends Container {
     
     this.setNode($(`
       <div id="${this.id}" class="input-group card-header">
-        MainSelectionArea
       </div>
     `).appendTo(this.#locationSelector))
 
     this.#firstRow = { node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="kernel-launch-selection-row"></div>`) }
-    this.#secondRow = { node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="compute-selection-row"</div>`) }
+    let secondRow = { 
+      node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="compute-selection-row"</div>`),
+    }
 
+    secondRow.left = {
+      node : $(`<div class="col-6" id="compute-selection-row-left"></div>`).appendTo(secondRow.node)
+    }
+    
+    secondRow.right = {
+      node : $(`<div class="col-6" id="compute-selection-row-right">HELLO 2</div>`).appendTo(secondRow.node)
+    }
+
+    this.#secondRow = secondRow
     this.#firstRow.node.appendTo(this.node)
     this.#secondRow.node.appendTo(this.node)
     

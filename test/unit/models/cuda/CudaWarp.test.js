@@ -102,6 +102,36 @@ describe('renderer/models/cuda/CudaWarp', () => {
     })
   })
 
+  describe("getNumUnusableLanes", () => {
+    it("should return the right value [warpSize multiple] (1) ", () => {
+      let block = new CudaBlock(1024)
+      for ( let i = 0; i < block.numWarps; ++i)
+        expect(new CudaWarp(block, i).getNumUnusableLanes()).to.equal(0)
+    })
+
+    it("should return the right value [warpSize multiple] (2) ", () => {
+      let block = new CudaBlock(1024)
+      for ( let i = 0; i < block.numWarps; ++i)
+        expect(new CudaWarp(block, i).getNumUnusableLanes()).to.equal(0)
+    })
+
+    it("should return the right value [not warpSize multiple] (1)", () => {
+      let block = new CudaBlock(1000)
+      expect(new CudaWarp(block, 0).getNumUnusableLanes()).to.equal(0)
+      expect(new CudaWarp(block, 5).getNumUnusableLanes()).to.equal(0)
+      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.not.equal(0)
+      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.equal(CudaLimits.warpSize - 1000 % CudaLimits.warpSize)
+    })
+
+    it("should return the right value [not warpSize multiple] (2)", () => {
+      let block = new CudaBlock(new CudaDim(10, 99))
+      expect(new CudaWarp(block, 0).getNumUnusableLanes()).to.equal(0)
+      expect(new CudaWarp(block, 5).getNumUnusableLanes()).to.equal(0)
+      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.not.equal(0)
+      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.equal(2)
+    })
+  })
+
   describe("getUsableLaneIndices", () => {
     it("should return the right value [warpSize multiple] (1) ", () => {
       let block = new CudaBlock(1024)
@@ -138,35 +168,7 @@ describe('renderer/models/cuda/CudaWarp', () => {
     })
   })
 
-  describe("getNumUnusableLanes", () => {
-    it("should return the right value [warpSize multiple] (1) ", () => {
-      let block = new CudaBlock(1024)
-      for ( let i = 0; i < block.numWarps; ++i)
-        expect(new CudaWarp(block, i).getNumUnusableLanes()).to.equal(0)
-    })
 
-    it("should return the right value [warpSize multiple] (2) ", () => {
-      let block = new CudaBlock(1024)
-      for ( let i = 0; i < block.numWarps; ++i)
-        expect(new CudaWarp(block, i).getNumUnusableLanes()).to.equal(0)
-    })
-
-    it("should return the right value [not warpSize multiple] (1)", () => {
-      let block = new CudaBlock(1000)
-      expect(new CudaWarp(block, 0).getNumUnusableLanes()).to.equal(0)
-      expect(new CudaWarp(block, 5).getNumUnusableLanes()).to.equal(0)
-      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.not.equal(0)
-      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.equal(CudaLimits.warpSize - 1000 % CudaLimits.warpSize)
-    })
-
-    it("should return the right value [not warpSize multiple] (2)", () => {
-      let block = new CudaBlock(new CudaDim(10, 99))
-      expect(new CudaWarp(block, 0).getNumUnusableLanes()).to.equal(0)
-      expect(new CudaWarp(block, 5).getNumUnusableLanes()).to.equal(0)
-      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.not.equal(0)
-      expect(new CudaWarp(block, block.numWarps - 1).getNumUnusableLanes()).to.equal(2)
-    })
-  })
 
 
   describe("getUnusableLaneIndices", () => {

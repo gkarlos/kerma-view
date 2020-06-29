@@ -67,7 +67,7 @@ class CudaThread {
   }
 
   inUnusedLane() {
-    return this.getWarp().getLastUsableThread()
+    return this.getWarp().getLastUsableThread() >= CudaIndex.linearize(this.index, this.getBlock().dim)
   }
 }
 

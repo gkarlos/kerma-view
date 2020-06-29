@@ -1,34 +1,6 @@
-/// ------------------- ///
-///       Events        ///
-/// ------------------- ///
-
-// /** 
-//  * @static
-//  
-// const Events = {
-//   /** */
-//   ModeChange : "mode-change",
-//   /** */
-//   BlockSelect : "block-select",
-//   /** */
-//   UnitSelect : "unit-select",
-//   /** */
-//   WarpSelect : "warp-select",
-//   /** */
-//   ThreadSelect : "thread-select",
-//   /** */
-//   Enabled : "enabled",
-//   /** */
-//   Disabled : "disabled"
-// }
-
- /**
+/**
  * @module compute-selection
  * @category services
- * @property {module:compute-selection~ComputeSelectionView} ComputeSelectionView
- * @property {module:compute-selection~ComputeSelectionService} ComputeSelectionService
- * @property {module:compute-selection.ComputeSelection} ComputeSelection
- * @property {module:compute-selection.ComputeSelectionModel} ComputeSelectionModel
  */
 module.exports = {
   ComputeSelectionBlockView : require('./ComputeSelectionBlockView'),
@@ -41,3 +13,37 @@ module.exports = {
   ComputeSelectionModel : require('./ComputeSelectionModel'),
   ComputeSelectionMode : require('./ComputeSelectionMode')
 }
+
+/// ------------------- ///
+///  Callback Typedefs  ///
+/// ------------------- ///
+
+/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
+
+/**
+ * @callback ComputeSelectionOnBlockSelectCallback
+ * @memberof module:compute-selection
+ * @param {CudaBlock} block The selected block
+ */
+
+/**
+ * @callback ComputeSelectionOnWarpSelectCallback
+ * @memberof module:compute-selection
+ * @param {CudaWarp} warp The selected warp
+ */
+
+/**
+ * @callback ComputeSelectionOnThreadSelectCallback
+ * @memberof module:compute-selection
+ * @param {CudaThread} thread The selected thread
+ */
+
+/**
+ * @callback ComputeSelectionOnUnitSelectCallback
+ * @memberof module:compute-selection
+ * @param {ComputeSelectionMode} mode The current mode
+ * @param {CudaWarp|CudaThread} unit The selected unit (warp or thread)
+ */

@@ -29,7 +29,7 @@ class ComputeSelectionWarpView extends Component {
    * @param {ComputeSelectionModel} model 
    */
   constructor(model) {
-    super('warp-selector', App.ui.containers.mainSelection.secondRow)
+    super('warp-selector', App.ui.containers.mainSelection.secondRow.left)
     this.#model = model
     this.#active = false
     this.#rendered = false
@@ -54,7 +54,6 @@ class ComputeSelectionWarpView extends Component {
 
   deactivate() {
     if ( this.isRendered() && this.isActive()) {
-      console.log("deactivating")
       this.#node = this.#node.remove()
       this.#active = false
     }
@@ -66,12 +65,11 @@ class ComputeSelectionWarpView extends Component {
   }
 
   render() {
-    this.#node = $(`<div id="warp-view-container"> WarpView </div>`)
-    let warpContainer = $(`<div id="warp-container" class="list-group" data-simplebar></div>`)
-    this.#node.append(warpContainer)
+    this.#node  = $(`<div id="warp-container" class="list-group" data-simplebar></div>`)
+    // this.#node.append(warpContainer)
 
     for ( let i = 0 ; i < this.#model.block.numWarps; ++i)
-      warpContainer.append(this._renderWarp(this.#model.block.getWarp(i)))
+      this.#node.append(this._renderWarp(this.#model.block.getWarp(i)))
     $(this.container.node).insertAt(1, this.#node)
     this.#rendered = true
   }
@@ -115,8 +113,7 @@ class ComputeSelectionWarpView extends Component {
       self.#selected && self.#selected.removeClass("warp-container-item-selected")
       self.#selected = res
       self.#selected.addClass("warp-container-item-selected")
-
-      this.#emitter.emit(Events.WarpSelect, warp)
+      self.#emitter.emit(Events.WarpSelect, warp, 2)
     })
     
     res.mouseover( () => {

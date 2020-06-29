@@ -152,6 +152,10 @@ App.main = function() {
       launch => App.Logger.debug("User selected launch:", launch.toString(true))
     )
 
+    App.Services.ComputeSelection.defaultOnUnitSelect(
+      (unit, mode) => App.Logger.debug("User selected", mode.equals(ComputeSelectionService.Mode.Warp)? "warp:" : "thread:", unit.toString(true))
+    )
+
     App.Services.KernelSelection.createEmpty(true)
     App.Services.LaunchSelection.createEmpty(true)
 

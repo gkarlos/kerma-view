@@ -7,6 +7,8 @@ const App     = require('@renderer/app')
 /** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection")} ComputeSelection */
+/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnBlockSelectCallback} ComputeSelectionOnBlockSelectCallback */
+/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnUnitSelectCallback} ComputeSelectionOnUnitSelectCallback */
 
 /**
  * This service handles compute unit selection.
@@ -22,11 +24,17 @@ class ComputeSelectionService extends Service {
   #selections
   /** @type {ComputeSelection} */
   #current
+  /** @type {ComputeSelectionOnBlockSelectCallback[]} */
+  #defaultOnBlockSelectCallbacks
+  /** @type {ComputeSelectionOnUnitSelectCallback[]} */
+  #defaultOnUnitSelectCallbacks
 
   constructor() {
     super('ComputeSelectionService')
     this.#selections = []
     this.#current = undefined
+    this.#defaultOnBlockSelectCallbacks = []
+    this.#defaultOnUnitSelectCallbacks = []
   }
 
   enable() {
@@ -49,11 +57,15 @@ class ComputeSelectionService extends Service {
   create(grid, block, activate=false) {
 
     let lookup = this.#selections.find(sel => sel.grid.equals(grid) && sel.block.equals(block))
+    /** @type {ComputeSelection} */
     let selection
 
     if ( lookup) { // We found a cached selection that can be used for this launch...
       if ( this.#current.equals(lookup)) { // But its the current one so just create a new one
         selection = new ComputeSelection( grid, block)
+
+        this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
+        this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
         this.#selections.push(selection)    
       } else {
         lookup.clear()
@@ -61,8 +73,12 @@ class ComputeSelectionService extends Service {
       }
     } else { // We cant use any of the cached selections. Create a new one
       selection = new ComputeSelection(grid, block)
+
+      this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
+      this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
       this.#selections.push(selection)
     } 
+
 
     if ( activate)
       this.activate(selection)
@@ -106,8 +122,28 @@ class ComputeSelectionService extends Service {
     return this.#current
   }
 
+  /**
+   * Register a default callback to be fired when a block is selected
+   * Default callbacks are hooked to every ComputeSelection created by the service
+   * 
+   * @param {...ComputeSelectionOnBlockSelectCallback}
+   * @returns {void}
+   */
+  defaultOnBlockSelect(...callbacks) {
 
+  }
 
+  /**
+   * Register a default callback to be fired when a unit (warp of thread) is selected
+   * Default callbacks are hooked to every ComputeSelection created by the service
+   * @param {...ComputeSelectionOnUnitSelectCallback}
+   * @returns {void}
+   */
+  defaultOnUnitSelect(...callbacks) {
+    callbacks.forEach( callback => this.#defaultOnUnitSelectCallbacks.push(callback))
+  }
 }
+
+ComputeSelectionService.Mode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 
 module.exports = ComputeSelectionService

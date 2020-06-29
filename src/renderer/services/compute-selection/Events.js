@@ -55,34 +55,3 @@ module.exports = {
  * @property {CudaThread|CudaWarp} unit The selected unit
  * @property {ComputeSelectionMode} mode The current selection mode (@see {module:compute-selection.ComputeSelectionMode})
  */
-
-/// ------------------- ///
-///  Callback Typedefs  ///
-/// ------------------- ///
-
-/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread */
-
-/**
- * @callback ComputeSelectionOnBlockSelectCallback
- * @memberof module:compute-selection~ComputeSelection
- * @param {CudaWarp} block The selected block
- */
-
-/**
- * @callback ComputeSelectionOnWarpSelectCallback
- * @memberof module:compute-selection~ComputeSelection
- * @param {CudaWarp} warp The selected warp
- */
-
-/**
- * @callback ComputeSelectionOnThreadSelectCallback
- * @memberof module:compute-selection~ComputeSelection
- * @param {CudaThread} thread The selected thread
- */
-
-/**
- * @callback ComputeSelectionOnUnitSelectCallback
- * @memberof module:compute-selection~ComputeSelection
- * @param {CudaWarp|CudaThread} unit The selected unit (warp or thread)
- */
