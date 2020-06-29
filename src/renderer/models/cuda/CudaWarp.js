@@ -73,8 +73,8 @@ class CudaWarp {
   getIndex() { return this.#index }  
 
   /**
-   * Get the number of usable threads in this warp
-   * A warp might have unusable threads if it is the last warp in the block
+   * Get the number of usable lanes in this warp
+   * A warp might have unusable lanes if it is the last warp in the block
    * and the block size is not a multiple of the warp size
    * 
    * @return {Number}
@@ -82,7 +82,7 @@ class CudaWarp {
   getNumUsableLanes() { return this.#usableLanes}
 
   /**
-   * Get the number of unusable threads in this warp
+   * Get the number of unusable lanes in this warp
    * A warp might have unusable threads if it is the last warp in the block
    * and the block size is not a multiple of the warp size
    * 
@@ -92,7 +92,7 @@ class CudaWarp {
 
 
   /**
-   * Retrieve the indices of the usable threads in the block
+   * Retrieve the indices of the usable lanes in the warp
    * @returns {number[]}
    */
   getUsableLaneIndices() { 
@@ -100,15 +100,15 @@ class CudaWarp {
   }
 
   /**
-   * Retrieve the index of the last usable thread
+   * Retrieve the index of the last usable lane
    * @returns {Number}
    */
   getLastUsableLaneIndex() {
-    return this.getNumUnusableLanes() - 1
+    return this.getNumUsableLanes() - 1
   }
 
   /**
-   * Retrieve the indices of the unusable threads in the block
+   * Retrieve the indices of the unusable lanes in the warp
    * @returns {number[]}
    */
   getUnusableLaneIndices() {
@@ -124,6 +124,30 @@ class CudaWarp {
    */
   hasUnusableLanes() {
     return this.getNumUnusableLanes() > 0
+  }
+
+  /**
+   * Retrieve the linear index, w.r.t its block, of the first thread in this warp
+   * I.e the thread id of the thread at lane 0
+   */
+  getFirstThreadIndex() {
+    return this.getIndex() * Limits.warpSize
+  }
+
+  /**
+   * Retrieve the linear index, w.r.t its block, of the last thread in this warp
+   * I.e the thread id of the thead at lane 31
+   */
+  getLastThreadIndex() {
+    return (this.getIndex() + 1) * Limits.warpSize - 1
+  }
+
+  /**
+   * Retrieve the linear index, w.r.t its block of the the thread at the last
+   * usable lane of the warp
+   */
+  getLastUsableThreadIndex() {
+    return this.getFirstThreadIndex() + this.getLastUsableLaneIndex()
   }
 
   /**
@@ -145,7 +169,7 @@ class CudaWarp {
    * @returns {String}
    */
   toString(short=false) {
-    return short ? `#${this.getIndex()}, ${this.getNumUsableLanes()}/${this.getNumUnusableLanes()}` 
+    return short ? `#${this.getIndex()}, ${this.getNumUsableLanes()}/${this.getNumUnusableLanes()}, [${this.getFirstThreadIndex()}, ${this.hasUnusableLanes()? this.getLastUsableThreadIndex() + "/" : ""}${this.getLastThreadIndex()}]` 
       : `CudaWarp(block: ${this.#block.toString()}, id: ${this.getIndex()}, usable: ${this.getNumUsableLanes()})`
   }
 }
