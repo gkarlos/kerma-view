@@ -78,6 +78,7 @@
     "npm-scripts-tree": "^1.4.1",
     "pace-js": "^1.0.2",
     "popper.js": "^1.16.0",
+    "randomcolor": "^0.5.4",
     "rimraf": "^3.0.2",
     "run-script-os": "^1.1.1",
     "selectize": "^0.12.6",
