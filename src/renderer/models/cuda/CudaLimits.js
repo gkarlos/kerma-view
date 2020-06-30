@@ -31,16 +31,18 @@ class CudaLimits {
   /** Min number of threads in the z-dimension */
   static minBlockZ    = 1
   /** Max number of threads in the z-dimension */
-  static maxBlockZ    = 1024
+  static maxBlockZ    = 64
   /** Min total number of threads in a Cuda block */
   static minBlockSize = 1
   /** Max total number of threads in a Cuda block */
   static maxBlockSize = 1024
 
+  // https://llvm.org/doxygen/NVVMIntrRange_8cpp_source.html
+
   /** Min number of blocks in the x-dimension */
   static minGridX = 1
   /** Max number of blocks in the x-dimension */
-  static maxGridX = 2147483647 
+  static maxGridX = 0x7fffffff //TODO MaxGridX for < sm_30 is 0xffff 
   /** Min number of blocks in the y-dimension */
   static minGridY = 1
   /** Max number of blocks in the y-dimension */

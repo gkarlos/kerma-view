@@ -17,6 +17,10 @@ TODO:
 - https://bootsnipp.com/snippets/O5mM8
 - https://bootsnipp.com/snippets/KXQEW
 
+-----
+## Check
+- Exec - https://github.com/compiler-explorer/compiler-explorer/blob/master/lib/exec.js
+
 ------
 IDEAS:
 - https://lynx.pink/notiny/

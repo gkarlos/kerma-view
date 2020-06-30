@@ -11,6 +11,8 @@ class CudaKernel {
   #source
   /** @type {Array.<CudaLaunch>} */
   #launches
+  /** @type {String} */
+  #color
 
   /**
    * @param {Number} id
@@ -33,6 +35,19 @@ class CudaKernel {
 
   /** @type {Array.<CudaLaunch>} */
   get launches() { return this.#launches }
+
+  /** @type {String} */
+  get color() { return this.#color }
+
+  /**
+   * 
+   * @param {String} color 
+   * @return this;
+   */
+  setColor(color){ 
+    this.#color = color
+    return this
+  }
 
   /**
    * @param {CudaLaunch} launch 

@@ -11,6 +11,7 @@ const App             = require('@renderer/app')
 const { isFunction }  = require('@common/util/traits')
 const EventEmitter    = require('events').EventEmitter
 const Component       = require('@renderer/ui/component/Component')
+const ColorGenerator  = require('@renderer/util/ColorGenerator')
 
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnEnabledCallback} KernelSelectionOnEnabledCallback */
@@ -33,6 +34,8 @@ class KernelSelectionView extends Component {
   #viewimpl
   /** @type {EventEmitter} */
   #emitter
+  /** @type {ColorGenerator} */
+  #colors
 
   /**
    * @param {KernelSelectionModel} model 
@@ -53,6 +56,7 @@ class KernelSelectionView extends Component {
       </div>
     `)
     this.#emitter = new EventEmitter()
+    this.#colors = new ColorGenerator(10)
   }
 
   /**
@@ -76,7 +80,10 @@ class KernelSelectionView extends Component {
 
       if ( !this.#viewimpl) throw new InternalError(`Failed to create KernelSelectionView`)
 
-      this.#model.options.forEach(kernel => this.#viewimpl.addOption(kernel))
+      this.#model.options.forEach(kernel => {
+        kernel.setColor(this.#colors.next())
+        this.#viewimpl.addOption(kernel)
+      })
 
       /**
        * We need this indirection because the selectize callback accepts a String argument but
@@ -260,9 +267,10 @@ class KernelSelectionView extends Component {
   }
 
   static #renderSelected = (kernel, escape) => {
-    return `<span class="kernel-selection-selected-item">
-             ${kernel.source.name} 
-           </span>`
+    return `<div class="kernel-selection-selected-item">
+              <div class="badge kernel-color" style="background-color:${kernel.color}"> </div>        
+              <span class="kernel-name">${kernel.source.name}<span>
+           </div>`
   }
 
   static #renderOption = (kernel, escape) => {
@@ -270,7 +278,7 @@ class KernelSelectionView extends Component {
               <div class="first-row">
                 <table>
                   <tr>
-                    <td><span class="kernel-selection-kernel-name badge alert-info">${kernel.source.name}</span></td>
+                    <td><span class="kernel-selection-kernel-name badge" style="background-color: ${kernel.color}">${kernel.source.name}</span></td>
                     <td><span class="kernel-selection-kernel-signature">${kernel.source.arguments}</span></td>
                   </tr>
                 </table>
