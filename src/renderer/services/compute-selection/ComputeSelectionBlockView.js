@@ -51,24 +51,24 @@ class ComputeSelectionBlockView extends Component {
     this.#node = $(`		
       <div class="input-group" id="block-selection-container">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">Block</span>
+          <div class="input-group-text block-select-pre-text">&nbsp&nbspBlock</div>
         </div>
         <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">x</span>
+          <div class="input-group-text block-select-pre-text">x</div>
         </div>
         <input type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>
       </div>
     `)
     let ySel = $(`
       <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">y</span>
+        <span class="input-group-text block-select-pre-text">y</span>
       </div>
     `)
 
-    let yInput = $(`<input type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`)
+    ySel.appendTo(this.#node)
 
-    ySel.append(yInput)
-    this.#node.append(ySel)
+    let yInput = $(`<input type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`)
+    yInput.appendTo(this.#node)
 
     $(this.container.node).insertAt(0, this.#node)
   }

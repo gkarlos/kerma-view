@@ -170,7 +170,8 @@ body {
 
 #kernel-selection-group, #launch-selection-group {
     width : 49%;
-    height: 100%;
+    /* height: 100%; */
+    height: 33px !important;
     /* margin-left: auto; */
     /* margin-right: auto; */
     margin-bottom: auto;
@@ -184,6 +185,7 @@ body {
     font-family: SourceSansPro;
     font-size: smaller;
     font-weight: bold;
+    max-width: 62px;
 }
 
 #kernel-launch-selection-row {
@@ -335,7 +337,8 @@ body {
     font-weight: bold;
     max-height: 100%;
     opacity: 0.8;
-    vertical-align: text-top;
+    vertical-align: super;
+    line-height: 16px;
 }
 
 .kernel-selection-second-row-title,
@@ -377,6 +380,7 @@ body {
     font-family: SourceSansPro;
     font-size: smaller;
     font-weight: bold;
+    max-width: 62px;
 }
 
 
@@ -386,6 +390,8 @@ body {
     max-height: 100%;
     opacity: 0.8;
     vertical-align: text-top;
+    line-height: 16px;
+    vertical-align: super;
 }
 
 .launch-selection-selected-item-more {

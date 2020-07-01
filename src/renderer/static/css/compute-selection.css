@@ -16,6 +16,13 @@
     margin-bottom: 8px;
 }
 
+.block-select-pre-text {
+    font-family: SourceSansPro;
+    font-size: smaller;
+    font-weight: bold;
+    max-width: 62px;
+}
+
 #warp-view-container {
     /* display: inline-grid; */
     max-height: 95%;
