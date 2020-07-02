@@ -10,6 +10,9 @@ const Events = require("@renderer/services/compute-selection/Events")
 /** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 
+/**
+ * @memberof module:compute-selection
+ */
 class ComputeSelectionWarpView extends Component {
   
   /** @type {ComputeSelectionModel} */ #model

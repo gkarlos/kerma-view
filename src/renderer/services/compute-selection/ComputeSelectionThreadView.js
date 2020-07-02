@@ -5,6 +5,9 @@ const Events       = require('@renderer/services/compute-selection/Events')
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 
+/**
+ * @memberof module:compute-selection
+ */
 class ComputeSelectionThreadView extends Component {
 
   /** @type {ComputeSelectionModel} */ #model

@@ -6,6 +6,8 @@
  * @property {String} ThreadSelect
  * @property {String} Enabled
  * @property {String} Disabled
+ * @module Events
+ * @memberof module:compute-selection
  */
 module.exports = {
   /** */

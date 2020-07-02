@@ -4,6 +4,9 @@ const App          = require('@renderer/app')
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 
+/**
+ * @memberof module:compute-selection
+ */
 class ComputeSelectionBlockView extends Component {
 
   /** @type {ComputeSelectionModel} */
@@ -70,7 +73,7 @@ class ComputeSelectionBlockView extends Component {
   enable() {}
 
   disable() {}
-  
+
   render() {
     if ( !this.isRendered()) {
       this.#node = $(`		
