@@ -1,4 +1,5 @@
 const ComputeSelectionMode      = require('@renderer/services/compute-selection/ComputeSelectionMode')
+const ComputeSelectionModeView  = require('@renderer/services/compute-selection/ComputeSelectionModeView')
 const ComputeSelectionWarpView  = require('@renderer/services/compute-selection/ComputeSelectionWarpView')
 const ComputeSelectionBlockView = require('@renderer/services/compute-selection/ComputeSelectionBlockView')
 const EventEmitter = require('events').EventEmitter
@@ -10,11 +11,12 @@ const Events       = require('@renderer/services/compute-selection/Events')
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").ComputeSelectionOnBlockSelectCallback}  ComputeSelectionOnBlockSelectCallback */
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").} ComputeUnitSelection */
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeUnitSelectionMode */
-/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel").} ComputeUnitSelectionModel */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeSelectionMode */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel").} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionWarpView").} ComputeSelectionWarpView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionThreadView").} ComputeSelectionThreadView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionBlockView")} ComputeSelectionBlockView */
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModeView")} ComputeSelectionModeView */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 
 /**
@@ -28,8 +30,8 @@ class ComputeSelectionView {
   #warpViewImpl
   /** @type {ComputeSelectionThreadView} */
   #threadViewImpl
-  /** @type {JQuery} */
-  #modeSelection
+  /** @type {ComputeSelectionModeView} */
+  #modeViewImpl
   /** @type {ComputeSelectionBlockView} */
   #blockViewImpl
   /** @type {Boolean} */
@@ -47,6 +49,7 @@ class ComputeSelectionView {
     this.#emitter = new EventEmitter()
     this.#model = model
     this.#blockViewImpl = new ComputeSelectionBlockView(model)
+    this.#modeViewImpl = new ComputeSelectionModeView(model)
     this.#warpViewImpl = new ComputeSelectionWarpView(model)
 
 
@@ -99,8 +102,8 @@ class ComputeSelectionView {
         this.#threadViewImpl.activate()
 
       this.#blockViewImpl.activate()
+      this.#modeViewImpl.activate()
 
-      //TODO activate ModeSelection
       this.#active = true
 
       // setTimeout(() => this.#warpViewImpl.deactivate(), 5000)
@@ -115,6 +118,8 @@ class ComputeSelectionView {
   deactivate() {
     if ( this.isActive()) {
       this.#warpViewImpl.deactivate()
+      this.#blockViewImpl.deactivate()
+      this.#modeViewImpl.deactivate()
       // this.#threadViewImpl.deactivate()
       //TODO deactivate BlockSelection
       //TODO deactivate ModeSelection

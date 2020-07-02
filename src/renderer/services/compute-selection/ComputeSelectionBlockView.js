@@ -20,7 +20,7 @@ class ComputeSelectionBlockView extends Component {
    * @param {ComputeSelectionModel} model 
    */
   constructor(model) {
-    super('warp-selector', App.ui.containers.mainSelection.secondRow.left)
+    super('warp-selector', App.ui.containers.mainSelection.secondRow.left.firstRow)
     this.#model = model
     this.#active = false
     this.#rendered = false
@@ -47,7 +47,7 @@ class ComputeSelectionBlockView extends Component {
   }
 
   render() {
-    console.log(this.#model.getGrid().is2D())
+    // console.log(this.#model.getGrid().is2D())
     this.#node = $(`		
       <div class="input-group" id="block-selection-container">
         <div class="input-group-prepend">
@@ -70,6 +70,7 @@ class ComputeSelectionBlockView extends Component {
     let yInput = $(`<input type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`)
     yInput.appendTo(this.#node)
 
+    this.#rendered = true
     $(this.container.node).insertAt(0, this.#node)
   }
 

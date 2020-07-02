@@ -53,6 +53,7 @@ class ComputeSelectionWarpView extends Component {
   }
 
   deactivate() {
+    console.log
     if ( this.isRendered() && this.isActive()) {
       this.#node = this.#node.remove()
       this.#active = false

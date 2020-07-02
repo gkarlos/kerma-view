@@ -5,6 +5,18 @@
     /* max-height: 92%; */
 }
 
+
+#compute-selection-row-left,
+#compute-selection-row-right {
+    width: 49%
+}
+
+#compute-selection-row-left-firstRow {
+    display: flex;
+    position: relative;
+    flex-flow: row;
+}
+
 #compute-selection-row-left {
     display: flex;
     flex-flow: column;
@@ -14,9 +26,46 @@
 
 #block-selection-container {
     margin-bottom: 8px;
+    width: 65%;
+}
+
+#compute-mode-view {
+    display: flex;
+    flex-flow: row;
+    float: right;
+    width: 35%;
+    height: 33px;
+}
+
+#compute-mode-view .input-group-prepend {
+    height: 33px
+}
+
+#compute-mode-view .selectize-control {
+    padding: 0px;
+    width: 100%;
+}
+
+.compute-mode-view-option {
+    height: 28px;
+    padding: 5px;
+    width: 100%;
+}
+
+#compute-mode-select {
+    height: 33px;
 }
 
 .block-select-pre-text {
+    font-family: SourceSansPro;
+    font-size: smaller;
+    font-weight: bold;
+    max-width: 62px;
+}
+
+
+
+.mode-select-pre-text {
     font-family: SourceSansPro;
     font-size: smaller;
     font-weight: bold;

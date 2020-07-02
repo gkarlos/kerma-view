@@ -64,11 +64,15 @@ class MainSelectionArea extends Container {
     }
 
     secondRow.left = {
-      node : $(`<div class="col-6" id="compute-selection-row-left"></div>`).appendTo(secondRow.node)
+      node : $(`<div id="compute-selection-row-left"></div>`).appendTo(secondRow.node)
     }
     
+    secondRow.left.firstRow = {
+      node :  $(`<div id="compute-selection-row-left-firstRow"></div>`).appendTo(secondRow.left.node)
+    }
+
     secondRow.right = {
-      node : $(`<div class="col-6" id="compute-selection-row-right">HELLO 2</div>`).appendTo(secondRow.node)
+      node : $(`<div id="compute-selection-row-right">HELLO 2</div>`).appendTo(secondRow.node)
     }
 
     this.#secondRow = secondRow

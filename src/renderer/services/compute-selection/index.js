@@ -11,7 +11,8 @@ module.exports = {
   Events : require('./Events'),
   ComputeSelection : require('./ComputeSelection'),
   ComputeSelectionModel : require('./ComputeSelectionModel'),
-  ComputeSelectionMode : require('./ComputeSelectionMode')
+  ComputeSelectionMode : require('./ComputeSelectionMode'),
+  ComputeSelectionModeView : require('./ComputeSelectionModeView')
 }
 
 /// ------------------- ///
