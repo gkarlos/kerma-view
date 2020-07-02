@@ -23,13 +23,17 @@ class ComputeSelectionMode {
 
   /**
    * Compare two modes for equality
-   * @param {ComputeUnitSelectionMode} more Another mode to compare with
+   * @param {ComputeSelectionMode} more Another mode to compare with
    * @return {Boolean} Whether the modes are equal or not
    */
   equals(mode) {
     if ( ! (mode instanceof ComputeSelectionMode))
       return false
     return this.#name === mode.name
+  }
+
+  toString() {
+    return this.name
   }
 }
 
@@ -44,5 +48,18 @@ ComputeSelectionMode.Unknown = new ComputeSelectionMode('unknown')
 
 /** */
 ComputeSelectionMode.Default = ComputeSelectionMode.Warp
+
+/**
+ * Get a ComputeSelection mode from a String
+ * @returns {ComputeSelectionMode}
+ */
+ComputeSelectionMode.fromString = function(str) {
+  if ( str === ComputeSelectionMode.Thread.name)
+    return ComputeSelectionMode.Thread
+  else if ( str === ComputeSelectionMode.Warp.name)
+    return ComputeSelectionMode.Warp
+  else
+    return ComputeSelectionMode.Unknown
+}
 
 module.exports = ComputeSelectionMode

@@ -10,10 +10,16 @@ class ComputeSelectionBlockView extends Component {
   #model
   /** @type {JQuery} */
   #node
+  /** @type {JQuery} */
+  #xInput
+  /** @type {JQuery} */
+  #yInput
   /** @type {Boolean} */
   #rendered
   /** @type {Boolean} */
   #active
+  /** @type {Boolean} */
+  #enabled
 
   /**
    * 
@@ -24,11 +30,26 @@ class ComputeSelectionBlockView extends Component {
     this.#model = model
     this.#active = false
     this.#rendered = false
+    this.#enabled = false
   }
 
+  /**
+   * Check if the view has been rendered
+   * @returns {Boolean}
+   */
+  isRendered() { return this.#rendered }
+
+  /**
+   * Check if the the view is currently active
+   * @returns {Boolean}
+   */
   isActive() { return this.#active }
 
-  isRendered() { return this.#rendered }
+  /**
+   * Check if the view is enabled. i.e the user can interact with it
+   * @returns {Boolean}
+   */
+  isEnabled() { return this.#enabled }
 
   activate() {
     if ( !this.isActive()) {
@@ -40,38 +61,49 @@ class ComputeSelectionBlockView extends Component {
 
   deactivate() {
     if ( this.isRendered() && this.isActive()) {
-      this.#node = this.#node.remove()
+      this.#node = this.#node.detach()
       this.#active = false
     }
     return this
   }
 
+  enable() {}
+
+  disable() {}
+  
   render() {
-    // console.log(this.#model.getGrid().is2D())
-    this.#node = $(`		
-      <div class="input-group" id="block-selection-container">
-        <div class="input-group-prepend">
-          <div class="input-group-text block-select-pre-text">&nbsp&nbspBlock</div>
+    if ( !this.isRendered()) {
+      this.#node = $(`		
+        <div class="input-group" id="block-selection-container">
+          <div class="input-group-prepend">
+            <div class="input-group-text block-select-pre-text">&nbsp&nbspBlock</div>
+          </div>
+          <div class="input-group-prepend">
+            <div class="input-group-text block-select-pre-text">x</div>
+          </div>
         </div>
+      `)
+
+      this.#xInput = 
+        $(`<input id="block-select-x" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node)
+
+      let ySel = $(`
         <div class="input-group-prepend">
-          <div class="input-group-text block-select-pre-text">x</div>
+          <span class="input-group-text block-select-pre-text">y</span>
         </div>
-        <input type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>
-      </div>
-    `)
-    let ySel = $(`
-      <div class="input-group-prepend">
-        <span class="input-group-text block-select-pre-text">y</span>
-      </div>
-    `)
+      `).appendTo(this.#node)
 
-    ySel.appendTo(this.#node)
+      this.#yInput = 
+        $(`<input id="block-select-y" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node)
 
-    let yInput = $(`<input type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`)
-    yInput.appendTo(this.#node)
+      this.#rendered = true
+    }
 
-    this.#rendered = true
     $(this.container.node).insertAt(0, this.#node)
+
+    if ( !this.isEnabled()) {
+      this.disable()
+    }
   }
 
 

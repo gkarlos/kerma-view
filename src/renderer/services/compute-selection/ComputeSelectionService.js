@@ -112,10 +112,13 @@ class ComputeSelectionService extends Service {
    * @param {ComputeSelection} selection
    * @returns {Boolean} True if the selection was successfully activated. False otherwise
    */
-  activate(selection) {
+  activate(selection, enable) {
     this.#current && this.#current.deactivate()
     this.#current = selection
     selection.activate()
+    if ( enable)
+      selection.enable()
+    return selection
   }
 
   getCurrent() {

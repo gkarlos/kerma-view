@@ -170,8 +170,10 @@ App.main = function() {
 
     App.on( Events.INPUT_KERNEL_LAUNCH_SELECTED, (launch) => {
       App.Services.ComputeSelection.activate(
-        App.Services.ComputeSelection.createForLaunch(launch)
-      )
+        App.Services.ComputeSelection
+          .createForLaunch(launch)
+          .onModeChange((oldMode, newMode) => App.Logger.debug("User changed comp. select mode:", oldMode.toString(), "->", newMode.toString()))
+      , true)
     })
 
 

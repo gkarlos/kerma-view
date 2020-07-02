@@ -4,7 +4,7 @@ const ComputeSelectionModel = require('@renderer/services/compute-selection/Comp
 const ThreadMode = ComputeSelectionMode.Thread
 const WarpMode = ComputeSelectionMode.Warp
 
-
+/** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnModeChangeCallback} ComputeSelectionOnModeChangeCallback*/
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionView")} ComputeSelectionView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
@@ -74,6 +74,14 @@ class ComputeSelection {
     this.#view.deactivate()
   }
 
+  enable() {
+    this.#view.enable()
+  }
+
+  disable() {
+    this.#view.disable()
+  }
+
   dispose() {
     this.#view.dispose()
   }
@@ -88,15 +96,15 @@ class ComputeSelection {
 
   /** 
    * Register a callback to be fired when the unit selection changes mode 
-   * @param {ComputeUnitSelectionOnModeChange} callback A callback
-   * @returns {Boolean} Whether the callback was registered correctly
+   * @param {ComputeSelectionOnModeChangeCallback} callback A callback
+   * @returns {ComputeSelection} this
    */
   onModeChange(callback) {
     if (typeof callback === 'function') {
-      this.#onModeChangeCallbacks.push(callback)
-      return true
+      // this.#onModeChangeCallbacks.push(callback)
+      this.#view.onModeChange(callback)
     }
-    return false
+    return this
   }
 
   /**

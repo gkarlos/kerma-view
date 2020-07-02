@@ -55,7 +55,7 @@ class ComputeSelectionWarpView extends Component {
   deactivate() {
     console.log
     if ( this.isRendered() && this.isActive()) {
-      this.#node = this.#node.remove()
+      this.#node.remove()
       this.#active = false
     }
     return this;
@@ -125,7 +125,7 @@ class ComputeSelectionWarpView extends Component {
   }
 
   /**
-   * Register a callback to be invoken when a warp is selected
+   * Register a callback to be invoked when a warp is selected
    * @param {ComputeSelectionOnWarpSelectCallback} A callback 
    */
   onSelect(callback) {

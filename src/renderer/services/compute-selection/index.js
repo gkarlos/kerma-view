@@ -48,3 +48,11 @@ module.exports = {
  * @param {ComputeSelectionMode} mode The current mode
  * @param {CudaWarp|CudaThread} unit The selected unit (warp or thread)
  */
+
+ /**
+  * @callback ComputeSelectionOnModeChangeCallback
+  * @memberof module:compute-selection
+  * @param {ComputeSelectionMode} oldMode The old mode
+  * @param {ComputeSelectionMode} newMode The new mode
+  * @returns {void}
+  */
