@@ -1,7 +1,8 @@
-const ComputeSelectionMode      = require('@renderer/services/compute-selection/ComputeSelectionMode')
-const ComputeSelectionModeView  = require('@renderer/services/compute-selection/ComputeSelectionModeView')
-const ComputeSelectionWarpView  = require('@renderer/services/compute-selection/ComputeSelectionWarpView')
-const ComputeSelectionBlockView = require('@renderer/services/compute-selection/ComputeSelectionBlockView')
+const ComputeSelectionMode       = require('@renderer/services/compute-selection/ComputeSelectionMode')
+const ComputeSelectionModeView   = require('@renderer/services/compute-selection/ComputeSelectionModeView')
+const ComputeSelectionWarpView   = require('@renderer/services/compute-selection/ComputeSelectionWarpView')
+const ComputeSelectionThreadView = require('@renderer/services/compute-selection/ComputeSelectionThreadView')
+const ComputeSelectionBlockView  = require('@renderer/services/compute-selection/ComputeSelectionBlockView')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
 
@@ -43,12 +44,26 @@ class ComputeSelectionView {
   constructor(model) {
     this.#emitter = new EventEmitter()
     this.#model = model
-    this.#blockViewImpl = new ComputeSelectionBlockView(model)
-    this.#modeViewImpl = new ComputeSelectionModeView(model)
-    this.#warpViewImpl = new ComputeSelectionWarpView(model)
+    this.#blockViewImpl  = new ComputeSelectionBlockView(model)
+    this.#modeViewImpl   = new ComputeSelectionModeView(model)
+    this.#warpViewImpl   = new ComputeSelectionWarpView(model)
+    this.#threadViewImpl = new ComputeSelectionThreadView(model)
+
+
 
 
     let self = this
+    
+    this.#modeViewImpl.onChange((oldMode, newMode) => {
+      if ( newMode.equals(ComputeSelectionMode.Thread)) {
+        self.#warpViewImpl.deactivate()
+        self.#threadViewImpl.activate()
+      } else {
+        self.#threadViewImpl.deactivate()
+        self.#warpViewImpl.activate()
+      }
+    })
+
     this.#warpViewImpl.onSelect( warp => self.#emitter.emit(Events.UnitSelect, warp, ComputeSelectionMode.Warp))
     this.#active = false
     this.#enabled = false
@@ -153,7 +168,8 @@ class ComputeSelectionView {
 
   /**
    * Register a callback to be invoked when a block is selected
-   * @param {ComputeSelectionOnBlockSelectCallback} A callback
+   * @param {ComputeSelectionOnBlockSelectCallback} callback A callback
+   * @returns {ComputeSelectionView} this
    */
   onBlockSelect(callback) {
     // this.#emitter.on(Events.BlockSelect, callback)
@@ -162,7 +178,7 @@ class ComputeSelectionView {
 
   /**
    * Register a callback to be invoked when a warp is selected
-   * @param {ComputeSelectionOnWarpSelectCallback} callback 
+   * @param {ComputeSelectionOnWarpSelectCallback} callback A callback
    * @returns {ComputeSelectionView} this
    */
   onWarpSelect(callback) {
@@ -171,17 +187,18 @@ class ComputeSelectionView {
   }
 
   /**
-   * Register a callback to be invoken when a thread is selected
+   * Register a callback to be invoked when a thread is selected
    * @param {ComputeSelectionOnThreadSelectCallback} callback
-   * @returns {ComputeSelectionView} this 
+   * @returns {ComputeSelectionView} this
    */
   onThreadSelect(callback) {
     // this.#threadViewImpl.onThreadSelect(callback)
   }
 
   /** 
-   * Register a callback to be invoken when a unit is selected
-   * @param {ComputeSelectionOnUnitSelectCallback} A callback
+   * Register a callback to be invoked when a unit is selected
+   * @param {ComputeSelectionOnUnitSelectCallback} callback A callback
+   * @returns {ComputeSelectionView} this
    */
   onUnitSelect(callback) { 
     this.#emitter.on(Events.UnitSelect, callback)
@@ -189,8 +206,9 @@ class ComputeSelectionView {
   }
 
   /**
-   * 
-   * @param {*} callback 
+   * Register a callback to be invoked when the mode changes
+   * @param {ComputeSelectionOnModeChangeCallback} callback A callback
+   * @returns {ComputeSelectionView} this
    */
   onModeChange(callback) {
     this.#modeViewImpl.onChange(callback)

@@ -12,16 +12,14 @@ const Events = require("@renderer/services/compute-selection/Events")
 
 class ComputeSelectionWarpView extends Component {
   
-  /** @type {ComputeSelectionModel} */
-  #model
-  /** @type {JQuery} */
-  #node
-  /** @type {EventEmitter} */
-  #emitter
-  /** @type {Boolean} */
-  #active
-  /** @type {Boolean} */
-  #rendered
+  /** @type {ComputeSelectionModel} */ #model
+  /** @type {JQuery} */                #node
+  /** @type {EventEmitter} */          #emitter
+  /** @type {Boolean} */               #rendered
+  /** @type {Boolean} */               #active
+  /** @type {Boolean} */               #enabled
+  /** @type {Boolean} */               #disposed
+
   #selected
 
 
@@ -36,43 +34,92 @@ class ComputeSelectionWarpView extends Component {
     this.#emitter = new EventEmitter()
   }
 
-  isRendered() { 
-    return this.#rendered
-  }
+  /**
+   * Check if the view has been rendered
+   * @returns {Boolean}
+   */
+  isRendered() { return this.#rendered }
 
-  isActive() {
-    return this.#active
-  }
+  /**
+   * Check if the the view is currently active
+   * @returns {Boolean}
+   */
+  isActive() { return this.#active }
+
+  /**
+   * Check if the view is enabled. i.e the user can interact with it
+   * @returns {Boolean}
+   */
+  isEnabled() { return this.#enabled }
+
+  /**
+   * Check if the view is disposed
+   * @returns {Boolean}
+   */
+  isDisposed() { return this.#disposed }
 
   activate() {
     if ( !this.isActive()) {
-      this.render()
+      this._render()
       this.#active = true
     }
     return this
   }
 
   deactivate() {
-    console.log
     if ( this.isRendered() && this.isActive()) {
-      this.#node.remove()
+      this.#node = this.#node.detach()
       this.#active = false
     }
     return this;
   }
 
-  clear() {
-
+  enable() {
+    if ( !this.isDisposed()) {
+      //TODO
+    }
+    return this
   }
 
-  render() {
-    this.#node  = $(`<div id="warp-container" class="list-group" data-simplebar></div>`)
-    // this.#node.append(warpContainer)
+  disable() {
+    if ( !this.isDisposed()) {
+      //TODO
+    }
+  }
 
-    for ( let i = 0 ; i < this.#model.block.numWarps; ++i)
-      this.#node.append(this._renderWarp(this.#model.block.getWarp(i)))
+  dispose() {
+    if ( !this.isDisposed()) {
+      if ( this.isRendered()) {
+        this.#node.remove()
+        this.#emitter.removeAllListeners()
+        this.#node = undefined
+        this.#emitter = undefined
+      }
+      this.#disposed = true;
+    }
+    return this;
+  }
+
+  _render() {
+    if ( this.isDisposed())
+      return this
+    
+    if ( !this.isRendered()) {
+      this.#node  = $(`<div id="warp-container" class="list-group" data-simplebar></div>`)
+      // this.#node.append(warpContainer)
+  
+      for ( let i = 0 ; i < this.#model.block.numWarps; ++i)
+        this.#node.append(this._renderWarp(this.#model.block.getWarp(i)))
+    
+      this.#rendered = true
+    }
+
     $(this.container.node).insertAt(1, this.#node)
-    this.#rendered = true
+
+    if ( this.isEnabled())
+      this.enable()
+    else
+      this.disable()
   }
 
   /**

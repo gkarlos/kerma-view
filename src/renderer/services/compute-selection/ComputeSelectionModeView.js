@@ -142,30 +142,30 @@ class ComputeSelectionModeView extends Component {
       this.#viewImpl = $(`<select id="compute-mode-select"></select>`)
         .appendTo(this.#node)
         .selectize({
-        valueField: 'name',
-        create: false,
-        dropdownParent: 'body',
-        maxItems: 1,
-        render : {
-          item : (mode, escape) => {
-            return mode.equals(ComputeSelectionMode.Thread) ? 
-              `<div class="kernel-selection-selected-item">
-                <span class="kernel-name">
-                  <i class="fas fa-ruler-horizontal"></i>&nbsp${capitalizeFirst(mode.name)}
-                <span>
-              </div>`
-              : 
-              `<div class="kernel-selection-selected-item">
-                <span class="kernel-name">
-                  <i class="fas fa-stream"></i>&nbsp&nbsp${capitalizeFirst(mode.name)}
-                <span>
-              </div>`
-          },
-          option: (mode, escape) => {
-            return `<div class="compute-mode-view-option">${capitalizeFirst(mode.name)}</div>`
+          valueField: 'name',
+          create: false,
+          dropdownParent: 'body',
+          maxItems: 1,
+          render : {
+            item : (mode, escape) => {
+              return mode.equals(ComputeSelectionMode.Thread) ? 
+                `<div class="kernel-selection-selected-item">
+                  <span class="kernel-name">
+                    <i class="fas fa-ruler-horizontal"></i>&nbsp${capitalizeFirst(mode.name)}
+                  <span>
+                </div>`
+                : 
+                `<div class="kernel-selection-selected-item">
+                  <span class="kernel-name">
+                    <i class="fas fa-stream"></i>&nbsp&nbsp${capitalizeFirst(mode.name)}
+                  <span>
+                </div>`
+            },
+            option: (mode, escape) => {
+              return `<div class="compute-mode-view-option">${capitalizeFirst(mode.name)}</div>`
+            }
           }
-        }
-      })[0].selectize
+        })[0].selectize
 
       if ( !this.#viewImpl) throw new Error("Failed to create ComputeSelectionModeView")
 
@@ -191,10 +191,10 @@ class ComputeSelectionModeView extends Component {
 
     $(this.container.node).insertAt(1, this.#node)
 
-    if ( !this.isEnabled()) {
+    if ( this.isEnabled())
+      this.enable()
+    else
       this.disable()
-    }
-
   }
 
   /**
