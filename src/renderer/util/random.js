@@ -1,5 +1,5 @@
 /**
- * @module renderer/util/random
+ * @module random
  * @category util
  */
 
