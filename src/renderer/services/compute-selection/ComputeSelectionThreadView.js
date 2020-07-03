@@ -89,11 +89,22 @@ class ComputeSelectionThreadView extends Component {
       return this
 
     if ( !this.isRendered()) {
-      this.#node = $(`<div>Thread Selector</div>`)
+      this.#node = $(`<div id="${this.id} class="list-group" data-simplebar>Thread Selector</div>`)
+
+      for ( let i = 0; i < this.#model.block.numWarps; ++i) 
+        this.#node.append(this._renderWarp(this.#model.block.getWarp(i)))
+
       this.#rendered = true
     }
 
     $(this.container.node).insertAt(1, this.#node)
+
+    if ( this.isEnabled())
+      this.enable()
+    else
+      this.disable()
+
+    return this
   }
 }
 

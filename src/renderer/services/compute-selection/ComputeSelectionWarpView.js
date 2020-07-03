@@ -61,7 +61,14 @@ class ComputeSelectionWarpView extends Component {
    */
   isDisposed() { return this.#disposed }
 
+  /**
+   * Activate the view
+   * @returns {ComputeSelectionWarpView} this
+   */
   activate() {
+    if ( this.isDisposed())
+      return this;
+
     if ( !this.isActive()) {
       this._render()
       this.#active = true
@@ -69,7 +76,14 @@ class ComputeSelectionWarpView extends Component {
     return this
   }
 
+  /**
+   * Deactivate the view. An inactive view can be reactivated later
+   * @returns {ComputeSelectionWarpView} this
+   */
   deactivate() {
+    if ( this.isDisposed())
+      return this;
+
     if ( this.isRendered() && this.isActive()) {
       this.#node = this.#node.detach()
       this.#active = false
@@ -77,6 +91,12 @@ class ComputeSelectionWarpView extends Component {
     return this;
   }
 
+  /**
+   * Allow the user to interact with the view
+   * If the view is active it immediately becomes enabled. If it is inactive
+   * it will be enabled the next time it is activated
+   * @returns {ComputeSelectionWarpView} this
+   */
   enable() {
     if ( !this.isDisposed()) {
       //TODO
@@ -84,12 +104,21 @@ class ComputeSelectionWarpView extends Component {
     return this
   }
 
+  /**
+   * Prevent the user from interacting with the view
+   * If the view is activate it immediately becomes disabled. If it is inactive
+   * it will be disabled the next time it is activated
+   * @returns {ComputeSelectionWarpView} this
+   */
   disable() {
     if ( !this.isDisposed()) {
       //TODO
     }
   }
 
+  /**
+   * Dispose the view. A disposed view cannot be reactivated
+   */
   dispose() {
     if ( !this.isDisposed()) {
       if ( this.isRendered()) {
@@ -103,12 +132,31 @@ class ComputeSelectionWarpView extends Component {
     return this;
   }
 
+  /**
+   * Register a callback to be invoked when a warp is selected
+   * @param {ComputeSelectionOnWarpSelectCallback} A callback 
+   */
+  onSelect(callback) {
+    this.#emitter.on(Events.WarpSelect, callback)
+  }
+
+  onEnable(callback) {
+    //TODO
+  }
+
+  onDisable(callback) {
+    //TODO
+  }
+
+  /**
+   * Render the view
+   */
   _render() {
     if ( this.isDisposed())
       return this
     
     if ( !this.isRendered()) {
-      this.#node  = $(`<div id="warp-container" class="list-group" data-simplebar></div>`)
+      this.#node  = $(`<div id="${this.id}" class="list-group" data-simplebar></div>`)
       // this.#node.append(warpContainer)
   
       for ( let i = 0 ; i < this.#model.block.numWarps; ++i)
@@ -126,11 +174,11 @@ class ComputeSelectionWarpView extends Component {
   }
 
   /**
-   * 
+   * Render a specific warp
    * @param {CudaWarp} warp 
    */
   _renderWarp(warp) {
-    let res =  $(`<div class="list-group-item warp-container-item" data-warp-id=${warp.getIndex()}></div>`)
+    let res =  $(`<div class="list-group-item warp-selector-item" data-warp-id=${warp.getIndex()}></div>`)
     let firstRow = $(`<div id="first-row"> <p class="badge badge-secondary warp-index">Warp ${warp.getIndex()}${warp.getIndex() < 10? "&nbsp&nbsp":""}</p> </div>`)
     let secondRow = $(`<div id="second-row"> </div>`)
 
@@ -161,9 +209,9 @@ class ComputeSelectionWarpView extends Component {
 
     let self = this
     res.on('click', {warp : warp}, (event) => {
-      self.#selected && self.#selected.removeClass("warp-container-item-selected")
+      self.#selected && self.#selected.removeClass("warp-selector-item-selected")
       self.#selected = res
-      self.#selected.addClass("warp-container-item-selected")
+      self.#selected.addClass("warp-selector-item-selected")
       self.#emitter.emit(Events.WarpSelect, warp, 2)
     })
     
@@ -174,17 +222,6 @@ class ComputeSelectionWarpView extends Component {
     return res;
   }
 
-  /**
-   * Register a callback to be invoked when a warp is selected
-   * @param {ComputeSelectionOnWarpSelectCallback} A callback 
-   */
-  onSelect(callback) {
-    this.#emitter.on(Events.WarpSelect, callback)
-  }
-
-  onClear(callback) {
-    
-  }
 }
 
 
