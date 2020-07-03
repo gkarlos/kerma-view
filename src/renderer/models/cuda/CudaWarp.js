@@ -170,7 +170,7 @@ class CudaWarp {
    */
   toString(short=false) {
     return short ? `#${this.getIndex()}, ${this.getNumUsableLanes()}/${this.getNumUnusableLanes()}, [${this.getFirstThreadIndex()}, ${this.hasUnusableLanes()? this.getLastUsableThreadIndex() + "/" : ""}${this.getLastThreadIndex()}]` 
-      : `CudaWarp(block: ${this.#block.toString()}, id: ${this.getIndex()}, usable: ${this.getNumUsableLanes()})`
+      : `CudaWarp(id: ${this.getIndex()}, block: ${this.#block.toString()}, usable: ${this.getNumUsableLanes()})`
   }
 }
 

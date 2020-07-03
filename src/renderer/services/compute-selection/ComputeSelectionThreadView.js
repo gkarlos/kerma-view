@@ -84,6 +84,10 @@ class ComputeSelectionThreadView extends Component {
 
   dispose() { }
 
+  _renderWarp(i) {
+    return $(`<div>${i.toString()}</div>`)
+  }
+
   _render() {
     if ( this.isDisposed())
       return this
