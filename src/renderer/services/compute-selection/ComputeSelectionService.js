@@ -3,12 +3,13 @@ const ComputeSelection  = require('@renderer/services/compute-selection/ComputeS
 const App     = require('@renderer/app')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")}   CudaGrid   */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")}  CudaBlock  */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection")} ComputeSelection */
-/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnBlockSelectCallback} ComputeSelectionOnBlockSelectCallback */
-/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnUnitSelectCallback} ComputeSelectionOnUnitSelectCallback */
+/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnBlockSelectCallback}  ComputeSelectionOnBlockSelectCallback */
+/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnUnitSelectCallback }  ComputeSelectionOnUnitSelectCallback  */
+/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnModeChangeCallback }  ComputeSelectionOnModeChangeCallback  */
 
 /**
  * This service handles compute unit selection.
@@ -28,13 +29,16 @@ class ComputeSelectionService extends Service {
   #defaultOnBlockSelectCallbacks
   /** @type {ComputeSelectionOnUnitSelectCallback[]} */
   #defaultOnUnitSelectCallbacks
+  /** @type {ComputeSelectionOnModeChangeCallback[]} */
+  #defaultOnModeChangeCallbacks
 
   constructor() {
     super('ComputeSelectionService')
     this.#selections = []
     this.#current = undefined
     this.#defaultOnBlockSelectCallbacks = []
-    this.#defaultOnUnitSelectCallbacks = []
+    this.#defaultOnUnitSelectCallbacks  = []
+    this.#defaultOnModeChangeCallbacks  = []
   }
 
   enable() {
@@ -44,6 +48,7 @@ class ComputeSelectionService extends Service {
 
   disable() {
     super.disable()
+    return this
   }
 
   /**
@@ -60,25 +65,24 @@ class ComputeSelectionService extends Service {
     /** @type {ComputeSelection} */
     let selection
 
-    if ( lookup) { // We found a cached selection that can be used for this launch...
-      if ( this.#current.equals(lookup)) { // But its the current one so just create a new one
-        selection = new ComputeSelection( grid, block)
+    // if ( lookup) { // We found a cached selection that can be used for this launch...
+    //   if ( this.#current.equals(lookup)) { // But its the current one so just create a new one
+    //     selection = new ComputeSelection( grid, block)
+    //     this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
+    //     this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
+    //     this.#selections.push(selection)    
+    //   } else {
+    //     selection = lookup
+    //   }
+    // } else { // We cant use any of the cached selections. Create a new one
 
-        this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
-        this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
-        this.#selections.push(selection)    
-      } else {
-        lookup.clear()
-        selection = lookup
-      }
-    } else { // We cant use any of the cached selections. Create a new one
-      selection = new ComputeSelection(grid, block)
+    // } 
 
-      this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
-      this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
-      this.#selections.push(selection)
-    } 
-
+    selection = new ComputeSelection(grid, block)
+    this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
+    this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
+    this.#defaultOnModeChangeCallbacks.forEach(cb => selection.onModeChange(cb))
+    this.#selections.push(selection)
 
     if ( activate)
       this.activate(selection)

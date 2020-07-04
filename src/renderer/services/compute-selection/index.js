@@ -26,37 +26,33 @@ module.exports = {
 
 /**
  * @callback ComputeSelectionOnBlockSelectCallback
- * @memberof module:compute-selection
  * @param {CudaBlock} block The selected block
+ * @memberof module:compute-selection
  */
 
 /**
  * @callback ComputeSelectionOnWarpSelectCallback
- * @memberof module:compute-selection
  * @param {CudaWarp} warp The selected warp
+ * @memberof module:compute-selection
  */
 
 /**
  * @callback ComputeSelectionOnThreadSelectCallback
- * @memberof module:compute-selection
  * @param {CudaThread} thread The selected thread
+ * @memberof module:compute-selection
  */
 
 /**
  * @callback ComputeSelectionOnUnitSelectCallback
- * @memberof module:compute-selection
  * @param {ComputeSelectionMode} mode The current mode
  * @param {CudaWarp|CudaThread} unit The selected unit (warp or thread)
+ * @memberof module:compute-selection
  */
 
  /**
   * @callback ComputeSelectionOnModeChangeCallback
+  * @param {ComputeSelectionMode} oldMode
+  * @param {ComputeSelectionMode} newMode
   * @memberof module:compute-selection
-  * @param {ComputeSelectionMode} oldMode The old mode
-  * @param {ComputeSelectionMode} newMode The new mode
-  * @returns {void}
   */
 
-  /**
-   * @callback
-   */
