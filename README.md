@@ -1,10 +1,3 @@
-## Events
-
-In general code fired on events resides in the same file as the 'listeing' object.
-For instance if objects A and B wait for an event E, then there will be two stubs ui.on(E, ...)
-in the source files of A and B.
-
-------
 TODO:
 - Replace jquery
     - https://github.com/atom/etch
@@ -20,7 +13,11 @@ TODO:
 -----
 ## Check
 - Exec - https://github.com/compiler-explorer/compiler-explorer/blob/master/lib/exec.js
-
+- Heatmap of the arrays accessed per thread. Example https://github.com/UsabilityEtc/d3-space-filler-explorer
+- Electron-related - https://blog.dcpos.ch/how-to-make-your-electron-app-sexy
+- Memory 
+    - https://github.com/matiaslindgren/cuda-memory-access-recorder
+    - https://github.com/matiaslindgren/cuda-animations
 ------
 IDEAS:
 - https://lynx.pink/notiny/
@@ -31,6 +28,3 @@ IDEAS:
 
 - Memory areas: https://themes.getbootstrap.com/preview/?theme_id=4974
 
-- Heatmap of the arrays accesses per thread. Example https://github.com/UsabilityEtc/d3-space-filler-explorer
-
-- https://blog.dcpos.ch/how-to-make-your-electron-app-sexy
