@@ -3,7 +3,7 @@ const CudaWarp = require('@renderer/models/cuda/CudaWarp')
 const CudaLimits = require('@renderer/models/cuda/CudaLimits')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")}  CudaWarp  */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
 /**
