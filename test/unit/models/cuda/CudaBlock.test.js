@@ -97,7 +97,7 @@ describe('renderer/models/cuda/CudaBlock', () => {
 
     it("should return the index assigned on constructor (4)", () => {
       let block = new CudaBlock(new CudaDim(1024))
-      expect(block.getIndex()).to.be.null
+      expect(block.getIndex().equals(CudaIndex.Unknown)).to.be.true
     })
 
     it("should return the index assigned with setIndex (1)", () => {
@@ -263,11 +263,11 @@ describe('renderer/models/cuda/CudaBlock', () => {
     })
 
     it("should not be equal 2D (4)", () => {
-      expect(new CudaBlock(new CudaDim(2,100)).equals(new CudaBlock(new CudaDim(2,1,100)))).to.be.false
+      expect(new CudaBlock(new CudaDim(2,64)).equals(new CudaBlock(new CudaDim(2,1,64)))).to.be.false
     })
 
     it("should not be equal 2D (5)", () => {
-      expect(new CudaBlock(new CudaDim(2,1,100)).equals(new CudaBlock(new CudaDim(2,100)))).to.be.false
+      expect(new CudaBlock(new CudaDim(2,1,64)).equals(new CudaBlock(new CudaDim(2,64)))).to.be.false
     })
   })
 })
