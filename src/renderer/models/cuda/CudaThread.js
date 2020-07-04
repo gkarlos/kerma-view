@@ -24,7 +24,7 @@ class CudaThread {
   
   /**
    * Create a new CudaThread instance
-   * @param {CudaBlock} block 
+   * @param {CudaBlock} block The block this therad belongs to
    * @param {CudaIndex|Number} index 
    */
   constructor(block, index) {
@@ -81,6 +81,27 @@ class CudaThread {
     return this.#warp
   }
 
+  /**
+   * Retrieve the index of this thread within its block
+   * @returns {CudaIndex}
+   */
+  getIndex() {
+    return this.index
+  }
+
+  /**
+   * Retrieve the lane of this thread within its warp
+   * @returns {Number}
+   */
+  getLane() {
+    return CudaIndex.linearize(this.index, this.getBlock().dim) % CudaLimits.warpSize
+  }
+
+  /**
+   * Check if the lane that corresponds to this thread in the warp is unused.
+   * i.e. this thread will never exist in an execution
+   * @returns {Boolean}
+   */
   inUnusedLane() {
     return this.getWarp().getLastUsableThread() >= CudaIndex.linearize(this.index, this.getBlock().dim)
   }
@@ -89,10 +110,12 @@ class CudaThread {
    * Compare with another thread for equality
    * Two threads are considered equal if they belong to the same block and have the same index
    * within the block
-   * @param {*} other 
+   * @param {CudaThread} other 
    */
   equals(other) {
-
+    return ( other instanceof CudaThread)
+      && this.#block.eql(other.getBlock())
+      && this.#index.equals(other.getIndex())
   }
 }
 

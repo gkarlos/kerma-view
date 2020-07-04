@@ -56,3 +56,7 @@ module.exports = {
   * @param {ComputeSelectionMode} newMode The new mode
   * @returns {void}
   */
+
+  /**
+   * @callback
+   */
