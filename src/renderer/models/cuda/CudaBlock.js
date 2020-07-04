@@ -38,7 +38,7 @@ class CudaBlock {
       throw new Error(`Invalid Block dimensions : ${this.#dim.toString()}`)
 
     if( index === undefined || index === null) 
-      this.#index = null
+      this.#index = CudaIndex.Unknown
     else {
       this.#index = Number.isInteger(index)? new CudaIndex(index) : index
     }
@@ -50,7 +50,7 @@ class CudaBlock {
    * Check if this block has been assigned an index
    * @returns {Boolean}
    */
-  hasIndex() { return this.#index !== null }
+  hasIndex() { return this.#index.equals(CudaIndex.Unknown) }
 
   /**
    * Assign an index to this block. Not checks are performed on the index.
@@ -176,12 +176,25 @@ class CudaBlock {
   }
 
   /**
-   * Compare with another block for value equality
+   * Compare with another block for equality
+   * Two blocks are considered equal if they have the same dimensions, i.e the indices of
+   * the blocks within the grid are not checked.
+   * To compare if two CudaBlock objects refer to same block within the grid use `eql()`
    * @param {CudaBlock} other 
    * @return {Boolean}
    */
   equals(other) {
     return (other instanceof CudaBlock) && this.#dim.equals(other.dim)
+  }
+
+  /**
+   * Compare with another block for equality including indices
+   * @param {CudaBlock} other 
+   */
+  eql(other) {
+    return this.equals(other)
+      && this.hasIndex() && other.hasIndex()
+      && this.getIndex().equals(other.getIndex())
   }
 }
 

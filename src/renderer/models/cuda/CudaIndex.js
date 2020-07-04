@@ -100,18 +100,27 @@ class CudaIndex {
   constructor(row, col) {
     this.#onedimensional = false
 
-    // if one argument passed treat it as col index
-    if ( col === undefined) {
-      col = row
-      row = 0
-      this.#onedimensional = true
+    if ( row === "unknown") {
+      /// FOR INTERNAL USE ONLY
+      this.#col = -1
+      this.#row = -1
+
+    } else {  
+
+      // if one argument passed treat it as col index
+      if ( col === undefined) {
+        col = row
+        row = 0
+        this.#onedimensional = true
+      }
+  
+      this._argCheck(row, col)
+      this.#col = col
+      this.#row = row
     }
 
-    this._argCheck(row, col)
-    this.#col = col
-    this.#row = row
   }
-  
+
   /** 
    * Retrieve the x-coordinate
    * @returns {Number}
@@ -263,5 +272,13 @@ class CudaIndex {
   toString() { return `[${this.y},${this.x}]` }
 
 }
+
+/**
+ * Represents an unknown index. Allows queries that want to return an
+ * unknown index to return this instead of null. To check if an index x
+ * is unknown simply to `x.equals(CudaIndex.Unknown)`
+ * @type {CudaIndex}
+ */
+CudaIndex.Unknown = new CudaIndex("unknown")
 
 module.exports = CudaIndex

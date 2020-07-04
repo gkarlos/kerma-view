@@ -17,6 +17,8 @@ class CudaThread {
   #block
   /** @type {CudaIndex} */
   #index
+  /** @type {CudaIndex} */
+  #globalIndex
   /** @type {CudaWarp} */
   #warp
   
@@ -40,15 +42,28 @@ class CudaThread {
       throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
     }
 
+    // TODO #globalIndex = ?
     this.#block = block
     this.#warp = undefined
   }
 
+  /** @type {CudaIndex} */
   get index() { return this.#index }
 
+  /** @type {Number} */
   get x() { return this.#index.x }
 
+  /** @type {Number} */
   get y() { return this.#index.y }
+
+  /** @type {CudaIndex} */
+  get globalIndex() { return this.#globalIndex }
+
+  /** @type {Number} */
+  get globalX() { return this.#globalIndex.x }
+
+  /** @type {Number} */
+  get globalY() { return this.#globalIndex.y }
 
   /**
    * Retrieve the block this thread is part of
@@ -68,6 +83,16 @@ class CudaThread {
 
   inUnusedLane() {
     return this.getWarp().getLastUsableThread() >= CudaIndex.linearize(this.index, this.getBlock().dim)
+  }
+
+  /**
+   * Compare with another thread for equality
+   * Two threads are considered equal if they belong to the same block and have the same index
+   * within the block
+   * @param {*} other 
+   */
+  equals(other) {
+
   }
 }
 

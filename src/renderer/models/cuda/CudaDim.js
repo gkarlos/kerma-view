@@ -129,7 +129,7 @@ class CudaDim {
    * @returns {String}
    */
   toString() {
-    let str = `${this.#y}x${this.#x}`
+    let str = `${this.#x}x${this.#y}`
     if (this.#z > 1)
       str += `x${this.#z}`
     return str
@@ -141,7 +141,7 @@ class CudaDim {
    * @returns {Boolean}
    */
   equals(other) {
-    return (other instanceof CudaDim) && this.#x === other.x && this.y === other.y && this.z === other.z
+    return (other instanceof CudaDim) && this.#x === other.x && this.#y === other.y && this.#z === other.z
   }
 
   /**
