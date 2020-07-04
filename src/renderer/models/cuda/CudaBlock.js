@@ -50,7 +50,7 @@ class CudaBlock {
    * Check if this block has been assigned an index
    * @returns {Boolean}
    */
-  hasIndex() { return this.#index.equals(CudaIndex.Unknown) }
+  hasIndex() { return !this.#index.equals(CudaIndex.Unknown) }
 
   /**
    * Assign an index to this block. Not checks are performed on the index.
@@ -147,7 +147,6 @@ class CudaBlock {
     return this.#warps[index]
   }
 
-
   /**
    * Check if the block is 1-dimensional. i.e Exactly one dimension has size > 1
    * @returns {Boolean}
@@ -171,8 +170,8 @@ class CudaBlock {
    * @returns {String}
    */
   toString(short=false) {
-    return short ? `${this.#dim.y}x${this.#dim.x}` 
-      : `(${this.#dim.y}x${this.#dim.x}, #threads: ${this.size}, #warps: ${this.numWarps})`
+    return short ? `${this.#dim.x}x${this.#dim.y}` 
+      : `(${this.#dim.x}x${this.#dim.y}, #threads: ${this.size}, #warps: ${this.numWarps})`
   }
 
   /**

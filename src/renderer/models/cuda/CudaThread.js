@@ -13,21 +13,21 @@ const CudaLimits = require('@renderer/models/cuda/CudaLimits')
  * @memberof module:cuda
  */
 class CudaThread {
-  /** @type {CudaBlock} */
-  #block
-  /** @type {CudaIndex} */
-  #index
-  /** @type {CudaIndex} */
-  #globalIndex
-  /** @type {CudaWarp} */
-  #warp
+  /** @type {CudaBlock} */ #block
+  /** @type {CudaIndex} */ #index
+  /** @type {CudaIndex} */ #globalIndex
+  /** @type {CudaWarp}  */ #warp
   
   /**
    * Create a new CudaThread instance
-   * @param {CudaBlock} block The block this therad belongs to
+   * @param {CudaBlock} block The block this therad belongs to. This must refer to a specific block in the grid, i.e a block with an index
    * @param {CudaIndex|Number} index 
    */
   constructor(block, index) {
+    if ( !block)
+      throw new Error(`Missing required argument 'block'`)
+    if ( !block.hasIndex())
+      throw new Error("Block does not have an index")
     if ( index instanceof CudaIndex) {
       if ( index.x >= block.x)
         throw new Error(`Invalid thread index '${index.toString()}' for block '${block.toString()}'`)
@@ -35,7 +35,7 @@ class CudaThread {
         throw new Error(`Invalid thread index '${index.toString()}' for block '${block.toString()}'`)
       this.#index = index
     } else if ( Number.isInteger(index)) {
-      if ( index >= block.size())
+      if ( index >= block.size)
         throw new Error(`Invalid thread index '${index}' for block '${block.toString()}'`)
       this.#index = index
     } else {
@@ -66,6 +66,22 @@ class CudaThread {
   get globalY() { return this.#globalIndex.y }
 
   /**
+   * Retrieve the index of this thread within its block
+   * @returns {CudaIndex}
+   */
+  getIndex() {
+    return this.#index
+  }
+
+  /**
+   * Retrieve the global index of this thread
+   * @returns {CudaIndex}
+   */
+  getGlobalIndex() {
+    return this.#globalIndex
+  }
+
+  /**
    * Retrieve the block this thread is part of
    * @returns {CudaBlock}
    */
@@ -82,14 +98,6 @@ class CudaThread {
   }
 
   /**
-   * Retrieve the index of this thread within its block
-   * @returns {CudaIndex}
-   */
-  getIndex() {
-    return this.index
-  }
-
-  /**
    * Retrieve the lane of this thread within its warp
    * @returns {Number}
    */
@@ -98,12 +106,20 @@ class CudaThread {
   }
 
   /**
-   * Check if the lane that corresponds to this thread in the warp is unused.
+   * Check if the lane that corresponds to this thread in the warp is usable.
+   * @returns {Boolean}
+   */
+  inUsableLane() {
+    return CudaIndex.linearize(this.index, this.getBlock().dim) <= this.getWarp().getLastUsableThread()
+  }
+
+  /**
+   * Check if the lane that corresponds to this thread in the warp is always inactive.
    * i.e. this thread will never exist in an execution
    * @returns {Boolean}
    */
-  inUnusedLane() {
-    return this.getWarp().getLastUsableThread() >= CudaIndex.linearize(this.index, this.getBlock().dim)
+  inUnusableLane() {
+    return CudaIndex.linearize(this.index, this.getBlock().dim) > this.getWarp().getLastUsableThread()
   }
 
   /**
