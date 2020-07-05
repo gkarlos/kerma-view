@@ -141,13 +141,25 @@ class ComputeSelectionService extends Service {
   }
 
   /**
-   * Register a default callback to be fired when a unit (warp of thread) is selected
+   * Register default callback(s) to be fired when a unit (warp of thread) is selected
    * Default callbacks are hooked to every ComputeSelection created by the service
    * @param {...ComputeSelectionOnUnitSelectCallback}
-   * @returns {void}
+   * @returns {ComputeSelectionService} this
    */
   defaultOnUnitSelect(...callbacks) {
     callbacks.forEach( callback => this.#defaultOnUnitSelectCallbacks.push(callback))
+    return this;
+  }
+
+  /**
+   * Register default callback(s) to be fired when the more changes
+   * Default callbacks are hooked to every ComputeSelection created by the service
+   * @param {...ComputeSelectionOnModeChangeCallback}
+   * @returns {ComputeSelectionService} this
+   */
+  defaultOnModeChange(...callbacks) {
+    callbacks.forEach( callback => this.#defaultOnModeChangeCallbacks.push(callback))
+    return this
   }
 }
 

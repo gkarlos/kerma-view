@@ -3,6 +3,7 @@ const App          = require('@renderer/app')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
 
+/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 
 /**
@@ -84,8 +85,22 @@ class ComputeSelectionThreadView extends Component {
 
   dispose() { }
 
-  _renderWarp(i) {
-    return $(`<div>${i.toString()}</div>`)
+  /**
+   * 
+   * @param {CudaWarp} warp 
+   */
+  _renderWarp(warp) {
+    let res =  $(`<div class="list-group-item thread-selector-item" data-warp-id=${warp.getIndex()}></div>`)
+    let firstRow = $(`
+      <div id="first-row"> 
+        <p class="badge badge-secondary warp-index">Warp ${warp.getIndex()}${warp.getIndex() < 10? "&nbsp&nbsp":""}</p> 
+      </div>`)
+    let secondRow = $(`<div id="second-row"> </div>`)
+
+    firstRow.appendTo(res)
+    secondRow.appendTo(res)
+
+    return res
   }
 
   _render() {
@@ -93,7 +108,7 @@ class ComputeSelectionThreadView extends Component {
       return this
 
     if ( !this.isRendered()) {
-      this.#node = $(`<div id="${this.id} class="list-group" data-simplebar>Thread Selector</div>`)
+      this.#node = $(`<div id="${this.id}" class="list-group" data-simplebar></div>`)
 
       for ( let i = 0; i < this.#model.block.numWarps; ++i) 
         this.#node.append(this._renderWarp(this.#model.block.getWarp(i)))

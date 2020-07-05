@@ -20,22 +20,14 @@ const Events       = require('@renderer/services/compute-selection/Events')
  */
 class ComputeSelectionView {
 
-  /** @type {ComputeUnitSelectionModel} */
-  #model
-  /** @type {ComputeSelectionWarpView} */
-  #warpViewImpl
-  /** @type {ComputeSelectionThreadView} */
-  #threadViewImpl
-  /** @type {ComputeSelectionModeView} */
-  #modeViewImpl
-  /** @type {ComputeSelectionBlockView} */
-  #blockViewImpl
-  /** @type {Boolean} */
-  #active
-  /** @type {Boolean} */
-  #enabled
-  /** @type {EventEmitter} */
-  #emitter
+  /** @type {ComputeUnitSelectionModel}  */ #model
+  /** @type {ComputeSelectionWarpView}   */ #warpViewImpl
+  /** @type {ComputeSelectionThreadView} */ #threadViewImpl
+  /** @type {ComputeSelectionModeView}   */ #modeViewImpl
+  /** @type {ComputeSelectionBlockView}  */ #blockViewImpl
+  /** @type {Boolean} */ #active
+  /** @type {Boolean} */ #enabled
+  /** @type {EventEmitter} */ #emitter
 
   /**
    * Creates a new ComputeSelectionView
@@ -111,10 +103,14 @@ class ComputeSelectionView {
    */
   activate() {
     if ( !this.isActive()) {
-      if ( this.inWarpMode())
+      if ( this.inWarpMode()) {
         this.#warpViewImpl.activate()
-      else
+        this.#threadViewImpl.deactivate()
+      } else {
         this.#threadViewImpl.activate()
+        this.#warpViewImpl.deactivate()
+      }
+        
       this.#blockViewImpl.activate()
       this.#modeViewImpl.activate()
       this.#active = true
@@ -129,6 +125,7 @@ class ComputeSelectionView {
   deactivate() {
     if ( this.isActive()) {
       this.#warpViewImpl.deactivate()
+      this.#threadViewImpl.deactivate()
       this.#blockViewImpl.deactivate()
       this.#modeViewImpl.deactivate()
       // this.#threadViewImpl.deactivate()

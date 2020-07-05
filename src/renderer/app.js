@@ -152,9 +152,13 @@ App.main = function() {
       launch => App.Logger.debug("User selected launch:", launch.toString(true))
     )
 
-    App.Services.ComputeSelection.defaultOnUnitSelect(
-      (unit, mode) => App.Logger.debug("User selected", mode.equals(ComputeSelectionService.Mode.Warp)? "warp:" : "thread:", unit.toString(true))
-    )
+    App.Services.ComputeSelection
+      .defaultOnUnitSelect(
+        (unit, mode) => App.Logger.debug("User selected", mode.equals(ComputeSelectionService.Mode.Warp)? "warp:" : "thread:", unit.toString(true))
+      )
+      .defaultOnModeChange(
+        (oldMode, newMode) => App.Logger.debug("User changed comp. select mode:", oldMode.toString(), "->", newMode.toString())
+      )
 
     App.Services.KernelSelection.createEmpty(true)
     App.Services.LaunchSelection.createEmpty(true)
@@ -169,11 +173,7 @@ App.main = function() {
     })
 
     App.on( Events.INPUT_KERNEL_LAUNCH_SELECTED, (launch) => {
-      App.Services.ComputeSelection.activate(
-        App.Services.ComputeSelection
-          .createForLaunch(launch)
-          .onModeChange((oldMode, newMode) => App.Logger.debug("User changed comp. select mode:", oldMode.toString(), "->", newMode.toString()))
-      , true)
+      App.Services.ComputeSelection.activate(App.Services.ComputeSelection.createForLaunch(launch), true)
     })
 
 
