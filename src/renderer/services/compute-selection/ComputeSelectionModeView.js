@@ -132,7 +132,7 @@ class ComputeSelectionModeView extends Component {
 
     if ( !this.isRendered()) {
         this.#node = $(`
-        <div class="input-group select-group" id="compute-mode-view">
+        <div class="input-group select-group col-4" id="compute-mode-view">
           <div class="input-group-prepend">
             <div class="input-group-text mode-select-pre-text">Mode</div>
           </div>

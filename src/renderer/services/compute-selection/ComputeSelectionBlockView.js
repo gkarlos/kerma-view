@@ -76,28 +76,32 @@ class ComputeSelectionBlockView extends Component {
 
   render() {
     if ( !this.isRendered()) {
-      this.#node = $(`		
-        <div class="input-group" id="block-selection-container">
-          <div class="input-group-prepend">
-            <div class="input-group-text block-select-pre-text">&nbsp&nbspBlock</div>
-          </div>
-          <div class="input-group-prepend">
-            <div class="input-group-text block-select-pre-text">x</div>
-          </div>
+      this.#node = $(`<div class="input-group col-8" id="block-selection-container"></div>`)
+
+      let title = $(`
+        <div class="input-group-prepend">
+          <div class="input-group-text block-select-pre-text block-select-pre-text-title">&nbsp&nbspBlock</div>
+        </div>`
+      ).appendTo(this.#node)
+
+      let yPre = $(`<div class="input-group-text block-select-pre-text"> &nbspy :</div>`).appendTo(title).hide()
+
+      this.#yInput = 
+        $(`<input id="block-select-y" type='number' value="0" min="0" size="4" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node).hide()
+
+      let xSel = $(`
+        <div class="input-group-prepend">
+          <div class="input-group-text block-select-pre-text"> x :</div>
         </div>
-      `)
+      `).appendTo(this.#node).hide()
 
       this.#xInput = 
         $(`<input id="block-select-x" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node)
-
-      let ySel = $(`
-        <div class="input-group-prepend">
-          <span class="input-group-text block-select-pre-text">y</span>
+      
+      $(`<div class="input-group-text block-select-pre-text block-select-pre-text-last"> 
+          2D&nbsp&nbsp<input type="checkbox">
         </div>
       `).appendTo(this.#node)
-
-      this.#yInput = 
-        $(`<input id="block-select-y" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node)
 
       this.#rendered = true
     }

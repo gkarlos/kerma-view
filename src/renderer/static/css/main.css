@@ -187,7 +187,10 @@ body {
     font-size: smaller;
     font-weight: bold;
     max-width: 62px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
+
 
 #kernel-launch-selection-row {
     margin-bottom: 8px;
@@ -383,6 +386,8 @@ body {
     font-size: smaller;
     font-weight: bold;
     max-width: 62px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 
