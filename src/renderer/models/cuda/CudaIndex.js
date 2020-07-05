@@ -269,7 +269,9 @@ class CudaIndex {
    * Get a String representation of the index
    * @return {String}
    */
-  toString() { return `[${this.y},${this.x}]` }
+  toString() { 
+    return (this.x === -1 || this.y === -1)? "unknown" : `[${this.y},${this.x}]` 
+  }
 
 }
 

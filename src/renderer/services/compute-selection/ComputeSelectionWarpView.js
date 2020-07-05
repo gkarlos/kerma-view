@@ -5,7 +5,7 @@ const Events = require("@renderer/services/compute-selection/Events")
 
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").ComputeSelectionOnWarpSelectCallback}   ComputeSelectionOnWarpSelectCallback */
-
+/** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").} */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
@@ -140,6 +140,10 @@ class ComputeSelectionWarpView extends Component {
     this.#emitter.on(Events.WarpSelect, callback)
   }
 
+  /**
+   * 
+   * @param {Comp} callback 
+   */
   onEnable(callback) {
     //TODO
   }
@@ -150,6 +154,7 @@ class ComputeSelectionWarpView extends Component {
 
   /**
    * Render the view
+   * @returns 
    */
   _render() {
     if ( this.isDisposed())

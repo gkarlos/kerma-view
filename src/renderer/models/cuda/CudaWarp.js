@@ -1,5 +1,6 @@
 const Limits = require('@renderer/models/cuda/CudaLimits')
 const CudaIndex = require('@renderer/models/cuda/CudaIndex')
+const CudaLaunch = require('./CudaLaunch')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
@@ -38,9 +39,12 @@ class CudaWarp {
     }
 
     this.#block = block
-    this.#usableLanes = this._computeUsableLanes(block, index)
+    this.#usableLanes   = this._computeUsableLanes(block, index)
     this.#unusableLanes = Limits.warpSize - this.#usableLanes
   }
+
+  /** @type {Number} */
+  static get Size() { return 32 }
 
   /** 
    * Compute the number of usable threads in a warp

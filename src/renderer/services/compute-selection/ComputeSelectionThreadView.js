@@ -2,6 +2,8 @@ const Component    = require('@renderer/ui/component/Component')
 const App          = require('@renderer/app')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
+const { CudaWarp } = require('@renderer/models/cuda')
+const { first } = require('lodash')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
@@ -88,17 +90,62 @@ class ComputeSelectionThreadView extends Component {
   /**
    * 
    * @param {CudaWarp} warp 
+   * @param {Number} tid 
+   */
+  _renderThread(warp, tid) {
+    let thread = $(`<div class="thread"></div>`)
+      .popover({
+        placement: 'auto',
+        trigger: 'manual',
+        container: 'body',
+        html: true,
+        content: `
+          <div> 
+            <span class="key">btid:</span>
+            <span class="value">${warp.getFirstThreadIndex() + tid}</span>
+            <span class="key">gtid:</span>
+            <span class="value">${warp.getBlock().size * warp.getBlock().getIndex()}
+          </div>
+        `
+      })
+
+    $(thread).on('mouseenter', () => thread.popover("show"))
+    $(thread).on('mouseleave', () => thread.popover("hide"))
+    return thread
+  }
+
+  /**
+   * 
+   * @param {CudaWarp} warp 
    */
   _renderWarp(warp) {
-    let res =  $(`<div class="list-group-item thread-selector-item" data-warp-id=${warp.getIndex()}></div>`)
-    let firstRow = $(`
-      <div id="first-row"> 
-        <p class="badge badge-secondary warp-index">Warp ${warp.getIndex()}${warp.getIndex() < 10? "&nbsp&nbsp":""}</p> 
-      </div>`)
-    let secondRow = $(`<div id="second-row"> </div>`)
+    console.log(warp.getBlock().toString())
+    
+    let res   = $(`<div class="list-group-item thread-selector-item" data-warp-id=${warp.getIndex()}></div>`)
+    let left  = $(`<div class="left"></div>`).appendTo(res)
+    let right = $(`<div class="right"></div>`).appendTo(res)
 
-    firstRow.appendTo(res)
-    secondRow.appendTo(res)
+    // let firstRow = $(`<div id="first-row"></div>`).appendTo(res)
+    let badge = $(`
+      <p class="badge badge-secondary warp-index">
+        Warp ${warp.getIndex()}${warp.getIndex() < 10? "&nbsp&nbsp":""}
+      </p>
+    `).appendTo(left)
+      
+    // let secondRow = $(`<div id="second-row"> </div>`).appendTo(res)
+    let threadContainer = $(`<div class="thread-container"></div>`).appendTo(right)
+
+    let halfWarp0 = $(`<div class="halfwarp"></div>`)
+    let halfWarp1 = $(`<div class="halfwarp"></div>`)
+
+    for ( let i = 0; i < CudaWarp.Size; ++i )
+      if ( i < CudaWarp.Size / 2)
+        halfWarp0.append(this._renderThread(warp, i))
+      else
+        halfWarp1.append(this._renderThread(warp, i))
+    
+    threadContainer.append(halfWarp0)
+    threadContainer.append(halfWarp1)
 
     return res
   }

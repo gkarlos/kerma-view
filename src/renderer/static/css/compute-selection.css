@@ -168,11 +168,64 @@
 }
 
 .thread-selector-item {
+    display: flex !important;
     padding: 3px;
-    /* height: 30px; */
+    width: 100%;
     margin-bottom: 2px;
-    cursor: pointer;
     display: block;
+}
+
+.thread-selector-item .left {
+    position: relative;
+    width: 20%;
+    float: left;
+}
+
+.thread-selector-item .right {
+    width: 80%;
+    float: right;
+}
+
+.thread-selector-item .thread-container {
+    display: flex;
+    flex-flow: column;
+    margin: 0 auto;
+    width: 100%;
+    float: right;
+    max-width: 60vh;
+    height: auto;
+    max-height: 60vh;
+    font-size: 1rem
+}
+
+.thread-selector-item .thread-container .halfwarp {
+    display: flex;
+    flex-flow: row;
+    position: relative;
+    justify-content: flex-end;
+    float: right;
+}
+
+.thread-selector-item .thread {
+    border: 1px solid lightgray;
+    cursor: pointer;
+    position: relative;
+    width: 5%;
+    margin: 1px;
+    border-radius: 2px;
+    /* width: 13px;
+    height: 13px */
+}
+
+.thread-selector-item .thread:hover {
+    background: rgb(167, 215, 243);
+    opacity: 0.8;
+}
+
+.thread-selector-item .thread:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
 }
 
 

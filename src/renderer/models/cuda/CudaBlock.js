@@ -15,7 +15,7 @@ const CudaIndex = require('./CudaIndex')
  * @memberof module:cuda
  */
 class CudaBlock {
-  /** @type {CudaDim} */ #dim
+  /** @type {CudaDim}   */ #dim
   /** @type {CudaIndex} */ #index
   /** @type {Array<CudaWarp>} */ #warps
 
@@ -72,6 +72,17 @@ class CudaBlock {
    */
   getIndex() {
     return this.#index === undefined? null: this.#index
+  }
+
+  /**
+   * Retrieve the global (linear) index of the first thread in the block
+   * @returns {Number}
+   */
+  getFirstTid() {
+    if ( !this.hasIndex())
+      return -1
+
+    return CudaIndex.linearize(this.#index, )
   }
 
   /**
@@ -170,8 +181,8 @@ class CudaBlock {
    * @returns {String}
    */
   toString(short=false) {
-    return short ? `${this.#dim.x}x${this.#dim.y}` 
-      : `(${this.#dim.x}x${this.#dim.y}, #threads: ${this.size}, #warps: ${this.numWarps})`
+    return short ? `#${this.#index.toString()}, ${this.#dim.x}x${this.#dim.y}` 
+      : `(#${this.#index.toString()}, dim: ${this.#dim.x}x${this.#dim.y}, #threads: ${this.size}, #warps: ${this.numWarps})`
   }
 
   /**
