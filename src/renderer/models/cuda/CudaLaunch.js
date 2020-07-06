@@ -72,7 +72,7 @@ class CudaLaunch {
    * @returns {String}
    */
   toString(short=false) {
-    return short? `#${this.id}, ${this.source.name}, <<<${this.grid.toString(true)},${this.block.toString(true)}>>>`
+    return short? `#${this.id}, ${this.source.name}, <<<${this.grid.toString(true)},${this.block.dim.toString()}>>>`
       : `launch(id: ${this.id}, kernel: ${this.source.name}, caller: ${this.#source.caller.name}, params: <<<${this.grid.toString(true)},${this.block.toString(true)}>>>)`
   }
 

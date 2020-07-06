@@ -99,7 +99,7 @@ class CudaGrid {
    * @returns {String}
    */
   toString(short=false) {
-    return short ? `${this.#dim.y}x${this.#dim.x}` : `(${this.#dim.y}x${this.#dim.x}, #blocks: ${this.size})`
+    return short ? `${this.#dim.x}x${this.#dim.y}` : `(${this.#dim.x}x${this.#dim.y}, #blocks: ${this.size})`
   }
 
   
