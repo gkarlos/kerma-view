@@ -51,7 +51,43 @@ class CudaDim {
    * @returns {Number}
    */
   get z() { return this.#z}
+
+  /**
+   * Minimum value for the x dimension
+   * @returns {Number}
+   */
+  get minx() { return 0 }
   
+  /**
+   * Minimum value for the y dimension
+   * @returns {Number}
+   */
+  get miny() { return 0 }
+
+  /** 
+   * Minimum value for the z dimension
+   * @returns {Number}
+   */
+  get minz() { return 0 }
+
+  /**
+   * Maximum value for the x dimension
+   * @returns {Number}
+   */
+  get maxx() { return this.#x - 1}
+
+  /**
+   * Maximum value for the y dimension
+   * @returns {Number}
+   */
+  get maxy() { return this.#y - 1}
+
+  /**
+   * Maximum value for the z dimension
+   * @returns {Number}
+   */
+  get maxz() { return this.#z - 1}
+
   /** 
    * Number of rows (y-dimension)
    * @alias y
