@@ -118,7 +118,6 @@ class CudaIndex {
       this.#col = col
       this.#row = row
     }
-
   }
 
   /** 
@@ -245,6 +244,27 @@ class CudaIndex {
    * @returns {Boolean}
    */
   is2D() { return !this.#onedimensional }
+
+
+  /**
+   * Linearize the index
+   * @param {CudaDim}
+   * @returns {Number}
+   */
+  linearize(dim) {
+    return CudaIndex.linearize(this, dim)
+  }
+
+  /**
+   * Delinearize the index. Identity function if the index is already 2D or 3D
+   * @param {CudaDim} other
+   * @returns {CudaIndex}
+   */
+  delinearize(dim) {
+    if ( this.is2D() || this.is3D())
+      return this
+    return CudaIndex.delinearize(this, dim)
+  }
 
   /**
    * Compare equality with another index
