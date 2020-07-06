@@ -119,7 +119,6 @@ class ComputeSelectionThreadView extends Component {
    * @param {CudaWarp} warp 
    */
   _renderWarp(warp) {
-    console.log(this.#model.getGrid().toString())
 
     let res   = $(`<div class="list-group-item thread-selector-item" data-warp-id=${warp.getIndex()}></div>`)
     let left  = $(`<div class="left"></div>`).appendTo(res)

@@ -74,9 +74,15 @@ class ComputeSelectionBlockView extends Component {
 
   disable() {}
 
+
+  _validateBlockSelection(x,y) {
+
+  }
+
   render() {
     if ( !this.isRendered()) {
       this.#node = $(`<div class="input-group col-8" id="block-selection-container"></div>`)
+      $(this.container.node).insertAt(0, this.#node)
 
       let title = $(`
         <div class="input-group-prepend">
@@ -84,29 +90,52 @@ class ComputeSelectionBlockView extends Component {
         </div>`
       ).appendTo(this.#node)
 
-      let yPre = $(`<div class="input-group-text block-select-pre-text"> &nbspy :</div>`).appendTo(title).hide()
+      let yPre = $(`
+        <div class="input-group-prepend">
+          <div class="input-group-text block-select-pre-text"> &nbspy :</div>
+        </div>`).appendTo(this.#node).hide()
 
-      this.#yInput = 
-        $(`<input id="block-select-y" type='number' value="0" min="0" size="4" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node).hide()
+      let yInput = $(`<input id="block-select-y" type='number' value="0" min="0" size="4" max="${this.#model.getGrid().size - 1}" step="1"/>`)
+        .change( event => {
+          let value = parseInt(event.target.value)
+          console.log(value)
+        })
+        .appendTo(this.#node)
+        .hide()
 
-      let xSel = $(`
+      let xPre = $(`
         <div class="input-group-prepend">
           <div class="input-group-text block-select-pre-text"> x :</div>
         </div>
       `).appendTo(this.#node).hide()
 
-      this.#xInput = 
-        $(`<input id="block-select-x" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node)
+      let xInput = $(`<input id="block-select-x" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>`).appendTo(this.#node)
       
+
+      let checkbox2D = $(`<input type="checkbox">`).change(event => {
+        if ( event.target.checked) {
+          yPre.show()
+          yInput.show()
+          xPre.show()
+        } else {
+          yPre.hide()
+          yInput.hide()
+          xPre.hide()
+        }
+      })
+
       $(`<div class="input-group-text block-select-pre-text block-select-pre-text-last"> 
-          2D&nbsp&nbsp<input type="checkbox">
+          2D&nbsp&nbsp
         </div>
-      `).appendTo(this.#node)
+      `).append( checkbox2D)
+        .appendTo( this.#node)
 
       this.#rendered = true
+    } else {
+      $(this.container.node).insertAt(0, this.#node)
     }
 
-    $(this.container.node).insertAt(0, this.#node)
+    
 
     if ( !this.isEnabled()) {
       this.disable()
