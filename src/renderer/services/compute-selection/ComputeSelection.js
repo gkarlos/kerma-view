@@ -1,6 +1,7 @@
 const ComputeSelectionMode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 const ComputeSelectionView = require('@renderer/services/compute-selection/ComputeSelectionView')
 const ComputeSelectionModel = require('@renderer/services/compute-selection/ComputeSelectionModel')
+const CudaGrid = require('@renderer/models/cuda/CudaGrid')
 const ThreadMode = ComputeSelectionMode.Thread
 const WarpMode = ComputeSelectionMode.Warp
 
@@ -24,7 +25,6 @@ class ComputeSelection {
   
   /**@type {ComputeSelectionModel}*/ #model
   /**@type {ComputeSelectionView} */ #view
-  /**@type {ComputeSelectionMode} */ #mode
   /**@type {Array.<ComputeSelectionOnModeChangeCallback>}*/#onModeChangeCallbacks
 
   /**
@@ -37,34 +37,48 @@ class ComputeSelection {
     this.#view  = new ComputeSelectionView(this.#model)
   }
 
+  // /** 
+  //  * The model of this selection
+  //  * @type {ComputeSelectionModel}
+  //  */
+  // get model() { 
+  //   return this.#model
+  // }
+  // /** Retrieve the view */
+  // get view() { return this.#view }
+
+  /// ------------------- ///
+  /// Accessor Properties ///
+  /// ------------------- ///
+
   /** 
-   * The model of this selection
-   * @type {ComputeSelectionModel}
+   * Grid description of this selection
+   * @type {CudaGrid}
    */
-  get model() { 
-    return this.#model
-  }
+  get grid() { return this.#model.grid }
 
-  /** Retrieve the view */
-  get view() { 
-    return this.#view
-  }
-
-  get grid() { 
-    return this.#model.grid
-  }
-
-  get block() {
-    return this.#model.block
-  }
+  /**
+   * Block description of this selection
+   * @type {CudaBlock}
+   */
+  get block() { return this.#model.block }
 
   /** 
-   * The current mode 
+   * Mode of the unit selection
    * @type {ComputeSelectionMode}
    */
-  get mode() { 
-    return this.#model.getMode()
-  }
+  get mode() { return this.#model.getMode() }
+
+
+  /// ------------------- ///
+  ///       Methods       ///
+  /// ------------------- ///
+
+  getBlockSelection() { return this.#model.getBlockSelection() }
+  
+  getUnitSelection() { return this.#model.getUnitSelection() }
+
+  getWarpSelection() { return this.#model.getWarpSelection() }
 
   activate() {
     this.#view.activate()

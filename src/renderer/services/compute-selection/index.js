@@ -25,8 +25,9 @@ module.exports = {
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
 
 /**
- * @callback ComputeSelectionOnBlockSelectCallback
- * @param {CudaBlock} block The selected block
+ * @callback ComputeSelectionOnBlockChangeCallback
+ * @param {CudaBlock} oldBlock The old block
+ * @param {CudaBlock} newBlock The new block
  * @memberof module:compute-selection
  */
 

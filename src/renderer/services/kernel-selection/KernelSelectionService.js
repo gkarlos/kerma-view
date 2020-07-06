@@ -6,6 +6,7 @@ const { FunctionCallInfo } = require('@renderer/models/source')
 const CudaLaunch = require('@renderer/models/cuda/CudaLaunch')
 const CudaBlock = require('@renderer/models/cuda/CudaBlock')
 const CudaGrid = require('@renderer/models/cuda/CudaGrid')
+const { CudaDim } = require('@renderer/models/cuda')
 
 /**@ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback*/
 
@@ -99,8 +100,8 @@ class KernelSelectionService extends Service {
         })
 
         let cudaLaunch = new CudaLaunch(cudaKernel, {
-          grid: new CudaGrid(1024),
-          block : j % 2 == 0? new CudaBlock(1023) : new CudaBlock(200),
+          grid: new CudaGrid(new CudaDim(1024,512)),
+          block : j % 2 == 0? new CudaBlock(1000) : new CudaBlock(200),
         }, { id : j, source: launchFCI})
 
         cudaKernel.addLaunch(cudaLaunch)

@@ -28,6 +28,7 @@
 
 
 #block-selection-container {
+    /* margin-left: -1px; */
     margin-bottom: 8px;
     width: 50%;
     padding: 0px;
@@ -35,6 +36,10 @@
 
 #block-select-x {
     border:solid 1px #ccc;
+}
+
+#block-select-x-pre {
+    margin-left: -1px;
 }
 
 #block-select-y {
@@ -269,6 +274,3 @@
     vertical-align: middle;
     /* height: 8px; */
 }
-
-  
-  

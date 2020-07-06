@@ -13,7 +13,7 @@ module.exports = {
   /** */
   ModeChange : "mode-change",
   /** */
-  BlockSelect : "block-select",
+  BlockChange : "block-change",
   /** */
   UnitSelect : "unit-select",
   /** */

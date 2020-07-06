@@ -156,7 +156,7 @@ class ComputeSelectionView {
    * @returns {ComputeSelectionView} this
    */
   disable() {
-
+    this.#blockViewImpl.disable()
   }
 
   dispose() {
