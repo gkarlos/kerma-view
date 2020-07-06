@@ -154,7 +154,7 @@ class ComputeSelectionWarpView extends Component {
 
   /**
    * Render the view
-   * @returns 
+   * @returns {ComputeSelectionWarpView}
    */
   _render() {
     if ( this.isDisposed())
