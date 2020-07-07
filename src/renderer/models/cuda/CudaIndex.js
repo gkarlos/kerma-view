@@ -251,9 +251,7 @@ class CudaIndex {
    * @param {CudaDim}
    * @returns {Number}
    */
-  linearize(dim) {
-    return CudaIndex.linearize(this, dim)
-  }
+  linearize(dim) { return CudaIndex.linearize(this, dim) }
 
   /**
    * Delinearize the index. Identity function if the index is already 2D or 3D
@@ -289,8 +287,8 @@ class CudaIndex {
    * Get a String representation of the index
    * @return {String}
    */
-  toString() { 
-    return (this.x === -1 || this.y === -1)? "unknown" : `[${this.y},${this.x}]` 
+  toString(includeLinear=false) { 
+    return (this.x === -1 || this.y === -1)? "unknown" : `(${this.y},${this.x})` 
   }
 
 }
