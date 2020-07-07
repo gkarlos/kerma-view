@@ -7,7 +7,7 @@ const App     = require('@renderer/app')
 /** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")}  CudaBlock  */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection")} ComputeSelection */
-/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnBlockSelectCallback}  ComputeSelectionOnBlockSelectCallback */
+/** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnBlockChangeCallback}  ComputeSelectionOnBlockChangeCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnUnitSelectCallback }  ComputeSelectionOnUnitSelectCallback  */
 /** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnModeChangeCallback }  ComputeSelectionOnModeChangeCallback  */
 
@@ -25,8 +25,8 @@ class ComputeSelectionService extends Service {
   #selections
   /** @type {ComputeSelection} */
   #current
-  /** @type {ComputeSelectionOnBlockSelectCallback[]} */
-  #defaultOnBlockSelectCallbacks
+  /** @type {ComputeSelectionOnBlockChangeCallback[]} */
+  #defaultOnBlockChangeCallbacks
   /** @type {ComputeSelectionOnUnitSelectCallback[]} */
   #defaultOnUnitSelectCallbacks
   /** @type {ComputeSelectionOnModeChangeCallback[]} */
@@ -36,7 +36,7 @@ class ComputeSelectionService extends Service {
     super('ComputeSelectionService')
     this.#selections = []
     this.#current = undefined
-    this.#defaultOnBlockSelectCallbacks = []
+    this.#defaultOnBlockChangeCallbacks = []
     this.#defaultOnUnitSelectCallbacks  = []
     this.#defaultOnModeChangeCallbacks  = []
   }
@@ -79,7 +79,7 @@ class ComputeSelectionService extends Service {
     // } 
 
     selection = new ComputeSelection(grid, block)
-    this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
+    this.#defaultOnBlockChangeCallbacks.forEach(cb => selection.onBlockChange(cb))
     this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
     this.#defaultOnModeChangeCallbacks.forEach(cb => selection.onModeChange(cb))
     this.#selections.push(selection)
@@ -133,11 +133,12 @@ class ComputeSelectionService extends Service {
    * Register a default callback to be fired when a block is selected
    * Default callbacks are hooked to every ComputeSelection created by the service
    * 
-   * @param {...ComputeSelectionOnBlockSelectCallback}
+   * @param {...ComputeSelectionOnBlockChangeCallback}
    * @returns {void}
    */
-  defaultOnBlockSelect(...callbacks) {
-
+  defaultOnBlockChange(...callbacks) {
+    callbacks.forEach( callback => this.#defaultOnBlockChangeCallbacks.push(callback))
+    return this
   }
 
   /**

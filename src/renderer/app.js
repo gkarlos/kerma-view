@@ -159,6 +159,9 @@ App.main = function() {
       .defaultOnModeChange(
         (oldMode, newMode) => App.Logger.debug("User changed comp. select mode:", oldMode.toString(), "->", newMode.toString())
       )
+      .defaultOnBlockChange(
+        (oldBlock, newBlock) => App.Logger.debug("User selected block:", newBlock.getIndex().toString())
+      )
 
     App.Services.KernelSelection.createEmpty(true)
     App.Services.LaunchSelection.createEmpty(true)

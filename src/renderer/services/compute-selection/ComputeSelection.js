@@ -100,8 +100,8 @@ class ComputeSelection {
     this.#view.dispose()
   }
 
-  onBlockSelect(callback) {
-
+  onBlockChange(callback) {
+    this.#view.onBlockChange(callback)
   }
 
   onUnitSelect(callback) {

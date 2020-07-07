@@ -9,8 +9,8 @@ const Events       = require('@renderer/services/compute-selection/Events')
 /** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnWarpSelectCallback}   ComputeSelectionOnWarpSelectCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnThreadSelectCallback} ComputeSelectionOnThreadSelectCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnUnitSelectCallback}   ComputeSelectionOnUnitSelectCallback */
-/** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnBlockSelectCallback}  ComputeSelectionOnBlockSelectCallback */
-/** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnModeChangeCallback}  ComputeSelectionOnModeChangeCallback */
+/** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnBlockChangeCallback}  ComputeSelectionOnBlockChangeCallback */
+/** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnModeChangeCallback}   ComputeSelectionOnModeChangeCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").} ComputeUnitSelection */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel").} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
@@ -27,6 +27,7 @@ class ComputeSelectionView {
   /** @type {ComputeSelectionBlockView}  */ #blockViewImpl
   /** @type {Boolean} */ #active
   /** @type {Boolean} */ #enabled
+  /** @type {Boolean} */ #disposed
   /** @type {EventEmitter} */ #emitter
 
   /**
@@ -86,7 +87,11 @@ class ComputeSelectionView {
   }
 
   isEnabled() {
+    return this.#enabled
+  }
 
+  isDiposed() {
+    return this.#disposed
   }
 
   inWarpMode() {
@@ -128,9 +133,6 @@ class ComputeSelectionView {
       this.#threadViewImpl.deactivate()
       this.#blockViewImpl.deactivate()
       this.#modeViewImpl.deactivate()
-      // this.#threadViewImpl.deactivate()
-      //TODO deactivate BlockSelection
-      //TODO deactivate ModeSelection
       this.#active = false
     }
     return this
@@ -142,8 +144,8 @@ class ComputeSelectionView {
    */
   enable() {
     if ( !this.isEnabled()) {    
-      console.log
-      // this.#warpViewImpl.enable()
+      this.#warpViewImpl.enable()
+      this.#threadViewImpl.enable()
       this.#blockViewImpl.enable()
       this.#modeViewImpl.enable()
       this.#enabled = true
@@ -156,20 +158,37 @@ class ComputeSelectionView {
    * @returns {ComputeSelectionView} this
    */
   disable() {
-    this.#blockViewImpl.disable()
-  }
+    if ( this.isEnabled()) {
+      this.#warpViewImpl.disable()
+      this.#threadViewImpl.disable()
+      this.#blockViewImpl.disable()
+      this.#modeViewImpl.disable()
+      this.#enabled = false
+    }
+    return this
+  } 
 
+  /**
+   * Dispose the view
+   * @returns {ComputeSelectionView} this
+   */
   dispose() {
-
+    if ( !this.isDiposed()) {
+      this.#warpViewImpl.dispose()
+      this.#threadViewImpl.dispose()
+      this.#blockViewImpl.dispose()
+      this.#disposed = true
+    }
+    return this
   }
 
   /**
    * Register a callback to be invoked when a block is selected
-   * @param {ComputeSelectionOnBlockSelectCallback} callback A callback
+   * @param {ComputeSelectionOnBlockChangeCallback} callback A callback
    * @returns {ComputeSelectionView} this
    */
-  onBlockSelect(callback) {
-    // this.#emitter.on(Events.BlockSelect, callback)
+  onBlockChange(callback) {
+    this.#blockViewImpl.onChange(callback)
     return this
   }
 

@@ -12,22 +12,15 @@ const { CudaIndex, CudaBlock } = require('@renderer/models/cuda')
  */
 class ComputeSelectionBlockView extends Component {
 
-  /** @type {ComputeSelectionModel} */
-  #model
-  /** @type {JQuery} */
-  #node
-  /** @type {JQuery} */
-  #xInput
-  /** @type {JQuery} */
-  #yInput
-  /** @type {Boolean} */
-  #rendered
-  /** @type {Boolean} */
-  #active
-  /** @type {Boolean} */
-  #enabled
-  /** @type {EventEmitter} */
-  #emitter
+  /** @type {ComputeSelectionModel} */ #model
+  /** @type {JQuery}                */ #node
+  /** @type {JQuery}                */ #xInput
+  /** @type {JQuery}                */ #yInput
+  /** @type {Boolean}               */ #active
+  /** @type {Boolean}               */ #enabled
+  /** @type {Boolean}               */ #rendered
+  /** @type {Boolean}               */ #disposed
+  /** @type {EventEmitter}          */ #emitter
 
   /**
    * 
@@ -35,12 +28,12 @@ class ComputeSelectionBlockView extends Component {
    */
   constructor(model) {
     super('warp-selector', App.ui.containers.mainSelection.secondRow.left.firstRow)
-    this.#model = model
-    this.#active = false
+    this.#model    = model
+    this.#active   = false
+    this.#enabled  = false
     this.#rendered = false
-    this.#enabled = false
-    this.#emitter = new EventEmitter()
-    this.onChange( (odlblock, newblock) => console.log("old:",odlblock.toString(),"new:",newblock.toString()))
+    this.#disposed = false
+    this.#emitter  = new EventEmitter()
   }
 
   /**
@@ -61,14 +54,28 @@ class ComputeSelectionBlockView extends Component {
    */
   isEnabled() { return this.#enabled }
 
+  /**
+   * Check if the view is disposed
+   * @returns {Boolean}
+   */
+  isDisposed() { return this.#disposed }
+
+  /**
+   * Activate the view
+   * @returns {ComputeSelectionBlockView} this
+   */
   activate() {
     if ( !this.isActive()) {
-      this.render()
+      this._render()
       this.#active = true
     }
     return this
   }
 
+  /**
+   * Deactivate the view
+   * @returns {ComputeSelectionBlockView} this
+   */
   deactivate() {
     if ( this.isRendered() && this.isActive()) {
       this.#node = this.#node.detach()
@@ -77,30 +84,62 @@ class ComputeSelectionBlockView extends Component {
     return this
   }
 
+  /**
+   * Allow the user to interact with the view
+   * If the view is active it immediately becomes enabled. If it is inactive
+   * it will be enabled the next time it is activated.
+   * No-op if the view is disposed
+   * @returns {ComputeSelectionBlockView} this
+   */
   enable() {
-    if ( this.isRendered()) {
-      this.#xInput.removeAttr('disabled')
-      this.#yInput.removeAttr('disabled')
-      this.#enabled = true
+    if ( !this.isDisposed()) {
+      if ( this.isRendered()) {
+        this.#xInput.removeAttr('disabled')
+        this.#yInput.removeAttr('disabled')
+        this.#enabled = true
+      }
     }
     return this
   }
 
+  /**
+   * Prevent the user from interacting with the view
+   * If the view is activate it immediately becomes disabled. If it is inactive
+   * it will be disabled the next time it is activated.
+   * No-op if the view is disposed
+   * @returns {ComputeSelectionBlockView} this
+   */
   disable() {
-    if ( this.isRendered()) {
-      this.#xInput.attr('disabled', 'disabled')
-      this.#yInput.attr('disabled', 'disabled')
-      this.#enabled = false
+    if ( !this.isDisposed()) {
+      if ( this.isRendered()) {
+        this.#xInput.attr('disabled', 'disabled')
+        this.#yInput.attr('disabled', 'disabled')
+        this.#enabled = false
+      }
     }
     return this
   }
 
-
-  _validateBlockSelection(x,y) {
-
+  /**
+   * Dispose the view. A disposed view cannot be reactivated
+   * @returns {ComputeSelectionBlockView} this
+   */
+  dispose() {
+    if ( !this.isDisposed()) {
+      if ( this.isRendered()) {
+        this.#node.remove()
+        this.#emitter.removeAllListeners()
+        this.#node    = undefined
+        this.#xInput  = undefined
+        this.#yInput  = undefined
+        this.#emitter = undefined
+      }
+      this.#disposed = true;
+    }
+    return this
   }
 
-  render() {
+  _render() {
     if ( !this.isRendered()) {
       this.#node = $(`<div class="input-group col-8" id="block-selection-container"></div>`)
 
@@ -134,7 +173,7 @@ class ComputeSelectionBlockView extends Component {
 
       let xInput = 
         $(`
-          <input id="block-select-x" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>
+          <input id="block-select-x" maxlength="5" type='number' value="0" min="0" max="${this.#model.getGrid().size - 1}" step="1"/>
         `)
 
       let checkbox2DContainer = 
@@ -161,67 +200,95 @@ class ComputeSelectionBlockView extends Component {
       checkbox2DContainer
         .appendTo(this.#node)
 
-      let self = this;
+      
 
-      let blockChangeHandler = () => {
-        console.log(yInput[0].value, xInput[0].value)
-        let oldBlock = this.#model.getBlockSelection()
-        this.#model.selectBlock(new CudaIndex(parseInt(yInput[0].value), parseInt(xInput[0].value)))
-        let newBlock = this.#model.getBlockSelection()
-        if ( !oldBlock.eql(newBlock))
-          this.#emitter.emit(Events.BlockChange, oldBlock, newBlock)
+      function inputTooltip(input, min, max) {
+        return {
+          title: () => {
+            if ( input.hasClass('empty-input'))
+              return '<i class="fa fa-exclamation-triangle"></i> Cannot be empty'
+            else if ( input.hasClass('invalid-input'))
+              return `<i class="fa fa-exclamation-triangle"></i> Select a value in [${min}, ${max}]`
+            else
+              return `[${min}, ${max}]`
+          },
+          html: true,
+          trigger : 'hover'
+        }
       }
 
-      xInput.change( event => {
-        if ( xInput.val().length == 0)
-          xInput.val(0)
-        let yValue = parseInt(yInput[0].value) || 0
-        let xValue = parseInt(event.target.value)
-        blockChangeHandler(yValue, xValue)
-      })
+      xInput.tooltip(inputTooltip(xInput,this.#model.grid.dim.minx, this.#model.grid.dim.maxx))
+      yInput.tooltip(inputTooltip(yInput,this.#model.grid.dim.miny, this.#model.grid.dim.maxy))
+      
+      let self = this;
 
-      yInput.change( event => {
-        console.log(xInput)
-        if ( yInput.val().length == 0)
-          yInput.val(0)
-        let yValue = parseInt(event.target.value)
-        let xValue = parseInt(xInput[0].value) || 0
-        blockChangeHandler(yValue, xValue)
-      })
+      function blockChangeHandler() {
+        let oldBlock = self.#model.getBlockSelection()
+        self.#model.selectBlock(new CudaIndex(parseInt(yInput[0].value), parseInt(xInput[0].value)))
+        let newBlock = self.#model.getBlockSelection()
+        if ( !oldBlock.eql(newBlock))
+          self.#emitter.emit(Events.BlockChange, oldBlock, newBlock)
+      }
+
+      function inputHandler(input, min, max) {
+        return () => {
+          if ( input.val().length === 0) {
+            input.addClass('empty-input')
+            input.tooltip('hide').tooltip('show')
+          } else {
+            input.removeClass('empty-input')
+            input.tooltip('hide')
+            let value = parseInt(xInput.val())
+            if ( value < min || value > max) {
+              input.addClass('invalid-input')
+              input.tooltip('hide').tooltip('show')
+            } else {
+              input.removeClass('invalid-input')
+              input.tooltip('hide')
+            }
+          }
+        }
+      }
+
+      function blurHandler(input, oldVal) {
+        return () => ( input.hasClass('empty-input') || input.hasClass('invalid-input')) 
+           ? input.val(oldVal()) && input.trigger('input')
+           : blockChangeHandler()
+      }
+      
+      xInput.on('input', inputHandler(xInput, self.#model.grid.dim.minx, self.#model.grid.dim.maxx))
+            .on('blur', blurHandler(xInput, () => self.#model.getBlockSelection().getIndex().x))
+            // .on('change', blockChangeHandler)
+      yInput.on('input', inputHandler(yInput, self.#model.grid.dim.mixy, self.#model.grid.dim.maxy))
+            .on('blur', blurHandler(yInput, () => self.#model.getBlockSelection().getIndex().y))
+            // .on('change', blockChangeHandler)
 
       checkbox2D
         .change(event => {
           if ( event.target.checked) {
             xInput.attr('max', this.#model.grid.dim.x - 1)
-            if ( this.#model.grid.is1D())
+            if ( this.#model.grid.is1D()) {
               this.#yInput.attr('disabled', true)
+              this.#yInput.tooltip({title: "Grid is 1D", trigger: 'click'})
+            }
             yPre.show()
             yInput.show()
             xPre.show()
           } else {
             yInput.val(0)
-            blockChangeHandler(0, )
+            blockChangeHandler()
             yPre.hide()
             yInput.hide()
             xPre.hide()
           }
         })
 
-      
-
-      let xInputTooltip = { title: () => `[${self.#model.grid.dim.minx}, ${self.#model.grid.dim.maxx}]`, trigger : 'hover'}
-      let yInputTooltip = { title: () => this.#model.grid.is1D()? 'Grid is 1D' : `[${self.#model.grid.dim.miny}, ${self.#model.grid.dim.maxy}]`, trigger : 'hover'}
-
-
-      xInput.tooltip(xInputTooltip)
-      yInput.tooltip(yInputTooltip)
-      
       this.#xInput = xInput
       this.#yInput = yInput
       this.#rendered = true
-    } else {
-      $(this.container.node).insertAt(0, this.#node)
     }
+    
+    $(this.container.node).insertAt(0, this.#node)
 
     if ( !this.isEnabled()) {
       this.disable()

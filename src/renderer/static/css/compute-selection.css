@@ -36,6 +36,13 @@
 
 #block-select-x {
     border:solid 1px #ccc;
+    padding-left: 3px;
+    padding-top: 3px;
+    color: #545b62;
+}
+
+#block-select-x:focus {
+    z-index: 1;
 }
 
 #block-select-x-pre {
@@ -44,6 +51,9 @@
 
 #block-select-y {
     border:solid 1px #ccc;
+    padding-left: 3px;
+    padding-top: 3px;
+    color: #545b62;
 }
 
 #compute-mode-view {
@@ -93,6 +103,7 @@
     border-bottom-left-radius: 0px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+    margin-left: -1px;
 }
 
 #block-select-y {
@@ -273,4 +284,9 @@
 #active-lanes .progress-bar {
     vertical-align: middle;
     /* height: 8px; */
+}
+
+.empty-input,
+.invalid-input {
+    border: 2px solid red !important;
 }

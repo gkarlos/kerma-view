@@ -94,7 +94,8 @@ class ComputeSelectionWarpView extends Component {
   /**
    * Allow the user to interact with the view
    * If the view is active it immediately becomes enabled. If it is inactive
-   * it will be enabled the next time it is activated
+   * it will be enabled the next time it is activated.
+   * No-op if the view is disposed
    * @returns {ComputeSelectionWarpView} this
    */
   enable() {
@@ -108,6 +109,7 @@ class ComputeSelectionWarpView extends Component {
    * Prevent the user from interacting with the view
    * If the view is activate it immediately becomes disabled. If it is inactive
    * it will be disabled the next time it is activated
+   * No-op if the view is disposed
    * @returns {ComputeSelectionWarpView} this
    */
   disable() {
@@ -118,6 +120,7 @@ class ComputeSelectionWarpView extends Component {
 
   /**
    * Dispose the view. A disposed view cannot be reactivated
+   * @returns {ComputeSelectionWarpView} this
    */
   dispose() {
     if ( !this.isDisposed()) {
