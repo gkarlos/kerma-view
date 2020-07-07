@@ -1,5 +1,5 @@
 $KERMA_VIEW_ROOT/node_modules/.bin/sloc $KERMA_VIEW_ROOT/src -f csv > stats1.csv
-$KERMA_VIEW_ROOT/node_modules/.bin/sloc $KERMA_VIEW_ROOT/src --format-option no-head -f csv -d > stats2.csv
+$KERMA_VIEW_ROOT/node_modules/.bin/sloc --keys total,source,comment --format-option no-head -f csv -d src > stats2.csv
 $KERMA_VIEW_ROOT/node_modules/.bin/csv2md stats1.csv > $KERMA_VIEW_ROOT/docs/dev/STATS.md
 echo >> $KERMA_VIEW_ROOT/docs/dev/STATS.md
 echo >> $KERMA_VIEW_ROOT/docs/dev/STATS.md
