@@ -1,5 +1,5 @@
 
-[CodeStats](docs/STATS.md)
+[CodeStats](https://github.com/gkarlos/kerma-view/blob/gh-pages/STATS.md)
 
 TODO:
 - Replace jquery
