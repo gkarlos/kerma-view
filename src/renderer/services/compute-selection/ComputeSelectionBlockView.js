@@ -296,6 +296,7 @@ class ComputeSelectionBlockView extends Component {
   }
 
   /**
+   * Register a callback to be invoked when the block selection changes
    * @param {ComputeSelectionOnBlockChangeCallback} callback 
    * @returns {ComputeSelectionBlockView} this
    */
