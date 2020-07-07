@@ -8,6 +8,7 @@ script:
   - npm install
   - chmod +x ./scripts/build-the-docs.sh
   - npm run docs:build
+  - npm run stats
 
 deploy:
   provider: pages

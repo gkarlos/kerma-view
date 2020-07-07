@@ -1,3 +1,6 @@
+
+[CodeStats](docs/STATS.md)
+
 TODO:
 - Replace jquery
     - https://github.com/atom/etch
