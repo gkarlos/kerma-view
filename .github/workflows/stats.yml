@@ -18,7 +18,6 @@ jobs:
           debug: true
           directory: ./
           badge: ./output/badge.svg
-          patterns: '*.js'
           ignore: 'node_modules', 'inputs', 'docs', 'test'
 
       - name: Print the output
