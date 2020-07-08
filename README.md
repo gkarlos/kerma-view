@@ -1,3 +1,6 @@
+[![](https://tokei.rs/b1/github/gkarlos/kerma-view?category=code)](https://github.com/gkarlos/kerma-view/blob/gh-pages/STATS.md)
+[![](https://tokei.rs/b1/github/gkarlos/kerma-view?category=files)](https://github.com/gkarlos/kerma-view/blob/gh-pages/STATS.md)
+
 
 [CodeStats](https://github.com/gkarlos/kerma-view/blob/gh-pages/STATS.md)
 
