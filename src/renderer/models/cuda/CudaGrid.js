@@ -71,12 +71,6 @@ class CudaGrid {
    */
   get y() { return this.#dim; }
 
-  // /** 
-  //  * Retrieve the size of the z-dimension of the grid
-  //  * @returns {Number}
-  //  */
-  // get z() { return this.#z }
-
   /**
    * Retrieve the number of blocks in the grid
    * @returns {Number}
