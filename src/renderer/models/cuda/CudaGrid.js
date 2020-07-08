@@ -11,29 +11,53 @@ const CudaIndex = require('./CudaIndex')
  */
 class CudaGrid {
   /** @type {CudaDim} */ #dim
+  /** @type {CudaDim} */ #blockDim
 
   /**
-   * 
-   * @param {CudaDim} dim 
+   * @param {CudaDim|Number} dim Dimensions of the grid
+   * @param {CudaDim|Number} blockDim Dimensions of the blocks of the grid
    */
-  constructor(dim) {
+  constructor(dim, blockDim) {
     if ( !(dim instanceof CudaDim) && !Number.isInteger(dim))
       throw new Error("dim must be a CudaDim or Integer")
+    if ( !(blockDim instanceof CudaDim) && !Number.isInteger(blockDim))
+      throw new Error('blockDim must be a CudaDim or Integer')
 
     this.#dim = Number.isInteger(dim)? new CudaDim(dim) : dim
+    this.#blockDim = Number.isInteger(blockDim) ? new CudaDim(blockDim) : blockDim
 
     if ( this.#dim.is3D())
       throw new Error("3D Grids are not currently supported")    
+    if ( this.#blockDim.is3D())
+      throw new Error("3D Blocks are not currently supported")
    
-    if ( !Limits.validGridDims(this.#dim.x, this.#dim.y, this.#dim.z))
+    if ( !Limits.validGridDim(this.#dim))
       throw new Error(`Invalid Grid dimensions : ${this.#dim.toString()}`)
+    if ( !Limits.validBlockDim(this.#blockDim))
+      throw new Error(`Invalid Block dimensions : ${this.#blockDim.toString()}`)
   }
 
+  /// --------------------- ///
+  ///  Accessor Properties  ///
+  /// --------------------- ///
+
   /**
-   * Retrieve the dimensions of this grid
-   * @returns {CudaDim}
+   * The dimensions of the grid
+   * @type {CudaDim}
    */
   get dim() { return this.#dim}
+
+  /**
+   * The dimenions of the blocks of the grid
+   * @type {CudaDim}
+   */
+  get blockDim() { return this.#blockDim }
+
+  /**
+   * The dimenions of the blocks of the grid. Alias for {@link module:cuda.CudaGrid#blockDim}
+   * @type {CudaDim}
+   */
+  get block() { return this.#blockDim }
 
   /** 
    * Retrieve the size of the x-dimension of the grid 
@@ -45,7 +69,7 @@ class CudaGrid {
    * Retrieve the size of the y-dimension of the grid
    * @returns {Number}
    */
-  get y() { return this.#dim.y }
+  get y() { return this.#dim; }
 
   // /** 
   //  * Retrieve the size of the z-dimension of the grid
@@ -58,6 +82,12 @@ class CudaGrid {
    * @returns {Number}
    */
   get size() { return this.#dim.size }
+
+
+
+  /// --------------------- ///
+  ///        Methods        ///
+  /// --------------------- ///
 
   /**
    * Retrieve the block at a given index
@@ -118,7 +148,7 @@ class CudaGrid {
    * @return {Boolean}
    */
   equals(other) {
-    return (other instanceof CudaGrid) && this.#dim.equals(other.dim)
+    return (other instanceof CudaGrid) && this.#dim.equals(other.dim) && this.#blockDim.equals(other.block)
   }
 }
 
