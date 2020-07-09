@@ -22,8 +22,11 @@ class ComputeSelectionWarpView extends Component {
   /** @type {Boolean} */               #active
   /** @type {Boolean} */               #enabled
   /** @type {Boolean} */               #disposed
-
+  
   #selected
+  #options = {
+    /** @type {String} */ usableThreadsMode : 'bar' /// or 'bar'
+  }
 
 
   /**
@@ -183,38 +186,67 @@ class ComputeSelectionWarpView extends Component {
       this.disable()
   }
 
+  
+  /**
+   * Render how usable/unusable lanes are displayed
+   * Output controlled by #options.usableThreadsMode 
+   * @ignore
+   * @param {CudaWarp} warp
+   * @param {JQuery} containerText
+   * @param {JQuery} containerBar
+   */
+  _renderUsableThreads(warp, containerText, containerBar) {
+    if ( this.#options.usableThreadsMode === 'bar') {
+      // containerBar.append(`<small class="usable-lanes-number-barmode">&nbsp${warp.getNumUsableLanes() < 10 ? "&nbsp&nbsp" : ""}${warp.getNumUsableLanes()}</small>`)
+      let lanesBar = $(`<div class="progress" id="usable-lanes-barmode"></div>`).appendTo(containerBar)
+    
+      let activePercent = warp.getNumUsableLanes() / 32 * 100
+  
+      // active lanes
+      $(`<div class="progress-bar progress-bar-usable" role="progressbar" style="width: ${activePercent}%">
+         </div>`)
+         .appendTo(lanesBar)
+         .tooltip({
+           title: !warp.hasUnusableLanes()? 'All lanes are usable' : `${warp.getNumUsableLanes()} usable lanes`
+         })
+      
+      if ( warp.hasUnusableLanes()) {
+        // inactive lanes
+        $(`<div class="progress-bar progress-bar-unusable" role="progressbar" style="width: ${100 - activePercent}%">
+           </div>`)
+           .appendTo(lanesBar)
+           .tooltip({
+             title: `${warp.getNumUnusableLanes()} unusable lanes`
+           })
+        // inactive lanes number
+        // $(`<small class="unusable-lanes-number-barmode"> ${warp.getNumUnusableLanes()}</small>`).appendTo(containerBar)
+      }
+    } else {
+      let node = $(`<div class="badge badge-light usable-lanes-textmode"></div>`).appendTo(containerText)
+      node.tooltip({
+        title: 'Usable/Unusable Lanes'
+      })
+      $(`<span class="usable-lanes-number-textmode">${warp.getNumUsableLanes()}</span>`).appendTo(node)
+      $(`<span class="usable-lanes-separator-textmode"> / </span>`).appendTo(node)
+      $(`<span class="unusable-lanes-number-textmode">${warp.getNumUnusableLanes()}</span>`).appendTo(node)
+    }
+  }
+
   /**
    * Render a specific warp
    * @param {CudaWarp} warp 
    */
   _renderWarp(warp) {
     let res =  $(`<div class="list-group-item warp-selector-item" data-warp-id=${warp.getIndex()}></div>`)
-    let firstRow = $(`<div id="first-row"> <p class="badge badge-secondary warp-index">Warp ${warp.getIndex()}${warp.getIndex() < 10? "&nbsp&nbsp":""}</p> </div>`)
-    let secondRow = $(`<div id="second-row"> </div>`)
+    let firstRow = $(`<div class="first-row"> <p class="badge badge-secondary warp-index">Warp ${warp.getIndex()}${warp.getIndex() < 10? "&nbsp&nbsp":""}</p> </div>`).appendTo(res)
+    let secondRow = $(`<div class="second-row"> </div>`).appendTo(res)
 
-    firstRow
-      .appendTo(res)
-      .append(`<small class="active-lanes-number">&nbsp${warp.getNumUsableLanes() < 10 ? "&nbsp&nbsp" : ""}${warp.getNumUsableLanes()}</small>`)
 
-    let lanesBar = $(`<div class="progress" id="active-lanes"></div>`).appendTo(firstRow)
-    
-    let activePercent = warp.getNumUsableLanes() / 32 * 100
+    // firstRow
+    //   .appendTo(res)
+    //   .append(`<small class="active-lanes-number">&nbsp${warp.getNumUsableLanes() < 10 ? "&nbsp&nbsp" : ""}${warp.getNumUsableLanes()}</small>`)
 
-    // active lanes
-    $(`<div class="progress-bar bg-success" role="progressbar" style="width: ${activePercent}%" title="Usable Lanes">
-       </div>`)
-       .appendTo(lanesBar)
-       .tooltip()
-    
-    if ( warp.hasUnusableLanes()) {
-      // inactive lanes
-      $(`<div class="progress-bar bg-danger" role="progressbar" style="width: ${100 - activePercent}%" title="Unusable Lanes">
-         </div>`)
-         .appendTo(lanesBar)
-         .tooltip()
-      // inactive lanes number
-      $(`<small class="inactive-lanes-number"> ${warp.getNumUnusableLanes()}</small>`).appendTo(firstRow)
-    }
+    this._renderUsableThreads(warp, firstRow, secondRow)
 
 
     let self = this
