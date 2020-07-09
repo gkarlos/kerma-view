@@ -121,6 +121,11 @@
     padding-right: 4px;
 }
 
+
+/*************************
+        Thread view
+ *************************/
+
 #thread-selector {
     display: flex;
     flex-flow: column;
@@ -136,22 +141,37 @@
 }
 
 .thread-selector-item {
-    display: flex !important;
+    /* display: flex !important; */
+    height: 5%;
     padding: 3px;
+    padding-right: 8px;
     width: 100%;
     margin-bottom: 2px;
-    display: block;
+    border-radius: 2px;
 }
 
-.thread-selector-item .left {
+.thread-selector-item .first-row {
     position: relative;
-    width: 20%;
-    float: left;
+    width: 100%;
+    height: 50%;
+    text-align: end;
+    width: auto;
 }
 
-.thread-selector-item .right {
-    width: 80%;
-    float: right;
+.thread-selector-item .second-row {
+    position: relative;
+    width: 100%;
+    height: 50%;
+    text-align: end;
+    width: auto;
+}
+
+.thread-selector-item .first-row .first-index,
+.thread-selector-item .second-row .middle-index {
+    font-size: small;
+    color: #636c73;
+    margin-right: 2px;
+    vertical-align: text-bottom;
 }
 
 .thread-selector-item .thread-container {
@@ -166,11 +186,12 @@
     font-size: 1rem
 }
 
-.thread-selector-item .thread-container .halfwarp {
+.thread-selector-item .halfwarp {
     display: flex;
     flex-flow: row;
     position: relative;
     justify-content: flex-end;
+    width: auto;
     float: right;
 }
 
@@ -178,7 +199,8 @@
     border: 1px solid lightgray;
     cursor: pointer;
     position: relative;
-    width: 5%;
+    width: 20px;
+    height: 20px;
     margin: 1px;
     border-radius: 2px;
     /* width: 13px;
@@ -195,6 +217,13 @@
     display: block;
     padding-bottom: 100%;
 }
+
+.thread-view-warp-index {
+    width: 56px;
+    background-color: #636c73 !important;
+    float: left;
+}
+
 
 
 

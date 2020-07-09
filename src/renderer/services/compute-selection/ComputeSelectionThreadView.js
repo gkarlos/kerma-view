@@ -143,24 +143,22 @@ class ComputeSelectionThreadView extends Component {
   }
 
   /**
-   * 
    * @param {CudaWarp} warp 
    */
   _renderWarp(warp) {
 
-    let res   = $(`<div class="list-group-item thread-selector-item" data-warp-id=${warp.getIndex()}></div>`)
-    let left  = $(`<div class="left"></div>`).appendTo(res)
-    let right = $(`<div class="right"></div>`).appendTo(res)
+    let res       = $(`<div class="list-group-item thread-selector-item" data-warp-id=${warp.getIndex()}></div>`)
+    let firstRow  = $(`<div class="first-row"></div>`).appendTo(res)
+    let secondRow = $(`<div class="second-row"></div>`).appendTo(res)
 
-    // let firstRow = $(`<div id="first-row"></div>`).appendTo(res)
     let badge = $(`
-      <p class="badge badge-secondary warp-index">
+      <p class="badge badge-secondary thread-view-warp-index">
         Warp ${warp.getIndex()}${warp.getIndex() < 10? "&nbsp&nbsp":""}
       </p>
-    `).appendTo(left)
-      
-    // let secondRow = $(`<div id="second-row"> </div>`).appendTo(res)
-    let threadContainer = $(`<div class="thread-container"></div>`).appendTo(right)
+    `).appendTo(firstRow)
+
+    firstRow.append($(`<span class="first-index">${warp.getFirstThreadIndex()}</span>`))
+    secondRow.append($(`<span class="middle-index">${warp.getFirstThreadIndex() + 16}</span>`))
 
     let halfWarp0 = $(`<div class="halfwarp"></div>`)
     let halfWarp1 = $(`<div class="halfwarp"></div>`)
@@ -171,8 +169,9 @@ class ComputeSelectionThreadView extends Component {
       else
         halfWarp1.append(this._renderThread(warp, i))
     
-    threadContainer.append(halfWarp0)
-    threadContainer.append(halfWarp1)
+    
+    firstRow.append(halfWarp0)
+    secondRow.append(halfWarp1)
 
     return res
   }

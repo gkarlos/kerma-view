@@ -47,7 +47,7 @@ ComputeSelectionMode.Warp    = new ComputeSelectionMode('warp')
 ComputeSelectionMode.Unknown = new ComputeSelectionMode('unknown')
 
 /** */
-ComputeSelectionMode.Default = ComputeSelectionMode.Warp
+ComputeSelectionMode.Default = ComputeSelectionMode.Thread
 
 /**
  * Get a ComputeSelection mode from a String
