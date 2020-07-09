@@ -26,7 +26,8 @@ class CudaLaunch {
     this.#kernel = kernel || undefined
     this.#grid   = grid || undefined
     this.#source = props && props.source || undefined
-    this.#id = props && props.id || undefined
+    if ( props && (props.id !== undefined || props.id !== null))
+      this.#id = props.id
   }
 
   /** 

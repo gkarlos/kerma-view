@@ -87,7 +87,8 @@ class KernelSelection {
    * @returns {KernelSelection} this
    */
   addKernels(kernels=[], enable) {
-    kernels.forEach(kernel => this.addKernel(kernel))
+    let self = this
+    kernels.forEach(kernel => self.addKernel(kernel))
     if ( enable) 
       this.enable()
     return this

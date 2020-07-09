@@ -101,6 +101,7 @@ class KernelSelectionService extends Service {
         cudaKernel.addLaunch(cudaLaunch)
       })
 
+
       kernels.push(cudaKernel)
     })
 

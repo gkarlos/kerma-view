@@ -181,11 +181,13 @@ class ComputeSelectionThreadView extends Component {
     if ( this.isDisposed())
       return this
 
+    let block = this.#model.grid.getBlock(0)
+
     if ( !this.isRendered()) {
       this.#node = $(`<div id="${this.id}" class="list-group" data-simplebar></div>`)
 
-      for ( let i = 0; i < this.#model.block.numWarps; ++i) 
-        this.#node.append(this._renderWarp(this.#model.block.getWarp(i)))
+      for ( let i = 0; i < block.numWarps; ++i) 
+        this.#node.append(this._renderWarp(block.getWarp(i)))
 
       this.#rendered = true
     }
