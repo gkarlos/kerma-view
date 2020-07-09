@@ -12,6 +12,7 @@ const { CudaDim } = require('@renderer/models/cuda')
 
 /**
  * @memberof module:kernel-selection
+ * @extends Service
  */
 class KernelSelectionService extends Service {
 
@@ -86,24 +87,17 @@ class KernelSelectionService extends Service {
       let cudaKernel = new CudaKernel(i, kernelFI)
 
       kernel.launches.forEach((launch, j) => {
+        let caller    = new FunctionInfo({ name : launch.caller.source.name, type : launch.caller.source.type, arguments : launch.caller.source.signature})
         let launchFCI = new FunctionCallInfo({
           name : cudaKernel.name,
           isKernelLaunch : true,
           launchParams : launch.source.params,
           range : SourceRange.fromArray(launch.source.range),
           arguments : launch.source.arguments,
-          caller : new FunctionInfo({
-            name : launch.caller.source.name,
-            type : launch.caller.source.type,
-            arguments : launch.caller.source.signature
-          })
+          caller : caller
         })
 
-        let cudaLaunch = new CudaLaunch(cudaKernel, {
-          grid: new CudaGrid(new CudaDim(1024,1)),
-          block : j % 2 == 0? new CudaBlock(1000) : new CudaBlock(200),
-        }, { id : j, source: launchFCI})
-
+        let cudaLaunch = new CudaLaunch(cudaKernel, new CudaGrid(1024, j % 2 == 0? 1000 : 200), { id : j, source: launchFCI})
         cudaKernel.addLaunch(cudaLaunch)
       })
 
@@ -198,9 +192,6 @@ class KernelSelectionService extends Service {
     callbacks.forEach(callback => this.#defaultOnSelectCallbacks.push(callback))
     return this
   }
-
-
-
 }
 
 module.exports = KernelSelectionService

@@ -13,6 +13,8 @@ class CudaGrid {
   /** @type {CudaDim} */ #dim
   /** @type {CudaDim} */ #blockDim
 
+  /** @type {CudaBlock} */ #blockInstance
+
   /**
    * @param {CudaDim|Number} dim Dimensions of the grid
    * @param {CudaDim|Number} blockDim Dimensions of the blocks of the grid
@@ -35,6 +37,8 @@ class CudaGrid {
       throw new Error(`Invalid Grid dimensions : ${this.#dim.toString()}`)
     if ( !Limits.validBlockDim(this.#blockDim))
       throw new Error(`Invalid Block dimensions : ${this.#blockDim.toString()}`)
+    
+    this.#blockInstance = new CudaBlock(blockDim, 0)
   }
 
   /// --------------------- ///
@@ -90,11 +94,20 @@ class CudaGrid {
    * @returns {CudaBlock}
    */
   getBlock(index) {
+    return new CudaBlock(this.block, index)
     // if ( !(Number.isInteger(index) || (index instanceof CudaIndex)))
     //   throw new Error("index must me of type Number or CudaIndex")
     // if ( !this.hasIndex(index))
     //   throw new Error(`Invalid block index '${Number.isInteger(index)? index : index.toString()}' for grid '${this.toString(true)}'`)
     // TODO
+  }
+
+  /**
+   * Retrieve the number of warps in each block of the grid
+   * @returns {Number}
+   */
+  getBlockNumWarps() {
+    return this.#blockInstance.numWarps
   }
 
   /**
@@ -132,7 +145,7 @@ class CudaGrid {
    * @returns {String}
    */
   toString(short=false) {
-    return short ? `${this.#dim.x}x${this.#dim.y}` : `(${this.#dim.x}x${this.#dim.y}, #blocks: ${this.size})`
+    return short ? `${this.x}x${this.y}, ${this.block.x}x${this.block.y}` : `(${this.x}x${this.y}, ${this.block.x}x${this.block.y}, #blocks: ${this.size})`
   }
 
   

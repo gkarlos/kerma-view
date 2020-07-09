@@ -9,7 +9,6 @@ const WarpMode = ComputeSelectionMode.Warp
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionView")} ComputeSelectionView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch*/
 /** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread*/
 /** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp*/
 
@@ -30,10 +29,9 @@ class ComputeSelection {
   /**
    * Create a new ComputeSelection
    * @param {CudaGrid} grid A CudaGrid
-   * @param {CudaBlock} block A CudaBlock
    */
   constructor(grid, block) {
-    this.#model = new ComputeSelectionModel(grid, block)
+    this.#model = new ComputeSelectionModel(grid)
     this.#view  = new ComputeSelectionView(this.#model)
   }
 

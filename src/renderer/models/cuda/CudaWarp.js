@@ -1,6 +1,5 @@
 const Limits = require('@renderer/models/cuda/CudaLimits')
 const CudaIndex = require('@renderer/models/cuda/CudaIndex')
-const CudaLaunch = require('./CudaLaunch')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */

@@ -13,7 +13,6 @@ const Events       = require('@renderer/services/compute-selection/Events')
 /** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnModeChangeCallback}   ComputeSelectionOnModeChangeCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").} ComputeUnitSelection */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel").} ComputeSelectionModel */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 
 /**
  * @memberof module:compute-selection

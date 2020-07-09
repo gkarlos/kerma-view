@@ -68,14 +68,14 @@ class CudaKernel {
       && this.#id === other.id
       && !(this.#source === null || other.source === null)
       && this.#source.equals(other.source)
-      && ((self) => {
-        if ( self.#launches.length !== other.launches.length)
-          return false
-        for( let i = 0; i < this.#launches.length; ++i)
-          if ( !self.#launches[i].equals(other.launches[i]))
-            return false
-        return true
-      })(this)
+      // && ((self) => {
+      //   if ( self.#launches.length !== other.launches.length)
+      //     return false
+      //   for( let i = 0; i < self.#launches.length; ++i)
+      //     if ( !self.#launches[i].equals(other.launches[i]))
+      //       return false
+      //   return true
+      // })(this)
   }
 
   /**

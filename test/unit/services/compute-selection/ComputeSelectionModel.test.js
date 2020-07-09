@@ -5,8 +5,8 @@ const CudaDim = require('@renderer/models/cuda/CudaDim')
 const CudaGrid = require('@renderer/models/cuda/CudaGrid')
 const CudaBlock = require('@renderer/models/cuda/CudaBlock')
 const CudaIndex = require('@renderer/models/cuda/CudaIndex')
-const ComputeSelectionModel = require('@renderer/services/compute-selection').ComputeSelectionModel
-const ComputeSelectionMode = require('@renderer/services/compute-selection').ComputeSelectionMode
+const ComputeSelectionModel = require('@renderer/services/compute-selection/ComputeSelectionModel')
+const ComputeSelectionMode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 
 
 describe("renderer/services/compute-selection/ComputeSelectionModel", () => {
@@ -14,24 +14,24 @@ describe("renderer/services/compute-selection/ComputeSelectionModel", () => {
     
     describe("grid / getGrid()", () => {
       it("should return the right value (1)", () => {
-        let grid = new CudaGrid(1024)
-        let model = new ComputeSelectionModel(grid, new CudaBlock(1024))
+        let grid = new CudaGrid(1024, 1024)
+        let model = new ComputeSelectionModel(grid)
 
         expect(model.grid.equals(grid)).to.be.true
         expect(model.getGrid().equals(grid)).to.be.true
       })
 
       it("should return the right value (2)", () => {
-        let grid = new CudaGrid(new CudaDim(1024))
-        let model = new ComputeSelectionModel(grid, new CudaBlock(1024))
+        let grid = new CudaGrid(new CudaDim(1024), 1024)
+        let model = new ComputeSelectionModel(grid)
 
         expect(model.grid.equals(grid)).to.be.true
         expect(model.getGrid().equals(grid)).to.be.true
       })
 
       it("should return the right value (2)", () => {
-        let grid = new CudaGrid(new CudaDim(1024,1024))
-        let model = new ComputeSelectionModel(grid, new CudaBlock(1024))
+        let grid = new CudaGrid(new CudaDim(1024,1024), 1024)
+        let model = new ComputeSelectionModel(grid)
         expect(model.grid.equals(grid)).to.be.true
         expect(model.getGrid().equals(grid)).to.be.true
       })
@@ -39,48 +39,45 @@ describe("renderer/services/compute-selection/ComputeSelectionModel", () => {
 
     describe("block / getBlock()", () => {
       it("should return the right value (1)", () => {
-        let grid = new CudaGrid(1024)
         let block = new CudaBlock(1024)
-        let model = new ComputeSelectionModel(grid, block)
-        expect(model.block.equals(block)).to.be.true
-        expect(model.getBlock().equals(block)).to.be.true
+        let grid = new CudaGrid(1024, 1024)
+        let model = new ComputeSelectionModel(grid)
+        expect(model.grid.getBlock(0).equals(block)).to.be.true
+        expect(model.grid.getBlock(1).equals(block)).to.be.true
       })
 
       it("should return the right value (2)", () => {
-        let grid = new CudaGrid(1024)
+        let grid = new CudaGrid(1024, 1024)
         let block = new CudaBlock(new CudaDim(1024))
-        let model = new ComputeSelectionModel(grid, block)
-        expect(model.block.equals(block)).to.be.true
-        expect(model.getBlock().equals(block)).to.be.true
-      })
-
-      it("should return the right value (3)", () => {
-        let grid = new CudaGrid(1024)
-        let block = new CudaBlock(new CudaDim(1024))
-        let model = new ComputeSelectionModel(grid, block)
-        expect(model.block.equals(block)).to.be.true
-        expect(model.getBlock().equals(block)).to.be.true
+        let model = new ComputeSelectionModel(grid)
+        expect(model.grid.getBlock(3).equals(block)).to.be.true
+        expect(model.grid.getBlock(4).equals(block)).to.be.true
       })
 
       it("should return the right value (4)", () => {
-        let grid = new CudaGrid(1024)
+        let grid = new CudaGrid(1024, new CudaDim(32,32))
         let block = new CudaBlock(new CudaDim(32,32))
-        let model = new ComputeSelectionModel(1024, block)
-        expect(model.block.equals(block)).to.be.true
-        expect(model.getBlock().equals(block)).to.be.true
+        let model = new ComputeSelectionModel(grid)
+        expect(model.grid.getBlock(0).equals(block)).to.be.true
+        expect(model.grid.getBlock(1).equals(block)).to.be.true
       })
     })
     
     describe("mode / getMode()", () => {
       it("should return the right value after construction (1)", () => {
-        let model = new ComputeSelectionModel(new CudaGrid(1024), new CudaBlock(new CudaDim(32,32)))
-        expect(model.mode).to.equal(ComputeSelectionMode.Thread)
-        expect(model.getMode()).to.equal(ComputeSelectionMode.Thread)
+        let model = new ComputeSelectionModel(new CudaGrid(1024, new CudaDim(32,32)))
+        expect(model.mode).to.equal(ComputeSelectionMode.Default)
+        expect(model.getMode()).to.equal(ComputeSelectionMode.Default)
       })
 
       it("should return the right value after construction (2)", () => {
-        let model = new ComputeSelectionModel(1024, new CudaBlock(new CudaDim(32,32)), ComputeSelectionMode.Warp)
+        let model = new ComputeSelectionModel(new CudaGrid(1024, new CudaDim(32,32)), ComputeSelectionMode.Warp)
         expect(model.mode).to.equal(ComputeSelectionMode.Warp)
+      })
+
+      it("should return the right value after construction (3)", () => {
+        let model = new ComputeSelectionModel(new CudaGrid(1024, new CudaDim(32,32)), ComputeSelectionMode.Thread)
+        expect(model.mode).to.equal(ComputeSelectionMode.Thread)
       })
     })
   })

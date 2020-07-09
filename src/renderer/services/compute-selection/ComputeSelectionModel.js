@@ -1,12 +1,9 @@
-const Mode = require('./ComputeSelectionMode')
+const Mode      = require('./ComputeSelectionMode')
 const CudaIndex = require('@renderer/models/cuda').Index
 const CudaBlock = require('@renderer/models/cuda').Block
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeSelectionMode */
-
-
-
 
 /**
  * A model for a selection of a thread or warp in a Cuda block
@@ -16,8 +13,6 @@ class ComputeSelectionModel {
 
   /** @type {CudaGrid} */
   #gridDescription
-  /** @type {CudaBlock} */
-  #blockDescription
   /** @type {ComputeSelectionMode} */
   #mode
   /** @type {CudaIndex} */
@@ -28,17 +23,15 @@ class ComputeSelectionModel {
   /**
    * Create a new ComputeSelectionModel
    * @param {CudaGrid} grid A Cuda grid description
-   * @param {CudaBlock} block A Cuda block description
    * @param {ComputeSelectionMode} [mode] Optionally set the mode upon creation. {@link module:compute-selection.ComputeSelectionMode.Thread} by default
    */
-  constructor(grid, block, mode=Mode.Default) {
+  constructor(grid, mode=Mode.Default) {
     // if ( !grid) throw new Error('Required argument `grid` is missing')
     // if ( !block) throw new Error('Required argument `block` is missing')
     this.#gridDescription  = grid
-    this.#blockDescription = block
     this.#mode = mode
     
-    this.selectBlock(new CudaIndex(ComputeSelectionModel.Defaults.blockX, ComputeSelectionModel.Defaults.blockY))
+    this.selectBlock(new CudaIndex(ComputeSelectionModel.Defaults.block.x, ComputeSelectionModel.Defaults.block.y))
                     
     this.#unitSelection  = null
   }
@@ -50,12 +43,12 @@ class ComputeSelectionModel {
    */
   get grid() { return this.#gridDescription }
 
-  /** 
-   * The grid description this selection is relevant for
-   * @readonly
-   * @returns {CudaBlock}
-   */
-  get block() { return this.#blockDescription }
+  // /** 
+  //  * The grid description this selection is relevant for
+  //  * @readonly
+  //  * @returns {CudaDim}
+  //  */
+  // get block() { return this.grid.block }
 
   /** 
    * The mode of this selection. Thread or Warp
@@ -70,11 +63,11 @@ class ComputeSelectionModel {
    */
   getGrid() { return this.#gridDescription }
 
-  /**
-   * Get the block description this selection is relevant for
-   * @returns {CudaBlock}
-   */
-  getBlock() { return this.#blockDescription }
+  // /**
+  //  * Get the block description this selection is relevant for
+  //  * @returns {CudaBlock}
+  //  */
+  // getBlock() { return this.#blockDescription }
 
   /**
    * Get the selection mode
@@ -164,12 +157,12 @@ class ComputeSelectionModel {
     if ( !(isInteger || isCuIndex))
       throw new Error(`Argument 'index' must be an Integer or a CudaIndex instance`)
 
-    let idx = isInteger? CudaIndex.delinearize(index, this.#blockDescription.dim) : index
+    let idx = isInteger? CudaIndex.delinearize(index, this.grid.block) : index
 
     if ( !this.#gridDescription.hasIndex(idx))
       throw new Error(`Invalid index '${isInteger? index : index.toString()}' for Grid '${this.#gridDescription.toString(true)}'`)
 
-    this.#blockSelection = new CudaBlock(this.#blockDescription.dim, idx)
+    this.#blockSelection = new CudaBlock(this.grid.block, idx)
     return this;
   }
 
@@ -189,7 +182,7 @@ class ComputeSelectionModel {
    * @param {CudaIndex|Number} index  
    */
   selectThread(index) {
-    this.#unitSelection = Number.isInteger(index) ? CudaIndex.delinearize(index, this.#blockDescription.dim) : index
+    this.#unitSelection = Number.isInteger(index) ? CudaIndex.delinearize(index, this.grid.block) : index
     if ( this.inWarpMode())
       this.#mode = Mode.Thread
     return this
@@ -261,7 +254,6 @@ class ComputeSelectionModel {
   equals(other) {
     return ( other instanceof ComputeSelectionModel)
       && this.grid.equals(other.grid)
-      && this.block.equals(other.block)
       && this.mode === other.mode
       && ( this.inThreadMode() 
             ? this.hasThreadSelected() && this.getThreadSelection().equals(other.getThreadSelection())
@@ -277,14 +269,12 @@ class ComputeSelectionModel {
   eql(other) {
     return ( other instanceof ComputeSelectionModel)
       && this.grid.equals(other.grid)
-      && this.block.equals(other.block)
       && this.mode === other.mode
   }
 }
 
 ComputeSelectionModel.Defaults = {
-  blockX : 0,
-  blockY : 0
+  block : { x : 0, y : 0}
 }
 
 module.exports = ComputeSelectionModel

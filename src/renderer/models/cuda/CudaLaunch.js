@@ -12,25 +12,21 @@ class CudaLaunch {
 
   /** @type {Number}           */ #id       
   /** @type {CudaGrid}         */ #grid
-  /** @type {CudaBlock}        */ #block
   /** @type {CudaKernel}       */ #kernel
   /** @type {FunctionCallInfo} */ #source
 
   /** 
    * @param {CudaKernel} kernel The Kernel this launch is for
-   * @param {Object} dims
-   * @param {CudaGrid} dims.grid The Grid used by the kernel launch
-   * @param {CudaBlock} dims.block The Block used by the kernel launch
+   * @param {CudaGrid} dims
    * @param {Object} props Optional properties
    * @param {Number} [props.id] An id for this launch
    * @param {FunctionCallInfo} [props.source] Source info about the launch
    */
-  constructor(kernel, dims={}, props={}) {
+  constructor(kernel, grid, props={}) {
     this.#kernel = kernel || undefined
-    this.#grid   = dims && dims.grid || undefined
-    this.#block  = dims && dims.block || undefined
+    this.#grid   = grid || undefined
     this.#source = props && props.source || undefined
-    this.#id = props && props.id
+    this.#id = props && props.id || undefined
   }
 
   /** 
@@ -43,7 +39,7 @@ class CudaLaunch {
   get grid() { return this.#grid }
 
   /** @type {CudaBlock} */
-  get block() { return this.#block }
+  get block() { return this.#grid.block }
 
   /** @type {FunctionCallInfo} */
   get source() { return this.#source }
@@ -60,10 +56,10 @@ class CudaLaunch {
    */
   equals(other) {
     return ( other instanceof CudaLaunch)
-      && ((!this.#grid && !other.grid) || ( this.#grid && this.#grid.equals(other.grid)))
-      && ((!this.#block && !other.block) || ( this.#block && this.#block.equals(other.block)))
-      && this.#source.equals(other.source)
-      && this.#id === other.id
+      && this.#grid.equals(other.grid)
+      && this.kernel.equals(other.kernel)
+      && ((this.#source && other.source && this.#source.equals(other.source)) || (!this.#source && !other.source))
+      && ((this.#id && other.id && this.#id === other.id) || (!this.#id && !other.id))
   }
 
   /**
@@ -72,8 +68,8 @@ class CudaLaunch {
    * @returns {String}
    */
   toString(short=false) {
-    return short? `#${this.id}, ${this.source.name}, <<<${this.grid.toString(true)},${this.block.dim.toString()}>>>`
-      : `launch(id: ${this.id}, kernel: ${this.source.name}, caller: ${this.#source.caller.name}, params: <<<${this.grid.toString(true)},${this.block.toString(true)}>>>)`
+    return short? `#${this.id}, ${this.source.name}, <<<${this.grid.toString(true)}>>>`
+      : `launch(id: ${this.id}, kernel: ${this.source.name}, caller: ${this.#source.caller.name}, params: <<<${this.grid.toString(true)}}>>>)`
   }
 
 }
