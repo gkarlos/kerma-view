@@ -38,7 +38,7 @@ class CudaGrid {
     if ( !Limits.validBlockDim(this.#blockDim))
       throw new Error(`Invalid Block dimensions : ${this.#blockDim.toString()}`)
     
-    this.#blockInstance = new CudaBlock(blockDim, 0)
+    // this.#blockInstance = new CudaBlock(blockDim, this, 0)
   }
 
   /// --------------------- ///

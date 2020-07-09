@@ -2,7 +2,8 @@ const Component    = require('@renderer/ui/component/Component')
 const App          = require('@renderer/app')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
-const { CudaWarp } = require('@renderer/models/cuda')
+const { CudaWarp,
+        CudaIndex} = require('@renderer/models/cuda')
 const { first } = require('lodash')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
@@ -116,25 +117,33 @@ class ComputeSelectionThreadView extends Component {
   }
 
   /**
-   * 
+   * Render a thread in a warp
    * @param {CudaWarp} warp 
-   * @param {Number} tid 
+   * @param {Number} lane
    */
-  _renderThread(warp, tid) {
+  _renderThread(warp, lane) {
+    let block = this.#model.getBlockSelection()
+
     let thread = $(`<div class="thread"></div>`)
       .popover({
         placement: 'auto',
         trigger: 'manual',
         container: 'body',
         html: true,
-        content: `
+        content: () => {
+          console.log(block.size, CudaIndex.linearize(block.getIndex(), this.#model.getGrid().dim))
+          return `
           <div> 
             <span class="key">btid:</span>
-            <span class="value">${warp.getFirstThreadIndex() + tid}</span>
+            <span class="value">${warp.getFirstThreadIndex() + lane}</span>
             <span class="key">gtid:</span>
-            <span class="value">${warp.getBlock().size * warp.getBlock().getIndex()}
+            <span class="value">${
+              block.size * CudaIndex.linearize(block.getIndex(), this.#model.getGrid().dim)
+              + (warp.getFirstThreadIndex() + lane)
+            }
           </div>
-        `
+          `
+        }
       })
 
     $(thread).on('mouseenter', () => thread.popover("show"))
@@ -143,6 +152,7 @@ class ComputeSelectionThreadView extends Component {
   }
 
   /**
+   * Render a warp in the view
    * @param {CudaWarp} warp 
    */
   _renderWarp(warp) {
@@ -176,11 +186,14 @@ class ComputeSelectionThreadView extends Component {
     return res
   }
 
+  /**
+   * Render the view
+   */
   _render() {
     if ( this.isDisposed())
       return this
 
-    let block = this.#model.grid.getBlock(0)
+    let block = this.#model.getBlockSelection()
 
     if ( !this.isRendered()) {
       this.#node = $(`<div id="${this.id}" class="list-group" data-simplebar></div>`)
