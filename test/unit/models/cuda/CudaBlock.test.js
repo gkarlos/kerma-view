@@ -19,23 +19,34 @@ describe('renderer/models/cuda/CudaBlock', () => {
       expect(() => new CudaBlock(1025,grid)).to.throw(Error)
     })
 
-    it("should throw on index missmatch", () => {
+    it("should throw on index missmatch (1)", () => {
       let grid = new CudaGrid(1024, 1024)
       expect( () => new CudaBlock(1024,grid,1024)).to.throw(Error)
     })
 
-    it("should not throw on 1D w/o grid+index", () => {
-      expect(() => new CudaBlock(new CudaDim(1024))).to.not.throw()
-      expect(() => new CudaBlock(1024)).to.not.throw()
+    it("should throw on index missmatch (2)", () => {
+      let grid = new CudaGrid(new CudaDim(4,4), new CudaDim(2,2))
+      expect( () => new CudaBlock(new CudaDim(2,2), grid, 16)).to.throw(Error)
+    })
+
+    it("should throw on invalid index", () => {
+      let grid = new CudaGrid(new CudaDim(4,4), new CudaDim(2,2))
+      expect( () => new CudaBlock(new CudaDim(2,2), grid, -1)).to.throw(Error)
+    })
+
+    it("should not throw on 1D w/o index", () => {
+      expect(() => new CudaBlock(new CudaDim(1024), new CudaGrid(1024,1024))).to.not.throw()
+      expect(() => new CudaBlock(1024, new CudaGrid(1024,1024))).to.not.throw()
     })
 
     it("should not throw on 2D w/o grid+index", () => {
-      expect(() =>  new CudaBlock(new CudaDim(1024,1))).to.not.throw()
-      expect(() =>  new CudaBlock(new CudaDim(10,10))).to.not.throw()
-      expect(() =>  new CudaBlock(new CudaDim(10,10,1))).to.not.throw()
-      expect(() =>  new CudaBlock(new CudaDim(10,1,10))).to.not.throw()
-      expect(() =>  new CudaBlock(new CudaDim(1,10,1))).to.not.throw()
-      expect(() =>  new CudaBlock(new CudaDim(1,10))).to.not.throw()
+      
+      expect(() =>  new CudaBlock(new CudaDim(1024,1),   new CudaGrid(1024, new CudaDim(1024,1)))).to.not.throw()
+      expect(() =>  new CudaBlock(new CudaDim(10,10),    new CudaGrid(1024, new CudaDim(10,10)))).to.not.throw()
+      expect(() =>  new CudaBlock(new CudaDim(10,10,1),  new CudaGrid(1024, new CudaDim(10,10,1)))).to.not.throw()
+      expect(() =>  new CudaBlock(new CudaDim(10,1,10),  new CudaGrid(1024, new CudaDim(10,1,10)))).to.not.throw()
+      expect(() =>  new CudaBlock(new CudaDim(1,10,1),   new CudaGrid(1024, new CudaDim(1,10,1)))).to.not.throw()
+      expect(() =>  new CudaBlock(new CudaDim(1,10),     new CudaGrid(1024, new CudaDim(1,10)))).to.not.throw()
     })
     
     it("should throw on 3D", () => {
@@ -86,64 +97,122 @@ describe('renderer/models/cuda/CudaBlock', () => {
     })
 
     it("should not throw with valid index (1)", () => {
-      expect(() => new CudaBlock(new CudaDim(1024), null, new CudaIndex(100))).to.not.throw()
+      expect(() => new CudaBlock(new CudaDim(1024), new CudaGrid(160, 1024), new CudaIndex(100))).to.not.throw()
     })
 
     it("should not throw with valid index (2)", () => {
-      expect(() => new CudaBlock(new CudaDim(1024), null, 1024)).to.not.throw()
+      expect(() => new CudaBlock(new CudaDim(1024), new CudaGrid(1024, 1024), 1023)).to.not.throw()
     })
 
-    it("should not throw with valid grid+index", () => {
-      expect(() => new CudaBlock(1024, new CudaGrid(1024, 1024), 1023)).to.not.throw()
+    it("should not throw with valid index (3)", () => {
+      expect(() => new CudaBlock(new CudaDim(1024), new CudaGrid(160, 1024), 0)).to.not.throw()
     })
   })
 
-  describe('getFirstTid', () => {
+  describe('getFirstThreadIdx', () => {
     it("should return the right value (1)", () => {
       let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
       let block = new CudaBlock( new CudaDim(2,2), grid, 0)
-      expect(block.getFirstTid().equals(new CudaIndex(0,0))).to.be.true
+      expect(block.getFirstThreadIdx().equals(new CudaIndex(0,0))).to.be.true
     })
 
     it("should return the right value (2)", () => {
       let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
       let block = new CudaBlock( new CudaDim(2,2), grid, new CudaIndex(0,1))
-      console.log(block.getFirstTid().toString())
-      expect(block.getFirstTid().equals(new CudaIndex(0,2))).to.be.true
+      expect(block.getFirstThreadIdx().equals(new CudaIndex(0,2))).to.be.true
+    })
+
+    it("should return the right value (3)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, grid.size - 1)
+      expect(block.getFirstThreadIdx().equals(new CudaIndex(6,6))).to.be.true
     })
   })
 
-  describe('getFirstLinearTid', () => {
-    let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
-    let block = new CudaBlock( new CudaDim(2,2), grid, new CudaIndex(0,1))
-    expect(block.getFirstLinearTid()).to.equal(4)
+  describe('getLastThreadIdx', () => {
+    it("should return the right value (1)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, 0)
+      expect(block.getLastThreadIdx().equals(new CudaIndex(1,1))).to.be.true
+    })
+
+    it("should return the right value (2)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, new CudaIndex(0,1))
+      expect(block.getLastThreadIdx().equals(new CudaIndex(1,3))).to.be.true
+    })
+
+    it("should return the right value (3)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, grid.size - 1)
+      expect(block.getLastThreadIdx().equals(new CudaIndex(7,7))).to.be.true
+    })
+  })
+
+  describe('getFirstLinearThreadIdx', () => {
+    it("should return the right value (1)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, 0)
+      expect(block.getFirstLinearThreadIdx()).to.equal(0)
+    })
+
+    it("should return the right value (2)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, new CudaIndex(0,1))
+      expect(block.getFirstLinearThreadIdx()).to.equal(4)
+    })
+
+    it("should return the right value (3)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, new CudaIndex(1,1))
+      expect(block.getFirstLinearThreadIdx()).to.equal(20)
+    })
+  })
+
+  describe('getLastLinearThreadIdx', () => {
+    it("should return the right value (1)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, 0)
+      expect(block.getLastLinearThreadIdx()).to.equal(3)
+    })
+
+    it("should return the right value (2)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, 1)
+      expect(block.getLastLinearThreadIdx()).to.equal(7)
+    })
   })
 
   describe('getWarp', () => {
     it('should return the right warp (1)', () => {
-      let block = new CudaBlock(256)
+      let grid = new CudaGrid(1024, 256)
+      let block = new CudaBlock(256, grid)
       expect(block.getWarp(0).equals(new CudaWarp(block,0))).to.be.true
     })
   })
 
   describe("getIndex", () => {
     it("should return the index assigned on constructor (1)", () => {
-      let block = new CudaBlock(new CudaDim(1024), new CudaIndex(128))
+      let grid = new CudaGrid(256, 1024)
+      let block = new CudaBlock(new CudaDim(1024), grid, new CudaIndex(128))
       expect(block.getIndex().equals(new CudaIndex(128))).to.be.true
     })
 
     it("should return the index assigned on constructor (2)", () => {
-      let block = new CudaBlock(new CudaDim(1024), 128)
-      expect(block.getIndex().equals(new CudaIndex(128))).to.be.true
+      let grid = new CudaGrid(1024, 1024)
+      let block = new CudaBlock(new CudaDim(1024), grid, 128)
+      expect(block.getIndex().equals(CudaIndex.delinearize(128, grid.dim))).to.be.true
     })
 
     it("should return the index assigned on constructor (3)", () => {
-      let block = new CudaBlock(new CudaDim(1024), new CudaDim(100,100))
-      expect(block.getIndex().equals(new CudaDim(100,100))).to.be.true
+      let grid = new CudaGrid(1024, 1024)
+      let block = new CudaBlock(new CudaDim(1024), grid, 0)
+      expect(block.getIndex().equals(new CudaIndex(0,0))).to.be.true
     })
 
     it("should return the index assigned on constructor (4)", () => {
-      let block = new CudaBlock(new CudaDim(1024))
+      let grid = new CudaGrid(1024, 1024)
+      let block = new CudaBlock(new CudaDim(1024),grid)
       expect(block.getIndex().equals(CudaIndex.Unknown)).to.be.true
     })
 

@@ -33,7 +33,7 @@ class CudaIndex {
     if ( dim.y == 1) //1D
       return index.col
 
-    return (index.row * dim.x) + index.col
+    return index.x + index.y * dim.x
   }
 
   /**
@@ -50,6 +50,8 @@ class CudaIndex {
 
     let row, col
     if ( Number.isInteger(index)) {
+      if ( index < 0)
+        throw new Error('Index must be >= 0')
       if ( dim.y === 1)
         return new CudaIndex(index)
       row = Math.floor(index / dim.x)
@@ -83,8 +85,8 @@ class CudaIndex {
    * @param {Number} [row] Value for the row, (y) dimension.
    * @param {Number} col Value for the col (x) dimension.
    * @description
-   *  - When two arguments are passed the first one defines the row and the second one the column.
-   *  - When one argument is passed it defines the colum.
+   *  - When two arguments are passed the first one defines the row (y) and the second one the column (x).
+   *  - When one argument is passed it defines the column (x).
    * This is to be consistent with common, C-like, row-major indexing notation
    * @example
    *  let index1 = new Index(1,2) // 3rd element of the 2nd row

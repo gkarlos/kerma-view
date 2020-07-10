@@ -73,7 +73,7 @@ class CudaGrid {
    * Retrieve the size of the y-dimension of the grid
    * @returns {Number}
    */
-  get y() { return this.#dim; }
+  get y() { return this.#dim.y; }
 
   /**
    * Retrieve the number of blocks in the grid
@@ -145,7 +145,8 @@ class CudaGrid {
    * @returns {String}
    */
   toString(short=false) {
-    return short ? `${this.x}x${this.y}, ${this.block.x}x${this.block.y}` : `(${this.x}x${this.y}, ${this.block.x}x${this.block.y}, #blocks: ${this.size})`
+    return short ? `${this.#dim.toString(true)}, ${this.block.x}x${this.block.y}` 
+    : `(${this.x}x${this.y}, ${this.block.x}x${this.block.y}, #blocks: ${this.size})`
   }
 
   
