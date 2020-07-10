@@ -7,17 +7,13 @@ const CudaIndex = require('./CudaIndex')
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
 /**
- * A Cuda block. This class is meant to be used both as a description of the block
- * dimensions used in a kernel launch as well ass to model specific block in a grid.
- * The difference between the two (so far) lies at whether the CudaBlock object has
- * been assigned an index or not. See {@link module:cuda.CudaBlock#hasIndex}
- * 
+ * This class represents a block in a cuda grid
  * @memberof module:cuda
  */
 class CudaBlock {
-  /** @type {CudaDim}   */ #dim
-  /** @type {CudaGrid}  */ #grid 
-  /** @type {CudaIndex} */ #index
+  /** @type {CudaDim}         */ #dim
+  /** @type {CudaGrid}        */ #grid 
+  /** @type {CudaIndex}       */ #index
   /** @type {Array<CudaWarp>} */ #warps
 
 
@@ -84,6 +80,7 @@ class CudaBlock {
    * Whether the index is valid within the grid must be checked externally
    * @param {CudaIndex|Number} index 
    * @returns {CudaBlock} this
+   * @throws {Error} On invalid argument
    */
   setIndex(index) {
     if ( !(index instanceof CudaIndex) && !Number.isInteger(index))
@@ -94,7 +91,10 @@ class CudaBlock {
 
   /**
    * Associate this block with a grid instance.
-   * @param {} grid 
+   * @param {CudaGrid} grid
+   * @returns {CudaBlock} this
+   * @throws {Error} On invalid argument
+   * @throws {Error} If the block has an index which is out of bounds of the provided grid
    */
   setGrid(grid) {
     const CudaGrid = require('./CudaGrid')
@@ -109,30 +109,54 @@ class CudaBlock {
 
   /**
    * Retrieve the index of this block (if one exists) <br/>
-   * If no index is assigned `null` is returned
-   * @returns {CudaIndex} 
+   * @returns {CudaIndex} The index of this block or `undefined`
    */
   getIndex() {
-    return this.#index === undefined? null: this.#index
+    return this.#index
   }
 
   /**
-   * Retrieve the global (linear) index of the first thread in the block
-   * @returns {Number}
+   * Retrieve the global index of the first thread in the block
+   * @returns {CudaIndex}
+   * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
    */
   getFirstTid() {
     if ( !this.hasIndex())
       throw new Error('Operation requires an indx to be assigned to the block')
-
-    if ( !this.hasIndex())
-      return -1
-    return CudaIndex.linearize(this.#index, )
+    return new CudaIndex(this.#index.y * this.#dim.y, this.#index.x * this.#dim.x)
   }
 
+  /**
+   * Retrieve the global index of the last thread in the block
+   * @returns {CudaIndex}
+   * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
+   */
+  getLastTid() {
+    if ( !this.hasIndex())
+      throw new Error('Operation required an index to be assigned to the block')
+    return new CudaIndex((this.#index.y + 1) * this.#dim.y - 1, (this.#index.x + 1) * this.#dim.x - 1)
+  }
+
+  /**
+   * Retrieve the global linear index of the first thread in the block
+   * @returns {Number}
+   * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
+   */
   getFirstLinearTid() {
     if ( !this.hasIndex())
       throw new Error('Operation requires an indx to be assigned to the block')
-      
+    return this.size * this.getIndex().linearize()
+  }
+
+  /**
+   * Retrieve the global linear index of the last thread in the block
+   * @returns {Number}
+   * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
+   */
+  getLastLinearTid() {
+    if ( !this.hasIndex())
+      throw new Error('Operation requires an index to be assigned to the block')
+    return this.size * (this.getIndex() + 1) - 1
   }
 
   /**
