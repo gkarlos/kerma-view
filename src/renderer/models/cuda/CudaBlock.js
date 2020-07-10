@@ -70,6 +70,10 @@ class CudaBlock {
     this.#warps = Array.apply(null, Array(this.numWarps)).map(function () {})
   }
 
+  /// --------------------- ///
+  ///  Accessor Properties  ///
+  /// --------------------- ///
+
   /**
    * The dimensions of this block
    * @type {CudaDim}
@@ -94,10 +98,12 @@ class CudaBlock {
    */
   get y() { return this.#dim.y }
 
-  // /** Retrieve the size of the z-dimension of the block
-  //  * @returns {Number}
-  //  */
-  // get z() { return this.#dim.z }
+  /** 
+   * Size of the z-dimension of the block
+   * Currently this always returns 1 as 3D blocks are not yet supported
+   * @type {Number}
+   */
+  get z() { return 1 }
 
   /** 
    * Number of threads in the block
@@ -111,6 +117,10 @@ class CudaBlock {
    */
   get numWarps() { return Math.floor(this.size / Limits.warpSize) + (this.size % Limits.warpSize > 0 ? 1 : 0) }
 
+
+  /// ------------------- ///
+  ///       Methods       ///
+  /// ------------------- ///
 
   /**
    * Check if this block has been assigned an index

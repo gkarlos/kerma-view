@@ -191,6 +191,14 @@ describe('renderer/models/cuda/CudaBlock', () => {
     })
   })
 
+  describe("setIndex", () => {
+    it("should throw if 2D index passed for 1D grid", () => {
+      let grid = new CudaGrid(16,16)
+      let block = new CudaBlock(16, grid)
+      expect(() => block.setIndex(new CudaIndex(15,15))).to.throw()
+    })
+  })
+
   describe("getIndex", () => {
     it("should return the index assigned on constructor (1)", () => {
       let grid = new CudaGrid(256, 1024)
@@ -216,16 +224,25 @@ describe('renderer/models/cuda/CudaBlock', () => {
       expect(block.getIndex().equals(CudaIndex.Unknown)).to.be.true
     })
 
-    it("should return the index assigned with setIndex (1)", () => {
-      let block = new CudaBlock(new CudaDim(1024))
-      block.setIndex(new CudaIndex(1024))
-      expect(block.getIndex().equals(new CudaIndex(1024))).to.be.true
+    it("should return the 1D index assigned with setIndex (1)", () => {
+      let grid = new CudaGrid(1024,1024)
+      let block = new CudaBlock(1024, grid)
+      block.setIndex(new CudaIndex(1000))
+      expect(block.getIndex().equals(new CudaIndex(1000))).to.be.true
     })
 
-    it("should return the index assigned with setIndex (2)", () => {
-      let block = new CudaBlock(new CudaDim(1024))
-      block.setIndex(1024)
-      expect(block.getIndex().equals(new CudaIndex(1024))).to.be.true
+    it("should return the 1D index assigned with setIndex (2)", () => {
+      let grid = new CudaGrid(1024,1024)
+      let block = new CudaBlock(1024, grid)
+      block.setIndex(1000)
+      expect(block.getIndex().equals(new CudaIndex(1000))).to.be.true
+    })
+
+    it("should return the 1D index assigned with setIndex (2)", () => {
+      let grid = new CudaGrid(1024,1024)
+      let block = new CudaBlock(1024, grid)
+      block.setIndex(CudaIndex.Unknown)
+      expect(block.getIndex().equals(CudaIndex.Unknown)).to.be.true
     })
   })
 
