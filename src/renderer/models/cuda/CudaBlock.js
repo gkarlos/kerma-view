@@ -145,7 +145,7 @@ class CudaBlock {
   getFirstLinearTid() {
     if ( !this.hasIndex())
       throw new Error('Operation requires an indx to be assigned to the block')
-    return this.size * this.getIndex().linearize()
+    return this.size * this.getIndex().linearize(this.#dim)
   }
 
   /**

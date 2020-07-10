@@ -2,6 +2,7 @@ require('module-alias/register')
 
 const CudaGrid = require('@renderer/models/cuda/CudaGrid')
 const CudaBlock  = require('@renderer/models/cuda/CudaBlock')
+const { to } = require('cli-color/move')
 const CudaWarp  = require('@renderer/models/cuda').Warp
 const CudaLimits = require('@renderer/models/cuda').Limits
 const CudaDim = require('@renderer/models/cuda').Dim
@@ -95,6 +96,27 @@ describe('renderer/models/cuda/CudaBlock', () => {
     it("should not throw with valid grid+index", () => {
       expect(() => new CudaBlock(1024, new CudaGrid(1024, 1024), 1023)).to.not.throw()
     })
+  })
+
+  describe('getFirstTid', () => {
+    it("should return the right value (1)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, 0)
+      expect(block.getFirstTid().equals(new CudaIndex(0,0))).to.be.true
+    })
+
+    it("should return the right value (2)", () => {
+      let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+      let block = new CudaBlock( new CudaDim(2,2), grid, new CudaIndex(0,1))
+      console.log(block.getFirstTid().toString())
+      expect(block.getFirstTid().equals(new CudaIndex(0,2))).to.be.true
+    })
+  })
+
+  describe('getFirstLinearTid', () => {
+    let grid = new CudaGrid( new CudaDim(4,4), new CudaDim(2,2))
+    let block = new CudaBlock( new CudaDim(2,2), grid, new CudaIndex(0,1))
+    expect(block.getFirstLinearTid()).to.equal(4)
   })
 
   describe('getWarp', () => {
