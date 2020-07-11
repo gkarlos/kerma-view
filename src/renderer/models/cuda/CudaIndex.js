@@ -289,10 +289,10 @@ class CudaIndex {
 
   /**
    * Create a copy of the index
-   * @returns {Index}
+   * @returns {CudaIndex}
    */
   clone() {
-    return new Index(this.#row, this.#col)
+    return new CudaIndex(this.#row, this.#col)
   }
 
 
