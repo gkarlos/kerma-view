@@ -26,8 +26,6 @@ class CudaThread {
   constructor(block, index) {
     if ( !block)
       throw new Error(`Missing required argument 'block'`)
-    if ( !block.hasIndex())
-      throw new Error("Block does not have an index")
     if ( index instanceof CudaIndex) {
       if ( index.x >= block.x)
         throw new Error(`Invalid thread index '${index.toString()}' for block '${block.toString()}'`)

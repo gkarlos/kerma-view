@@ -41,7 +41,7 @@ class CudaBlock {
       throw new Error("Missing required argument 'grid'")
     if ( !isCudaGrid(grid))
       throw new Error('grid must be a CudaGrid instance')
-
+    
     this.#grid = grid
     this.#dim = grid.block
 

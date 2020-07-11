@@ -85,7 +85,7 @@ describe('renderer/models/cuda/CudaDim', () => {
   describe("hasIndex", () => {
     it("should throw on invalid index (1)", () => {
       let dim = new CudaDim(1024)
-      expect(() => dim.hasIndex(-10)).to.throw()
+      expect(() => dim.hasIndex("abc")).to.throw()
     })
 
     it("should throw on invalid index (2)", () => {
@@ -101,6 +101,11 @@ describe('renderer/models/cuda/CudaDim', () => {
     it("should throw on invalid index (4)", () => {
       let dim = new CudaDim(1024)
       expect(() => dim.hasIndex(null)).to.throw()
+    })
+
+    it("should not throw on negative index (1)", () => {
+      let dim = new CudaDim(1024)
+      expect(() => dim.hasIndex(-10)).to.not.throw()
     })
 
     it("should not throw on valid index (1)", () => {

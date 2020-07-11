@@ -1,5 +1,5 @@
 require('module-alias/register')
-const CudaGrid  = require('@renderer/models/cuda').Grid
+const CudaGrid  = require('@renderer/models/cuda/CudaGrid')
 const CudaDim = require('@renderer/models/cuda').Dim
 const CudaIndex = require('@renderer/models/cuda').Index
 const CudaLimits = require('@renderer/models/cuda').Limits
