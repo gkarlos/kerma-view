@@ -1,24 +1,24 @@
-const Limits = require('./CudaLimits')
-const CudaDim = require('./CudaDim')
-const CudaIndex = require('./CudaIndex')
+const Limits    = require('@renderer/models/cuda/CudaLimits')
+const CudaDim   = require('@renderer/models/cuda/CudaDim')
+const CudaIndex = require('@renderer/models/cuda/CudaIndex')
+const CudaBlock = require('@renderer/models/cuda/CudaBlock')
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
-
-var CudaBlock;
+/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
 
 /**
  * A Cuda grid description
  * @memberof module:cuda
  */
 class CudaGrid {
-  /** @type {CudaDim} */ #dim
-  /** @type {CudaDim} */ #blockDim
-
+  /** @type {CudaDim}   */ #dim
+  /** @type {CudaDim}   */ #blockDim
   /** @type {CudaBlock} */ #blockInstance
 
   /**
-   * @param {CudaDim|Number} dim Dimensions of the grid
+   * @param {CudaDim|Number} dim Dimensions of the grid. 
+   *                             If an integer is passed it is considered the x-dimension and the y-dimension is implicitly `1`
    * @param {CudaDim|Number} blockDim Dimensions of the blocks of the grid
+   *                                  If an integer is passed it is considered the x-dimension and the y-dimension is implicitly `1`
    */
   constructor(dim, blockDim) {
     if ( !(dim instanceof CudaDim) && !Number.isInteger(dim))
@@ -38,8 +38,8 @@ class CudaGrid {
       throw new Error(`Invalid Grid dimensions : ${this.#dim.toString()}`)
     if ( !Limits.validBlockDim(this.#blockDim))
       throw new Error(`Invalid Block dimensions : ${this.#blockDim.toString()}`)
-    
-    // this.#blockInstance = new CudaBlock(blockDim, this, 0)
+
+    this.#blockInstance = new CudaBlock(this, 0)    
   }
 
   /// --------------------- ///
@@ -95,15 +95,11 @@ class CudaGrid {
    * @returns {CudaBlock}
    */
   getBlock(index) {
-    if ( !CudaBlock)
-      CudaBlock = require('./CudaBlock')
-      
-    return new CudaBlock(this.block, index)
-    // if ( !(Number.isInteger(index) || (index instanceof CudaIndex)))
-    //   throw new Error("index must me of type Number or CudaIndex")
-    // if ( !this.hasIndex(index))
-    //   throw new Error(`Invalid block index '${Number.isInteger(index)? index : index.toString()}' for grid '${this.toString(true)}'`)
-    // TODO
+    try {
+      return new CudaBlock(this, index)
+    } catch ( e) {
+      throw new Error(e.message)
+    }
   }
 
   /**
