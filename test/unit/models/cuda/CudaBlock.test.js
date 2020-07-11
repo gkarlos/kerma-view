@@ -274,67 +274,51 @@ describe('renderer/models/cuda/CudaBlock', () => {
     })
 
     it("should be equal 2D (1)", () => {
-      expect(new CudaBlock(new CudaDim(2,256)).equals(new CudaBlock(new CudaDim(2,256)))).to.be.true
+      expect(new CudaBlock( new CudaGrid(1, new CudaDim(2,256)), 0).equals(new CudaBlock( new CudaGrid(1, new CudaDim(2,256)), 0))).to.be.true
     })
 
     it("should be equal 2D (2)", () => {
-      expect(new CudaBlock(new CudaDim(1,256)).equals(new CudaBlock(new CudaDim(1,256)))).to.be.true
+      expect(new CudaBlock(new CudaGrid(1, new CudaDim(1,256)), 0).equals(new CudaBlock(new CudaGrid(1, new CudaDim(1,256)), 0))).to.be.true
     })
 
     it("should be equal 2D (3)", () => {
-      expect(new CudaBlock(new CudaDim(10,10)).equals(new CudaBlock(new CudaDim(10,10)))).to.be.true
+      expect(new CudaBlock(new CudaGrid(1, new CudaDim(10,10)), 0).equals(new CudaBlock(new CudaGrid(1, new CudaDim(10,10)), 0))).to.be.true
     })
 
     it("should be equal 2D (4)", () => {
-      expect(new CudaBlock(new CudaDim(10)).equals(new CudaBlock(new CudaDim(10,1)))).to.be.true
+      expect(new CudaBlock(new CudaGrid(1, new CudaDim(10)), 0).equals(new CudaBlock(new CudaGrid(1, new CudaDim(10,1)), 0))).to.be.true
     })
 
-    it("should be equal 2D (5)", () => {
-      expect(new CudaBlock(new CudaDim(10)).equals(new CudaBlock(10))).to.be.true
-    })
-  
     it("should not be equal 1D (1)", () => {
-      expect(new CudaBlock(256).equals(new CudaBlock(255))).to.be.false
+      expect(new CudaBlock(new CudaGrid(1,256), 0).equals(new CudaBlock(new CudaGrid(1,255), 0))).to.be.false
     })
 
     it("should not be equal 1D (2)", () => {
-      expect(new CudaBlock(1).equals(new CudaBlock(2))).to.be.false
+      expect(new CudaBlock(new CudaGrid(1,256), 0).equals(new CudaBlock(new CudaGrid(2,256), 0))).to.be.false
     })
 
     it("should not be equal 1D (3)", () => {
-      expect(new CudaBlock(123).equals(new CudaBlock(12))).to.be.false
-    })
-
-    it("should not be equal 1D (4)", () => {
-      expect(new CudaBlock(256).equals(new CudaBlock(new CudaDim(255)))).to.be.false
-    })
-
-    it("should not be equal 1D (5)", () => {
-      expect(new CudaBlock(256).equals(new CudaBlock(new CudaDim(1,256)))).to.be.false
-    })
-
-    it("should not be equal 1D (5)", () => {
-      expect(new CudaBlock(1,256).equals(new CudaBlock(new CudaDim(256)))).to.be.false
+      expect(new CudaBlock(new CudaGrid(1,256), 0).equals(new CudaBlock(new CudaGrid(2,256), 1))).to.be.false
     })
 
     it("should not be equal 2D (1)", () => {
-      expect(new CudaBlock(new CudaDim(16,16)).equals(new CudaDim(1,16))).to.be.false
+      expect(new CudaBlock(new CudaGrid( 16, new CudaDim(16,16)), 0).equals(new CudaBlock(new CudaGrid( 16, new CudaDim(1,16)), 0))).to.be.false
     })
 
     it("should not be equal 2D (2)", () => {
-      expect(new CudaBlock(new CudaDim(1,256)).equals(new CudaBlock(new CudaDim(256,1)))).to.be.false
+      expect(new CudaBlock(new CudaGrid( 16, new CudaDim(1,256)), 0).equals(new CudaBlock(new CudaGrid( 16, new CudaDim(256,1)), 0))).to.be.false
     })
 
     it("should not be equal 2D (3)", () => {
-      expect(new CudaBlock(new CudaDim(2,100)).equals(new CudaBlock(new CudaDim(2,200)))).to.be.false
+      expect(new CudaBlock(new CudaGrid( 16, new CudaDim(2,100)), 0).equals(new CudaBlock(new CudaGrid( 16, new CudaDim(2,200)), 0))).to.be.false
     })
 
     it("should not be equal 2D (4)", () => {
-      expect(new CudaBlock(new CudaDim(2,64)).equals(new CudaBlock(new CudaDim(2,1,64)))).to.be.false
+      expect(new CudaBlock(new CudaGrid( 16, new CudaDim(2,64)), 0).equals(new CudaBlock(new CudaGrid( 16, new CudaDim(2,1,64)), 0))).to.be.false
     })
 
     it("should not be equal 2D (5)", () => {
-      expect(new CudaBlock(new CudaDim(2,1,64)).equals(new CudaBlock(new CudaDim(2,64)))).to.be.false
+      expect(new CudaBlock(new CudaGrid( 16, new CudaDim(2,1,64)), 0).equals(new CudaBlock(new CudaGrid( 16, new CudaDim(2,64)), 0))).to.be.false
     })
   })
 })

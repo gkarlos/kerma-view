@@ -39,7 +39,7 @@ class CudaBlock {
     } catch ( e) {
       throw new Error(e)
     }
-    
+
     // Create an empty warps array. We will lazily populate it
     // as soon as requests for warps come in
     this.#warps = Array.apply(null, Array(this.numWarps)).map(function () {})
@@ -281,18 +281,18 @@ class CudaBlock {
     return (other instanceof CudaBlock) 
       && this.#dim.equals(other.dim)
       && this.#grid.equals(other.grid)
-      && ( (!this.hasIndex() && !other.hasIndex()) || (this.getIndex().equals(other.getIndex())) )
+      && this.#index.equals(other.getIndex())
   }
 
-  /**
-   * Compare with another block for equality including grid and index
-   * @param {CudaBlock} other 
-   */
-  eql(other) {
-    return this.equals(other)
-      && this.hasIndex() && other.hasIndex()
-      && this.getIndex().equals(other.getIndex())
-  }
+  // /**
+  //  * Compare with another block for equality including grid and index
+  //  * @param {CudaBlock} other 
+  //  */
+  // eql(other) {
+  //   return this.equals(other)
+  //     && this.hasIndex() && other.hasIndex()
+  //     && this.getIndex().equals(other.getIndex())
+  // }
 }
 
 module.exports = CudaBlock
