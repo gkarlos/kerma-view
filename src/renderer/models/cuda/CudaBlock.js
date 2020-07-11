@@ -1,11 +1,10 @@
-const Limits    = require('./CudaLimits')
-const CudaWarp  = require('./CudaWarp')
-const CudaDim   = require('./CudaDim')
-const CudaIndex = require('./CudaIndex')
-const CudaGrid  = require('./CudaGrid')
+const {
+  CudaLimits,
+  CudaWarp,
+  CudaDim,
+  CudaIndex,
+  isCudaGrid } = require('@renderer/models/cuda')
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
 
 /**
@@ -30,7 +29,7 @@ class CudaBlock {
   constructor(grid, index) {
     if ( !grid)
       throw new Error("Missing required argument 'grid'")
-    if ( !(grid instanceof CudaGrid))
+    if ( !isCudaGrid(grid))
       throw new Error('grid must be a CudaGrid instance')
 
     this.#grid = grid
@@ -92,7 +91,7 @@ class CudaBlock {
    * Number of warps in the block
    * @type {Number}
    */
-  get numWarps() { return Math.floor(this.size / Limits.warpSize) + (this.size % Limits.warpSize > 0 ? 1 : 0) }
+  get numWarps() { return Math.floor(this.size / CudaLimits.warpSize) + (this.size % CudaLimits.warpSize > 0 ? 1 : 0) }
 
 
   /// ---------------------- ///
@@ -234,7 +233,7 @@ class CudaBlock {
    * That is the size of the block is not a multiple of {@link CudaLimits.warpSize}
    * @returns {Boolean}
    */
-  hasWarpWithInactiveLanes() { return this.size % Limits.warpSize != 0 }
+  hasWarpWithInactiveLanes() { return this.size % CudaLimits.warpSize != 0 }
 
   /**
    * Retrieve a warp from this block
