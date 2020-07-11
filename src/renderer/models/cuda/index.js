@@ -81,14 +81,6 @@ function isCudaDim(obj) {
 /** 
  * @module cuda
  * @category models
- * @property {module=cuda.CudaLimits} Limits
- * @property {module=cuda.CudaBlock} Block
- * @property {module=cuda.CudaGrid} Grid
- * @property {module=cuda.CudaWarp} Warp
- * @property {module=cuda.CudaThread} Thread
- * @property {module=cuda.CudaIndex} Index
- * @property {module=cuda.CudaDim} Dim
- * @property {module=cuda.CudaKernel} Kernel
  */
 module.exports = {
   Limits,
