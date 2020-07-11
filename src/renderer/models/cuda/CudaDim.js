@@ -133,7 +133,12 @@ class CudaDim {
   hasIndex(index) {
     if ( !(index instanceof CudaIndex) && !Number.isInteger(index))
       throw new Error("index must be a CudaIndex or Integer")
-    let idx = Number.isInteger(index)? new CudaIndex(index) : index
+    let idx = index
+    if ( Number.isInteger(index)) {
+      if (index < 0)
+        return false
+      idx = new CudaIndex(index)
+    }
     return  !( idx.x >= this.#x ||  idx.y >= this.#y)
   }
 
@@ -142,26 +147,24 @@ class CudaDim {
    * @returns {Boolean}
    */
   is1D() { 
-    return (this.#y == 1 && this.#z == 1) 
-        || (this.#y > 1  && this.#x == 1 && this.#z == 1) 
-        || (this.#z > 1  && this.#x == 1 && this.#y == 1)
+    return this.#y === 1 && this.#z === 1
   }
   
   /**
-   * Check if 2-dimensional, i.e exactly 2 dimensions > 1
+   * Check if 2-dimensional
    * @returns {Boolean}
    */
   is2D() { 
-    return (this.#x > 1 && this.#y > 1 && this.#z == 1)
-     || (this.#x > 1 && this.#y == 1 && this.#z > 1)
-     || (this.#x == 1 && this.#y > 1 && this.#z > 1)
+    return this.#y > 1 && this.#z === 1
   } 
 
   /**
-   * Check if 3-dimensional, i.e all 3 dimensions > 1
+   * Check if 3-dimensional
    * @returns {Boolean}
    */
-  is3D() { return (this.#x > 1 && this.#y > 1 && this.#z > 1) }
+  is3D() { 
+    return this.#z > 1
+  }
 
   /**
    * Create a copy of this CudaDim object

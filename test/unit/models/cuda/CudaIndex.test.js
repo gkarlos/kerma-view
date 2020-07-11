@@ -202,4 +202,10 @@ describe('renderer/models/cuda/CudaIndex', () => {
       expect(new Index(1).is2D()).to.be.false
     })
   })
+
+  describe("clone", () => {
+    it("should return a copy", () => {
+      expect(new Index(15,15).clone().equals(new Index(15,15))).to.be.true
+    })
+  })
 })

@@ -1,8 +1,8 @@
-const Limits = require('./CudaLimits')
-const CudaWarp = require('./CudaWarp')
-const CudaDim = require('./CudaDim')
+const Limits    = require('./CudaLimits')
+const CudaWarp  = require('./CudaWarp')
+const CudaDim   = require('./CudaDim')
 const CudaIndex = require('./CudaIndex')
-const CudaGrid = require('./CudaGrid')
+const CudaGrid  = require('./CudaGrid')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
@@ -20,10 +20,12 @@ class CudaBlock {
 
 
   /**
-   * Create new CudaBlock. A dim is required. An index may be assigned later.
-   * **No checks are performed on the index**. That is the index may be invalid for the grid this block is part of.
+   * Create new CudaBlock
    * @param {CudaGrid}         grid  The grid this block belongs to
    * @param {CudaIndex|Number} index The index of the block within the grid
+   * @throws {Error} Missing and/or undefined arguments
+   * @throws {Error} Arguments have incorrect type
+   * @throws {Error} Index not valid in the grid
    */
   constructor(grid, index) {
     if ( !grid)
@@ -93,28 +95,17 @@ class CudaBlock {
   get numWarps() { return Math.floor(this.size / Limits.warpSize) + (this.size % Limits.warpSize > 0 ? 1 : 0) }
 
 
-  /// ------------------- ///
-  ///       Methods       ///
-  /// ------------------- ///
+  /// ---------------------- ///
+  ///        Methods         ///
+  /// ---------------------- ///
 
   /**
-   * Check if this block has been assigned an index
-   * @returns {Boolean}
-   */
-  hasIndex() { return !this.#index.equals(CudaIndex.Unknown) }
-
-  /**
-   * Check if this block has been associated with a grid
-   * @returns {Boolean}
-   */
-  hasGrid() { return this.#grid !== undefined }
-
-  /**
-   * Assign an index to this block. Not checks are performed on the index.
-   * Whether the index is valid within the grid must be checked externally
-   * @param {CudaIndex|Number} index 
+   * Assign an index to this block
+   * 
+   * @param   {CudaIndex|Number} index 
    * @returns {CudaBlock} this
-   * @throws {Error} On invalid argument
+   * @throws  {Error} Argument invalid or incorrect type
+   * @throws  {Error} Index not valid in the grid
    */
   setIndex(index) {
     if ( !(index instanceof CudaIndex) && !Number.isInteger(index))
@@ -126,24 +117,6 @@ class CudaBlock {
     if ( !this.#grid.hasIndex(this.#index))
       throw new Error(`Invalid block index ${this.#index.toString(true)} for grid ${this.#grid.toString(true)}`)
     return this;
-  }
-
-  /**
-   * Associate this block with a grid instance.
-   * @param {CudaGrid} grid
-   * @returns {CudaBlock} this
-   * @throws {Error} On invalid argument
-   * @throws {Error} If the block has an index which is out of bounds of the provided grid
-   */
-  setGrid(grid) {
-    const CudaGrid = require('./CudaGrid')
-
-    if ( !(grid instanceof CudaGrid))
-      throw new Error('grid must be a CudaGrid instance')
-    if ( this.#index && !grid.hasIndex(this.#index))
-      throw new Error(`Grid '${grid.toString()}' and block index '${this.#index.toString()}' missmatch`)
-    this.#grid = grid
-    return this
   }
 
   /**
@@ -159,9 +132,7 @@ class CudaBlock {
    * @returns {CudaIndex}
    * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
    */
-  getFirstThreadIdx() {
-    if ( !this.hasIndex())
-      throw new Error('Operation requires an indx to be assigned to the block')
+  getFirstGlobalThreadIdx() {
     return new CudaIndex(this.#index.y * this.#dim.y, this.#index.x * this.#dim.x)
   }
 
@@ -170,9 +141,7 @@ class CudaBlock {
    * @returns {CudaIndex}
    * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
    */
-  getLastThreadIdx() {
-    if ( !this.hasIndex())
-      throw new Error('Operation required an index to be assigned to the block')
+  getLastGlobalThreadIdx() {
     return new CudaIndex((this.#index.y + 1) * this.#dim.y - 1, (this.#index.x + 1) * this.#dim.x - 1)
   }
 
@@ -181,12 +150,7 @@ class CudaBlock {
    * @returns {Number}
    * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
    */
-  getFirstLinearThreadIdx() {
-    if ( !this.hasIndex())
-      throw new Error('Operation requires an index to be assigned to the block')
-    if ( !this.hasGrid())
-      throw new Error('Operation requires a grid to be associated with the block')
-
+  getFirstGlobalLinearThreadIdx() {
     return this.size * this.getIndex().linearize(this.#grid.dim)
   }
 
@@ -195,29 +159,74 @@ class CudaBlock {
    * @returns {Number}
    * @throws If the block does not have an index. See {@link module:cuda.CudaBlock#hasIndex}
    */
-  getLastLinearThreadIdx() {
-    if ( !this.hasIndex())
-      throw new Error('Operation requires an index to be assigned to the block')
-    if ( !this.hasGrid())
-      throw new Error('Operation requires a grid to be associated with the block')
-      
+  getLastGlobalLinearThreadIdx() {
     return this.size * (this.getIndex().linearize(this.#grid.dim) + 1) - 1
   }
 
   /**
-   * Check if a thread index exists in this block
+   * Check if a thread index is within the bounds of this block
    * @param {CudaIndex|Number} index 
    */
-  hasThreadIndex(index) { return this.#dim.hasIndex(index) }
+  hasLocalThreadIdx(index) { 
+    return this.#dim.hasIndex(index)
+  }
+
+  /**
+   * Check if a linear thread index is within the bounds of this block
+   * @param {Number} index 
+   */
+  hasLocalLinearThreadIdx(index) {
+    return index > 0 && index < this.size
+  }
+
+  /**
+   * Check if this block contains a thread with a given global index.
+   * 
+   * If an integer is passed it will be treated as an index with 0 in the y-dimension.
+   * For instance 
+   *  - `hasGlobalThreadIdx(10)` 
+   *  - `hasGlobalThreadIdx(new CudaIndex(0,10))`
+   *  - `hasGlobalThreadIdx(new CudaIndex(10))`
+   * are equivalent
+   * 
+   * To check if the block contains a linear index use {@link module:cuda.CudaBlock#hasGlobalLinearIndex}
+   * @param {CudaIndex|Number} index 
+   */
+  hasGlobalThreadIdx(index) {
+    let idx
+    if ( Number.isInteger(index))
+      idx = new CudaIndex(index)
+    else if ( index instanceof CudaIndex)
+      idx = index
+    else
+      throw new Error('index must be a CudaIndex or an integer')
+
+    let first = this.getFirstGlobalThreadIdx()
+    let last = this.getLastGlobalThreadIdx()
+
+    // console.log(idx.toString(), first.toString(), last.toString(), "---", this.#index.toString())
+    return idx.x >= first.x && idx.x <= last.x
+      &&  idx.y >= first.y && idx.y <= last.y
+  }
+
+  /**
+   * Check if this block contains a thread with a given global linear index
+   * @param {Number} index 
+   */
+  hasGlobalLinearThreadIdx(index) {
+    if ( !Number.isInteger(index))
+      throw new Error('index must be an integer')
+    return index >= this.getFirstGlobalLinearThreadIdx() && index <= this.getLastGlobalLinearThreadIdx()
+  }
 
   /**
    * Check if a warp index exists in this block
    * @param {CudaIndex|Number} index 
    */
-  hasWarpIndex(index) { 
-    return Number.isInteger(index) 
-      ? (index >= 0 && index < this.numWarps)
-      : (index.y >= 0 && index.y < this.numWarps)
+  hasWarpIdx(index) { 
+    if ( !Number.isInteger(index))
+      throw new Error('index must be an integer')
+    return index >= 0 && index < this.numWarps
   }
 
   /** 
@@ -271,28 +280,24 @@ class CudaBlock {
 
   /**
    * Compare with another block for equality
-   * Two blocks are considered equal if they have the same dimensions, belong to the
-   * same grid and have the same index or both have no index. To compare the blocks
-   * without their indices use `eql`
+   * Two blocks are equal if they belong to the same grid
+   * and have the same index within the grid
    * @param {CudaBlock} other 
    * @return {Boolean}
    */
   equals(other) {
     return (other instanceof CudaBlock) 
-      && this.#dim.equals(other.dim)
       && this.#grid.equals(other.grid)
       && this.#index.equals(other.getIndex())
   }
 
-  // /**
-  //  * Compare with another block for equality including grid and index
-  //  * @param {CudaBlock} other 
-  //  */
-  // eql(other) {
-  //   return this.equals(other)
-  //     && this.hasIndex() && other.hasIndex()
-  //     && this.getIndex().equals(other.getIndex())
-  // }
+  /**
+   * Returns a copy of this block
+   * @returns {CudaBlock}
+   */
+  clone() {
+    return new CudaBlock(this.#grid.clone(), this.#index.clone())
+  }
 }
 
 module.exports = CudaBlock
