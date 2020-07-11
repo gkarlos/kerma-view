@@ -1,9 +1,13 @@
 const {
-  CudaLimits,
   CudaWarp,
-  CudaDim,
-  CudaIndex,
-  isCudaGrid } = require('@renderer/models/cuda')
+  CudaDim
+} = require('@renderer/models/cuda')
+
+const CudaLimits = require('@renderer/models/cuda/CudaLimits')
+const CudaIndex = require('@renderer/models/cuda/CudaIndex')
+
+var isCudaGrid
+var isCudaIndex
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
 
@@ -27,6 +31,12 @@ class CudaBlock {
    * @throws {Error} Index not valid in the grid
    */
   constructor(grid, index) {
+
+    if ( !isCudaGrid)
+      isCudaGrid = require('@renderer/models/cuda').isCudaGrid
+    if ( !isCudaIndex)
+      isCudaIndex = require('@renderer/models/cuda').isCudaIndex
+
     if ( !grid)
       throw new Error("Missing required argument 'grid'")
     if ( !isCudaGrid(grid))
@@ -107,7 +117,7 @@ class CudaBlock {
    * @throws  {Error} Index not valid in the grid
    */
   setIndex(index) {
-    if ( !(index instanceof CudaIndex) && !Number.isInteger(index))
+    if ( !isCudaIndex(index) && !Number.isInteger(index))
       throw new Error("Index must be CudaIndex or Integer")
     if ( Number.isInteger(index))
       this.#index = this.#dim.is1D()? new CudaIndex(index) : CudaIndex.delinearize(index, this.#grid.dim)
