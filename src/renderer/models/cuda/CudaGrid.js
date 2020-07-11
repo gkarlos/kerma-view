@@ -162,6 +162,14 @@ class CudaGrid {
   equals(other) {
     return (other instanceof CudaGrid) && this.#dim.equals(other.dim) && this.#blockDim.equals(other.block)
   }
+
+  /**
+   * Create a copy of this grid
+   * @returns {CudaGrid}
+   */
+  clone() {
+    return new CudaGrid(this.#dim.clone(), this.#blockDim.clone())
+  }
 }
 
 
