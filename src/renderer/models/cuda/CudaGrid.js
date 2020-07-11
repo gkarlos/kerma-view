@@ -1,9 +1,10 @@
 const Limits = require('./CudaLimits')
 const CudaDim = require('./CudaDim')
-const CudaBlock = require('./CudaBlock')
 const CudaIndex = require('./CudaIndex')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
+
+var CudaBlock;
 
 /**
  * A Cuda grid description
@@ -94,6 +95,9 @@ class CudaGrid {
    * @returns {CudaBlock}
    */
   getBlock(index) {
+    if ( !CudaBlock)
+      CudaBlock = require('./CudaBlock')
+      
     return new CudaBlock(this.block, index)
     // if ( !(Number.isInteger(index) || (index instanceof CudaIndex)))
     //   throw new Error("index must me of type Number or CudaIndex")

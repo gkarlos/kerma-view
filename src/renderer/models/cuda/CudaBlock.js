@@ -2,6 +2,7 @@ const Limits = require('./CudaLimits')
 const CudaWarp = require('./CudaWarp')
 const CudaDim = require('./CudaDim')
 const CudaIndex = require('./CudaIndex')
+const CudaGrid = require('./CudaGrid')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
@@ -21,50 +22,24 @@ class CudaBlock {
   /**
    * Create new CudaBlock. A dim is required. An index may be assigned later.
    * **No checks are performed on the index**. That is the index may be invalid for the grid this block is part of.
-   * @param {CudaDim|Number}   dim The dimensions of the block
-   * @param {CudaGrid}         grid The grid this block belongs to
-   * @param {CudaIndex|Number} [index] An optional index for the position of this block in the grid. 
-   *                                   If a number is passed it will first be delinearized. Can be set later
+   * @param {CudaGrid}         grid  The grid this block belongs to
+   * @param {CudaIndex|Number} index The index of the block within the grid
    */
-  constructor(dim, grid=undefined, index=undefined) {
-
-    const CudaGrid = require('./CudaGrid')
-
-    ///
-    /// check the dim
-    ///
-    if ( !dim)
-      throw new Error("Missing required argument 'dim'")
-    if ( !(dim instanceof CudaDim) && !Number.isInteger(dim))
-      throw new Error("dim must be a CudaDim or Integer")
-      
-    this.#dim = Number.isInteger(dim)? new CudaDim(dim) : dim
-
-    if ( this.#dim.is3D())
-      throw new Error("3D Blocks are not currently supported")
-    if ( !Limits.validBlockDim(this.#dim))
-      throw new Error(`Invalid Block dimensions : ${this.#dim.toString()}`)
-
-    ///
-    /// check the grid
-    ///
+  constructor(grid, index) {
     if ( !grid)
       throw new Error("Missing required argument 'grid'")
     if ( !(grid instanceof CudaGrid))
-      throw new Error('grid must be a CudaGrid')
-    if ( !grid.block.equals(this.#dim))
-      throw new Error('dim does not match grid.block')
+      throw new Error('grid must be a CudaGrid instance')
 
     this.#grid = grid
+    this.#dim = grid.block
 
-    /// 
-    /// check the index
-    ///
-    if( index === undefined || index === null)
-      this.#index = CudaIndex.Unknown
-    else
+    try {
       this.setIndex(index)
-
+    } catch ( e) {
+      throw new Error(e)
+    }
+    
     // Create an empty warps array. We will lazily populate it
     // as soon as requests for warps come in
     this.#warps = Array.apply(null, Array(this.numWarps)).map(function () {})
