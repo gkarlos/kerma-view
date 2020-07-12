@@ -1,10 +1,7 @@
-const {
-  CudaWarp,
-  CudaDim
-} = require('@renderer/models/cuda')
-
+const CudaWarp   = require('@renderer/models/cuda/CudaWarp')
+const CudaDim    = require('@renderer/models/cuda/CudaDim')
 const CudaLimits = require('@renderer/models/cuda/CudaLimits')
-const CudaIndex = require('@renderer/models/cuda/CudaIndex')
+const CudaIndex  = require('@renderer/models/cuda/CudaIndex')
 
 var isCudaGrid
 var isCudaIndex
@@ -98,7 +95,7 @@ class CudaBlock {
   get size() { return this.#dim.size }
 
   /** 
-   * Number of warps in the block
+   * Number of warps in this block
    * @type {Number}
    */
   get numWarps() { return Math.floor(this.size / CudaLimits.warpSize) + (this.size % CudaLimits.warpSize > 0 ? 1 : 0) }
@@ -135,6 +132,12 @@ class CudaBlock {
   getIndex() {
     return this.#index
   }
+
+  /**
+   * Retrieve the number of warps in this block. Alias for `numWarps`
+   * @returns {Number}
+   */
+  getNumWarps() { return this.numWarps }
 
   /**
    * Retrieve the global index of the first thread in the block
