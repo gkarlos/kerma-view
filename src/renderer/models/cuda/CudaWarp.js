@@ -1,6 +1,8 @@
 const Limits = require('@renderer/models/cuda/CudaLimits')
 const CudaIndex = require('@renderer/models/cuda/CudaIndex')
 
+const isCudaBlock = require('@renderer/models/cuda').isCudaBlock
+
 /** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
 
@@ -61,6 +63,18 @@ class CudaWarp {
           return block.size % Limits.warpSize
     }
     return Limits.warpSize
+  }
+
+  /**
+   * Set the block this warp belongs to
+   * @param {CudaBlock} block 
+   * @returns {CudaWarp} this
+   */
+  setBlock(block) {
+    if ( !isCudaBlock(block))
+      throw new Error('block must be a CudaBlock')
+    this.#block = block
+    return this
   }
 
   /** 
