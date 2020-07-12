@@ -35,7 +35,7 @@ class CudaThread {
     } else if ( Number.isInteger(index)) {
       if ( index >= block.size)
         throw new Error(`Invalid thread index '${index}' for block '${block.toString()}'`)
-      this.#index = index
+      this.#index = new CudaIndex(index)
     } else {
       throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
     }
@@ -128,8 +128,12 @@ class CudaThread {
    */
   equals(other) {
     return ( other instanceof CudaThread)
-      && this.#block.eql(other.getBlock())
+      && this.#block.equals(other.getBlock())
       && this.#index.equals(other.getIndex())
+  }
+
+  toString() {
+    return `#${this.index.toString()}`
   }
 }
 
