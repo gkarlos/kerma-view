@@ -3,8 +3,8 @@ const App          = require('@renderer/app')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
 const { CudaWarp,
-        CudaIndex} = require('@renderer/models/cuda')
-const { first } = require('lodash')
+        CudaIndex,
+        CudaThread} = require('@renderer/models/cuda')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
@@ -16,11 +16,12 @@ class ComputeSelectionThreadView extends Component {
 
   /** @type {ComputeSelectionModel} */ #model
   /** @type {JQuery}                */ #node
+  /** @type {JQuery} */                #selected
   /** @type {Boolean}               */ #active
   /** @type {Boolean}               */ #enabled
   /** @type {Boolean}               */ #rendered
   /** @type {Boolean}               */ #disposed
-
+  /** @type {EventEmitter}          */ #emitter
   /**
    * @param {ComputeSelectionModel} model 
    */
@@ -31,6 +32,7 @@ class ComputeSelectionThreadView extends Component {
     this.#enabled  = false
     this.#rendered = false
     this.#disposed = false
+    this.#emitter  = new EventEmitter()
   }
 
  /**
@@ -116,38 +118,78 @@ class ComputeSelectionThreadView extends Component {
     //TODO
   }
 
+  clearSelection() {
+    if ( this.#model.hasThreadSelected()) {
+      this.#selected.removeClass("thread-selector-item-selected")
+      this.#selected = undefined
+    }
+    return this;
+  }
+
+
+  /**
+   * Register a callback to be invoked when a thread is selected
+   * @param {ComputeSelectionOnThreadSelectCallback} callback A callback 
+   */
+  onSelect(callback) {
+    this.#emitter.on(Events.ThreadSelect, callback)
+  }
+
+  /**
+   * 
+   * @param {Comp} callback 
+   */
+  onEnable(callback) {
+    //TODO
+  }
+
+  onDisable(callback) {
+    //TODO
+  }
+
   /**
    * Render a thread in a warp
    * @param {CudaWarp} warp 
    * @param {Number} lane
    */
-  _renderThread(warp, lane) {
-    let block = this.#model.getBlockSelection()
+  _renderThread(warp, lane, unusable=false) {
 
-    let thread = $(`<div class="thread"></div>`)
+    let self = this;
+
+    let thread = $(`<div class="thread ${unusable? 'unusable' : 'usable'}">${unusable? '<i class="fas fa-times"></i>' : ''}</div>`)
       .popover({
         placement: 'auto',
         trigger: 'manual',
         container: 'body',
         html: true,
-        content: () => {
-          console.log(block.size, CudaIndex.linearize(block.getIndex(), this.#model.getGrid().dim))
-          return `
+        content: () => unusable?
+          `<div>Unusable lane</div>`
+          :
+          `
           <div> 
-            <span class="key">btid:</span>
+            <span class="key">loc:</span>
             <span class="value">${warp.getFirstThreadIndex() + lane}</span>
-            <span class="key">gtid:</span>
+            <span class="key">glob:</span>
             <span class="value">${
-              block.size * CudaIndex.linearize(block.getIndex(), this.#model.getGrid().dim)
-              + (warp.getFirstThreadIndex() + lane)
+              this.#model.getBlockSelection().getFirstGlobalLinearThreadIdx() + (warp.getIndex() * CudaWarp.Size) + lane
             }
           </div>
           `
-        }
       })
 
     $(thread).on('mouseenter', () => thread.popover("show"))
     $(thread).on('mouseleave', () => thread.popover("hide"))
+
+    if ( !unusable)
+      $(thread).click({thread: new CudaThread(this.#model.getBlockSelection(), warp.getFirstThreadIndex() + lane)}, (event) => {
+        if ( !this.#model.hasThreadSelected() || !(this.#model.getThreadSelection().equals(event.data.thread))) {
+          self.#selected && self.#selected.removeClass("thread-selector-item-selected")
+          self.#selected = thread
+          self.#selected.addClass("thread-selector-item-selected")
+          self.#model.selectThread(event.data.thread)
+          self.#emitter.emit(Events.ThreadSelect, event.data.thread)
+        }
+      })
     return thread
   }
 
@@ -168,16 +210,16 @@ class ComputeSelectionThreadView extends Component {
     `).appendTo(firstRow)
 
     firstRow.append($(`<span class="first-index">${warp.getFirstThreadIndex()}</span>`))
-    secondRow.append($(`<span class="middle-index">${warp.getFirstThreadIndex() + 16}</span>`))
-
     let halfWarp0 = $(`<div class="halfwarp"></div>`)
+
+    secondRow.append($(`<span class="middle-index">${warp.getFirstThreadIndex() + 16}</span>`))
     let halfWarp1 = $(`<div class="halfwarp"></div>`)
 
-    for ( let i = 0; i < CudaWarp.Size; ++i )
-      if ( i < CudaWarp.Size / 2)
-        halfWarp0.append(this._renderThread(warp, i))
+    for ( let lane = 0; lane < CudaWarp.Size; ++lane )
+      if ( lane < CudaWarp.Size / 2)
+        halfWarp0.append(this._renderThread(warp, lane, warp.getLastUsableLaneIndex() < lane))
       else
-        halfWarp1.append(this._renderThread(warp, i))
+        halfWarp1.append(this._renderThread(warp, lane, warp.getLastUsableLaneIndex() < lane))
     
     
     firstRow.append(halfWarp0)
@@ -193,13 +235,11 @@ class ComputeSelectionThreadView extends Component {
     if ( this.isDisposed())
       return this
 
-    let block = this.#model.getBlockSelection()
-
     if ( !this.isRendered()) {
       this.#node = $(`<div id="${this.id}" class="list-group" data-simplebar></div>`)
 
-      for ( let i = 0; i < block.numWarps; ++i) 
-        this.#node.append(this._renderWarp(block.getWarp(i)))
+      for ( let i = 0; i < this.#model.getBlockSelection().getNumWarps(); ++i) 
+        this.#node.append(this._renderWarp(this.#model.getBlockSelection().getWarp(i)))
 
       this.#rendered = true
     }

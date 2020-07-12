@@ -41,9 +41,6 @@ class ComputeSelectionView {
     this.#warpViewImpl   = new ComputeSelectionWarpView(model)
     this.#threadViewImpl = new ComputeSelectionThreadView(model)
 
-
-
-
     let self = this
     
     this.#modeViewImpl.onChange((oldMode, newMode) => {
@@ -57,8 +54,21 @@ class ComputeSelectionView {
     })
 
     this.#warpViewImpl.onSelect( warp => self.#emitter.emit(Events.UnitSelect, warp, ComputeSelectionMode.Warp))
+    this.#threadViewImpl.onSelect( thread => self.#emitter.emit(Events.UnitSelect, thread, ComputeSelectionMode.Thread))
+
+    this.#blockViewImpl.onChange(() => self.clearUnitSelection())
+
     this.#active = false
     this.#enabled = false
+  }
+
+  clearUnitSelection() {
+    if ( this.inWarpMode())
+      this.#warpViewImpl.clearSelection()
+    else
+      this.#threadViewImpl.clearSelection()
+    this.#model.clearUnitSelection()
+    return this
   }
 
   /**

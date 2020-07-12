@@ -224,9 +224,9 @@ class ComputeSelectionBlockView extends Component {
 
       function blockChangeHandler() {
         let oldBlock = self.#model.getBlockSelection()
-        self.#model.selectBlock(new CudaIndex(parseInt(yInput[0].value), parseInt(xInput[0].value)))
+        self.#model.selectBlockByIdx(new CudaIndex(parseInt(yInput[0].value), parseInt(xInput[0].value)))
         let newBlock = self.#model.getBlockSelection()
-        if ( !oldBlock.eql(newBlock))
+        if ( !oldBlock.equals(newBlock))
           self.#emitter.emit(Events.BlockChange, oldBlock, newBlock)
       }
 
@@ -239,6 +239,7 @@ class ComputeSelectionBlockView extends Component {
             input.removeClass('empty-input')
             input.tooltip('hide')
             let value = parseInt(xInput.val())
+            console.log(value)
             if ( value < min || value > max) {
               input.addClass('invalid-input')
               input.tooltip('hide').tooltip('show')
@@ -258,10 +259,10 @@ class ComputeSelectionBlockView extends Component {
       
       xInput.on('input', inputHandler(xInput, self.#model.grid.dim.minx, self.#model.grid.dim.maxx))
             .on('blur', blurHandler(xInput, () => self.#model.getBlockSelection().getIndex().x))
-            // .on('change', blockChangeHandler)
+            .on('change', blockChangeHandler)
       yInput.on('input', inputHandler(yInput, self.#model.grid.dim.mixy, self.#model.grid.dim.maxy))
             .on('blur', blurHandler(yInput, () => self.#model.getBlockSelection().getIndex().y))
-            // .on('change', blockChangeHandler)
+            .on('change', blockChangeHandler)
 
       checkbox2D
         .change(event => {

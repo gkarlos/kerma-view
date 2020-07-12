@@ -17,13 +17,14 @@ class ComputeSelectionWarpView extends Component {
   
   /** @type {ComputeSelectionModel} */ #model
   /** @type {JQuery} */                #node
+  /** @type {JQuery} */                #selected
   /** @type {EventEmitter} */          #emitter
   /** @type {Boolean} */               #rendered
   /** @type {Boolean} */               #active
   /** @type {Boolean} */               #enabled
   /** @type {Boolean} */               #disposed
   
-  #selected
+  
   #options = {
     /** @type {String} */ usableThreadsMode : 'bar' /// or 'bar'
   }
@@ -138,9 +139,17 @@ class ComputeSelectionWarpView extends Component {
     return this;
   }
 
+  clearSelection() {
+    if ( this.#model.hasWarpSelected()) {
+      this.#selected.removeClass("warp-selector-item-selected")
+      this.#selected = undefined
+    }
+    return this;
+  }
+
   /**
    * Register a callback to be invoked when a warp is selected
-   * @param {ComputeSelectionOnWarpSelectCallback} A callback 
+   * @param {ComputeSelectionOnWarpSelectCallback} callback A callback 
    */
   onSelect(callback) {
     this.#emitter.on(Events.WarpSelect, callback)
@@ -166,14 +175,12 @@ class ComputeSelectionWarpView extends Component {
     if ( this.isDisposed())
       return this
     
-    let block = this.#model.grid.getBlock(0)
-
     if ( !this.isRendered()) {
       this.#node  = $(`<div id="${this.id}" class="list-group" data-simplebar></div>`)
       // this.#node.append(warpContainer)
   
-      for ( let i = 0 ; i < block.numWarps; ++i)
-        this.#node.append(this._renderWarp(block.getWarp(i)))
+      for ( let i = 0 ; i < this.#model.getBlockSelection().getNumWarps(); ++i)
+        this.#node.append(this._renderWarp(this.#model.getBlockSelection().getWarp(i)))
     
       this.#rendered = true
     }
@@ -248,13 +255,15 @@ class ComputeSelectionWarpView extends Component {
 
     this._renderUsableThreads(warp, firstRow, secondRow)
 
-
     let self = this
     res.on('click', {warp : warp}, (event) => {
-      self.#selected && self.#selected.removeClass("warp-selector-item-selected")
-      self.#selected = res
-      self.#selected.addClass("warp-selector-item-selected")
-      self.#emitter.emit(Events.WarpSelect, warp, 2)
+      if ( !this.#model.hasWarpSelected() || !(this.#model.getWarpSelection().equals(event.data.warp))) {
+        self.#selected && self.#selected.removeClass("warp-selector-item-selected")
+        self.#selected = res
+        self.#selected.addClass("warp-selector-item-selected")
+        self.#model.selectWarp(event.data.warp)
+        self.#emitter.emit(Events.WarpSelect, event.data.warp)
+      }
     })
     
     res.mouseover( () => {
