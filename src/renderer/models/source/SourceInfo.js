@@ -18,7 +18,7 @@ class SourceInfo {
    * @param {SourceRange} opts.range
    */
   constructor( opts={}) {
-    this.#filename = opts.filename || null
+    this.#filename = opts.filename
     this.#range = opts.range || new SourceRange()
   }
 
@@ -35,7 +35,7 @@ class SourceInfo {
   equals(other) {
     if ( !(other instanceof SourceInfo))
       return false
-    return this.#filename === other.filename && this.#range.equals(other.range)
+    return (this.#filename === other.filename) && this.#range.equals(other.range)
   }
 }
 
