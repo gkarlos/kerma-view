@@ -56,13 +56,15 @@ class FunctionCallInfo extends SourceInfo {
   /**
    * Compare with another FunctionCallInfo for equality
    * @param {FunctionCallInfo} other Another FunctionCallInfo 
+   * @returns {Boolean}
    */
   equals(other) {
     return (other instanceof FunctionCallInfo) 
       && super.equals(other)
       && this.#name === other.name
       && this.#arguments === other.arguments
-      && this.caller.equals(other.caller)
+      && (   (this.caller === null && other.caller === null) 
+          || (this.caller !== null && other.caller !== null && this.caller.equals(other.caller)))
       && this.launchParams === other.launchParams
       && this.inLoop === other.inLoop
       && this.isKernelLaunch() === other.isKernelLaunch()
