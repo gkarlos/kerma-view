@@ -19,10 +19,8 @@ const App = {}
 ///     Properties      ///
 /// ------------------- ///
 
-App.Electron = {
-  remote : require('electron').remote,
-  app    : require('electron').remote.app
-}
+App.Electron = require('electron').remote
+App._        = require('lodash')
 
 App.Emitter    = new (require('events'))()
 /** @method */
