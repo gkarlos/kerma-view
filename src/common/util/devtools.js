@@ -7,6 +7,8 @@
 * @file util/devtools.js
 * @author gkarlos 
 * @module util/devtools
+* @category Common
+* @subcategory util
 * @description 
 *   Utilities relevant to opening devtools
 *  

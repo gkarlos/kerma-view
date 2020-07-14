@@ -1,15 +1,4 @@
-/**--renderer/components/layout/BaseLayout.js-----------------------/
- *
- * Part of the kerma project
- * 
- *------------------------------------------------------------------/
- * 
- * @file renderer/components/layout/BaseLayout.js
- * @author gkarlos 
- *  
- *//*--------------------------------------------------------------*/
-
- 'use-strict'
+'use-strict'
 
 // const Component = require('../component')
 const {InternalError} = require('@common/util/error')
@@ -17,7 +6,7 @@ const {InternalError} = require('@common/util/error')
 /**
  * @abstract
  * @extends Component
- * @memberof module:ui/layout
+ * @memberof module:layout
  * @description
  *  Base (abstract) class for the app layout(s)
  *                                                       <br/>

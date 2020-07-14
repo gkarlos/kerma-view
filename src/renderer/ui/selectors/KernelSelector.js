@@ -4,7 +4,7 @@
 * 
 *-------------------------------------------------------------------/
 * 
-* @file renderer/components/selectors/KernelSelector.js
+* 
 * @author gkarlos 
 *  
 *------------------------------------------------------------------*/
@@ -43,7 +43,7 @@ function renderOption(kernel, escape) {
 const Selector = require('./Selector')
 
 /**
- * @memberof module:renderer/components/selectors
+ * @memberof module:selectors
  */
 class KernelSelector extends Selector {
   constructor(id, container, app) {

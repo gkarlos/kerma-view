@@ -1,6 +1,7 @@
 /**
  * @module source
- * @category models
+ * @category Renderer
+ * @subcategory models
  * @property {module:source.SourceLoc} SourceLoc
  * @property {module:source.SourceInfo} SourceInfo
  * @property {module:source.SourceRange} SourceRange

@@ -11,7 +11,8 @@
 
 /** 
  * @exports App
- * @category main
+ * @category Renderer
+ * @subcategory main
  */
 const App = {}
 

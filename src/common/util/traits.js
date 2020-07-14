@@ -1,9 +1,12 @@
+/**
+ * @module traits
+ * @category Common
+ * @subcategory util
+ */
+
+
 'use strict'
 
-/**
- * 
- * @param {*} v 
- */
 function isNumber(v) { 
   return !isNaN(parseFloat(v)) && !isNaN(v - 0) 
 }

@@ -4,6 +4,9 @@ const KernelSelector = require('../selectors/KernelSelector')
 const KernelLaunchSelector = require('../selectors/KernelLaunchSelector')
 const CodeNavToolbar = require('./CodeNavToolbar')
 
+/**
+ * @memberof module:toolbars
+ */
 class MainToolbar extends Component {
   constructor(id, container, app) {
     super()

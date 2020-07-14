@@ -6,7 +6,7 @@ const App = require('@renderer/app')
 
 /**
  * The main container for memory visualizations
- * @memberof module:memory
+ * @memberof module:memory-ui
  */
 class MemoryArea extends Component {
   constructor(id, container) {

@@ -1,6 +1,7 @@
 /**
  * @module kernel-selection
- * @category services
+ * @category Renderer
+ * @subcategory services
  */
 module.exports = {
   KernelSelection : require('./KernelSelection'),

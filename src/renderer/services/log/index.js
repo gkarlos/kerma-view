@@ -1,6 +1,7 @@
 /**
  * @module log
- * @category services
+ * @category Renderer
+ * @subcategory services
  */
 module.exports = {
   LogLevel : require('./LogLevel'),

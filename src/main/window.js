@@ -1,4 +1,9 @@
 /**
+ * @module window
+ * @category Main 
+ */
+
+/**
  * Create a {BrowserWindow} object at a position
  * @param {*} pos 
  */

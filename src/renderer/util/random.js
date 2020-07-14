@@ -1,6 +1,7 @@
 /**
  * @module random
- * @category util
+ * @category Renderer
+ * @subcategory util
  */
 
 /**

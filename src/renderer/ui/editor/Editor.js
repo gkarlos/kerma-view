@@ -1,7 +1,3 @@
-/**
- * @module ui/editor
- * @category ui
- */
 const fs              = require('@common/util/fs')
 const {InternalError} = require('@common/util/error')
 
@@ -15,6 +11,7 @@ const path = require('path')
 const EditorTabs = require('./EditorTabs')
 
 /**
+ * @memberof module:editor
  */
 class Editor extends Component {
 

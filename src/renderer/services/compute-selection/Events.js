@@ -1,13 +1,13 @@
 /**
- * @property {String} ModeChange
+ * @name EventNames
+ * @memberof module:compute-selection
+ * @property {String} ModeChange="mode-change"
  * @property {String} BlockSelect
  * @property {String} UnitSelect
  * @property {String} WarpSelect
  * @property {String} ThreadSelect
  * @property {String} Enabled
  * @property {String} Disabled
- * @module Events
- * @memberof module:compute-selection
  */
 module.exports = {
   /** */

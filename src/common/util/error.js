@@ -7,6 +7,8 @@
  * @file util/error.js
  * @author gkarlos 
  * @module util/error
+ * @category Common
+ * @subcategory util
  * @description 
  *  Defines error types for the app. Different components may
  *  extend those classes

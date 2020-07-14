@@ -4,8 +4,7 @@
 * 
 *-------------------------------------------------------------------/
 * 
-* @file renderer/components/selectrons/launch-selector.js
-* @author gkarlos 
+*
 *  
 *------------------------------------------------------------------*/
 
@@ -46,7 +45,7 @@ function renderOption( launch, escape) {
 const Selector = require('./Selector')
 
 /**
- * @memberof module:renderer/components/selectors
+ * @memberof module:selectors
  */
 class KernelLaunchSelector extends Selector {
   constructor(id, container, app) {

@@ -1,6 +1,7 @@
 /**
  * @module launch-selection
- * @category services
+ * @category Renderer
+ * @subcategory services
  */
 
 module.exports = {

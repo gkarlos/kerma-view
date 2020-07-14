@@ -6,7 +6,8 @@
  * 
  * @file main/config.js
  * @author gkarlos 
- * @module main/config
+ * @module config
+ * @category Main
  * @description 
  *   Configuration stuff for the main process2
  *  
@@ -37,4 +38,8 @@ function dumpLaunchConfiguration() {
       window : settings.screen.width + "x" + settings.screen.height
     }
   }, true)
+}
+
+module.exports = {
+  dumpLaunchConfiguration
 }

@@ -5,6 +5,9 @@ const CodeNavToolbar = require('@renderer/ui/toolbars/CodeNavToolbar')
 const Events         = require('@renderer/events')
 const App            = require('@renderer/app')
 
+/**
+ * @memberof module:editor
+ */
 class EditorToolbar extends Component {
   constructor(id, container) {
     super(id, container)

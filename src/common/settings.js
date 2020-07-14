@@ -7,6 +7,7 @@
  * @file common/settings.js
  * @author gkarlos 
  * @module settings
+ * @category Common
  * @description 
  *   Global app settings
  *  

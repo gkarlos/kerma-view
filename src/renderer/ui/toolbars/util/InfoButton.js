@@ -4,6 +4,9 @@ const openAboutWindow = require('electron-about-window').default
 const path = require('path')
 const {InternalError} = require('@common/util/error')
 
+/**
+ * @memberof module:toolbars
+ */
 class InfoButton extends Component {
   constructor(id, container) {
     super(id, container)

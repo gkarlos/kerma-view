@@ -6,6 +6,7 @@
  * 
  * @file renderer/events.js
  * @module renderer/events
+ * @category Renderer
  * @author gkarlos 
  * @description 
  *   This module includes all the available events

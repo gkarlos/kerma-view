@@ -1,13 +1,3 @@
-/**--renderer/components/layout/ElectronLayout.js-------------------/
- *
- * Part of the kerma project
- * 
- *------------------------------------------------------------------/
- * 
- * @file renderer/components/layout/ElectronLayout.js
- * @author gkarlos 
- *  
- *//*--------------------------------------------------------------*/
 'use-string'
 
 const BaseLayout      = require('./BaseLayout')
@@ -22,7 +12,7 @@ const Split           = require('split.js')
 /**
  * Defines the layout for the desktop (electron) app
  * 
- * @memberof module:ui/layout
+ * @memberof module:layout
  * @extends BaseLayout 
  */
 class ElectronLayout extends BaseLayout {

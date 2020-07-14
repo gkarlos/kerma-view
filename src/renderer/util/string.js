@@ -1,7 +1,8 @@
 /**
  * This module contains string utilities
  * @module string
- * @category util
+ * @category Renderer
+ * @subcategory util
  */
 
 /**

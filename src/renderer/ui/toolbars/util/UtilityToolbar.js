@@ -6,6 +6,9 @@ const Events         = require('@renderer/events')
 const MenuSeparator  = require('@renderer/ui/MenuSeparator')
 const App            = require('@renderer/app')
 
+/**
+ * @memberof module:toolbars
+ */
 class UtilityToolbar extends Component {
   constructor(id, container) {
     super(id,container)

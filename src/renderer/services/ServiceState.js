@@ -1,8 +1,8 @@
 /**
  * Singleton class that represents the available states for a Service
  * 
- * @class
- * @category services
+ * @category Renderer
+ * @subcategory services
  */
 class ServiceState {
 

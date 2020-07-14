@@ -80,7 +80,8 @@ function isCudaDim(obj) {
 
 /** 
  * @module cuda
- * @category models
+ * @category Renderer
+ * @subcategory models
  */
 module.exports = {
   Limits,

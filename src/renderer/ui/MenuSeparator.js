@@ -1,6 +1,7 @@
 /**
  * @module MenuSeparator
- * @category ui
+ * @category Renderer
+ * @subcategory Ui
  */
 
 const Component = require('./component/Component')

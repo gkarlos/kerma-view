@@ -1,12 +1,12 @@
-/**
- * @file input-file-dialog.js
- */
 const Component = require('@renderer/ui/component/Component')
 const Events    = require('@renderer/events')
 const {dialog}  = require('electron').remote
 const {InternalError} = require('@common/util/error')
 const App = require('@renderer/app')
 
+/**
+ * @memberof module:toolbars
+ */
 class InputModeSelectionItem extends Component {
   constructor(id, container) { 
     super(id, container)
@@ -65,6 +65,9 @@ class InputModeSelectionItem extends Component {
   }
 }
 
+/**
+ * @memberof module:input-toolbar
+ */
 class InputModeSelection extends Component {
   constructor(id, container) {
     super(id,container)
@@ -150,6 +153,7 @@ class InputModeSelection extends Component {
 }
 
 /**
+ * @memberof module:input-toolbar
  */
 class InputToolbar extends Component {
   constructor( id, container) {

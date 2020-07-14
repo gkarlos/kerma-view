@@ -1,5 +1,8 @@
 const Component = require('@renderer/ui/component/Component')
 
+/**
+ * @memberof module:toolbars
+ */
 class SettingsButton extends Component {
   constructor(id, container) {
     super(id, container)

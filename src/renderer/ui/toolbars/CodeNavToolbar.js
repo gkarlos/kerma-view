@@ -2,6 +2,9 @@ const Component = require('../component/Component')
 const Events = require('../../events')
 const App = require('@renderer/app')
 
+/**
+ * @memberof module:toolbars
+ */
 class CodeNavToolbar extends Component {
   constructor(id, container, app, subcomponent=false) {
     super(id, container)

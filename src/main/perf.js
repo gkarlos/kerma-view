@@ -1,3 +1,7 @@
+/**
+ * @module perf
+ * @category Main
+ */
 const app      = require('electron').app
 const cl       = require('@main/cl')
 const settings = require('@common/settings') 

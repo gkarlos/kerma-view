@@ -1,7 +1,7 @@
-/**
- * @file component/component.js 
+/** 
  * @module component
- * @category ui
+ * @category Renderer
+ * @subcategory ui
  */
 module.exports = {
   Component : require('./Component')

@@ -1,19 +1,10 @@
-/**--renderer/components/memory/MemoryVisualizer.js------------------/
- *
- * Part of the kerma project
- * 
- *------------------------------------------------------------------/
- * 
- * @file renderer/components/memory/MemoryVisualizer.js
- *  
- *//*--------------------------------------------------------------*/
 const Component               = require('@renderer/ui/component/Component')
 const Memory                  = require('@renderer/models/memory').Memory
 const MemoryVisualizerToolbar = require('./MemoryVisualizerToolbar')
 const {InternalError}         = require('@common/util/error')
 
 /**
- * @memberof module:ui/memory
+ * @memberof module:memory-ui
  * @description 
  *   Visualizes a memory object
  *   ### Important

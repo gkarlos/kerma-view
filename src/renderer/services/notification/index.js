@@ -1,6 +1,7 @@
 /**
  * @module notification
- * @category services
+ * @category Renderer
+ * @subcategory services
  */
 module.exports = {
   NotificationModel : require('./NotificationModel'),

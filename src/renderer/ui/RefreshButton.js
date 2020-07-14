@@ -1,12 +1,10 @@
-/**
- * @file RefreshButton.js
- */
 const Component = require('./component/Component')
 const Events = require('../events')
 const App = require('@renderer/app')
 
 /**
- * @category ui
+ * @category Renderer
+ * @subcategory Ui
  */
 class RefreshButton extends Component {
   constructor(id, container) {

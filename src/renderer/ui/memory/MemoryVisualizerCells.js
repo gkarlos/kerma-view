@@ -1,7 +1,7 @@
 const Component = require('../component/Component')
 
 /**
- * @memberof module:ui/memory
+ * @memberof module:memory-ui
  */
 class MemoryVisualizerCells extends Component {
   constructor(memory, id, container, app) {

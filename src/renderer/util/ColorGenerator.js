@@ -1,6 +1,7 @@
 /**
  * @module ColorGenerator
- * @category util
+ * @category Renderer
+ * @subcategory util
  */
 
 const randomColor = require('randomcolor')

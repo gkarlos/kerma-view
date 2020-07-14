@@ -1,6 +1,7 @@
 /** 
  * @module jquery 
- * @category extensions
+ * @category Renderer
+ * @subcategory extensions
  */
 
  module.exports = (() =>{

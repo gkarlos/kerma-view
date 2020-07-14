@@ -6,7 +6,7 @@ const Component = require('../component/Component')
  * 
  * This class is only meant to be used within {@link MemoryAreaTitleBar}
  * 
- * @memberof module:ui/memory
+ * @memberof module:memory-ui
  */
 class AddRandomMemoryButton extends Component {
   constructor(id, container) {

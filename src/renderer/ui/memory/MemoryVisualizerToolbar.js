@@ -1,18 +1,9 @@
-/**--renderer/components/memory/MemoryVisualizer.js------------------/
- *
- * Part of the kerma project
- * 
- *------------------------------------------------------------------/
- * 
- * @file renderer/components/memory/MemoryVisualizer.js
- *  
- *//*--------------------------------------------------------------*/
 'use-strict'
 
 const Component = require('../component/Component')
 
 /**
- * @memberof module:ui/memory
+ * @memberof module:memory-ui
  */
 class MemoryVisualizerToolbar extends Component {
   constructor(id, container, vizualizer) {

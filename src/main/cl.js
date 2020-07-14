@@ -6,7 +6,8 @@
  * 
  * @file util/cl.js
  * @author gkarlos 
- * @module util/cl
+ * @module cl
+ * @category Main
  * @description 
  *   Command line utilities such us logging and argument parsing. 
  *   Moreover it defines a standard arg parser for the application

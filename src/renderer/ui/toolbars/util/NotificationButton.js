@@ -1,5 +1,8 @@
 const Component = require("@renderer/ui/component").Component
 
+/**
+ * @memberof module:toolbars
+ */
 class NotificationButton extends Component {
 
   static enabledTooltip = "Disable notifications"

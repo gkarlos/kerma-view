@@ -1,3 +1,8 @@
+/**
+ * @module editor
+ * @category Renderer
+ * @subcategory Ui
+ */
 module.exports = {
   EditorTabs : require('./EditorTabs'),
   EditorToolbar : require('./EditorToolbar'),

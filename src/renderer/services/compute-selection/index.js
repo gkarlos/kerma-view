@@ -1,6 +1,7 @@
 /**
  * @module compute-selection
- * @category services
+ * @category Renderer
+ * @subcategory services
  */
 module.exports = {
   ComputeSelectionBlockView : require('./ComputeSelectionBlockView'),

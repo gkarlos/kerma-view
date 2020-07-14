@@ -6,7 +6,9 @@
  * 
  * @file model/memory/index.js
  * @author gkarlos 
- * @module model/memory
+ * @module memory
+ * @category Renderer
+ * @subcategory models
  * @description
  *  Models arbitrary memory ranges
  *//*--------------------------------------------------------------*/

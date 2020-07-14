@@ -3,8 +3,8 @@ const ServiceState = require('@renderer/services/ServiceState')
 /**
  * Base class for all services
  * 
- * @class
- * @category services
+ * @category Renderer
+ * @subcategory services
  * 
  */
 class Service {

@@ -1,6 +1,7 @@
 /**
  * @module containers
- * @category ui
+ * @category Renderer
+ * @subcategory Ui
  */
 module.exports = {
   Container : require('./Container'),

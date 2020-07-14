@@ -1,8 +1,9 @@
 /** 
  * (Pre)-Main entry point for the application. Its job is to 
  * perform some global configuration and invoke {@link module:renderer/app~App.main}
- * @module 
- * @category main
+ * @module main
+ * @category Renderer
+ * @subcategory main
  */
 
 'use-strict'

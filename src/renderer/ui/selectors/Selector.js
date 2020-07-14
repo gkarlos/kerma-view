@@ -4,6 +4,7 @@ const Component = require('@renderer/ui/component/Component')
 
 /**
  * Base (abstract) class for the selectors
+ * @memberof module:selectors
  */
 class Selector extends Component {
   constructor(id, container, app) {

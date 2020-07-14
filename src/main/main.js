@@ -6,7 +6,8 @@
  * 
  * @file main/main.js
  * @author gkarlos 
- * @module main/main
+ * @module main
+ * @category Main
  * @description 
  *   The main/entry-point module
  *  

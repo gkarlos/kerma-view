@@ -10,7 +10,7 @@ const Memory           = require('@renderer/models/memory').Memory
  * 
  * This class is only meant to be used within {@link MemoryArea}
  * 
- * @memberof module:ui/memory
+ * @memberof module:memory-ui
  */
 class MemoryAreaBody extends Component {
   constructor(id, container) {

@@ -6,7 +6,9 @@
 * 
 * @file renderer/components/selectors/index.js
 * @author gkarlos 
-* @module renderer/components/selectors
+* @module selectors
+* @category Renderer
+* @subcategory Ui
 * @description 
 *   This module defines various selector components and
 *   relevant utilities

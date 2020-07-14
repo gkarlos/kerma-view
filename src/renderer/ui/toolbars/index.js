@@ -1,6 +1,7 @@
 /**
- * @module ui/toolbars
- * @category ui
+ * @module toolbars
+ * @category Renderer
+ * @subcategory Ui
  */
 module.exports = {
   InputToolbar : require('./input'),

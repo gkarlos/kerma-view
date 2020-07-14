@@ -1,3 +1,8 @@
+/**
+ * @module shortcuts
+ * @category Main
+ */
+
 const electron        = require('electron')
 const globalShortcut  = electron.globalShortcut
 const {InternalError} = require('@common/util/error')

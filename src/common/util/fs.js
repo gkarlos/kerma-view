@@ -6,6 +6,8 @@
 //
 // @file util/fs.js 
 // @module fs
+// @category Common
+// @subcategory util
 // @description 
 // This module includes filesystem utilities. It mostly wraps 
 // around and combines nodejs's fs and path functionality

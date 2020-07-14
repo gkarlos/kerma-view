@@ -7,6 +7,7 @@
  * @file session/session.js
  * @author gkarlos 
  * @module session
+ * @category Renderer
  * @description 
  *    Defines a simple (for now) session manager.
  *    The SessionManager is a singleton

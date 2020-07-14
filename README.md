@@ -20,12 +20,24 @@ TODO:
 
 -----
 ## Check
-- Exec - https://github.com/compiler-explorer/compiler-explorer/blob/master/lib/exec.js
-- Heatmap of the arrays accessed per thread. Example https://github.com/UsabilityEtc/d3-space-filler-explorer
-- Electron-related - https://blog.dcpos.ch/how-to-make-your-electron-app-sexy
+- Exec 
+    - https://github.com/compiler-explorer/compiler-explorer/blob/master/lib/exec.js
+- Heatmap of the arrays accessed per thread. 
+    - Example https://github.com/UsabilityEtc/d3-space-filler-explorer
+- Electron-related 
+    - https://blog.dcpos.ch/how-to-make-your-electron-app-sexy
 - Memory 
     - https://github.com/matiaslindgren/cuda-memory-access-recorder
     - https://github.com/matiaslindgren/cuda-animations
+- Shortcuts
+    - https://craig.is/killing/mice
+- Docs
+    - https://onury.io/docma/
+
+
+### Other electron projects with relevant components
+- https://github.com/ZeroX-DG/SnippetStore
+- https://github.com/jcf94/vizgraph
 ------
 IDEAS:
 - https://lynx.pink/notiny/

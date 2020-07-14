@@ -1,5 +1,9 @@
 /** @ignore @typedef {import("@renderer/ui/containers/MainSelectionArea") MainSelectionArea} */
 
+/**
+ * @category Renderer
+ * @subcategory ui
+ */
 class Ui {
   static onReadyCallbacks = []
   static onDocumentReadyCallbacks = []

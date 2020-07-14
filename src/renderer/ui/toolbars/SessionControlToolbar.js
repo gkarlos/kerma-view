@@ -2,6 +2,9 @@ const Component = require('../component/Component')
 const Events = require('../../events')
 const App = require('@renderer/app')
 
+/**
+ * @memberof module:toolbars
+ */
 class SessionRestartButton extends Component {
   constructor(id, container) {
     super(id, container)
