@@ -12,5 +12,6 @@ module.exports = {
   SourceInfo : require('./SourceInfo'),
   SourceRange : require('./SourceRange'),
   FunctionInfo : require('./FunctionInfo'),
-  FunctionCallInfo : require('./FunctionCallInfo')
+  FunctionCallInfo : require('./FunctionCallInfo'),
+  MemoryInfo : require('./MemoryInfo')
 }
