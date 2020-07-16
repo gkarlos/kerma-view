@@ -20,7 +20,7 @@ class FunctionCallSrc extends SrcInfo {
    * @param {String}       opts.filename
    * @param {SourceRange}  opts.range
    * @param {String}       opts.arguments
-   * @param {FunctionSrc} opts.caller
+   * @param {FunctionSrc}  opts.caller
    * @param {Boolean}      opts.isKernelLaunch
    * @param {String}       opts.launchParams
    * @param {Boolean}      opts.inLoop

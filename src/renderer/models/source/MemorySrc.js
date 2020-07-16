@@ -12,21 +12,28 @@ class MemorySrc extends SrcInfo {
   /** @type {String}   */ #type
   /** @type {String}   */ #name
   /** @type {String[]} */ #qualifiers
+  /** @type {String}   */ #decl
+  /** @type {Striung}  */ #declContext
   
   /**
    * Create a new MemorySrc object
    * @param {Object}      opts
    * @param {String}      opts.type
    * @param {String}      opts.name
-   * @param {String[]}    opts.qualifiers
+   * @param {String[]}    [opts.qualifiers]
+   * @param {String}      [opts.decl]
+   * @param {String}      [opts.declcontext]
    * @param {String}      opts.filename
    * @param {SrcRange}    opts.range
    */
   constructor(opts={}) {
     super(opts)
-    this.#type = opts.type
-    this.#name = opts.name
-    this.#qualifiers = opts.qualifiers || []
+    this.#type        = opts.type
+    this.#name        = opts.name
+    this.#qualifiers  = opts.qualifiers || []
+    this.#decl        = opts.decl
+    this.#declContext = opts.declcontext
+
   }
 
   /** @type {String} */
@@ -38,14 +45,55 @@ class MemorySrc extends SrcInfo {
   /** @type {String} */
   get qualifiers() { return this.#qualifiers }
 
-  /** @returns {Boolean} */
-  hasQualifier(qualifier) {
-    return this.#qualifiers.find(qualifier)
+  /** @type {String} */
+  get decl() { return this.#decl }
+
+  /** @type {String} */
+  get declContext() { return this.#declContext }
+
+  /**
+   * @param {String} type
+   * @returns {MemorySrc}
+   */
+  setType(type) {
+    this.#type = type
+    return this
   }
 
-  /** @returns {void} */
+  /**
+   * @param {String} name
+   * @returns {MemorySrc}
+   */
+  setName(name) {
+    this.#name = name
+    return this
+  }
+
+  /**
+   * @param {String} declContext 
+   * @returns {MemorySrc}
+   */
+  setDeclContext(declContext) {
+    this.#declContext = declContext
+    return this
+  }
+
+  /**
+   * @param {String} decl 
+   * @returns {MemorySrc}
+   */
+  setDecl(decl) {
+    this.#decl = decl;
+    return this
+  }
+
+  /**
+   * @param {String} 
+   * @returns {MemorySrc} 
+   */
   addQualifier(qualifier) {
     this.#qualifiers.push(qualifier)
+    return this
   }
 
   /** @returns {Boolean} */
@@ -57,6 +105,31 @@ class MemorySrc extends SrcInfo {
         res = true
       }
     return res
+  }
+
+  /** @returns {Boolean} */
+  hasQualifier(qualifier) {
+    return this.#qualifiers.find(qual => qual === qualifier) != undefined
+  }
+
+  /** @returns {String} */
+  getType() { 
+    return this.#type
+  }
+
+  /** @returns {String} */
+  getName() { 
+    return this.#name
+  }
+
+  /** @returns {String} */
+  getDecl() { 
+    return this.#decl
+  }
+
+  /** @returns {String} */
+  getDeclContext() { 
+    return this.#declContext
   }
 
   /**

@@ -16,7 +16,7 @@ class FunctionSrc extends SrcInfo {
    * @param {Object}      opts
    * @param {String}      opts.type
    * @param {String}      opts.filename
-   * @param {SrcRange} opts.range
+   * @param {SrcRange}    opts.range
    * @param {String}      opts.name
    * @param {String}      opts.arguments
    * @param {Boolean}     opts.isKernel

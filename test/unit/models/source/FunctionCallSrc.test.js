@@ -8,10 +8,6 @@ const expect = require('chai').expect
 
 describe("models/source/FunctionCallSrc", () => {
   describe("equals", () => {
-    it("should be true (no args)", () => {
-      expect(new FunctionCallSrc().equals(new FunctionCallSrc())).to.be.true
-    })
-
     it("should be true (same super only)", () => {
       let fci= new FunctionCallSrc( {filename:"test.cu", range: new SrcRange({fromLine:0,toLine:15})})
       expect(fci.equals(fci)).to.be.true
@@ -23,20 +19,34 @@ describe("models/source/FunctionCallSrc", () => {
     })
 
     it("should be true (1)", () => {
-      let fci= new FunctionCallSrc({
-        filename : "test.cu", 
-        range : new SrcRange({fromLine:0,toLine:15}),
-        caller : new FunctionSrc({arguments: "somearguments"})
+      let fci = new FunctionCallSrc({
+        filename: "test.cu", 
+        range:    new SrcRange({fromLine:15,toLine:15}),
+        caller:   new FunctionSrc({
+          filename: "test.cu", 
+          range:    new SrcRange({
+            fromLine: 10,
+            toLine:   20
+          }), 
+          arguments: "somearguments"
+        })
       })
       expect(fci.equals(fci)).to.be.true
     })
 
-    it("should be false (1)", () => {
+    it("should be false (different caller)", () => {
       let fci1 = new FunctionCallSrc( {filename:"test.cu", range: new SrcRange({fromLine:0,toLine:15})})
       let fci2 = new FunctionCallSrc({
         filename : "test.cu", 
         range : new SrcRange({fromLine:0,toLine:15}),
-        caller : new FunctionSrc({arguments: "somearguments"})
+        caller:   new FunctionSrc({
+          filename: "test.cu", 
+          range:    new SrcRange({
+            fromLine: 10,
+            toLine:   20
+          }), 
+          arguments: "somearguments"
+        })
       })
       expect(fci1.equals(fci2)).to.be.false
     })

@@ -16,6 +16,34 @@ class SrcLoc {
   /** @type {Number} */
   get column() { return this.#column }
 
+  /** @returns {String} */
+  getLine() {
+    return this.#line
+  }
+
+  /** @returns {String} */
+  getColumn() {
+    return this.#column
+  }
+
+  /**
+   * @param {Number} line
+   * @returns {SrcLoc} this 
+   */
+  setLine(line) {
+    this.#line = line
+    return this
+  }
+
+  /**
+   * @param {String} column 
+   * @returns {SrcLoc} this
+   */
+  setColumn(column) {
+    this.#column = column
+    return this 
+  }
+
   /** @returns {Number[]} */
   toArray() {
     return [this.#line, this.#column]

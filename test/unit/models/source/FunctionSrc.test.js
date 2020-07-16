@@ -7,9 +7,6 @@ const SrcRange    = require('@renderer/models/source/SrcRange')
 
 describe("models/source/FunctionSrc", () => {
   describe("equals", () => {
-    it("should be true (no args)", () => {
-      expect(new FunctionSrc().equals(new FunctionSrc())).to.be.true
-    })
 
     it("should be true (same super only)", () => {
       let fi1 = new FunctionSrc({filename:"test.cu",range: new SrcRange({fromLine:0,toLine:15})})
@@ -30,7 +27,7 @@ describe("models/source/FunctionSrc", () => {
 
     it("should be true (2)", () => {
       let fi1 = new FunctionSrc({
-        filename : "",
+        filename : "test.cu",
         range : new SrcRange({fromLine:0,toLine:15}),
         arguments : "",
         isKernel : true
@@ -41,14 +38,14 @@ describe("models/source/FunctionSrc", () => {
 
     it("should be false (kernel vs non-kernel)", () => {
       let fi1 = new FunctionSrc({
-        filename : "",
+        filename : "test.cu",
         range : new SrcRange({fromLine:0,toLine:15}),
         arguments : "",
         isKernel : true
       })
 
       let fi2 = new FunctionSrc({
-        filename : "",
+        filename : "test.cu",
         range : new SrcRange({fromLine:0,toLine:15}),
         arguments : ""
       })

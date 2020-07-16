@@ -2,7 +2,6 @@
 
 const SrcRange = require("./SrcRange")
 
-
 /**
  * @memberof module:source
  */
@@ -18,6 +17,8 @@ class SrcInfo {
    * @param {SrcRange} opts.range
    */
   constructor( opts={}) {
+    if ( !opts)
+      throw new Error("missing required argument 'opts'")
     this.#filename = opts.filename
     this.#range = opts.range || new SrcRange()
   }
@@ -27,6 +28,34 @@ class SrcInfo {
 
   /** @type {SrcRange} */
   get range() { return this.#range }
+
+  /** @returns {String} */
+  getFilename() {
+    return this.#filename
+  }
+
+  /** @returns {SrcRange} */
+  getRange() {
+    return this.#range
+  }
+
+  /**
+   * @param {String} filename
+   * @returns {SrcInfo} this
+   */
+  setFilename(filename) {
+    this.#filename = filename
+    return this
+  }
+
+  /**
+   * @param {String} range 
+   * @returns {SrcInfo} this
+   */
+  setRange(range) {
+    this.#range = range
+    return this
+  }
 
   /**
    * Compare with another SrcInfo for equality

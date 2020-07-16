@@ -13,11 +13,12 @@ class SrcRange {
   /** @type {Number} */ #toColumn
 
   /** 
-   * @param {Object} opts
-   * @param {Number} opts.fromLine
-   * @param {Number} opts.fromColumn
-   * @param {Number} opts.toLine
-   * @param {Number} opts.toColumn 
+   * Create a new SrcRange object
+   * @param {Object} opts   
+   * @param {Number} opts.fromLine   Starting line
+   * @param {Number} opts.fromColumn Starting column
+   * @param {Number} opts.toLine     Ending line   (inclusive)
+   * @param {Number} opts.toColumn   Ending column (inclusive)
    */
   constructor(opts={}) {
     this.#fromLine   = opts.fromLine   || 0
