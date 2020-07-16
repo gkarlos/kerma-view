@@ -1,3 +1,3 @@
-[submodule "kerma-inputs"]
-    path = inputs
-    url = https://github.com/gkarlos/kerma-inputs
+[submodule "inputs"]
+	path = inputs
+	url = https://github.com/gkarlos/kerma-inputs
