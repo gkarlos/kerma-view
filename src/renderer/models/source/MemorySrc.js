@@ -7,20 +7,20 @@ const _ = require('@renderer/app')._
 /**
  * @memberof module:source
  */
-class MemoryInfo extends SrcInfo {
+class MemorySrc extends SrcInfo {
 
   /** @type {String}   */ #type
   /** @type {String}   */ #name
   /** @type {String[]} */ #qualifiers
   
   /**
-   * Create a new MemoryInfo object
+   * Create a new MemorySrc object
    * @param {Object}      opts
    * @param {String}      opts.type
    * @param {String}      opts.name
    * @param {String[]}    opts.qualifiers
    * @param {String}      opts.filename
-   * @param {SrcRange} opts.range
+   * @param {SrcRange}    opts.range
    */
   constructor(opts={}) {
     super(opts)
@@ -61,10 +61,10 @@ class MemoryInfo extends SrcInfo {
 
   /**
    * 
-   * @param {MemoryInfo} other 
+   * @param {MemorySrc} other 
    */
   equals(other) {
-    return (other instanceof MemoryInfo) 
+    return (other instanceof MemorySrc) 
       && super.equals(other)
       && this.#type === other.type
       && this.#name === other.name
@@ -72,4 +72,4 @@ class MemoryInfo extends SrcInfo {
   }
 }
 
-module.exports = MemoryInfo
+module.exports = MemorySrc
