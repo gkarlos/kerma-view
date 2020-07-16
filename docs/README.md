@@ -8,7 +8,7 @@ To run KermaView from source you will need to intall [**nodejs**](https://nodejs
 ## Installation
 
 1. Clone the repo <br/>
-    `git clone https://github.com/gkarlos/kerma-view`
+    `git clone --recurse-submodules https://github.com/gkarlos/kerma-view`
 2. Install dependencies <br/>
     `cd kerma-view && npm install`
 3. Start KermaView <br/>
