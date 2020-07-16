@@ -1,7 +1,7 @@
 /**
  * @memberof module:source
  */
-class SourceLoc {
+class SrcLoc {
   /** @type {Number} */ #line
   /** @type {Number} */ #column
 
@@ -22,14 +22,14 @@ class SourceLoc {
   }
 
   /**
-   * Compare with another SourceLoc for equality
-   * @param {SourceLoc} other Another SourceLoc
+   * Compare with another SrcLoc for equality
+   * @param {SrcLoc} other Another SrcLoc
    */
   equals(other) {
-    if ( !(other instanceof SourceLoc))
+    if ( !(other instanceof SrcLoc))
       return false
     return this.#line === other.line && this.#column === other.column
   }
 }
 
-module.exports = SourceLoc
+module.exports = SrcLoc
