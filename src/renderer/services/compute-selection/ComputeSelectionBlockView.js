@@ -239,7 +239,6 @@ class ComputeSelectionBlockView extends Component {
             input.removeClass('empty-input')
             input.tooltip('hide')
             let value = parseInt(xInput.val())
-            console.log(value)
             if ( value < min || value > max) {
               input.addClass('invalid-input')
               input.tooltip('hide').tooltip('show')
