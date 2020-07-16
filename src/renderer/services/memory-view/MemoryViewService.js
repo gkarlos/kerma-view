@@ -1,9 +1,10 @@
-const Service           = require('@renderer/services').Service
+const Service = require('@renderer/services').Service
 
 /**
  * @memberof module:memory-view
  */
 class MemoryViewService extends Service {
-  consturctor()
-  
+  consturctor() {}
 }
+
+module.exports = MemoryViewService
