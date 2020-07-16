@@ -6,6 +6,12 @@
 
 [CodeStats](https://github.com/gkarlos/kerma-view/blob/gh-pages/STATS.md)
 
+## Install
+
+`git clone --recurse-submodules https://github.com/gkarlos/kerma-view`
+
+------
+
 TODO:
 - Replace jquery
     - https://github.com/atom/etch
