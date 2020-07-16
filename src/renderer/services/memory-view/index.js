@@ -4,5 +4,5 @@
  * @subcategory services
  */
 module.exports = {
-  MemoryViewService = require('./MemoryViewService')
+  MemoryViewService : require('./MemoryViewService')
 }
