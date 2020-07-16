@@ -2,11 +2,10 @@ require('module-alias/register')
 
 const CudaGrid = require('@renderer/models/cuda/CudaGrid')
 const CudaBlock  = require('@renderer/models/cuda/CudaBlock')
-const { to } = require('cli-color/move')
-const CudaWarp  = require('@renderer/models/cuda').Warp
-const CudaLimits = require('@renderer/models/cuda').Limits
-const CudaDim = require('@renderer/models/cuda').Dim
-const CudaIndex = require('@renderer/models/cuda').Index
+const CudaWarp  = require('@renderer/models/cuda/CudaWarp')
+const CudaLimits = require('@renderer/models/cuda/CudaLimits')
+const CudaDim = require('@renderer/models/cuda/CudaDim')
+const CudaIndex = require('@renderer/models/cuda/CudaIndex')
 
 const expect = require('chai').expect
 
