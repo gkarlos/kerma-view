@@ -1,11 +1,11 @@
-/** @ignore @typedef {import("@renderer/models/source/SourceLoc")} SourceLoc */
+/** @ignore @typedef {import("@renderer/models/source/SrcLoc")} SrcLoc */
 
-const SourceLoc = require('./SourceLoc')
+const SrcLoc = require('./SrcLoc')
 
 /**
  * @memberof module:source
  */
-class SourceRange {
+class SrcRange {
 
   /** @type {Number} */ #fromLine
   /** @type {Number} */ #fromColumn
@@ -32,7 +32,7 @@ class SourceRange {
    * @param {Number[]} arr 
    */
   static fromArray(arr) {
-    return new SourceRange({
+    return new SrcRange({
       fromLine   : (arr[0] === undefined || arr[0] === null)? 0 : arr[0],
       fromColumn : (arr[1] === undefined || arr[1] === null)? 0 : arr[1],
       toLine     : (arr[2] === undefined || arr[2] === null)? Infinity : arr[2],
@@ -40,11 +40,11 @@ class SourceRange {
     })
   }
 
-  /** @type {SourceLoc} */
-  get from() { return new SourceLoc(this.#fromLine, this.#fromColumn) }
+  /** @type {SrcLoc} */
+  get from() { return new SrcLoc(this.#fromLine, this.#fromColumn) }
 
-  /** @type {SourceLoc} */
-  get to() { return new SourceLoc(this.#toLine, this.#toColumn) }
+  /** @type {SrcLoc} */
+  get to() { return new SrcLoc(this.#toLine, this.#toColumn) }
   
   /** @type {Number} */
   get fromLine() { return this.#fromLine }
@@ -69,14 +69,14 @@ class SourceRange {
   hasEndColumn() { return this.#toColumn !== Infinity }
 
   /**
-   * Compare with another SourceRange for equality
-   * @param {SourceRange} other 
+   * Compare with another SrcRange for equality
+   * @param {SrcRange} other 
    */
   equals(other) {
-    if ( !(other instanceof SourceRange))
+    if ( !(other instanceof SrcRange))
       return false
     return this.from.equals(other.from) && this.to.equals(other.to)
   }
 }
 
-module.exports = SourceRange
+module.exports = SrcRange

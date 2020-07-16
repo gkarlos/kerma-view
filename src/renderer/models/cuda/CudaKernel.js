@@ -1,4 +1,4 @@
-/** @ignore @typedef {import("@renderer/models/source/FunctionInfo")} FunctionInfo */
+/** @ignore @typedef {import("@renderer/models/source/FunctionSrc")} FunctionSrc */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 
 /**
@@ -7,7 +7,7 @@
 class CudaKernel {
   /** @type {Number} */
   #id
-  /** @type {FunctionInfo} */
+  /** @type {FunctionSrc} */
   #source
   /** @type {Array.<CudaLaunch>} */
   #launches
@@ -16,7 +16,7 @@ class CudaKernel {
 
   /**
    * @param {Number} id
-   * @param {FunctionInfo} source 
+   * @param {FunctionSrc} source 
    */
   constructor(id,source) {
     this.#id = id
@@ -27,7 +27,7 @@ class CudaKernel {
   /** @type {Number} */
   get id() { return this.#id }
 
-  /** @type {FunctionInfo} */
+  /** @type {FunctionSrc} */
   get source() { return this.#source }
 
   /** @type {String} */

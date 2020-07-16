@@ -2,17 +2,17 @@
  * @module source
  * @category Renderer
  * @subcategory models
- * @property {module:source.SourceLoc} SourceLoc
- * @property {module:source.SourceInfo} SourceInfo
- * @property {module:source.SourceRange} SourceRange
- * @property {module:source.FunctionInfo} FunctionInfo
- * @property {module:source.FunctionCallInfo} FunctionCallInfo
+ * @property {module:source.SrcLoc} SrcLoc
+ * @property {module:source.SrcInfo} SrcInfo
+ * @property {module:source.SrcRange} SrcRange
+ * @property {module:source.FunctionSrc} FunctionSrc
+ * @property {module:source.FunctionCallSrc} FunctionCallSrc
  */
 module.exports = {
-  SourceLoc : require('./SourceLoc'),
-  SourceInfo : require('./SourceInfo'),
-  SourceRange : require('./SourceRange'),
-  FunctionInfo : require('./FunctionInfo'),
-  FunctionCallInfo : require('./FunctionCallInfo'),
+  SrcLoc : require('./SrcLoc'),
+  SrcInfo : require('./SrcInfo'),
+  SrcRange : require('./SrcRange'),
+  FunctionSrc : require('./FunctionSrc'),
+  FunctionCallSrc : require('./FunctionCallSrc'),
   MemoryInfo : require('./MemoryInfo')
 }

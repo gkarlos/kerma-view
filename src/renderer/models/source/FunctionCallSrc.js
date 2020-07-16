@@ -1,26 +1,26 @@
-const SourceInfo = require('./SourceInfo')
+const SrcInfo = require('./SrcInfo')
 
-/** @ignore @typedef {import("@renderer/models/source/FunctionInfo")} FunctionInfo */
+/** @ignore @typedef {import("@renderer/models/source/FunctionSrc")} FunctionSrc */
 
 
 /**
  * @memberof module:source
  */
-class FunctionCallInfo extends SourceInfo {
+class FunctionCallSrc extends SrcInfo {
   /** @type {String}  */ #name
   /** @type {String}  */ #arguments 
-  /** @type {FunctionInfo} */ #caller
+  /** @type {FunctionSrc} */ #caller
   /** @type {Boolean} */ #isKernelLaunch
   /** @type {Boolean} */ #launchParams
   /** @type {Boolean} */ #inLoop
 
   /**
-   * Create a new FunctionCallInfo instance
+   * Create a new FunctionCallSrc instance
    * @param {Object}       opts
    * @param {String}       opts.filename
    * @param {SourceRange}  opts.range
    * @param {String}       opts.arguments
-   * @param {FunctionInfo} opts.caller
+   * @param {FunctionSrc} opts.caller
    * @param {Boolean}      opts.isKernelLaunch
    * @param {String}       opts.launchParams
    * @param {Boolean}      opts.inLoop
@@ -41,7 +41,7 @@ class FunctionCallInfo extends SourceInfo {
   /** @type {String} */
   get arguments() { return this.#arguments }
 
-  /** @type {FunctionInfo} */
+  /** @type {FunctionSrc} */
   get caller() { return this.#caller }
 
   /** @type {String} */
@@ -54,12 +54,12 @@ class FunctionCallInfo extends SourceInfo {
   isKernelLaunch() { return this.#isKernelLaunch }
 
   /**
-   * Compare with another FunctionCallInfo for equality
-   * @param {FunctionCallInfo} other Another FunctionCallInfo 
+   * Compare with another FunctionCallSrc for equality
+   * @param {FunctionCallSrc} other Another FunctionCallSrc 
    * @returns {Boolean}
    */
   equals(other) {
-    return (other instanceof FunctionCallInfo) 
+    return (other instanceof FunctionCallSrc) 
       && super.equals(other)
       && this.#name === other.name
       && this.#arguments === other.arguments
@@ -72,4 +72,4 @@ class FunctionCallInfo extends SourceInfo {
   }
 }
 
-module.exports = FunctionCallInfo
+module.exports = FunctionCallSrc

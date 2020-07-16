@@ -1,10 +1,10 @@
-const SourceInfo = require('./SourceInfo')
-const SourceRange = require('./SourceRange')
+const SrcInfo = require('./SrcInfo')
+const SrcRange = require('./SrcRange')
 
 /**
  * @memberof module:source
  */
-class FunctionInfo extends SourceInfo {
+class FunctionSrc extends SrcInfo {
 
   /** @type {String} */ #name
   /** @type {String} */ #arguments 
@@ -12,11 +12,11 @@ class FunctionInfo extends SourceInfo {
   /** @type {String}  */ #type
 
   /**
-   * Create a new FunctionInfo instance
+   * Create a new FunctionSrc instance
    * @param {Object}      opts
    * @param {String}      opts.type
    * @param {String}      opts.filename
-   * @param {SourceRange} opts.range
+   * @param {SrcRange} opts.range
    * @param {String}      opts.name
    * @param {String}      opts.arguments
    * @param {Boolean}     opts.isKernel
@@ -42,15 +42,15 @@ class FunctionInfo extends SourceInfo {
   isKernel() { return this.#isKernel }
 
   /**
-   * Compare with another FunctionInfo for equality
-   * @param {FunctionInfo} other Another FunctionInfo 
+   * Compare with another FunctionSrc for equality
+   * @param {FunctionSrc} other Another FunctionSrc 
    */
   equals(other) {
-    return (other instanceof FunctionInfo ) && super.equals(other)
+    return (other instanceof FunctionSrc ) && super.equals(other)
       && this.#name === other.name 
       && this.#arguments === other.arguments
       && this.#isKernel === other.isKernel()
   }
 }
 
-module.exports = FunctionInfo
+module.exports = FunctionSrc

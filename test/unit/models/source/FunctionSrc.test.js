@@ -2,25 +2,25 @@ require('module-alias/register')
 
 const expect = require('chai').expect
 
-const FunctionInfo = require('@renderer/models/source/FunctionInfo')
-const { SourceRange } = require('@renderer/models/source')
+const FunctionSrc = require('@renderer/models/source/FunctionSrc')
+const SrcRange    = require('@renderer/models/source/SrcRange')
 
-describe("models/source/FunctionInfo", () => {
+describe("models/source/FunctionSrc", () => {
   describe("equals", () => {
     it("should be true (no args)", () => {
-      expect(new FunctionInfo().equals(new FunctionInfo())).to.be.true
+      expect(new FunctionSrc().equals(new FunctionSrc())).to.be.true
     })
 
     it("should be true (same super only)", () => {
-      let fi1 = new FunctionInfo({filename:"test.cu",range: new SourceRange({fromLine:0,toLine:15})})
-      let fi2 = new FunctionInfo({filename:"test.cu",range: new SourceRange({fromLine:0,toLine:15})})
+      let fi1 = new FunctionSrc({filename:"test.cu",range: new SrcRange({fromLine:0,toLine:15})})
+      let fi2 = new FunctionSrc({filename:"test.cu",range: new SrcRange({fromLine:0,toLine:15})})
       expect(fi1.equals(fi2)).to.be.true
     })
 
     it("should be true (1)", () => {
-      let fi1 = new FunctionInfo({
+      let fi1 = new FunctionSrc({
         filename : "test.cu",
-        range : new SourceRange({fromLine:0,toLine:15}),
+        range : new SrcRange({fromLine:0,toLine:15}),
         arguments : "somearguments",
         isKernel : true
       })
@@ -29,9 +29,9 @@ describe("models/source/FunctionInfo", () => {
     })
 
     it("should be true (2)", () => {
-      let fi1 = new FunctionInfo({
+      let fi1 = new FunctionSrc({
         filename : "",
-        range : new SourceRange({fromLine:0,toLine:15}),
+        range : new SrcRange({fromLine:0,toLine:15}),
         arguments : "",
         isKernel : true
       })
@@ -40,16 +40,16 @@ describe("models/source/FunctionInfo", () => {
     })
 
     it("should be false (kernel vs non-kernel)", () => {
-      let fi1 = new FunctionInfo({
+      let fi1 = new FunctionSrc({
         filename : "",
-        range : new SourceRange({fromLine:0,toLine:15}),
+        range : new SrcRange({fromLine:0,toLine:15}),
         arguments : "",
         isKernel : true
       })
 
-      let fi2 = new FunctionInfo({
+      let fi2 = new FunctionSrc({
         filename : "",
-        range : new SourceRange({fromLine:0,toLine:15}),
+        range : new SrcRange({fromLine:0,toLine:15}),
         arguments : ""
       })
 
@@ -57,15 +57,15 @@ describe("models/source/FunctionInfo", () => {
     })
 
     it("should be false (different super)", () => {
-      let fi1 = new FunctionInfo({
+      let fi1 = new FunctionSrc({
         filename : "testa.cu",
-        range : new SourceRange({fromLine:0,toLine:15}),
+        range : new SrcRange({fromLine:0,toLine:15}),
         arguments : "somearguments",
       })
 
-      let fi2 = new FunctionInfo({
+      let fi2 = new FunctionSrc({
         filename : "testb.cu",
-        range : new SourceRange({fromLine:0,toLine:16}),
+        range : new SrcRange({fromLine:0,toLine:16}),
         arguments : "somearguments"
       })
 

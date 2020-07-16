@@ -1,13 +1,13 @@
-const SourceInfo = require('./SourceInfo')
-const SourceRange = require('./SourceRange')
+const SrcInfo = require('./SrcInfo')
+const SrcRange = require('./SrcRange')
 const _ = require('@renderer/app')._
 
-/** @ignore @type import("@renderer/models/source/SourceRange") SourceRange*/
+/** @ignore @type import("@renderer/models/source/SrcRange") SrcRange*/
 
 /**
  * @memberof module:source
  */
-class MemoryInfo extends SourceInfo {
+class MemoryInfo extends SrcInfo {
 
   /** @type {String}   */ #type
   /** @type {String}   */ #name
@@ -20,7 +20,7 @@ class MemoryInfo extends SourceInfo {
    * @param {String}      opts.name
    * @param {String[]}    opts.qualifiers
    * @param {String}      opts.filename
-   * @param {SourceRange} opts.range
+   * @param {SrcRange} opts.range
    */
   constructor(opts={}) {
     super(opts)
