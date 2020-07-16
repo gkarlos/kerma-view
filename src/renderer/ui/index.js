@@ -34,8 +34,6 @@ class Ui {
 
   static memory = {}
 
-  static window = window
-
   static perf = {
     render : {}
   }
