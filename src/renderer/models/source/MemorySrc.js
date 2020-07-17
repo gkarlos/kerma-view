@@ -132,6 +132,11 @@ class MemorySrc extends SrcInfo {
     return this.#declContext
   }
 
+  /** @returns {String[]} */
+  getQualifiers() {
+    return this.#qualifiers
+  }
+
   /**
    * 
    * @param {MemorySrc} other 
