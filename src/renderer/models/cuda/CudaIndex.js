@@ -7,8 +7,7 @@ const Index = require('@renderer/models/Index')
  * Represents a 2D index value. Can be used index a thread or
  * index into an array. **Row-major** order is assumed
  * 
- * @category Renderer
- * @subcategory models
+ * @memberof module:cuda
  */
 class CudaIndex extends Index {
   /**
