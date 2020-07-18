@@ -204,4 +204,61 @@ class Dim {
   }
 }
 
+/** @type {Dim} */
+Dim.lin2 = new Dim(2)
+
+/** @type {Dim} */
+Dim.lin4 = new Dim(4)
+
+/** @type {Dim} */
+Dim.lin8 = new Dim(8)
+
+/** @type {Dim} */
+Dim.lin16 = new Dim(16)
+
+/** @type {Dim} */
+Dim.lin32 = new Dim(32)
+
+/** @type {Dim} */
+Dim.lin64 = new Dim(64)
+
+/** @type {Dim} */
+Dim.lin128 = new Dim(128)
+
+/** @type {Dim} */
+Dim.lin256 = new Dim(256)
+
+/** @type {Dim} */
+Dim.lin512 = new Dim(512)
+
+/** @type {Dim} */
+Dim.lin1024 = new Dim(1024)
+
+/** @type {Dim} */
+Dim.lin2048 = new Dim(2048)
+
+/** @type {Dim} */
+Dim.square2x2   = new Dim(2,2)
+
+/** @type {Dim} */
+Dim.square4x4   = new Dim(4,4)
+
+/** @type {Dim} */
+Dim.square8x8   = new Dim(8,8)
+
+/** @type {Dim} */
+Dim.square16x16 = new Dim(16,16)
+
+/** @type {Dim} */
+Dim.square32x32 = new Dim(32,32)
+
+/** @type {Dim} */
+Dim.square64x64 = new Dim(64,64)
+
+/** @type {Dim} */
+Dim.square128x128 = new Dim(128,128)
+
+/** @type {Dim} */
+Dim.square256x256 = new Dim(256,256)
+
 module.exports = Dim
