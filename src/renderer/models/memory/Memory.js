@@ -1,118 +1,63 @@
-const MemoryShape = require('./MemoryShape')
-const {InternalError} = require('@common/util/error')
-const {isString} = require('@common/util/traits')
+/**@ignore @typedef import("@renderer/modules/source/MemorySrc") MemorySrc */
+/**@ignore @typedef import("@renderer/modules/Dim") Dim */
 
-var crypto = null;
+const MemorySrc = require("@renderer/models/source/MemorySrc")
+const Dim       = require("@renderer/models/Dim")
+const {
+  isPowerOf2
+} = require("@common/util/math")
+
 /**
- * Models arbitrary memory
- * 
- * @memberof module:model/memory
- *
+ * @memberof module:memory
  */
 class Memory {
-  //TODO For now this class does not store memory contents
+  /**@type {Dim}       */ #dim
+  /**@type {Number}    */ #elementSize
+  /**@type {Boolean}   */ #elementSign
+  /**@type {MemorySrc} */ #src
 
   /**
-   * Create a random Memory
+   * @param {Dim}       dim          The size of this memory
+   * @param {Object}    element      Description of the elements of this memory
+   * @param {Number}    element.size Size of the elements of this memory. Must be a power of 2
+   * @param {Boolean}   element.sign Signed or unsigned elements
+   * @param {MemorySrc} src          Source info for this memory
    */
-  static createRandom() {
-    if ( !crypto)
-      crypto = require('crypto')
+  constructor(dim, element={size: 32, sign: true}, src) {
+    if ( !dim)
+      throw new Error("missing required argument dim")
+    if ( !(dim instanceof Dim))
+      throw new Error("dim must be a Dim instance")
+    if ( !isPowerOf2(element.size))
+      throw new Error("element.size must be a power of 2")
     
-    let name = `vec${crypto.randomBytes(8).toString('hex')}`
-    let type =  "int"
-    let shape = MemoryShape.createRandom()
-    return new Memory(name, type, shape)
+    this.#dim = dim
+    this.#src = src || new MemorySrc()
+    this.#elementSize = element.size
+    this.#elementSign = element.sign
   }
 
-  /**
-   * @param {String} name
-   * @param {Integer} type
-   * @param {MemoryShape} shape
-   * @param {Object} props
+  get src() { return this.#src }
+
+  get dim() { return this.#dim }
+
+  get elementSize() { return this.#elementSize }
+
+  get elementSign() { return this.#elementSign }
+
+  get isSigned()    { return this.#elementSign }
+
+  get isUnsigned()  { return !this.#elementSign }
+
+  /** 
+   * @param {Memory} other 
    */
-  constructor(name, type, shape, props) {
-    if ( !name || !isString(name) || name.length < 1)
-      throw new InternalError("Memory.constructor(): invalid or missing argument 'name'")
-    if ( !shape || !(shape instanceof MemoryShape))
-      throw new InternalError("Memory.constructor(): invalid of missing argument 'shape' ")
-    this.name = name;
-    this.type = type;
-    this.shape = shape;
-    if ( props)
-      Object.assign(this, props)
-  }
-
-  /** @returns {String} the name of this memory */
-  getName() { return this.name }
-
-  /** @returns {String} the type of this memory */
-  getType() { return this.type }
-  
-  /** @returns {Shape} the shape of this memory */
-  getShape() { return this.shape }
-
-
-  //
-  // Computed properties
-  //
-
-  /** Size of the x dimension */
-  get x() { return this.shape.getX() }
-  /** Size of the y dimension */
-  get y() { return this.shape.getY() }
-  /** Size of the z dimension */
-  get z() { return this.shape.getZ() }
-
-
-  //
-  // Instance methods
-  //
-
-  /** Retrieve the size of the x dimension */
-  getX() { return this.shape.getX() }
-  /** Retrieve the size of the y dimension */
-  getY() { return this.shape.getY() }
-  /** Retrieve the size of the z dimension */
-  getZ() { return this.shape.getZ() }
-
-  /** Set the size of the x dimension */
-  setX(v) { this.shape.setX(v) }
-  /** Set the size of the y dimension */
-  setY(v) { this.shape.setY(v) }
-  /** Set the size of the z dimension */
-  setZ(v) { this.shape.setZ(v) }
-
-  /** @returns {Number} The number of dimensions 
-   */
-  getDims() {
-    return this.shape.getDims()
-  }
-
-  /** @return {boolean} whether the object represents an array 
-   */
-  isArray() {
-    return this.shape.getX() > 1 || this.shape.getY() > 1 || this.shape.getZ() > 1
-  }
-
-  /**
-   * This is just an alias for **isArray**
-   * @return {boolean} whether the object represents a vector
-   */
-  isVector() {
-    return this.isArray()
-  }
-
-  /** @return {boolean} whether the object represents scalar 
-   */
-  isScalar() {
-    return !this.isArray()
-  }
-
-  /** @return {boolean} whether the object represents an array of more than 1 dimensions 
-   */
-  isMultiDimensionalArray() {
-    return this.isArray() && this.getDims() > 1
+  equals(other) {
+    return (other instanceof Memory)
+      && this.#dim.equals(other.dim)
+      && this.#elementSize === other.elementSize
+      && this.#elementSign === other.elementSign
+      && this.#src.equals(other.src)
   }
 }
 
