@@ -1,10 +1,9 @@
-const path = require('path')
-require('app-module-path').addPath(path.join(__dirname, "..", "..", "..", "src"))
+require('module-alias/register')
 
 const expect = require('chai').expect
 
-const NotificationModel = require('renderer/services/notification/NotificationModel')
-const NotificationType = require('renderer/services/notification/NotificationType')
+NotificationModel = require('@renderer/services/notification/NotificationModel')
+const NotificationType = require('@renderer/services/notification/NotificationType')
 
 describe("NotificationModel", () => {
   describe("constructor", () => {

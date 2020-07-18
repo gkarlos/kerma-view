@@ -1,9 +1,8 @@
-const path = require('path')
-require('app-module-path').addPath(path.join(__dirname, "..", "..", "..", "src"))
+require('module-alias/register')
 
 const expect = require('chai').expect
 
-const ProgressNotificationModel = require('renderer/services/notification/ProgressNotificationModel')
+const ProgressNotificationModel = require('@renderer/services/notification/ProgressNotificationModel')
 
 describe("ProgressNotificationModel", () => {
   describe("getters", () => {
