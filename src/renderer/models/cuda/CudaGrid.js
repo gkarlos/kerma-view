@@ -2,6 +2,7 @@ const Limits    = require('@renderer/models/cuda/CudaLimits')
 const CudaDim   = require('@renderer/models/cuda/CudaDim')
 const CudaIndex = require('@renderer/models/cuda/CudaIndex')
 const CudaBlock = require('@renderer/models/cuda/CudaBlock')
+const Dim = require('@renderer/models/Dim')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
 
@@ -21,9 +22,9 @@ class CudaGrid {
    *                                  If an integer is passed it is considered the x-dimension and the y-dimension is implicitly `1`
    */
   constructor(dim, blockDim) {
-    if ( !(dim instanceof CudaDim) && !Number.isInteger(dim))
+    if ( !(dim instanceof CudaDim) && !(dim instanceof Dim) && !Number.isInteger(dim))
       throw new Error("dim must be a CudaDim or Integer")
-    if ( !(blockDim instanceof CudaDim) && !Number.isInteger(blockDim))
+    if ( !(blockDim instanceof CudaDim) && !(blockDim instanceof Dim) && !Number.isInteger(blockDim))
       throw new Error('blockDim must be a CudaDim or Integer')
 
     this.#dim = Number.isInteger(dim)? new CudaDim(dim) : dim
