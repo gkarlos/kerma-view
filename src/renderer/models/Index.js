@@ -6,7 +6,8 @@
  * Represents a 2D index. Can be used as a thread/block index
  * or index into an array. **Row-major** order is assumed
  * 
- * @category models
+ * @category Renderer
+ * @subcategory models
  */
 class Index {
   /** @type {Number} */

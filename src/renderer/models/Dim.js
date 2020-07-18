@@ -144,7 +144,7 @@ class Dim {
   }
 
   /**
-   * Check if 1-dimensional
+   * Check if 1-dimensional, i.e can be indexed only in the x-dimension
    * @returns {Boolean}
    */
   is1D() { 
@@ -152,7 +152,7 @@ class Dim {
   }
   
   /**
-   * Check if 2-dimensional
+   * Check if 2-dimensional. i.e can be indexed in the y-dimension
    * @returns {Boolean}
    */
   is2D() { 
@@ -160,7 +160,7 @@ class Dim {
   } 
 
   /**
-   * Check if 3-dimensional
+   * Check if 3-dimensional. i.e can be indexed in both the z-dimension
    * @returns {Boolean}
    */
   is3D() { 
