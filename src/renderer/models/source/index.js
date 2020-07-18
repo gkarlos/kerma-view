@@ -14,5 +14,5 @@ module.exports = {
   SrcRange : require('./SrcRange'),
   FunctionSrc : require('./FunctionSrc'),
   FunctionCallSrc : require('./FunctionCallSrc'),
-  MemoryInfo : require('./MemoryInfo')
+  MemorySrc : require('./MemorySrc')
 }
