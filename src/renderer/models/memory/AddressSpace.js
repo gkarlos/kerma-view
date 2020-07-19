@@ -32,7 +32,7 @@ class AddressSpace {
    * @returns {Boolean}
    */
   equals(other) {
-    return ( other instanceof AddrSpace )
+    return ( other instanceof AddressSpace )
       && this.#name === other.name
       && this.#value === other.value
   }
