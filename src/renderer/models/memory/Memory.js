@@ -1,5 +1,5 @@
-/**@ignore @typedef import("@renderer/modules/source/MemorySrc") MemorySrc */
-/**@ignore @typedef import("@renderer/modules/Dim") Dim */
+/**@ignore @typedef {import("@renderer/modules/source/MemorySrc")} MemorySrc */
+/**@ignore @typedef {import("@renderer/modules/Dim")} Dim */
 
 const MemorySrc = require("@renderer/models/source/MemorySrc")
 const Dim       = require("@renderer/models/Dim")
@@ -28,13 +28,14 @@ class Memory {
       throw new Error("missing required argument dim")
     if ( !(dim instanceof Dim))
       throw new Error("dim must be a Dim instance")
-    if ( !isPowerOf2(element.size))
-      throw new Error("element.size must be a power of 2")
     
     this.#dim = dim
     this.#src = src || new MemorySrc()
-    this.#elementSize = element.size
-    this.#elementSign = element.sign
+    this.#elementSize = (element.size === undefined)? 32 : element.size
+    this.#elementSign = (element.sign === undefined)? true : element.sign
+
+    if ( !isPowerOf2(element.size))
+      throw new Error("element.size must be a power of 2")
   }
 
   get src() { return this.#src }
@@ -58,6 +59,10 @@ class Memory {
       && this.#elementSize === other.elementSize
       && this.#elementSign === other.elementSign
       && this.#src.equals(other.src)
+  }
+
+  toString() {
+
   }
 }
 
