@@ -3,6 +3,9 @@ require('module-alias/register')
 const expect = require('chai').expect
 
 const StructType = require('@renderer/models/types/StructType')
+const ArrayType = require('@renderer/models/types/ArrayType')
+const Type = require('@renderer/models/types/Type')
+const { Dim } = require('@renderer/models/cuda')
 
 describe("models/type/StructType", () => {
   describe("getName", () => {
@@ -23,6 +26,10 @@ describe("models/type/StructType", () => {
 
     it("should return 2", () => {
       expect(new StructType([StructType.Boolean, StructType.Double]).getNumElements()).to.equal(2)
+    })
+
+    it("{ [1024 x [512 x { i32, i32 }]], { i64, i8 } } ==> 2", () => {
+      
     })
   })
 
@@ -51,6 +58,21 @@ describe("models/type/StructType", () => {
 
     it("{ i8, i16, i32, i64 }", () => {
       expect(new StructType([StructType.Int8, StructType.Int16, StructType.Int32, StructType.Int64]).toString()).to.equal("{ i8, i16, i32, i64 }")
+    })
+
+    it("{ [512 x i8], i64 }", () => {
+      expect(new StructType([new ArrayType(Type.Int8, 512), Type.Int64], 
+                            Type.Int64 )
+                            .toString()
+                            ).to.equal("{ [512 x i8], i64 }")
+    })
+
+    it("{ [1024 x [512 x { i32, i32 }]], { i64, i8 } }", () => {
+      let structi32x2 = new StructType([Type.Int32, Type.Int32])
+      let t1 = new ArrayType(structi32x2, new Dim(1024, 512))
+      let t2 = new StructType([Type.Int64, Type.Int8])
+      let struct = new StructType([t1, t2])
+      expect(struct.toString()).to.equal("{ [1024 x [512 x { i32, i32 }]], { i64, i8 } }")
     })
   })
 
@@ -87,6 +109,26 @@ describe("models/type/StructType", () => {
 
     it("should be 8", () => {
       expect(new StructType([StructType.Int16, StructType.Int16, StructType.Int32]).getByteWidth()).to.equal(8)
+    })
+  })
+
+  describe("getNesting", () => {
+    it("{ } ==> 1", () => {
+      let struct = new StructType()
+      expect(struct.getNesting()).to.equal(1)
+    })
+
+    it("{ i64, i8 } ==> 1", () => {
+      let struct = new StructType([Type.Int64, Type.Int8])
+      expect(struct.getNesting()).to.equal(1)
+    })
+    
+    it("{ [1024 x [512 x { i32, i32 }]], { i64, i8 } } ==> 3", () => {
+      let structi32x2 = new StructType([Type.Int32, Type.Int32])
+      let t1 = new ArrayType(structi32x2, new Dim(1024, 512))
+      let t2 = new StructType([Type.Int64, Type.Int8])
+      let struct = new StructType([t1, t2])
+      expect(struct.toString()).to.equal("{ [1024 x [512 x { i32, i32 }]], { i64, i8 } }")
     })
   })
 

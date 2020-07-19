@@ -1,9 +1,9 @@
 const Type = require('./Type')
-
-/**@ignore @typedef {import("@renderer/models/Dim")} Dim */
+const Dim  = require('@renderer/models/Dim')
 
 /**
  * @memberof module:types
+ * @extends {Type}
  */
 class ArrayType extends Type {
   
@@ -15,11 +15,17 @@ class ArrayType extends Type {
    * @param {Dim|Number}  dim 
    */
   constructor(elementType, dim) {
+    if ( !elementType)
+      throw new Error("Missing required argument elementType")
+    if ( dim === undefined || dim === null)
+      throw new Error("Missing required argument dim")
     if ( !elementType.isValidArrayElementType())
       throw new Error("Invalid array element type")
-    this.#elementType = type
-    this.#dim  = Number.isInteger(dim) ? new Dim(dim) : dim
-    super("array", this.#dim.size, elementType.getAlignment())
+    
+    let tmpDim = Number.isInteger(dim) ? new Dim(dim) : dim
+    super("array", tmpDim.size)
+    this.#elementType = elementType
+    this.#dim = tmpDim
   }
 
   /**
@@ -37,6 +43,13 @@ class ArrayType extends Type {
   }
 
   /**
+   * @returns {Number}
+   */
+  getNesting() {
+    return 1 + this.#elementType.getNesting()
+  }
+
+  /**
    * @returns {Boolean}
    */
   isValidArrayElementType() { return false }
@@ -49,13 +62,13 @@ class ArrayType extends Type {
   /**
    * @returns {String}
    */
-  toString(short=false) {
+  toString() {
     if ( this.#dim.is1D()) {
-      return `[${this.#dim.x} x ${this.#elementType.toString(short)}]`
+      return `[${this.#dim.x} x ${this.#elementType.toString()}]`
     } else if ( this.#dim.is2D()) {
-      return `[${this.#dim.x} x [ ${this.#dim.y} x ${this.#elementType.toString(short)}]]`
+      return `[${this.#dim.x} x [${this.#dim.y} x ${this.#elementType.toString()}]]`
     } else {
-      return `[${this.#dim.x} x [ ${this.#dim.y} x [ ${this.#dim.z} x ${this.#elementType.toString(short)}]]]`
+      return `[${this.#dim.x} x [${this.#dim.y} x [${this.#dim.z} x ${this.#elementType.toString()}]]]`
     }
   }
 

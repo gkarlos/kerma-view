@@ -1,21 +1,25 @@
 
-const Limits = require('./CudaLimits')
-const Block = require('./CudaBlock')
-const Grid = require('./CudaGrid')
-const Warp = require('./CudaWarp')
-const Thread = require('./CudaThread')
-const Index = require('./CudaIndex')
-const Dim = require('./CudaDim')
-const Launch = require('./CudaLaunch')
-const Kernel = require('./CudaKernel')
-const CudaLimits = require('./CudaLimits')
-const CudaBlock = require('./CudaBlock')
-const CudaGrid = require('./CudaGrid')
-const CudaWarp = require('./CudaWarp')
-const CudaThread = require('./CudaThread')
-const CudaIndex = require('./CudaIndex')
-const CudaDim = require('./CudaDim')
-const CudaKernel = require('./CudaKernel')
+const CudaLimits       = require('./CudaLimits')
+const CudaBlock        = require('./CudaBlock')
+const CudaGrid         = require('./CudaGrid')
+const CudaWarp         = require('./CudaWarp')
+const CudaThread       = require('./CudaThread')
+const CudaIndex        = require('./CudaIndex')
+const CudaDim          = require('./CudaDim')
+const CudaLaunch       = require('./CudaLaunch')
+const CudaKernel       = require('./CudaKernel')
+const CudaAddressSpace = require('./CudaAddressSpace')
+
+const Limits = CudaLimits
+const Block  = CudaBlock
+const Grid   = CudaGrid
+const Warp   = CudaWarp
+const Thread = CudaThread
+const Index  = CudaIndex
+const Dim    = CudaDim
+const Launch = CudaLaunch
+const Kernel = CudaKernel
+const AddressSpace = CudaAddressSpace
 
 /**
  * Check if an object is an instance of CudaGrid
@@ -93,6 +97,7 @@ module.exports = {
   Dim,
   Launch,
   Kernel,
+  AddressSpace,
   CudaLimits,
   CudaBlock,
   CudaGrid,
@@ -101,6 +106,7 @@ module.exports = {
   CudaIndex,
   CudaDim,
   CudaKernel,
+  CudaAddressSpace,
   isCudaGrid,
   isCudaBlock,
   isCudaWarp,

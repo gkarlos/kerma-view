@@ -3,6 +3,7 @@ const Type = require('@renderer/models/types/Type')
 
 /**
  * @memberof module:types
+ * @extends {Type}
  */
 class StructType extends Type {
   /** @type {Type[]} **/ #elementTypes
@@ -58,6 +59,13 @@ class StructType extends Type {
     return this.#elementTypes.length
   }
 
+  /**
+   * @returns {Number}
+   */
+  getNesting() {
+    return 1 + (this.#elementTypes.length > 0? Math.max(...this.#elementTypes.map(ty => ty.getNesting())) : 0)
+  }
+
   /** @type {Boolean} */
   isArrayType() { return false; }
 
@@ -106,6 +114,14 @@ class StructType extends Type {
         return false
     
     return true
+  }
+
+  /**
+   * @param {Type[]} elementTypes
+   * @returns {StructType}
+   */
+  static get(elementTypes=[], name="struct") {
+    return new StructType(elementTypes, name)
   }
 }
 

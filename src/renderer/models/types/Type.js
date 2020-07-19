@@ -32,6 +32,12 @@ class Type {
   /** @returns {Number} */
   getByteWidth() { return Math.ceil(this.#bits / 8) }
 
+  /** @returns {Number} */
+  getNesting() { return 0; }
+
+  /** @returns {Number} */
+  isNested() { return this.getNesting() > 0 }
+
   /** 
    * @param {String} alias
    * @returns {Type}
@@ -40,6 +46,14 @@ class Type {
     this.#aliases.push(alias)
     return this
   }
+
+  /**
+   * @param {String} alias 
+   * @returns {Boolean}
+   */
+  hasAlias(alias) {
+    return this.#aliases.find(al => al === alias)? true : false
+  } 
 
   /** @returns {Boolean} */
   isArrayType() { return false; }
@@ -53,13 +67,8 @@ class Type {
   /** @returns {Boolean} */
   isBasicType() { return true; }
 
-  /**
-   * @param {String} alias 
-   * @returns {Boolean}
-   */
-  hasAlias(alias) {
-    return this.#aliases.find(al => al === alias)? true : false
-  } 
+  /** @returns {Boolean} */
+  isAggregateType() { return this.isArrayType() || this.isStructType()}
 
   /** 
    * @abstract
@@ -97,6 +106,16 @@ class Type {
     return (other instanceof Type)
       && this.#name === other.name
       && this.#bits === other.getBitWidth()
+  }
+
+  /**
+   * @param {String} name 
+   * @param {Number} bits
+   * @param {Number} align
+   * @returns {Type}
+   */
+  static get(name, bits) {
+    return new Type(name, bits)
   }
 }
 

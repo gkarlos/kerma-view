@@ -14,5 +14,4 @@
  *//*--------------------------------------------------------------*/
 module.exports = {
   Memory : require('./Memory'),
-  MemoryShape : require('./MemoryShape')
 }
