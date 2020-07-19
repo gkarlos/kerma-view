@@ -4,16 +4,28 @@ node_js:
 cache:
   directories:
   - node_modules
-script:
-  - npm install
-  - chmod +x ./scripts/build-the-docs.sh
-  - npm run docs:build
-  - npm run stats
 
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_API_KEY
-  local_dir: docs/dev
-  on:
-    branch: master
+install:
+  - npm install
+
+stages:
+  - test
+  - stats
+  - docs
+
+jobs:
+  include:
+    - stage: test
+      script: npm run test
+    - stage: stats
+      script: npm run stats
+    - stage: docs
+      script: chmod +x ./scripts/build-the-docs.sh
+      script: npm run docs:build
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_API_KEY
+        local_dir: docs/dev
+        on:
+          branch: master
