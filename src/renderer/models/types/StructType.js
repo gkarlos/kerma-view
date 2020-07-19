@@ -1,60 +1,111 @@
 
-const Type = require('./Type')
+const Type = require('@renderer/models/types/Type')
 
 /**
  * @memberof module:types
  */
 class StructType extends Type {
-  static DEFAULT_ALIGN = 8
-
   /** @type {Type[]} **/ #elementTypes
   
   /**
    * @param {Type[]} elementTypes
    */
-  constructor(elementTypes, name="struct") {
-    this.#elementTypes = []
+  constructor(elementTypes=[], name="struct") {
 
-    let self = this
+    let selfElemTypes = []
     
     elementTypes.forEach((ty,i) => {
       if ( !(ty instanceof Type))
         throw new Error(`Invalid type @position ${i}`)
       if ( !ty.isValidStructElementType())
         throw new Error(`Invalid struct element type @position ${i}`)
-      self.#elementTypes.push(ty)
+      selfElemTypes.push(ty)
     })
 
-    super(name, this.#elementTypes.reduce((accu, ty) => accu + ty.getBitWidth()))
+    super(name || "struct", selfElemTypes.reduce((accu, ty) => accu + ty.getBitWidth(), 0))
+    this.#elementTypes = selfElemTypes
   }
 
-  /** 
-   * @abstract
-   * @returns {Boolean} 
-   */
-  isValidArrayElementType() {
-    return true
+  /** @returns {Boolean} */
+  isAnonymous() {
+    return this.name === 'struct';
+  }
+
+  /** @returns {Boolean} */
+  isNamed() {
+    return !this.isAnonymous()
+  }
+
+  /** @returns {Type[]} */
+  getElementTypes() {
+    return this.#elementTypes
   }
 
   /**
-   * @abstract 
+   * @param {Type} type 
    * @returns {Boolean}
    */
-  isValidStructElementType() {
-    return true
+  hasElementType(type) {
+    if ( !type.isValidStructElementType())
+      return false
+    return this.#elementTypes.find(ty => ty.equals(type))? true : false
   }
 
   /**
-   * @param {Boolean} short 
+   * @returns {Number}
    */
-  toString(short=false) {
-    let res = "{ "
+  getNumElements() {
+    return this.#elementTypes.length
+  }
+
+  /** @type {Boolean} */
+  isArrayType() { return false; }
+
+  /** @type {Boolean} */
+  isPtrType() { return false; }
+
+  /** @type {Boolean} */
+  isStructType() { return true; }
+
+  /** @type {Boolean} */
+  isBasicType() { return false; }
+
+  /**
+   * @returns {String} 
+   */
+  toString() {
+    let res = "{"
+    let self = this
     this.#elementTypes.forEach((ty,i) => {
-      res += ty.toString(short)
-      if ( i < res.length - 1)
-        res += ", "
+      res += ` ${ty.toString()}`
+      if ( i < self.#elementTypes.length - 1)
+        res += ","
     })
-    return res + "}"
+    return res + " }"
+  }
+
+  /**
+   * @param {StructType} other
+   * @returns {Boolen}
+   */
+  equals(other) {
+    if ( !(other instanceof StructType))
+      return false
+    
+    if ( this.getNumElements() !== other.getNumElements())
+      return false
+
+    if ( this.getName() !== other.getName())
+      return false
+
+    if ( this.getBitWidth() != other.getBitWidth())
+      return false
+    
+    for ( let i = 0; i < this.#elementTypes.length; ++i )
+      if ( !this.#elementTypes[i].equals(other.getElementTypes()[i]))
+        return false
+    
+    return true
   }
 }
 

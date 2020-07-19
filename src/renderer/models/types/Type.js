@@ -41,6 +41,18 @@ class Type {
     return this
   }
 
+  /** @returns {Boolean} */
+  isArrayType() { return false; }
+
+  /** @returns {Boolean} */
+  isPtrType() { return false; }
+
+  /** @returns {Boolean} */
+  isStructType() { return false; }
+
+  /** @returns {Boolean} */
+  isBasicType() { return true; }
+
   /**
    * @param {String} alias 
    * @returns {Boolean}
