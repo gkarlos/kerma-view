@@ -49,7 +49,7 @@ class StructType extends Type {
    */
   toString(short=false) {
     let res = "{ "
-    this.#types.forEach((ty,i) => {
+    this.#elementTypes.forEach((ty,i) => {
       res += ty.toString(short)
       if ( i < res.length - 1)
         res += ", "
