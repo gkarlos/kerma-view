@@ -10,18 +10,16 @@ install:
 
 stages:
   - test
-  - stats
   - docs
+  - stats
+
 
 jobs:
   include:
     - stage: test
       script: npm run test
-    - stage: stats
-      script: npm run stats
     - stage: docs
-      script: chmod +x ./scripts/build-the-docs.sh
-      script: npm run docs:build
+      script: chmod +x ./scripts/build-the-docs.sh && npm run docs:build
       deploy:
         provider: pages
         skip_cleanup: true
@@ -29,3 +27,5 @@ jobs:
         local_dir: docs/dev
         on:
           branch: master
+    - stage: stats
+      script: npm run stats
