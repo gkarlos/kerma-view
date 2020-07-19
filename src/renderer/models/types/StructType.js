@@ -17,12 +17,12 @@ class StructType extends Type {
 
     let self = this
     
-    types.forEach((ty,i) => {
+    elementTypes.forEach((ty,i) => {
       if ( !(ty instanceof Type))
         throw new Error(`Invalid type @position ${i}`)
       if ( !ty.isValidStructElementType())
         throw new Error(`Invalid struct element type @position ${i}`)
-      self.#types.push(ty)
+      self.#elementTypes.push(ty)
     })
 
     super(name, this.#elementTypes.reduce((accu, ty) => accu + ty.getBitWidth()))
