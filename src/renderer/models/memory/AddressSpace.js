@@ -1,7 +1,7 @@
 /**
  * @memberof module:memory
  */
-class AddrSpace {
+class AddressSpace {
 
   /** @type {String} */ #name
   /** @type {Number} */ #value
@@ -17,8 +17,18 @@ class AddrSpace {
   /** @type {Number} */
   get value() { return this.#value }
 
+  /** @returns {String} */
+  getName() {
+    return this.#name
+  }
+
+  /** @returns {Number} */
+  getValue() {
+    return this.#value
+  }
+
   /**
-   * @param {AddrSpace} other
+   * @param {AddressSpace} other
    * @returns {Boolean}
    */
   equals(other) {
@@ -28,4 +38,4 @@ class AddrSpace {
   }
 }
 
-module.exports = AddrSpace
+module.exports = AddressSpace
