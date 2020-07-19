@@ -25,7 +25,7 @@ class StructType extends Type {
       self.#types.push(ty)
     })
 
-    super(name, this.#types.reduce((accu, ty) => accu + ty.getBitWidth()))
+    super(name, this.#elementTypes.reduce((accu, ty) => accu + ty.getBitWidth()))
   }
 
   /** 
