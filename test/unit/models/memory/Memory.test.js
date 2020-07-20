@@ -30,46 +30,247 @@ describe('renderer/models/memory/Memory', () => {
     })
   })
 
-  // describe("equals", () => {
+  describe("getNumElements", () => {
+    it("i16 ==> 1", () => {
+      expect(new Memory(Types.Int16, AddressSpace.Global).getNumElements()).to.equal(1)
+    })
 
-  //   it("should equal self (1)", () => {
-  //     let mem = new Memory(Dim.lin1024)
-  //     expect(mem.equals(mem)).to.be.true
-  //   })
+    it("i16* ==> 1", () => {
+      expect(new Memory(new Types.PtrType(Types.Int16, AddressSpace.Local), AddressSpace.Global).getNumElements()).to.equal(1)
+    })
 
-  //   it("should equal self (2)", () => {
-  //     let mem = new Memory(Dim.square128x128)
-  //     expect(mem.equals(mem)).to.be.true
-  //   })
+    it("{ i32, i32 } ==> 1", () => {
+      expect(new Memory(new Types.StructType([Types.Int32, Types.Int32]), AddressSpace.Global).getNumElements()).to.equal(1)
+    })
 
-  //   it("should equal self (3)", () => {
-  //     let mem = new Memory(Dim.square256x256, {size: 64})
-  //     expect(mem.equals(mem)).to.be.true
-  //   })
+    it("{ i32, i32 }* ==> 1", () => {
+      expect(
+        new Memory(
+          new Types.PtrType( 
+            new Types.StructType([Types.Int32, Types.Int32]), 
+            AddressSpace.Global),
+          AddressSpace.Global
+        ).getNumElements()
+      ).to.equal(1)
+    })
 
-  //   it("should equal identical instances (1)", () => {
-  //     let mem1 = new Memory(Dim.lin1024)
-  //     let mem2 = new Memory(Dim.lin1024)
-  //     expect(mem1.equals(mem2)).to.be.true
-  //   })
+    it("[1024 x i32] ==> 1024", () => {
+      expect(
+        new Memory(
+          Types.getArrayType( Types.Int32, 1024),
+          AddressSpace.Global
+        ).getNumElements()
+      ).to.equal(1024)
+    })
 
-  //   it("should equal identical instances (2)", () => {
-  //     let mem1 = new Memory(Dim.square128x128)
-  //     let mem2 = new Memory(Dim.square128x128)
-  //     expect(mem1.equals(mem2)).to.be.true
-  //   })
+    it("[1024 x [1024 x i32]] ==> 1048576", () => {
+      expect(
+        new Memory(
+          Types.getArrayType( Types.Int32, new Dim(1024,1024)),
+          AddressSpace.Global
+        ).getNumElements()
+      ).to.equal(1048576)
+    })
 
-  //   it("should equal identical instances (3)", () => {
-  //     let mem1 = new Memory(Dim.square256x256, {size: 64})
-  //     let mem2 = new Memory(Dim.square256x256, {size: 64})
-  //     expect(mem1.equals(mem2)).to.be.true
-  //   })
+    it("[1024 x { i32, i32 }] ==> 1024", () => {
+      expect(
+        new Memory(
+          Types.getArrayType(
+            Types.getStuctType( Types.Int32, Types.Int32),
+            1024),
+          AddressSpace.Global
+        ).getNumElements()
+      ).to.equal(1024)
+    })
+  })
 
-  //   it("should equal identical instances (4)", () => {
-  //     let mem1 = new Memory(Dim.square256x256, {size: 64})
-  //     let mem2 = new Memory(Dim.square256x256, {size: 64, sign:true})
-  //     expect(mem1.equals(mem2)).to.be.true
-  //   })
-  // })
+  describe("getSize", () => {
+    it("i16 ==> 2", () => {
+      expect(new Memory(Types.Int16, AddressSpace.Global).getSize()).to.equal(2)
+    })
+
+    it("i16* ==> 8", () => {
+      expect(new Memory(new Types.PtrType(Types.Int16, AddressSpace.Local), AddressSpace.Global).getSize()).to.equal(Types.DefaultPointerWidthBytes)
+    })
+
+    it("{ i32, i32 } ==> 8", () => {
+      expect(new Memory(new Types.StructType([Types.Int32, Types.Int32]), AddressSpace.Global).getSize()).to.equal(8)
+    })
+
+    it("{ i32, i32, i32 }* ==> 8", () => {
+      expect(
+        new Memory(
+          new Types.PtrType( 
+            new Types.StructType([Types.Int32, Types.Int32, Types.Int32]), 
+            AddressSpace.Global),
+          AddressSpace.Global
+        ).getSize()
+      ).to.equal(8)
+    })
+
+    it("[1024 x i32] ==> 4096", () => {
+      expect(
+        new Memory(
+          Types.getArrayType( Types.Int32, 1024),
+          AddressSpace.Global
+        ).getSize()
+      ).to.equal(4096)
+    })
+
+    it("[1024 x [1024 x i32]] ==> 4194304", () => {
+      expect(
+        new Memory(
+          Types.getArrayType( Types.Int32, new Dim(1024,1024)),
+          AddressSpace.Global
+        ).getSize()
+      ).to.equal(4194304)
+    })
+
+    it("[1024 x { i32, i32 }] ==> 8192", () => {
+      expect(
+        new Memory(
+          Types.getArrayType(
+            Types.getStuctType( Types.Int32, Types.Int32),
+            1024),
+          AddressSpace.Global
+        ).getSize()
+      ).to.equal(8192)
+    })
+  })
+
+  describe("isArrayOfStructs", () => {
+    it("i32 => false", () => {
+      expect(
+        new Memory( Types.Int32, AddressSpace.Global).isArrayOfStructs()
+      ).to.be.false
+    })
+
+    it("[1024 x i32] => false", () => {
+      expect(
+        new Memory( 
+          Types.getArrayType(Types.Int32, 1024),
+          AddressSpace.Global
+        ).isArrayOfStructs()
+      ).to.be.false
+    })
+
+    it("{ i32, i32 } => false", () => {
+      expect(
+        new Memory( 
+          Types.getStuctType( Types.Int32, Types.Int32), 
+          AddressSpace.Global
+        ).isArrayOfStructs()
+      ).to.be.false
+    })
+
+    it("[1024 x { i32, i32 }] ==> true", () => {
+      expect(
+        new Memory(
+          Types.getArrayType(
+            Types.getStuctType(Types.Int32, Types.Int32),
+            1024
+          ),
+          AddressSpace.Global
+        ).isArrayOfStructs()
+      ).to.be.true
+    })
+  })
+
+  describe("isStructWithArrays", () => {
+    it("i32 => false", () => {
+      expect(
+        new Memory(
+          Types.Int32,
+          AddressSpace.Global
+        ).isStructWithArrays()
+      ).to.be.false
+    })
+
+    it("{ i32, i32 } => false", () => {
+      expect(
+        new Memory(
+          Types.getStuctType(Types.Int32, Types.Int32),
+          AddressSpace.Global
+        ).isStructWithArrays()
+      ).to.be.false
+    })
+
+    it("{ i32, [1024 x i32] } => true", () => {
+      expect(
+        new Memory(
+          Types.getStuctType(
+            Types.Int32, 
+            Types.getArrayType(Types.Int32, 1024)
+          ),
+          AddressSpace.Global
+        ).isStructWithArrays()
+      ).to.be.true
+    })
+
+    it("{ [1024 x i32], [1024 x i32] } => true", () => {
+      expect(
+        new Memory(
+          Types.getStuctType(
+            Types.getArrayType(Types.Int32, 1024), 
+            Types.getArrayType(Types.Int32, 1024)
+          ),
+          AddressSpace.Global
+        ).isStructWithArrays()
+      ).to.be.true
+    })
+  })
+
+  describe("isStructOfArrays", () => {
+    it("{ i32, [1024 x i32] } => false", () => {
+      expect(
+        new Memory(
+          Types.getStuctType(
+            Types.Int32, 
+            Types.getArrayType(Types.Int32, 1024)
+          ),
+          AddressSpace.Global
+        ).isStructOfArrays()
+      ).to.be.false
+    })
+
+    it("{ [1024 x i32], [1024 x i32] } => true", () => {
+      expect(
+        new Memory(
+          Types.getStuctType(
+            Types.getArrayType(Types.Int32, 1024), 
+            Types.getArrayType(Types.Int32, 1024)
+          ),
+          AddressSpace.Global
+        ).isStructOfArrays()
+      ).to.be.true
+    })
+  })
+
+  describe("equals", () => {
+
+    it("should equal self (1)", () => {
+      let mem = 
+        new Memory( Types.Int32, AddressSpace.Global)
+      expect(mem.equals(mem)).to.be.true
+    })
+
+    it("[1024 x i32] == [1024 x i32]", () => {
+      let mem1 = new Memory( Types.getArrayType(Types.Int32, 1024), AddressSpace.Global)
+      let mem2 = new Memory( Types.getArrayType(Types.Int32, 1024), AddressSpace.Global)
+      expect(mem1.equals(mem2)).to.be.true
+    })
+
+    it("[1024 x i32] != [1024 x .i32]", () => {
+      let mem1 = new Memory( Types.getArrayType(Types.Int32, 1024), AddressSpace.Global)
+      let mem2 = new Memory( Types.getArrayType(Types.UInt32, 1024), AddressSpace.Global)
+      expect(mem1.equals(mem2)).to.be.false
+    })
+
+    it("<mem (4) [1024 x i32]> != <mem (5) [1024 x .i32]> | (different addr spaces)", () => {
+      let mem1 = new Memory( Types.getArrayType(Types.Int32, 1024), AddressSpace.Global)
+      let mem2 = new Memory( Types.getArrayType(Types.Int32, 1024), AddressSpace.Local)
+      expect(mem1.equals(mem2)).to.be.false
+    })
+  })
 
 })

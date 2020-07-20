@@ -77,12 +77,10 @@ class Memory {
    * @returns {Number}
    */
   getNumElements() {
-    if ( this.#type.isBasicType() || this.#type.isPtrType() )
+    if ( this.#type.isBasicType() || this.#type.isPtrType() || this.#type.isStructType())
       return 1
-    else if ( this.#type.isStructType())
-      return this.getNumElements()
     else
-      return this.getDim().getSize()
+      return this.#type.getDim().getSize()
   }
 
   /**
@@ -90,12 +88,12 @@ class Memory {
    * @returns {Number}
    */
   getSize() { 
-    if ( this.#type.isBasicType() || this.#type.isPtrType() )
-      return this.#type.getByteWidth()
-    else if ( this.#type.isStructType())
-      return this.ge
-    else
-      return this.getDim().getSize()
+    if ( this.#type.isBasicType() || this.#type.isPtrType() || this.#type.isStructType() ) {
+      return this.#type.getRequiredBytes()
+    } else {
+      return this.#type.getDim().getSize() * this.#type.getElementType().getRequiredBytes()
+    }
+      
   }
 
   /**
@@ -172,7 +170,7 @@ class Memory {
       let elemTypes = this.#type.getElementTypes()
       let res = true;
       for ( let i = 0; i < elemTypes.length; ++i)
-        res &= elemTypes[i].isArrayType()
+        res = res && elemTypes[i].isArrayType()
       return res;
     }
     return false

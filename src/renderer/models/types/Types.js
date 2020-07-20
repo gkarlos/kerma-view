@@ -1,5 +1,7 @@
 /**@ignore @typedef {import("@renderer/models/Dim")} Dim */
 
+const ArrayType = require("./ArrayType")
+
 /**
  * @memberof module:types
  */
@@ -29,6 +31,9 @@ class Types {
   /** */ static Double = Types.Float64
 
   /** */ static Boolean = new Types.IntType(1, false).addAlias("bool").addAlias("boolean")
+
+  /** */ static DefaultPointerWidth      = Types.PtrType.DefaultWidth
+  /** */ static DefaultPointerWidthBytes = Types.PtrType.DefaultWidth / 8
 
   /**
    * Create an unnamed struct type

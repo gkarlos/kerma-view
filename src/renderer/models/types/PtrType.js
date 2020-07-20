@@ -6,6 +6,8 @@ const AddressSpace = require('@renderer/models/memory/AddressSpace')
  * @extends {Type}
  */
 class PtrType extends Type {
+
+  /** */ static DefaultWidth = 64
   
   /** @type {Type}         */ #pointeeTy
   /** @type {AddressSpace} */ #addrSpace
@@ -15,7 +17,7 @@ class PtrType extends Type {
    * @param {AddressSpace} addrSpace
    * @param {Number}       [bits=64]
    */
-  constructor(pointeeTy, addrSpace, bits=64) {
+  constructor(pointeeTy, addrSpace, bits=PtrType.DefaultWidth) {
     if ( !pointeeTy)
       throw new Error("Missing required argument 'pointeeTy'")
     if ( !(pointeeTy instanceof Type))

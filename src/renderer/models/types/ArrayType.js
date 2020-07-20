@@ -49,6 +49,9 @@ class ArrayType extends Type {
     return 1 + this.#elementType.getNesting()
   }
 
+  /** @returns {Boolean} */
+  isArrayType() { return true; }
+  
   /**
    * @returns {Boolean}
    */
