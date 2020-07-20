@@ -5,9 +5,6 @@
 const MemorySrc = require("@renderer/models/source/MemorySrc")
 const AddressSpace = require("@renderer/models/memory/AddressSpace")
 const Type      = require("@renderer/models/types/Type")
-const AddressSpace = require("@renderer/models/memory/AddressSpace")
-
-
 
 /**
  * Models arbitrary memory
@@ -96,7 +93,7 @@ class Memory {
     if ( this.#type.isBasicType() || this.#type.isPtrType() )
       return this.#type.getByteWidth()
     else if ( this.#type.isStructType())
-      return this.getNumElements()
+      return this.ge
     else
       return this.getDim().getSize()
   }
