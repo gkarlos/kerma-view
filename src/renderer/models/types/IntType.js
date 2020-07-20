@@ -37,6 +37,7 @@ class IntType extends Type {
   equals(other) {
     return (other instanceof IntType)
       && super.equals(other)
+      && this.#sign === other.sign
   }
   
   /**
