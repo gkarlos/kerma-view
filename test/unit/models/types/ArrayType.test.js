@@ -24,6 +24,30 @@ describe("models/types/ArrayType", () => {
     })
   })
 
+  describe("getByteWidth", () => {
+    it("[16 x i32] ==> 64", () => {
+      let ty = new ArrayType(Types.Int32, 16)
+      expect(ty.getByteWidth()).to.equal(64)
+    })
+
+    it("[1000 x [1000 x i32]] ==> 4000000", () => {
+      let ty = new ArrayType(Types.Int32, new Dim(1000,1000))
+      expect(ty.getByteWidth()).to.equal(1000 * 1000 * 4)
+    })
+  })
+
+  describe("getBitWidth", () => {
+    it("[16 x i32] ==> 512", () => {
+      let ty = new ArrayType(Types.Int32, 16)
+      expect(ty.getBitWidth()).to.equal(64 * 8)
+    })
+
+    it("[1000 x [1000 x i32]] ==> 32000000", () => {
+      let ty = new ArrayType(Types.Int32, new Dim(1000,1000))
+      expect(ty.getBitWidth()).to.equal(1000 * 1000 * 4 * 8)
+    })
+  })
+
   describe("isValidArrayElementType", () => {
     it("should be false", () => expect(new ArrayType(Types.Double, 1).isValidArrayElementType()).to.be.false)
   })

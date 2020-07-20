@@ -5,7 +5,7 @@ const expect = require('chai').expect
 const Types = require('@renderer/models/types/Types')
 const ArrayType  = Types.ArrayType
 const StructType = Types.StructType
-const { Dim } = require('@renderer/models/cuda')
+const Dim = require('@renderer/models/Dim')
 
 describe("models/type/StructType", () => {
   describe("getName", () => {
@@ -29,7 +29,11 @@ describe("models/type/StructType", () => {
     })
 
     it("{ [1024 x [512 x { i32, i32 }]], { i64, i8 } } ==> 2", () => {
-      //TODO
+      let structi32x2 = new StructType([Types.Int32, Types.Int32])
+      let t1 = new ArrayType(structi32x2, new Dim(1024, 512))
+      let t2 = new StructType([Types.Int64, Types.Int8])
+      let struct = new StructType([t1, t2])
+      expect(struct.getNumElements()).to.equal(2)
     })
   })
 
