@@ -1,4 +1,7 @@
 /**
+ * Base class for all types
+ * Usually this class should not be used directly to create types
+ * Most common types can be retrieve through {@link module:types.Types}
  * @memberof module:types
  */
 class Type {
@@ -33,7 +36,16 @@ class Type {
   getByteWidth() { return Math.ceil(this.#bits / 8) }
 
   /** @returns {Number} */
+  getRequiredBits() { return this.getByteWidth() * 8 }
+
+  /** @returns {Number} */
+  getRequiredBytes() { return this.getByteWidth() }
+
+  /** @returns {Number} */
   getNesting() { return 0; }
+
+  /** @returns {String[]} */
+  getAliases() { return this.#aliases }
 
   /** @returns {Number} */
   isNested() { return this.getNesting() > 0 }
@@ -55,6 +67,13 @@ class Type {
     return this.#aliases.find(al => al === alias)? true : false
   } 
 
+  /**
+   * @returns {Booleean}
+   */
+  hasAliases() {
+    return this.#aliases.length > 0
+  }
+
   /** @returns {Boolean} */
   isArrayType() { return false; }
 
@@ -65,10 +84,16 @@ class Type {
   isStructType() { return false; }
 
   /** @returns {Boolean} */
-  isBasicType() { return true; }
+  isIntType() { return false; }
 
   /** @returns {Boolean} */
-  isAggregateType() { return this.isArrayType() || this.isStructType()}
+  isFloatType() { return false; }
+
+  /** @returns {Boolean} */
+  isBasicType() { return this.isIntType() || this.isFloatType() }
+
+  /** @returns {Boolean} */
+  isAggregateType() { return this.isArrayType() || this.isStructType() }
 
   /** 
    * @abstract
@@ -88,17 +113,7 @@ class Type {
 
   /** @returns {String} */
   toString() {
-    let res;
-    
-    if ( this.#name === "int")
-      res = "i"
-    else if ( this.#name === "float")
-      res = "f"
-    else {
-      res = this.#name
-    }
-
-    return res + this.#bits.toString()
+    return this.name + this.#bits.toString()
   } 
 
   /** @returns {Boolean} */
@@ -118,33 +133,6 @@ class Type {
     return new Type(name, bits)
   }
 }
-
-/** @type {Type} */
-Type.Int8    = new Type("int", 8)
-
-/** @type {Type} */
-Type.Int16   = new Type("int", 16)
-
-/** @type {Type} */
-Type.Int32   = new Type("int", 32)
-
-/** @type {Type} */
-Type.Int64   = new Type("int", 64)
-
-/** @type {Type} */
-Type.Float32 = new Type("float", 32)
-
-/** @type {Type} */
-Type.Float64 = new Type("float", 64)
-
-/** @type {Type} */
-Type.Boolean = new Type("int", 8).addAlias("bool").addAlias("boolean")
-
-/** @type {Type} */
-Type.Float = Type.Float32
-
-/** @type {Type} */
-Type.Double = Type.Float64
 
 module.exports = Type
 
