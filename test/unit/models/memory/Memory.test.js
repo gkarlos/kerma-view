@@ -4,19 +4,29 @@ const expect = require('chai').expect
 
 const Memory = require('@renderer/models/memory/Memory')
 const Dim    = require('@renderer/models/Dim')
+const Types  = require('@renderer/models/types/Types')
+const { AddressSpace } = require('@renderer/models/cuda')
 
 describe('renderer/models/memory/Memory', () => {
   describe("constructor", () => {
-    it("should throw when missing arg:dim", () => {
+    it("should throw when missing arg:type", () => {
       expect(() => new Memory()).to.throw()
     })
     
-    it("should throw when invalid type of arg:dim", () => {
+    it("should throw when invalid type of arg:type", () => {
       expect(() => new Memory(2)).to.throw()
     })
 
-    it("should throw if element.size not power of 2", () => {
-      expect(() => new Memory( Dim.square16x16, {size: 30})).to.throw()
+    it("should throw when missing arg:addrSpace", () => {
+      expect(() => new Memory( Types.Double)).to.throw()
+    })
+
+    it("should throw when invalid type of arg:addrSpace", () => {
+      expect(() => new Memory( Types.Double, 2)).to.throw()
+    })
+
+    it("should not throw with valid args", () => {
+      expect(() => new Memory( Types.Int16, AddressSpace.Global)).to.not.throw()
     })
   })
 
