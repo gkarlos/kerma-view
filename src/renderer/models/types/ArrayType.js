@@ -23,7 +23,7 @@ class ArrayType extends Type {
       throw new Error("Invalid array element type")
     
     let tmpDim = Number.isInteger(dim) ? new Dim(dim) : dim
-    super("array", tmpDim.size)
+    super("array", tmpDim.size * elementType.bits)
     this.#elementType = elementType
     this.#dim = tmpDim
   }
