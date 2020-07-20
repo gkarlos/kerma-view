@@ -110,22 +110,28 @@ class Dim {
   /** 
    * Number of columns (x-dimension)
    * @alias x
-   * @returns {Number}
+   * @type {Number}
    */
   get cols() { return this.#x}
 
   /** 
    * Number of layers (z-dimension)
    * @alias x
-   * @returns {Number}
+   * @type {Number}
    */
   get layers() { return this.#z}
 
   /**
    * Total number of elements
-   * @returns {Number}
+   * @type {Number}
    */
   get size() { return this.#x * this.#y * this.#z}
+
+  /**
+   * Total number of elements
+   * @returns {Number}
+   */
+  getSize() { return this.size }
 
   /**
    * Check if an index exists in these dimensions
