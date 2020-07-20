@@ -159,6 +159,18 @@ describe("models/type/StructType", () => {
       let s2 = new StructType([Types.Boolean, Types.Int16], "world")
       expect(s1.equals(s2)).to.be.false
     })
+
+    it("should be false (signed/unsigned elements)", () => {
+      let s1 = new StructType([Types.Boolean, Types.Int16], "myStruct")
+      let s2 = new StructType([Types.Boolean, Types.UInt16], "myStruct")
+      expect(s1.equals(s2)).to.be.false
+    })
+
+    it("should be false (float/double elements)", () => {
+      let s1 = new StructType([Types.Boolean, Types.Float], "myStruct")
+      let s2 = new StructType([Types.Boolean, Types.Double], "myStruct")
+      expect(s1.equals(s2)).to.be.false
+    })
   })
 
 

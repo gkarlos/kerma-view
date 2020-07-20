@@ -33,6 +33,12 @@ describe("models/types/PtrType", () => {
       let ptr = PtrType.get(struct, GenericAddrSpace)
       expect(ptr.toString()).to.equal("{ i64, [32 x i32*] }*")
     })
+
+    it(".i32*", () => {
+      let pointeeTy = Types.UInt32
+      let ptrTy = new PtrType(pointeeTy, GenericAddrSpace)
+      expect(ptrTy.toString()).to.equal(".i32*")
+    })
   })
 
   describe("getPointeeType", () => {
@@ -83,6 +89,12 @@ describe("models/types/PtrType", () => {
     it("should be false (different pointee type) (2)", () => {
       let ptr1 = new PtrType(Types.Float, GenericAddrSpace)
       let ptr2 = new PtrType(Types.Double, GenericAddrSpace)
+      expect(ptr1.equals(ptr2)).to.be.false
+    })
+
+    it("should be false (different pointee (sign))", () => {
+      let ptr1 = new PtrType(Types.Int32, GenericAddrSpace)
+      let ptr2 = new PtrType(Types.UInt32, GenericAddrSpace)
       expect(ptr1.equals(ptr2)).to.be.false
     })
 
