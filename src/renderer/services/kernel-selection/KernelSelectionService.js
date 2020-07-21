@@ -4,9 +4,9 @@ const Service          = require('@renderer/services/Service')
 const CudaKernel       = require('@renderer/models/cuda/CudaKernel')
 const FunctionCallSrc  = require('@renderer/models/source')
 const CudaLaunch = require('@renderer/models/cuda/CudaLaunch')
-const CudaBlock = require('@renderer/models/cuda/CudaBlock')
-const CudaGrid = require('@renderer/models/cuda/CudaGrid')
-const CudaDim  = require('@renderer/models/cuda/CudaDim')
+const CudaBlock  = require('@renderer/models/cuda/CudaBlock')
+const CudaGrid   = require('@renderer/models/cuda/CudaGrid')
+const CudaDim    = require('@renderer/models/cuda/CudaDim')
 
 /**@ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback*/
 
@@ -23,6 +23,9 @@ class KernelSelectionService extends Service {
   /** @type {KernelSelectionOnSelectCallback[]} */
   #defaultOnSelectCallbacks
 
+  /**
+   * 
+   */
   constructor() {
     super("KernelSelectionService")
     this.#selections = []

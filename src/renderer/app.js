@@ -1,10 +1,11 @@
 
 /// Some typedef imports for vscode intellisence :
-/** @ignore @typedef {import("@renderer/services/log/ConsoleLogger")}                       ConsoleLogger          */
-/** @ignore @typedef {import("@renderer/services/notification/NotificationService")}        NotificationService    */
-/** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionService")} KernelSelectionService */
-/** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionService")} LaunchSelectionService */
+/** @ignore @typedef {import("@renderer/services/log/ConsoleLogger")}                         ConsoleLogger           */
+/** @ignore @typedef {import("@renderer/services/notification/NotificationService")}          NotificationService     */
+/** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionService")}   KernelSelectionService  */
+/** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionService")}   LaunchSelectionService  */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionService")} ComputeSelectionService */
+/** @ignore @typedef {import("@renderer/services/memory-vis/MemoryVisService")}               MemoryVisService        */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
 // const { app } = require("electron")
@@ -55,6 +56,8 @@ App.Services = {
   LaunchSelection : undefined,
   /** @type {ComputeSelectionService} */
   ComputeSelection : undefined,
+  /** @type {MemoryVisService} */
+  MemoryVisService : undefined,
   
   /** @type {Boolean} */
   preUiReady : false,
@@ -109,11 +112,12 @@ App.main = function() {
   
   App.started = true
 
-  const NotificationService          = require('./services/notification').NotificationService
-  const ConsoleLogger                = require('./services/log').ConsoleLogger
-  const KernelSelectionService       = require('./services/kernel-selection').KernelSelectionService
-  const LaunchSelectionService       = require('./services/launch-selection').LaunchSelectionService
-  const ComputeSelectionService      = require('./services/compute-selection').ComputeSelectionService
+  const NotificationService       = require('./services/notification').NotificationService
+  const ConsoleLogger             = require('./services/log').ConsoleLogger
+  const KernelSelectionService    = require('./services/kernel-selection').KernelSelectionService
+  const LaunchSelectionService    = require('./services/launch-selection').LaunchSelectionService
+  const ComputeSelectionService   = require('./services/compute-selection').ComputeSelectionService
+  const MemoryVisService          = require('./services/memory-vis').MemoryVisService
 
   const Events = App.Events
 
@@ -131,10 +135,11 @@ App.main = function() {
   function initPostUiServices() {
     if ( App.Services.postUiReady) return
 
-    App.Services.Notification      = new NotificationService().enable()
-    App.Services.KernelSelection   = new KernelSelectionService().enable()
-    App.Services.LaunchSelection   = new LaunchSelectionService().enable()
-    App.Services.ComputeSelection  = new ComputeSelectionService().enable()
+    App.Services.Notification     = new NotificationService().enable()
+    App.Services.KernelSelection  = new KernelSelectionService().enable()
+    App.Services.LaunchSelection  = new LaunchSelectionService().enable()
+    App.Services.ComputeSelection = new ComputeSelectionService().enable()
+    App.Services.MemoryVisService = new MemoryVisService().enable()
     App.Notifier = App.Services.Notification
     // App.ComputeUnitSelector = App.Services.ComputeUnitSelectione
 
@@ -177,10 +182,6 @@ App.main = function() {
     App.on( Events.INPUT_KERNEL_LAUNCH_SELECTED, (launch) => {
       App.Services.ComputeSelection.activate(App.Services.ComputeSelection.createForLaunch(launch), true)
     })
-
-
-
-
   }
 
   /**

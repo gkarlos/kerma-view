@@ -5,7 +5,7 @@
 /** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
 
 const KernelSelectionModel = require('@renderer/services/kernel-selection/KernelSelectionModel')
-const KernelSelectionView = require('@renderer/services/kernel-selection/KernelSelectionView')
+const KernelSelectionView  = require('@renderer/services/kernel-selection/KernelSelectionView')
 
 /**
  * A controller for a kernel selection
@@ -14,7 +14,7 @@ const KernelSelectionView = require('@renderer/services/kernel-selection/KernelS
  * (see {@link module:kernel-selection.KernelSelection#enable})
  * @memberof module:kernel-selection
  */
-class KernelSelection {
+class KernelSelection { 
   /** @type {KernelSelectionModel} */
   #model
   /** @type {KernelSelectionView} */
@@ -26,7 +26,7 @@ class KernelSelection {
    */
   constructor(kernels=[]) {
     this.#model = new KernelSelectionModel()
-    this.#view = new KernelSelectionView(this.#model)
+    this.#view  = new KernelSelectionView(this.#model)
     this.#view.onSelect(kernel => this.#model.selectKernel(kernel))
     if ( Array.isArray(kernels))
       kernels.forEach(kernel => this.addKernel(kernel))
