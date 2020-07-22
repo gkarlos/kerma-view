@@ -13,7 +13,7 @@ class EditorToolbar extends Component {
     super(id, container)
     this.node = null
     this.tabs = new EditorTabs('editor-tabs', `#${this.id}`, App, true)
-    this.codenav = new CodeNavToolbar('codenav-toolbar', `#${this.id}`, App, true)
+    // this.codenav = new CodeNavToolbar('codenav-toolbar', `#${this.id}`, App, true)
   }
 
   render() {
@@ -24,7 +24,7 @@ class EditorToolbar extends Component {
                     // .css('right', '0px')
 
       this.tabs.render()
-      this.codenav.render()
+      // this.codenav.render()
 
       this.rendered = true
       App.emit(Events.UI_COMPONENT_READY, this)
@@ -34,7 +34,7 @@ class EditorToolbar extends Component {
 
   useDefaultControls() {
     this.tabs.useDefaultControls()
-    this.codenav.useDefaultControls()
+    // this.codenav.useDefaultControls()
   }
 }
 

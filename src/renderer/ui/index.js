@@ -1,4 +1,8 @@
 /** @ignore @typedef {import("@renderer/ui/containers/MainSelectionArea") MainSelectionArea} */
+/** @ignore @typedef {import("@renderer/ui/toolbars/CodeNavToolbar") CodeNavToolbar} */
+/** @ignore @typedef {import("@renderer/ui/editor/EditorToolbar")} EditorToolbar */
+/** @ignore @typedef {import("@renderer/ui/layout/ElectronLayout")} ElectronLayout */
+/** @ignore @typedef {import("@renderer/ui/component/Component")} Component */
 
 /**
  * @category Renderer
@@ -9,6 +13,7 @@ class Ui {
   static onDocumentReadyCallbacks = []
   static ready = false
 
+  /** @type {ElectronLayout} */
   static layout = null
   
   static containers = {
@@ -19,11 +24,17 @@ class Ui {
   static components = new Map()
   
   static toolbar = {
-    main : null,
-    input : null,
-    code : null,
-    session : null,
-    util : null
+    main: null,
+    
+    input: null,
+    
+    /** @type {EditorToolbar} */
+    editor: null,
+
+    /** @type {CodeNavToolbar} */
+    codenav: null,
+    session: null,
+    util: null
   }
 
   static console = {}
@@ -62,7 +73,7 @@ class Ui {
 
     // console.log(App)
     
-    Ui.layout     = new ElectronLayout(App)
+    Ui.layout = new ElectronLayout()
   
     App.on(Events.UI_COMPONENT_READY, (component,ms=0) => {
       if ( !Ui.components.has(component))
@@ -91,6 +102,15 @@ class Ui {
       renderComponents()
     })
   }
+
+  /**
+   * @param {Component} component
+   * @returns {Component}
+   */
+  static registerComponent(component) {
+    Ui.components.set(component, {ready: false})
+    return component
+  }
 }
 
 
@@ -114,10 +134,7 @@ Ui.selector.launch = null
 
 
 /** Register a component to the UI */
-function registerComponent(component) {
-  Ui.components.set(component, {ready: false})
-  return component
-}
+const registerComponent = (component) => Ui.registerComponent(component)
 
 /**
  * Create all the UI containers
@@ -140,7 +157,6 @@ function createComponents(app) {
   const UtilityToolbar        = require('@renderer/ui/toolbars/util/UtilityToolbar')
   const SessionControlToolbar = require('@renderer/ui/toolbars/SessionControlToolbar')
   /*====================================================================================*/
-  const CodeNavToolbar        = require('@renderer/ui/toolbars/CodeNavToolbar')
   const EditorToolbar         = require('@renderer/ui/editor/EditorToolbar')
   const Editor                = require('@renderer/ui/editor/Editor')
   /*====================================================================================*/
@@ -162,7 +178,7 @@ function createComponents(app) {
   Ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${Ui.layout.header.right.id}`, app))
   /*====================================================================================*/
   Ui.toolbar.editor  = registerComponent(new EditorToolbar('editor-toolbar', `#${Ui.layout.body.left.top.id}`, app))
-  Ui.toolbar.codenav = Ui.toolbar.editor.codenav
+  // Ui.toolbar.codenav = Ui.toolbar.editor.codenav
   Ui.editor          = registerComponent(new Editor('editor', `#${Ui.layout.body.left.top.id}`, app))
   /*====================================================================================*/
   Ui.memory          = registerComponent(new MemoryArea("memory-area", "#right", app))

@@ -6,6 +6,7 @@
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionService")}   LaunchSelectionService  */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionService")} ComputeSelectionService */
 /** @ignore @typedef {import("@renderer/services/memory-vis/MemoryVisService")}               MemoryVisService        */
+/** @ignore @typedef {import("@renderer/services/codenav/CodenavService")}                    CodenavService          */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
 // const { app } = require("electron")
@@ -56,6 +57,8 @@ App.Services = {
   LaunchSelection : undefined,
   /** @type {ComputeSelectionService} */
   ComputeSelection : undefined,
+  /** @type {CodenavService} */
+  Codenav: undefined,
   /** @type {MemoryVisService} */
   MemoryVisService : undefined,
   
@@ -118,6 +121,7 @@ App.main = function() {
   const LaunchSelectionService    = require('./services/launch-selection').LaunchSelectionService
   const ComputeSelectionService   = require('./services/compute-selection').ComputeSelectionService
   const MemoryVisService          = require('./services/memory-vis').MemoryVisService
+  const CodenavService            = require("./services/codenav/CodenavService")
 
   const Events = App.Events
 
@@ -140,6 +144,7 @@ App.main = function() {
     App.Services.LaunchSelection  = new LaunchSelectionService().enable()
     App.Services.ComputeSelection = new ComputeSelectionService().enable()
     App.Services.MemoryVisService = new MemoryVisService().enable()
+    App.Services.CodenavService   = new CodenavService().enable()
     App.Notifier = App.Services.Notification
     // App.ComputeUnitSelector = App.Services.ComputeUnitSelectione
 
