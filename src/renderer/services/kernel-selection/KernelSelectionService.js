@@ -113,35 +113,11 @@ class KernelSelectionService extends Service {
 
   /**
    * 
-   * @param {KernelSelection} selection 
-   */
-  createMock2(selection=null) {
-    const CudaKernel = require('@renderer/models/cuda/CudaKernel')
-    const FunctionSrc = require('@renderer/models/source/FunctionSrc')
-    const Mock = require('@mock/cuda-source')
-
-    let kernels = []
-
-    Mock.kernels.forEach( (kernel, i) => {
-      let fsrc = new FunctionSrc({
-        filename : kernel.source.filename,
-        name : kernel.source.name + "SECOND",
-        arguments : kernel.source.signature,
-        range : SrcRange.fromArray(kernel.source.range),
-        isKernel : true
-      })
-      kernels.push( new CudaKernel(i, fsrc))
-    })
-
-    return selection? selection.addKernels(kernels) : this.createNew().addKernels(kernels)
-  }
-
-  /**
-   * 
    * @param {KernelSelection} kernelSelection
    * @returns {KernelSelectionService} this
    */
   activate(kernelSelection) {
+    console.log(kernelSelection)
     if ( kernelSelection && this.#current !== kernelSelection) {
       if ( !this.#selections.find(sel => sel === kernelSelection))
         this.#selections.push(kernelSelection)
