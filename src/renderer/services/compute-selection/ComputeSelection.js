@@ -2,6 +2,7 @@ const ComputeSelectionMode = require('@renderer/services/compute-selection/Compu
 const ComputeSelectionView = require('@renderer/services/compute-selection/ComputeSelectionView')
 const ComputeSelectionModel = require('@renderer/services/compute-selection/ComputeSelectionModel')
 const CudaGrid = require('@renderer/models/cuda/CudaGrid')
+const CudaDim = require('@renderer/models/cuda/CudaDim')
 const ThreadMode = ComputeSelectionMode.Thread
 const WarpMode = ComputeSelectionMode.Warp
 
@@ -11,6 +12,7 @@ const WarpMode = ComputeSelectionMode.Warp
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread*/
 /** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp*/
+/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch*/
 
 /**
  * A compute unit selection controller.
@@ -28,22 +30,12 @@ class ComputeSelection {
 
   /**
    * Create a new ComputeSelection
-   * @param {CudaGrid} grid A CudaGrid
+   * @param {CudaLaunch} launch A Cuda kernel launch
    */
-  constructor(grid, block) {
-    this.#model = new ComputeSelectionModel(grid)
+  constructor(launch) {
+    this.#model = new ComputeSelectionModel(launch)
     this.#view  = new ComputeSelectionView(this.#model)
   }
-
-  // /** 
-  //  * The model of this selection
-  //  * @type {ComputeSelectionModel}
-  //  */
-  // get model() { 
-  //   return this.#model
-  // }
-  // /** Retrieve the view */
-  // get view() { return this.#view }
 
   /// ------------------- ///
   /// Accessor Properties ///
@@ -57,15 +49,21 @@ class ComputeSelection {
 
   /**
    * Block description of this selection
-   * @type {CudaBlock}
+   * @type {CudaDim}
    */
-  get block() { return this.#model.block }
+  get block() { return this.#model.grid.block }
 
   /** 
    * Mode of the unit selection
    * @type {ComputeSelectionMode}
    */
   get mode() { return this.#model.getMode() }
+
+  /**
+   * The model of this selection
+   * @type {ComputeSelectionModel}
+   */
+  get model() { return this.#model }
 
 
   /// ------------------- ///
@@ -77,6 +75,10 @@ class ComputeSelection {
   getUnitSelection() { return this.#model.getUnitSelection() }
 
   getWarpSelection() { return this.#model.getWarpSelection() }
+
+  isActive() {
+    return this.#view.isActive()
+  }
 
   activate() {
     this.#view.activate()
@@ -161,7 +163,8 @@ class ComputeSelection {
   }
 
   equals(other) {
-    return this.#model.equals(other.model)
+    return (other instanceof ComputeSelection)
+      && this.#model.equals(other.model)
   }
 }
 

@@ -11,6 +11,8 @@ const App     = require('@renderer/app')
 /** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnUnitSelectCallback }  ComputeSelectionOnUnitSelectCallback  */
 /** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnModeChangeCallback }  ComputeSelectionOnModeChangeCallback  */
 
+const TAG = "[compute-selection]"
+
 /**
  * This service handles compute unit selection.
  * ComputeUnitSelection objects are created and stored internally.
@@ -52,42 +54,21 @@ class ComputeSelectionService extends Service {
   }
 
   /**
-   * Create a new ComputeSelection for a given grid and block configuration
-   * The ComputeUnitSelection is storred internally.
-   * @param {CudaGrid} grid
-   * @param {CudaBlock} block
-   * @param {Boolean} activate immediate activate this selection upon creation
-   * @returns {ComputeSelection}
+   * Check if a selection exists in the service and if so return it
+   * @param {ComputeSelection} computeSelection
+   * @returns {ComputeSelection|undefined} The ComputeSelection if found. `undefined` otherwise 
    */
-  create(grid, block, activate=false) {
+  lookup(computeSelection) {
+    return this.#selections.find(sel => sel.equals(computeSelection))
+  }
 
-    let lookup = this.#selections.find(sel => sel.grid.equals(grid) && sel.block.equals(block))
-    /** @type {ComputeSelection} */
-    let selection
-
-    // if ( lookup) { // We found a cached selection that can be used for this launch...
-    //   if ( this.#current.equals(lookup)) { // But its the current one so just create a new one
-    //     selection = new ComputeSelection( grid, block)
-    //     this.#defaultOnBlockSelectCallbacks.forEach(cb => selection.onBlockSelect(cb))
-    //     this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
-    //     this.#selections.push(selection)    
-    //   } else {
-    //     selection = lookup
-    //   }
-    // } else { // We cant use any of the cached selections. Create a new one
-
-    // } 
-
-    selection = new ComputeSelection(grid, block)
-    this.#defaultOnBlockChangeCallbacks.forEach(cb => selection.onBlockChange(cb))
-    this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
-    this.#defaultOnModeChangeCallbacks.forEach(cb => selection.onModeChange(cb))
-    this.#selections.push(selection)
-
-    if ( activate)
-      this.activate(selection)
-
-    return selection
+  /**
+   * Check if a selection for a given launch exists and if so return it
+   * @param {CudaLaunch} launch
+   * @returns {ComputeSelection|undefined}
+   */
+  lookupForLaunch(launch) {
+    return this.#selections.find(sel => sel.model.launch.equals(launch))
   }
 
   /**
@@ -97,32 +78,140 @@ class ComputeSelectionService extends Service {
    * @returns {ComputeSelection}
    */
   createForLaunch(launch, activate=false) {
-    return this.create(launch.grid, launch.block, activate)
+    let selection = new ComputeSelection(launch)
+
+    this.#defaultOnBlockChangeCallbacks.forEach(cb => selection.onBlockChange(cb))
+    this.#defaultOnUnitSelectCallbacks.forEach(cb => selection.onUnitSelect(cb))
+    this.#defaultOnModeChangeCallbacks.forEach(cb => selection.onModeChange(cb))
+    this.#selections.push(selection)
+
+    if ( activate) {
+      this.activate(selection)
+    }
+      
+
+    return selection
   }
 
   /**
-   * Discard a ComputeUnitSelection. 
-   * A discarded selection can no longer be activated
-   * @param {ComputeUnitSelection} computeUnitSelection
-   * @returns {Boolean} False if the selection was not created through the service (and thus not removed). True otherwise
+   * Lookup the saved selections if one exists for the provided kernel launch and if so use it.
+   * If none exists one will be created
+   * @param {CudaLaunch} launch 
+   * @param {Boolean} activate
+   * @returns {ComputeSelection}
    */
-  discard(computeUnitSelection) {
+  getForLaunch(launch, activate=false) {
+    let lookup = this.lookupForLaunch(launch, activate)
+    if ( lookup ) {
+      App.Logger.debug(TAG, `Found cached for: ${lookup.model.launch.toString()}`)
+      return lookup
+    }
+    App.Logger.debug(TAG, `Creating new for: ${launch.toString()}`)
+    return this.createForLaunch(launch, activate)
+  }
+
+  /**
+   * Discard a ComputeSelection
+   * A discarded selection can no longer be activated
+   * @param {ComputeSelection} computeSelection A ComputeSelectio
+   * @returns {Boolean} False if the selection was not created through the service, or is not currently
+   *                    part of it (was disposed earlier). True otherwise
+   */
+  dispose(computeSelection) {
+    if ( !computeSelection)
+      return false
+
+    for ( let i = 0; i < this.#selections.length; ++i ) {
+       
+      if (computeSelection.equals(this.#selections[i])) {
+        computeSelection.dispose()
+        this.#selections.splice(i, 1)
+        return true
+      }
+    }
+
+    return false
+  }
+
+  /**
+   * Discard the currently active ComputeSelection
+   * @returns {ComputeSelectionService} this
+   */
+  disposeCurrent() {
+    App.Logger.debug(TAG, "Disposing Current ComputeSelection")
+    this.dispose(this.#current)
+    this.#current = null
+    return this
+  }
+
+  /**
+   * Discard all stored selections
+   * @returns {ComputeSelectionService} this
+   */
+  disposeAll() {
+    App.Logger.debug(TAG, "Disposing all ComputeSelections")
     
+    //dispose current first
+    this.#current && this.#current.dispose()
+    
+    //dispose the rest
+    for ( let i = 0; i < this.#selections.length; ++i) {
+      if ( this.#selections[i].equals(this.#current)) 
+        continue //current disposed already
+      this.#selections[i].dispose()
+    }
+
+    this.#selections = []
+    this.#current = undefined
   }
 
   /**
    * Make a ComputeUnitSelection the current active one.
-   * The selection will be activated only if it was created through the service
+   * The selection will be activated only if it is currently part of the service (i.e was not disposed)
    * @param {ComputeSelection} selection
-   * @returns {Boolean} True if the selection was successfully activated. False otherwise
+   * @param {Boolean} [enable=true] Immediately enable the service
+   * @returns {ComputeSelectionService} this
+   * @throws {Error} The selection is not part of the service
    */
-  activate(selection, enable) {
-    this.#current && this.#current.deactivate()
+  activate(selection, enable=true) {
+    if ( !this.lookup(selection))
+      throw new Error("requested selection currently not part of the service")
+    this.#current && this.deactivate(this.#current)
     this.#current = selection
-    selection.activate()
+    !selection.isActive() && selection.activate()
     if ( enable)
       selection.enable()
-    return selection
+    return this
+  }
+  
+  /**
+   * Deactivate a selection
+   * @param {ComputeSelection} computeSelection 
+   * @returns {ComputeSelectionService}
+   */
+  deactivate(computeSelection) {
+    if ( !computeSelection)
+      return false
+
+    for ( let i = 0; i < this.#selections.length; ++i ) {
+
+      if (computeSelection.equals(this.#selections[i])) {
+        computeSelection.deactivate()
+        return true
+      }
+    }
+
+    return false
+  }
+
+  /**
+   * @returns {ComputeSelectionService}
+   */
+  deactivateCurrent() {
+    App.Logger.debug(TAG, "Deactivating Current ComputeSelection")
+    this.deactivate(this.#current)
+    this.#current = null
+    return this
   }
 
   getCurrent() {

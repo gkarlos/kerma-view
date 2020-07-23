@@ -186,6 +186,8 @@ class ComputeSelectionView {
       this.#warpViewImpl.dispose()
       this.#threadViewImpl.dispose()
       this.#blockViewImpl.dispose()
+      this.#modeViewImpl.dispose()
+      this.#emitter.removeAllListeners()
       this.#disposed = true
     }
     return this

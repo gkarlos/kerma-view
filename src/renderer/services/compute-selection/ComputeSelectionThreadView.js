@@ -108,6 +108,7 @@ class ComputeSelectionThreadView extends Component {
     if ( !this.isDisposed()) {
       //TODO
     }
+    return this;
   }
 
   /**
@@ -115,7 +116,11 @@ class ComputeSelectionThreadView extends Component {
    * @returns {ComputeSelectionThreadView} this
    */
   dispose() { 
-    //TODO
+    if ( !this.isDisposed()) {
+      this.#node.detach()
+      this.#emitter.removeAllListeners()
+    } 
+    return this;
   }
 
   clearSelection() {

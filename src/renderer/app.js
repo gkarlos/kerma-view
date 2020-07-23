@@ -124,6 +124,7 @@ App.main = function() {
   const CodenavService            = require("./services/codenav/CodenavService")
 
   const Events = App.Events
+  const TAG = "[app]"
 
   /// Initialize servises that don't require the UI
   function initPreUiServices() {
@@ -154,38 +155,39 @@ App.main = function() {
   function start() {
     // Register some default callbacks for the kernel selection
     App.Services.KernelSelection.defaultOnSelect (
-      kernel => App.Logger.debug("User selected kernel:", kernel.toString(true)), //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
+      kernel => App.Logger.debug(TAG, "User selected kernel:", kernel.toString(true)), //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
     )
 
     App.Services.LaunchSelection.defaultOnSelect(
-      launch => App.Logger.debug("User selected launch:", launch.toString(true))
+      launch => App.Logger.debug(TAG, "User selected launch:", launch.toString(true))
     )
 
     App.Services.ComputeSelection
       .defaultOnUnitSelect(
-        (unit, mode) => App.Logger.debug("User selected", mode.equals(ComputeSelectionService.Mode.Warp)? "warp:" : "thread:", unit.toString(true))
+        (unit, mode) => App.Logger.debug(TAG, "User selected", mode.equals(ComputeSelectionService.Mode.Warp)? "warp:" : "thread:", unit.toString(true))
       )
       .defaultOnModeChange(
-        (oldMode, newMode) => App.Logger.debug("User changed comp. select mode:", oldMode.toString(), "->", newMode.toString())
+        (oldMode, newMode) => App.Logger.debug(TAG, "User changed comp. select mode:", oldMode.toString(), "->", newMode.toString())
       )
       .defaultOnBlockChange(
-        (oldBlock, newBlock) => App.Logger.debug("User selected block:", newBlock.getIndex().toString())
+        (oldBlock, newBlock) => App.Logger.debug(TAG, "User selected block:", newBlock.getIndex().toString())
       )
 
     App.Services.KernelSelection.createEmpty(true)
     App.Services.LaunchSelection.createEmpty(true)
 
     App.on( Events.INPUT_FILE_SELECTED, (filename) => {
-      App.Logger.debug("User selected file:", filename)
+      App.Logger.debug(TAG, "User selected file:", filename)
       App.Services.KernelSelection.activate(App.Services.KernelSelection.createMock().enable())
     })
 
     App.on( Events.INPUT_KERNEL_SELECTED, (kernel) => {
       App.Services.LaunchSelection.activate(App.Services.LaunchSelection.createForKernel(kernel).enable())
+      App.Services.ComputeSelection.deactivateCurrent()
     })
 
     App.on( Events.INPUT_KERNEL_LAUNCH_SELECTED, (launch) => {
-      App.Services.ComputeSelection.activate(App.Services.ComputeSelection.createForLaunch(launch), true)
+      App.Services.ComputeSelection.activate(App.Services.ComputeSelection.getForLaunch(launch), true)
     })
   }
 

@@ -72,6 +72,9 @@ class LaunchSelectionService extends Service {
    */
   getCurrent() { return this.#current }
 
+  /**
+   * @param {LaunchSelection} launchSelection 
+   */
   activate(launchSelection) {
     if ( launchSelection && this.#current !== launchSelection) {
       if ( !this.#selections.find(sel => sel === launchSelection))

@@ -52,6 +52,13 @@ class ComputeSelectionModeView extends Component {
    */
   isEnabled() { return this.#enabled }
 
+
+  /**
+   * Check if the view is disabled. i.e the user cannot interact with it
+   * @returns {Boolean}
+   */
+  isDisabled() { return !this.#enabled }
+
   /**
    * Check if the view is disposed
    * @returns {Boolean}
@@ -75,7 +82,7 @@ class ComputeSelectionModeView extends Component {
    * @returns {ComputeSelectionModeView} this
    */
   deactivate() {
-    if ( this.isRendered() && this.isActive()) {
+    if ( this.isActive()) {
       this.#node = this.#node.detach()
       this.#active = false
     }
@@ -87,8 +94,9 @@ class ComputeSelectionModeView extends Component {
    * @returns {ComputeSelectionModeView} this
    */
   enable() { 
-    if ( !this.isDisposed())
+    if ( !this.isEnabled() && this.isRendered() && !this.isDisposed())
       this.#viewImpl.enable()
+    this.#enabled = true
     return this
   }
 
@@ -97,8 +105,9 @@ class ComputeSelectionModeView extends Component {
    * @returns {ComputeSelectionModeView} this
    */
   disable() { 
-    if ( !this.isDisposed())
+    if ( this.isEnabled() && this.isRendered() && !this.isDisposed())
       this.#viewImpl.disable()
+    this.#enabled = false
     return this
   }
 

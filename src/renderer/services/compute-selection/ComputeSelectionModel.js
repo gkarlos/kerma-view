@@ -5,6 +5,7 @@ const CudaIndex = require('@renderer/models/cuda').Index
 const CudaBlock = require('@renderer/models/cuda').Block
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
+/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeSelectionMode */
 
 /**
@@ -13,6 +14,8 @@ const CudaBlock = require('@renderer/models/cuda').Block
  */
 class ComputeSelectionModel {
 
+  /** @type {CudaLaunch} */
+  #launch
   /** @type {CudaGrid} */
   #gridDescription
   /** @type {ComputeSelectionMode} */
@@ -24,13 +27,12 @@ class ComputeSelectionModel {
 
   /**
    * Create a new ComputeSelectionModel
-   * @param {CudaGrid} grid A Cuda grid description
+   * @param {CudaLaunch} launch A Cuda kernel launch
    * @param {ComputeSelectionMode} [mode] Optionally set the mode upon creation. {@link module:compute-selection.ComputeSelectionMode.Thread} by default
    */
-  constructor(grid, mode=Mode.Default) {
-    // if ( !grid) throw new Error('Required argument `grid` is missing')
-    // if ( !block) throw new Error('Required argument `block` is missing')
-    this.#gridDescription  = grid
+  constructor(launch, mode=Mode.Default) {
+    this.#launch = launch
+    this.#gridDescription  = launch.grid
     this.#mode = mode
     
     this.selectBlockByIdx(new CudaIndex(ComputeSelectionModel.Defaults.block.x, ComputeSelectionModel.Defaults.block.y))
@@ -41,7 +43,7 @@ class ComputeSelectionModel {
   /**
    * The grid description this selection is relevant for
    * @readonly
-   * @returns {CudaGrid}
+   * @type {CudaGrid}
    */
   get grid() { return this.#gridDescription }
 
@@ -58,6 +60,13 @@ class ComputeSelectionModel {
    * @type {ComputeSelectionMode}
    */
   get mode() { return this.#mode }
+
+  /**
+   * The relevant Cuda kernel launch
+   * @readonly
+   * @type {CudaLaunch}
+   */
+  get launch() { return this.#launch }
 
   /**
    * Get the grid description this selection is relevant for
@@ -77,13 +86,22 @@ class ComputeSelectionModel {
    */
   getMode() { return this.#mode }
 
+  /**
+   * Get the relevant Cuda kernel launch
+   * @returns {CudaLaunch}
+   */
+  getLaunch() { return this.#launch }
+
   /** 
    * @return {CudaBlock} 
    */
   getBlockSelection() { return this.#blockSelection }
 
+  /**
+   * @return {CudaWarp|CudaThread}
+   */
   getUnitSelection() {
-    //TODO
+    return this.#unitSelection
   }
 
   /**
@@ -224,18 +242,6 @@ class ComputeSelectionModel {
       this.#mode = Mode.Thread
   }
 
-  // /**
-  //  * Select a compute unit from the block (wapr/thread)
-  //  * @param {CudaIndex} index 
-  //  * @param {ComputeUnitSelectionMode} [mode] Choose the Selection mode. If present the current mode is overriden
-  //  * @returns {ComputeSelectionModel} this
-  //  */
-  // selectUnit(index, mode=null) {
-  //   if ( mode != null && (mode instanceof ComputeUnitSelectionMode))
-  //     this.#mode = mode
-  //   return this.inWarpMode()? this.selectWap(index) : this.selectThread(index)
-  // }
-
   /**
    * Retrieve the selected block
    * @returns {CudaIndex}
@@ -288,24 +294,42 @@ class ComputeSelectionModel {
    * @returns {Boolean}
    */
   equals(other) {
-    return ( other instanceof ComputeSelectionModel)
-      && this.grid.equals(other.grid)
-      && this.mode === other.mode
-      && ( this.inThreadMode() 
-            ? this.hasThreadSelected() && this.getThreadSelection().equals(other.getThreadSelection())
-            : this.hasWarpSelected() && this.getWarpSelection().equals(other.getWarpSelection()))
+    if ( other instanceof ComputeSelectionModel) {
+      if ( !this.#launch.equals(other.launch) || !this.mode.equals(other.mode))
+        return false
+
+      if ( this.inThreadMode()) {
+        if ( this.hasThreadSelected() && !other.hasThreadSelected() || !this.hasThreadSelected() && other.hasThreadSelected())
+          return false        
+        if ( this.hasThreadSelected())
+          return this.getThreadSelection().equals(other.getThreadSelection())
+      } else {
+        if ( this.hasWarpSelected() && !other.hasWarpSelected() || !this.hasWarpSelected() && other.hasWarpSelected())
+          return false
+        if ( this.hasThreadSelected())
+          return this.getWarpSelection().equals(other.getWarpSelection())
+      }
+
+      return true
+    }
+
+    return false
+      // && 
+      // && 
+      // && ( this.inThreadMode() 
+      //       ? this.hasThreadSelected() && this.getThreadSelection().equals(other.getThreadSelection())
+      //       : this.hasWarpSelected() && this.getWarpSelection().equals(other.getWarpSelection()))
   }
 
   /**
-   * Compare with another selection if both are selection for the same launch parameters (grid/block)
+   * Compare with another selection if both are selection for the same grid
    * Basically the same as `equals()` except that current selection and mode are not checked
    * @param {ComputeSelectionModel} other
    * @returns {Boolean} 
    */
   eql(other) {
     return ( other instanceof ComputeSelectionModel)
-      && this.grid.equals(other.grid)
-      && this.mode === other.mode
+      && this.#launch.equals(other.launch)
   }
 }
 

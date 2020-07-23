@@ -117,7 +117,6 @@ class KernelSelectionService extends Service {
    * @returns {KernelSelectionService} this
    */
   activate(kernelSelection) {
-    console.log(kernelSelection)
     if ( kernelSelection && this.#current !== kernelSelection) {
       if ( !this.#selections.find(sel => sel === kernelSelection))
         this.#selections.push(kernelSelection)
