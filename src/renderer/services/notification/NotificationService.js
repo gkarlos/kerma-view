@@ -45,7 +45,6 @@ class NotificationService extends Service {
    */
   _doNotify(type, message, opts) {
     let model, view
-    console.log(type, opts)
 
     if( opts.progress) {
       model = new ProgressNotificationModel({ type: type, message: message, title: opts.title,  details: opts.details, total: opts.total, sticky: opts.sticky})
