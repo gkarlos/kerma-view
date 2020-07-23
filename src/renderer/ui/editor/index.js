@@ -4,8 +4,9 @@
  * @subcategory Ui
  */
 module.exports = {
+  EditorTab : require('./EditorTab'),
   EditorTabs : require('./EditorTabs'),
   EditorToolbar : require('./EditorToolbar'),
-  Editor : require('./Editor').Editor,
+  Editor : require('./Editor'),
   defaultCreate: require('./Editor').defaultCreate
 }

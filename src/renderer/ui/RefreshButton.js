@@ -4,7 +4,7 @@ const App = require('@renderer/app')
 
 /**
  * @category Renderer
- * @subcategory Ui
+ * @subcategory ui
  */
 class RefreshButton extends Component {
   constructor(id, container) {

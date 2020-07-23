@@ -198,11 +198,6 @@ body {
     height: auto !important;
 }
 
-#start-stop-container {
-    /* width: 49%; */
-    /* margin-right: auto; */
-}
-
 #memory-area .card-header {
     padding: 10px;
 }

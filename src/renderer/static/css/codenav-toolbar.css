@@ -4,3 +4,13 @@
     width: 50%;
     float: right;
 }
+
+#codenav-toolbar-button-group {
+    float: right;
+    margin-top: 1px;
+    /* margin-right: 5px; */
+}
+
+#codenav-toolbar .btn {
+    margin-left: 5px;
+}

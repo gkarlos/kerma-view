@@ -42,6 +42,7 @@
   "_moduleAliases": {
     "@root": ".",
     "@lib": "lib",
+    "@assets": "assets",
     "@src": "src",
     "@test": "test",
     "@renderer": "src/renderer",
@@ -51,6 +52,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
+    "@types/simple-icons": "^2.5.0",
     "animate.css": "^4.1.0",
     "app-module-path": "^2.2.0",
     "beezy-jsdocstrap": "^1.0.0",
@@ -86,6 +88,7 @@
     "rimraf": "^3.0.2",
     "run-script-os": "^1.1.1",
     "selectize": "^0.12.6",
+    "simple-icons": "^3.2.0",
     "simplebar": "^5.2.1",
     "sloc": "^0.2.1",
     "split.js": "^1.5.11",

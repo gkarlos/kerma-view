@@ -7,7 +7,6 @@ class CodenavToolbar  {
   #view
 
   constructor() {
-    console.log("yes")
     this.#view = new CodenavToolbarView().render()
   }
 

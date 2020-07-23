@@ -39,3 +39,88 @@
     background-color: rgba(197, 197, 197, 0.2);
     border-radius: 3px;
 }
+
+
+/*
+ * EDITOR-TOOLBAR
+ */
+
+#editor-toolbar {
+    display: flex;
+    background-color: unset;
+    border-bottom: none;
+}
+
+#editor-tabs .nav-item {
+    margin-bottom: -2px;
+}
+
+#editor-tabs .nav-link {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#editor-tabs-add {
+    border-bottom: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    /* padding: 3px;
+    padding-top: 6px; */
+}
+
+#editor-tabs-add .btn {
+    border-radius: 2px;
+    opacity: 0.5;
+    font-size: 10px;
+    border: 1px solid rgba(0,0,0,0.2);
+    margin: auto;
+    margin-left: 6px;
+    margin-right: 6px;
+    padding: 1px;
+    width: 24px;
+    height: 24px;
+}
+
+#editor-tabs-add .dropdown-toggle::after{
+    content: unset;
+}
+
+#editor-tabs-add .dropdown-item {
+    display: flex;
+    flex-flow: row;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#editor-tabs-add .dropdown-item .title {
+    margin-left: 5px;
+}
+
+#editor-tabs-add #llvm-option {
+    overflow: hidden;
+}
+
+#editor-tabs-add #llvm-option > img {
+    position: relative;
+}
+
+/*
+ * TABS
+ */
+#editor-tabs .nav-item {
+    border-right: 1px solid #dee2e6;
+}
+
+.editor-tab {
+    display: flex;
+    flex-direction: row;
+}
+
+.editor-tab-close {
+    margin-left: 4px;
+    color: rgba(0,0,0,0.2)
+}
+
+.editor-tab-close:hover {
+    color: grey;
+}

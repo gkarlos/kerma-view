@@ -1,31 +1,52 @@
 
 const Component      = require('@renderer/ui/component/Component')
-const EditorTabs     = require('@renderer/ui/editor/EditorTabs')
-const CodeNavToolbar = require('@renderer/ui/toolbars/CodeNavToolbar')
 const Events         = require('@renderer/events')
 const App            = require('@renderer/app')
+const EditorTabs     = require('@renderer/ui/editor/EditorTabs')
+const EditorTabsAdd  = require('@renderer/ui/editor/EditorTabsAdd')
 
 /**
  * @memberof module:editor
  */
 class EditorToolbar extends Component {
+  /** @type {EditorTabs} */
+  #tabs
+  /** @type {EditorTabsAdd} */
+  #add
+  /** @type {Boolean} */
+  #rendered
+  /** @type {JQuery} */
+  #node
+
   constructor(id, container) {
     super(id, container)
-    this.node = null
-    this.tabs = new EditorTabs('editor-tabs', `#${this.id}`, App, true)
+    this.#node = null
+    this.#rendered = false
+    this.#tabs = new EditorTabs('editor-tabs', `#${this.id}`, App, true)
+    this.#add  = new EditorTabsAdd(`#${this.id}`)
     // this.codenav = new CodeNavToolbar('codenav-toolbar', `#${this.id}`, App, true)
   }
 
+  /** @type {EditorTabs} */
+  get tabs() { return this.#tabs }
+
+  /** @type {EditorToolbarAdd} */
+  get add() { return this.#add }
+
+  /** @returns {Boolean} */
+  isRendered() {
+    return this.#rendered
+  }
+
   render() {
-    if ( ! this.rendered ) {
-      this.node = $(`<div id=${this.id} class="nav"></div>`).appendTo(this.container)
-                    .css('display', 'flex')
-                    // .css('position', 'absolute')
-                    // .css('right', '0px')
+    if ( ! this.isRendered() ) {
+      this.node = $(`<div id=${this.id} class="nav-tabs"></div>`).appendTo(this.container)
 
+      this.add.render()
       this.tabs.render()
-      // this.codenav.render()
 
+      //TODO populate tabs
+      
       this.rendered = true
       App.emit(Events.UI_COMPONENT_READY, this)
     } 

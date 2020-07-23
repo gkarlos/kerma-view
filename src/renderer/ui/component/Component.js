@@ -64,7 +64,7 @@ class Component {
    * @returns {Boolean}
    */
   isRendered() {
-    throw new Error(`isRendererd() function for Component '${this.id}' is not implemented`)
+    throw new Error(`isRendered() function for Component '${this.id}' is not implemented`)
   }
 
   /** @type {String} */
