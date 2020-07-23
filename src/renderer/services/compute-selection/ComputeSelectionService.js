@@ -1,6 +1,7 @@
 const Service           = require('@renderer/services').Service
 const ComputeSelection  = require('@renderer/services/compute-selection/ComputeSelection')
 const App     = require('@renderer/app')
+const ComputeSelectionMode = require('./ComputeSelectionMode')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
 /** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")}   CudaGrid   */
@@ -34,6 +35,9 @@ class ComputeSelectionService extends Service {
   /** @type {ComputeSelectionOnModeChangeCallback[]} */
   #defaultOnModeChangeCallbacks
 
+  /**
+   * Create a new ComputeSelectionService instance
+   */
   constructor() {
     super('ComputeSelectionService')
     this.#selections = []
@@ -43,11 +47,19 @@ class ComputeSelectionService extends Service {
     this.#defaultOnModeChangeCallbacks  = []
   }
 
+  /**
+   * Enable the service
+   * @returns {ComputeSelectionService} this
+   */
   enable() {
     super.enable()
     return this
   }
 
+  /**
+   * Disable the service
+   * @returns {ComputeSelectionService} this
+   */
   disable() {
     super.disable()
     return this
@@ -166,7 +178,7 @@ class ComputeSelectionService extends Service {
   }
 
   /**
-   * Make a ComputeUnitSelection the current active one.
+   * Make a ComputeSelection the currently active one.
    * The selection will be activated only if it is currently part of the service (i.e was not disposed)
    * @param {ComputeSelection} selection
    * @param {Boolean} [enable=true] Immediately enable the service
@@ -214,6 +226,10 @@ class ComputeSelectionService extends Service {
     return this
   }
 
+  /**
+   * Retrieve the currently active selection
+   * @returns {ComputeSelection|undefined}
+   */
   getCurrent() {
     return this.#current
   }
@@ -253,6 +269,9 @@ class ComputeSelectionService extends Service {
   }
 }
 
+/**
+ * @type {ComputeSelectionMode}
+ */
 ComputeSelectionService.Mode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 
 module.exports = ComputeSelectionService
