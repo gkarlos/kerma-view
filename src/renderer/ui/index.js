@@ -177,7 +177,8 @@ function createComponents(app) {
   Ui.toolbar.util    = registerComponent(new UtilityToolbar('utility-toolbar', `#${Ui.layout.header.right.id}`, app))
   Ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${Ui.layout.header.right.id}`, app))
   /*====================================================================================*/
-  Ui.toolbar.editor  = registerComponent(new EditorToolbar('editor-toolbar', `#${Ui.layout.body.left.top.id}`, app))
+  // Ui.toolbar.editor  = registerComponent(new EditorToolbar('editor-toolbar', `#${Ui.layout.body.left.top.id}`, app))
+  Ui.toolbar.editor = new EditorToolbar('editor-toolbar', `#${Ui.layout.body.left.top.id}`)
   // Ui.toolbar.codenav = Ui.toolbar.editor.codenav
   Ui.editor          = registerComponent(new Editor('editor', `#${Ui.layout.body.left.top.id}`, app))
   /*====================================================================================*/

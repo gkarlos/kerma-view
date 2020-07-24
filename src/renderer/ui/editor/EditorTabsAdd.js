@@ -1,4 +1,6 @@
 const Component = require('@renderer/ui/component/Component')
+const App = require('@renderer/app')
+const EditorTabs = require('@renderer/ui/editor/EditorTabs')
 
 /**
  * @memberof module:editor
@@ -46,6 +48,9 @@ class EditorTabsAdd extends Component {
         <span class="title">llvm-ir</span>
       </a>
     `).appendTo(this.addDropdownMenu)
+      .on('click', () => {
+        App.ui.toolbar.editor.tabs.open(EditorTabs.TabLLVM)
+      })
     
     this.itemPtx = $(`
       <a class="dropdown-item" href="#">
@@ -53,7 +58,9 @@ class EditorTabsAdd extends Component {
         <span class="title">ptx</span>
       </a>
     `).appendTo(this.addDropdownMenu)
-  
+      .on('click', () => {
+        App.ui.toolbar.editor.tabs.open(EditorTabs.TabPtx)
+      })
 
     this.itemCompileCommands = $(`
       <a class="dropdown-item" href="#">
@@ -61,7 +68,9 @@ class EditorTabsAdd extends Component {
         <span class="title">compile-commands</span>
       </a>
     `).appendTo(this.addDropdownMenu)
-  
+      .on('click', () => {
+        App.ui.toolbar.editor.tabs.open(EditorTabs.TabCompileCommands)
+      })
 
     this.itemOutput = $(`
       <a class="dropdown-item" href="#">
@@ -69,6 +78,9 @@ class EditorTabsAdd extends Component {
         <span class="title">output<span>
       </a>
     `).appendTo(this.addDropdownMenu)
+      .on('click', () => {
+        App.ui.toolbar.editor.tabs.open(EditorTabs.TabCompileCommands)
+      })
 
     $(`<div class="dropdown-divider"></div>`).appendTo(this.addDropdownMenu)
     
@@ -78,6 +90,10 @@ class EditorTabsAdd extends Component {
         <span>Open all<span>
       </a>
     `).appendTo(this.addDropdownMenu)
+      .on('click', () => {
+        App.Logger.debug("[user-action]", "Open all tabs")
+        App.ui.toolbar.editor.openAllTabs()
+      })
 
     $(`<div class="dropdown-divider"></div>`).appendTo(this.addDropdownMenu)
     
@@ -87,6 +103,10 @@ class EditorTabsAdd extends Component {
         <span>Close all<span>
       </a>
     `).appendTo(this.addDropdownMenu)
+      .on('click', () => {
+        App.Logger.debug("[user-action]", "Open all tabs")
+        App.ui.toolbar.editor.closeAllTabs()
+      })
 
     this.#rendered = true
 

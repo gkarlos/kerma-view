@@ -74,10 +74,10 @@ class Editor extends Component {
     // register myself to the ui
     // this.app.ui.registerComponent(this)
     
-    this.tabs.addNew("Cuda")
-             .addNew("LLVM-IR")
-             .addNew("PTX")
-             .select("Cuda")
+    // this.tabs.addNew("Cuda")
+    //          .addNew("LLVM-IR")
+    //          .addNew("PTX")
+    //          .select("Cuda")
 
     // Asynchronously load the editor and emit a completion("editor-loaded") event
     this.AMDRequire(['vs/editor/editor.main'], (monaco) => {
@@ -91,7 +91,7 @@ class Editor extends Component {
       });
 
       App.emit(Events.EDITOR_LOADED, monaco)
-      this.tabs.select('Cuda')
+      // this.tabs.select('Cuda')
     });
 
     let on = (event, cb) => App.on(event, cb)

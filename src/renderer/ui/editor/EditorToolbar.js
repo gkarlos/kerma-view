@@ -2,6 +2,7 @@
 const Component      = require('@renderer/ui/component/Component')
 const Events         = require('@renderer/events')
 const App            = require('@renderer/app')
+const EditorTab      = require('@renderer/ui/editor/EditorTab')
 const EditorTabs     = require('@renderer/ui/editor/EditorTabs')
 const EditorTabsAdd  = require('@renderer/ui/editor/EditorTabsAdd')
 
@@ -9,21 +10,27 @@ const EditorTabsAdd  = require('@renderer/ui/editor/EditorTabsAdd')
  * @memberof module:editor
  */
 class EditorToolbar extends Component {
-  /** @type {EditorTabs} */
-  #tabs
-  /** @type {EditorTabsAdd} */
-  #add
-  /** @type {Boolean} */
-  #rendered
-  /** @type {JQuery} */
-  #node
+  /** @type {EditorTabs}    */ #tabs
+  /** @type {EditorTabsAdd} */ #add
+  /** @type {Boolean}       */ #rendered
+  /** @type {JQuery}        */ #node
+  /** @type {EditorTab}     */ #tabCuda
+  /** @type {EditorTab}     */ #tabLLVM
+  /** @type {EditorTab}     */ #tabPtx
+  /** @type {EditorTab}     */ #tabCompileCommands
+  /** @type {EditorTab}     */ #tabOutput
 
+  /**
+   * @param {String} id 
+   * @param {String} container 
+   */
   constructor(id, container) {
     super(id, container)
     this.#node = null
     this.#rendered = false
-    this.#tabs = new EditorTabs('editor-tabs', `#${this.id}`, App, true)
+    this.#tabs = new EditorTabs(`#${this.id}`, App, true)
     this.#add  = new EditorTabsAdd(`#${this.id}`)
+    App.ui.registerComponent(this)
     // this.codenav = new CodeNavToolbar('codenav-toolbar', `#${this.id}`, App, true)
   }
 
@@ -38,23 +45,52 @@ class EditorToolbar extends Component {
     return this.#rendered
   }
 
+  /** @returns {EditorToolbar} */
+  openAllTabs() {
+    if ( !EditorTabs.TabLLVM.isOpen())
+      App.ui.toolbar.editor.tabs.open(EditorTabs.TabLLVM)
+    if ( !EditorTabs.TabPtx.isOpen())
+      App.ui.toolbar.editor.tabs.open(EditorTabs.TabPtx)
+    if ( !EditorTabs.TabCompileCommands.isOpen())
+      App.ui.toolbar.editor.tabs.open(EditorTabs.TabCompileCommands)
+    if ( !EditorTabs.TabOutput.isOpen())
+      App.ui.toolbar.editor.tabs.open(EditorTabs.TabOutput)
+    return this
+  }
+
+  /** @returns {EditorToolbar} */
+  closeAllTabs() {
+    if ( EditorTabs.TabLLVM.isOpen())
+      App.ui.toolbar.editor.tabs.close(EditorTabs.TabLLVM)
+    if ( EditorTabs.TabPtx.isOpen())
+      App.ui.toolbar.editor.tabs.close(EditorTabs.TabPtx)
+    if ( EditorTabs.TabCompileCommands.isOpen())
+      App.ui.toolbar.editor.tabs.close(EditorTabs.TabCompileCommands)
+    if ( EditorTabs.TabOutput.isOpen())
+      App.ui.toolbar.editor.tabs.close(EditorTabs.TabOutput)
+    return this
+  }
+
   render() {
     if ( ! this.isRendered() ) {
       this.node = $(`<div id=${this.id} class="nav-tabs"></div>`).appendTo(this.container)
 
       this.add.render()
+
       this.tabs.render()
 
-      //TODO populate tabs
+      // open only the cuda source tab
+      this.#tabs.open(EditorTabs.TabSource, true)
       
       this.rendered = true
+
       App.emit(Events.UI_COMPONENT_READY, this)
     } 
     return this;
   }
 
   useDefaultControls() {
-    this.tabs.useDefaultControls()
+    // this.tabs.useDefaultControls()
     // this.codenav.useDefaultControls()
   }
 }
