@@ -1,16 +1,37 @@
 #codenav-toolbar {
-    position: absolute;
-    right: 2px;
-    /* width: 50%; */
+    position: relative;
+    /* right: 2px; */
     float: right;
+}
+
+#codenav-toolbar-separator {
+    width: 0px; 
+    margin-left: 3px; 
+    margin-right: 3px; 
+    margin-top: 2px;
+    margin-bottom: 6px;
+}
+
+#codenav-toolbar button {
+    margin-left: 2px;
 }
 
 #codenav-toolbar-button-group {
     float: right;
     margin-top: 1px;
-    /* margin-right: 5px; */
 }
+*/
 
 #codenav-toolbar .btn {
     margin-left: 5px;
+}
+
+
+#codenav-btn-stop,
+#codenav-btn-prev-stmt,
+#codenav-btn-next-stmt, 
+#codenav-btn-prev-rdwr,
+#codenav-btn-next-rdwr {
+    width: 28px;
+    height: 24px;
 }

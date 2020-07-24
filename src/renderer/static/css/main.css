@@ -46,23 +46,6 @@ body {
 
 /* Specific ids    */
 
-#top-toolbar {
-    height: 35px;
-    margin-left: 0px;
-    padding: 0px !important;
-    box-shadow: 0 0px 3px 1px;
-}
-
-#top-toolbar-left, #top-toolbar-right {
-    width: 50%;
-    padding-top: 2px;
-    height: 100%;
-}
-
-#top-toolbar-left {
-    padding-left: 5px;
-}
-
 
 
 .center-vertically {

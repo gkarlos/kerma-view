@@ -10,7 +10,7 @@ class RefreshButton extends Component {
   constructor(id, container) {
     super(id, container)
     /** */
-    this.classList = ["btn", "btn-sm", "btn-secondary"]
+    // this.classList = ["btn", "btn-sm", "btn-secondary"]
     /** */
     this.tooltip = "Reload"
     this.name = `RefreshButton[${this.id}]`
@@ -44,14 +44,20 @@ class RefreshButton extends Component {
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
     
     this.node = $(`
-      <button class="${this.classList.join(" ")}" id=${this.id} data-toggle="tooltip" data-placement="bottom" title="${this.tooltip}">
-      </button>
+      <div role="group">
+        <button class="btn kv-btn" id=${this.id} data-toggle="tooltip" data-placement="bottom" title="${this.tooltip}">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+      </div>
     `)
-    this.node.append($(this.value.current))
+
     this.node.css('margin-right', '2px')
+             .css('margin-bottom', '2px')
 
     
-    this.node.tooltip()
+    this.node.tooltip({
+      trigger : "hover"
+    })
     this.node.appendTo(this.container)
 
     App.emit(Events.UI_COMPONENT_READY, this)

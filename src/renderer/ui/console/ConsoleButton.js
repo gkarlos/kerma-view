@@ -12,7 +12,7 @@ class ConsoleButton extends Component {
     // this.app = app
     this.name = `ConsoleButton[${this.id}]`
     this.tooltip = "Open the terminal"
-    this.classList = ["btn", "btn-sm", "btn-secondary"]
+    // this.classList = ["btn", "btn-sm", "btn-secondary"]
     // this.container = container
     // this.rendered = false
   }
@@ -22,10 +22,12 @@ class ConsoleButton extends Component {
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
     
     this.node = $(`
-      <button class="${this.classList.join(" ")}" id=${this.id}
-                    data-toggle="tooltip" data-placement="bottom" title="${this.tooltip}">
-        <i class="fas fa-terminal"></i> Console
-      </button>
+      <div role="group">
+        <button type="button" class="btn kv-btn" id=${this.id}
+                      data-toggle="tooltip" data-placement="bottom" title="${this.tooltip}">
+          <i class="fas fa-terminal"></i>
+        </button>
+      </div>
     `).css("margin-right", "2px")
     
     this.node.tooltip()

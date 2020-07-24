@@ -34,7 +34,6 @@ class EditorTab {
     this.#title    = title !== undefined? title : name
     this.#rendered = false
     this.#closable = true
-    this.#emitter  = new EventEmitter()
   }
 
   /** @type {String} */

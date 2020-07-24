@@ -132,20 +132,20 @@ class ElectronLayout extends BaseLayout {
     
     /// Header
     let header = document.createElement('div')
-    header.id = "top-toolbar"
+    header.id = "header"
     header.classList.add('row', 'navbar')
     header.setAttribute("layout-element", "header")
     this.header.node = header
     this.header.id = header.id
 
     let headerLeft = document.createElement('div')
-    headerLeft.id = "top-toolbar-left"
+    headerLeft.id = "header-left"
     headerLeft.setAttribute("layout-element", "header.left")
     this.header.left.node = headerLeft
     this.header.left.id = headerLeft.id
     
     let headerRight = document.createElement('div')
-    headerRight.id = "top-toolbar-right"
+    headerRight.id = "header-right"
     headerRight.setAttribute("layout-element", "header.right")
     this.header.right.node = headerRight
     this.header.right.id = headerRight.id
