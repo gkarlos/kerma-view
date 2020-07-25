@@ -16,7 +16,7 @@ class SessionRestartButton extends Component {
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
     
     this.node = $(`
-      <button class="btn btn-sm btn-secondary" id="${this.id}" data-toggle="tooltip" data-placement="bottom" title="Start a new session">
+      <button class="btn kv-btn" id="${this.id}" data-toggle="tooltip" data-placement="bottom" title="Start a new session">
         <i class="fas fa-trash-restore"></i>
       </button>
     `)

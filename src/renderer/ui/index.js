@@ -173,9 +173,9 @@ function createComponents(app) {
   /*====================================================================================*/
   // ui.toolbar.main    = registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))
 
-  Ui.toolbar.input   = registerComponent(new InputToolbar("file-select-group", `#${Ui.layout.header.right.id}`, app))
+  Ui.toolbar.input   = new InputToolbar()
   Ui.toolbar.util    = registerComponent(new UtilityToolbar('utility-toolbar', `#${Ui.layout.header.right.id}`, app))
-  Ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${Ui.layout.header.right.id}`, app))
+  // Ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${Ui.layout.header.right.id}`, app))
   /*====================================================================================*/
   // Ui.toolbar.editor  = registerComponent(new EditorToolbar('editor-toolbar', `#${Ui.layout.body.left.top.id}`, app))
   Ui.toolbar.editor = new EditorToolbar('editor-toolbar', `#${Ui.layout.body.left.top.id}`)
