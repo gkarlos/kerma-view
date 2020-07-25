@@ -43,6 +43,8 @@ class Component {
   }
 
   /**
+   * Materialize the component
+   * 
    * Each components must implement this method
    * 
    * Base implementation just throws
@@ -51,6 +53,19 @@ class Component {
    */
   render() {
     throw new Error(`render() function for component '${this.name}' is not implemented`)
+  }
+
+  /**
+   * Insert the component to the dom
+   * 
+   * Each component must implement this method
+   * 
+   * Base implementation just throws
+   * 
+   * @abstract
+   */
+  install() {
+    throw new Error(`install() function for component '${this.name}' is not implemented`)
   }
   
   /**
