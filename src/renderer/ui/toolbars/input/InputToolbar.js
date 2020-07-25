@@ -184,6 +184,7 @@ class InputToolbar extends Component {
     App.ui.registerComponent(this)
   }
 
+  /** */
   disable() {
     this.enabled = false
     this.disableBrowseButton()
@@ -192,6 +193,7 @@ class InputToolbar extends Component {
     this.disableOkButton()
   }
 
+  /** */
   enable() {
     this.enabled = true
     // this.mode.enable()
@@ -199,63 +201,76 @@ class InputToolbar extends Component {
     this.enableBrowseInput()
   }
 
+  /** */
   disableBrowseButton() {
     $(`#${this.browseButtonId}`).prop('disabled', true)
   }
 
+  /** */
   enableBrowseButton() {
     // $(`#${this.browseButtonId}`).removeClass('btn-outline-secondary').addClass('btn-secondary').prop('disabled', false)
     $(`#${this.browseButtonId}`).prop('disabled', false)
   }
 
+  /** */
   disableBrowseInput() {
     $(`#${this.browseInputId}`).prop('disabled', true)
   }
 
+  /** */
   enableBrowseInput() {
     $(`#${this.browseInputId}`).prop('disabled', false)
   }
 
+  /** */
   disableOkButton() {
     // $(`#${this.id}-ok-button`).removeClass('btn-info').addClass('btn-secondary')
     $(`#${this.okButtonId}`).prop('disabled', true).css("cursor", "not-allowed")
   }
 
+  /** */
   enableOkButton() {
     // $(`#${this.id}-ok-button`).removeClass('btn-secondary').addClass('btn-info')
     $(`#${this.okButtonId}`).prop('disabled', false).css("cursor", "pointer")
   }
 
+  /** */
   get browseInput() {
     return !this.rendered? null: document.getElementById(this.browseInputId)
   }
 
+  /** */
   get browseButton() {
     return !this.rendered? null : document.getElementById(this.browseButtonId)
   }
 
+  /** */
   get okButton() {
     return !this.rendered? null : document.getElementById(this.okButtonId)
   }
 
+  /** */
   okButtonLoadingStart() {
     this.okButtonLoading = true
     this.okButton.innerHTML = this.okButtonContentLoading
     this.disableOkButton()
   }
 
+  /** */
   okButtonLoadingStop() {
     this.okButton.innerHTML = this.okButtonContent
     // this.enableOkButton()
     this.okButtonLoading = false
   }
 
+  /** */
   selectFile(path) {
     this.selectedFile = path
     this.browseInput.value = this.selectedFile
     this.enableOkButton()
   }
 
+  /** */
   __renderParts() {
     this.node   = $(`<div class="input-group input-group-sm" id="${this.id}"></div>`).appendTo(this.container)
 
@@ -295,10 +310,11 @@ class InputToolbar extends Component {
     this.rendered = true
   }
 
+  /** */
   reset() {
     //TODO implement me
   }
-  
+
   /**
    * @fires Events.UI_COMPONENT_READY
    */
@@ -364,15 +380,5 @@ class InputToolbar extends Component {
     //                .selectOption('Cuda')
   }
 }
-
-// function defaultCreate(app) {
-//   let ifdialog = new InputFileDialog( "file-select-group", "#top-toolbar-right", "Select a *.cu file...", app)
-  
-//   ifdialog.render()
-//   ifdialog.disable() // disable file selection until the editor is ready
-  
-//   return ifdialog
-// }
-
 
 module.exports = InputToolbar
