@@ -6,12 +6,8 @@
  */
 class Component {
   /** @type {String} */
-  #name
-  /** @type {String} */
   #id
-  // /** @type {Boolean} */
-  // #rendered
-  /** @type {Component} */
+  /** @type {String|JQuery} */
   #container
   
   /**
@@ -52,7 +48,7 @@ class Component {
    * @abstract
    */
   render() {
-    throw new Error(`render() function for component '${this.name}' is not implemented`)
+    throw new Error(`render() function for component '${this.id}' is not implemented`)
   }
 
   /**
@@ -65,11 +61,11 @@ class Component {
    * @abstract
    */
   install() {
-    throw new Error(`install() function for component '${this.name}' is not implemented`)
+    throw new Error(`install() function for component '${this.id}' is not implemented`)
   }
   
   /**
-   * Check if the component renderer
+   * Check if the component is renderer
    * 
    * Each components must implement this method
    * 
@@ -80,6 +76,20 @@ class Component {
    */
   isRendered() {
     throw new Error(`isRendered() function for Component '${this.id}' is not implemented`)
+  }
+
+  /**
+   * Check if the component is installed
+   * 
+   * Each components must implement this method
+   * 
+   * Base implementation just throws
+   * 
+   * @abstract
+   * @returns {Boolean}
+   */
+  isInstalled() {
+    throw new Error(`isInstalled() function for Component '${this.id}' is not implemented`)
   }
 
   /** @type {String} */

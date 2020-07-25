@@ -13,11 +13,30 @@ const Memory           = require('@renderer/models/memory').Memory
  * @memberof module:memory-ui
  */
 class MemoryAreaBody extends Component {
+  /**@type {Boolean}*/ #installed
+  /**@type {Boolean}*/ #rendered
+
+  /**
+   * 
+   * @param {String} id 
+   * @param {String|JQuery} container 
+   */
   constructor(id, container) {
     super(id, container)
     this.name = `MemoryAreaBody[${this.id}]`
     this.visualizers = []
-    this.rendered = false;
+    this.#installed = false
+    this.#rendered = false
+  }
+
+  /** @returns {MemoryAreaBody} */
+  install() {
+    if ( !this.isInstalled()) {
+      this.render()
+      $(this.node).appendTo(this.container)
+      this.#installed = true
+    }
+    return this
   }
 
   /**
@@ -29,45 +48,48 @@ class MemoryAreaBody extends Component {
    * removed
    */
   render() {
-    if ( !this.rendered) {
-      this.node = $(`
-      <div class="list-group" id="${this.id}">
-        <ul class="list-group" id="heatmap-example"></ul>
-      </div>`).appendTo(this.container)
-      
+    if ( !this.isRendered()) {
+      this.node = $(`<div class="list-group" id="${this.id}"></div>`)
+      this.memoryList = $(`<ul class="list-group" id="heatmap-example"></ul>`).appendTo(this.node)
       this.node.css("max-width", "100%")
               .css("max-height", "90vh")
               .css("overflow-y", "scroll")
-    } else {
-      // re-render
-      $('.memory-visualizer').remove()
     }
+    
+    // else {
+    //   // re-render
+    //   $('.memory-visualizer').remove()
+    // }
 
-    this.visualizers.forEach(visualizer => visualizer.render())
+    // this.visualizers.forEach(visualizer => visualizer.render())
     this.rendered = true
     return this;
   }
 
   /**
    * @param {Memory} memory A Memory object
-   * @param {boolean} forceRender  If true, if the MemoryAreaBody is rendered, the memory
-   *                               will be immediately rendered
-   *                               If false, the memory will be rendered at the next {@link render()} call
    */
-  addMemory(memory,forceRender=true) {
+  addMemory(memory) {
     
     let viz = new MemoryVisualizer(memory, `mem-viz-${memory.getName()}`, `#${this.id}`)
 
     this.visualizers.push(viz)
 
-    if ( this.rendered && forceRender)
-      viz.render()
-
+    this.memoryList.append(viz.render())
   }
 
   useDefaultControls() {
 
   }
+
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** @returns {Boolean} */
+  isRendered() { return this.#rendered }
+
+  /** @returns {Boolean} */
+  isInstalled() { return this.#installed }
 }
 
 module.exports = MemoryAreaBody

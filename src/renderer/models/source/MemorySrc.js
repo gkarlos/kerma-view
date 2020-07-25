@@ -18,13 +18,13 @@ class MemorySrc extends SrcInfo {
   /**
    * Create a new MemorySrc object
    * @param {Object}      opts
-   * @param {String}      opts.type
-   * @param {String}      opts.name
+   * @param {String}      [opts.type]
+   * @param {String}      [opts.name]
    * @param {String[]}    [opts.qualifiers]
    * @param {String}      [opts.decl]
    * @param {String}      [opts.declcontext]
-   * @param {String}      opts.filename
-   * @param {SrcRange}    opts.range
+   * @param {String}      [opts.filename]
+   * @param {SrcRange}    [opts.range]
    */
   constructor(opts={}) {
     super(opts)
@@ -33,7 +33,6 @@ class MemorySrc extends SrcInfo {
     this.#qualifiers  = opts.qualifiers || []
     this.#decl        = opts.decl
     this.#declContext = opts.declcontext
-
   }
 
   /** @type {String} */

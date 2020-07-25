@@ -61,7 +61,7 @@ class MemoryVisualizer extends Component {
     `).appendTo(this.node)
 
     this.rendered = true;
-    return this;
+    return this.node
     // d3.select(this.container).append('svg')
   }
 

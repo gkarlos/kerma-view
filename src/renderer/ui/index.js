@@ -145,7 +145,7 @@ function createContainers() {
 }
 
 /**
- * Create all the UI components
+ * Create all the static UI components
  */
 function createComponents(app) {
   const ConsoleButton         = require('@renderer/ui/console/ConsoleButton')
@@ -182,7 +182,7 @@ function createComponents(app) {
   // Ui.toolbar.codenav = Ui.toolbar.editor.codenav
   Ui.editor          = registerComponent(new Editor('editor', `#${Ui.layout.body.left.top.id}`, app))
   /*====================================================================================*/
-  Ui.memory          = registerComponent(new MemoryArea("memory-area", "#right", app))
+  Ui.memory          = new MemoryArea().install()
 }
 
 function renderComponents() {

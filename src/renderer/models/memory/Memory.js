@@ -73,6 +73,27 @@ class Memory {
   }
 
   /**
+   * Set the source info for this memory
+   * @param {MemorySrc} src
+   * @returns {Memory} this
+   */
+  setSrc(src) {
+    this.#src = src
+    return this
+  }
+
+  /**
+   * Retrieve the name of this memory
+   * @returns {String}
+   */
+  getName() {
+    if ( this.src)
+      if ( this.src.name.length > 0)
+        return this.src.name
+    return "unnamed-memory"
+  }
+
+  /**
    * Retrieve the number of elements of this memory
    * @returns {Number}
    */
@@ -193,7 +214,7 @@ class Memory {
    */
   toString() {
     let name = this.src? this.src.name : "mem"
-    return name + `${this.#addrSpace.getValue()}` + this.type.toString()
+    return `${name} (${this.#addrSpace.getValue()}) ${this.type.toString()}`
   }
 }
 

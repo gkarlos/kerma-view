@@ -58,9 +58,9 @@ App.Services = {
   /** @type {ComputeSelectionService} */
   ComputeSelection : undefined,
   /** @type {CodenavService} */
-  Codenav: undefined,
+  Codenav : undefined,
   /** @type {MemoryVisService} */
-  MemoryVisService : undefined,
+  Vis : undefined,
   
   /** @type {Boolean} */
   preUiReady : false,
@@ -144,7 +144,7 @@ App.main = function() {
     App.Services.KernelSelection  = new KernelSelectionService().enable()
     App.Services.LaunchSelection  = new LaunchSelectionService().enable()
     App.Services.ComputeSelection = new ComputeSelectionService().enable()
-    App.Services.MemoryVisService = new MemoryVisService().enable()
+    App.Services.Vis              = new MemoryVisService().enable()
     App.Services.CodenavService   = new CodenavService().enable()
     App.Notifier = App.Services.Notification
     // App.ComputeUnitSelector = App.Services.ComputeUnitSelectione

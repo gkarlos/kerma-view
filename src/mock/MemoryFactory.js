@@ -1,11 +1,14 @@
-
 /**
  * @module MemoryFactory
  * @category Mock
  */
 module.exports = function() {
   const Dim            = require('@renderer/models/Dim')
-  const { getRandomInt, getRandomMultiple, uuid} = require('@renderer/util/random')
+  const { 
+    uuid,
+    getRandomInt, 
+    getRandomMultiple 
+  } = require('@renderer/util/random')
   const Memory         = require('@renderer/models/memory/Memory')
   const MemorySrc      = require('@renderer/models/source/MemorySrc')
   const Types          = require('@renderer/models/types/Types')
@@ -31,7 +34,7 @@ module.exports = function() {
           Types.getArrayType(unitType[getRandomInt(0, unitType.length - 1)], dim), 
           getRandomInt(0,1)? AddressSpace.Shared: AddressSpace.Global)
 
-      let name = `mem-${uuid(4)}`
+      let name = `mock_mem_${uuid(4)}`
       let type = types[getRandomInt(0, types.length - 1)]
 
       let src = new MemorySrc({
@@ -43,10 +46,12 @@ module.exports = function() {
       mem.getType().addAlias("value_t")
       mem.setSrc(src)
 
-      App.Logger.debug("[mock]", "Created memory:", mem.toString())
       return mem
     },
 
+    /**
+     * @param {Dim} dim 
+     */
     createRandom2D(dim) {
       if ( !dim)
         dim = new Dim(getRandomMultiple(100, 1000), getRandomInt(2, 10))
@@ -59,7 +64,7 @@ module.exports = function() {
           Types.getArrayType(unitType[getRandomInt(0, unitType.length - 1)], dim), 
           getRandomInt(0,1)? AddressSpace.Shared: AddressSpace.Global)
 
-      let name = `mem-${uuid(4)}`
+      let name = `mock_mem_${uuid(4)}`
       let type = types[getRandomInt(0, types.length - 1)]
     
       let src = new MemorySrc({
@@ -71,16 +76,16 @@ module.exports = function() {
       mem.getType().addAlias(type)
       mem.setSrc(src)
 
-      App.Logger.debug("[mock]", "Created memory:", mem.toString())
+      return mem
     },
 
     /**
-     * @public
      * @param {Dim} [dim] Optional dimensions
+     * @returns {Memory}
      */
     createRandom(dim) {
       if ( !dim) {
-        return getRandomInt(1, 2) === 1? this.createRandom1D() : this.createRandom2D()
+        return getRandomInt(0, 1)? this.createRandom2D() : this.createRandom1D()
       }
       return dim.is1D()? this.createRandom1D(dim) : this.createRandom2D(dim)
     }

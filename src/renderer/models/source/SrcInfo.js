@@ -13,8 +13,8 @@ class SrcInfo {
 
   /**
    * @param {Object} opts 
-   * @param {String} opts.filename
-   * @param {SrcRange} opts.range
+   * @param {String}  [opts.filename]
+   * @param {SrcRange} [opts.range]
    */
   constructor( opts={}) {
     if ( !opts)

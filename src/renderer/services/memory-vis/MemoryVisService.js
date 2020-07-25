@@ -4,6 +4,7 @@ const MemoryVis = require('@renderer/services/memory-vis/MemoryVis')
 
 /**@ignore @typedef {import("@renderer/services/memory-vis/MemoryVis")} MemoryVis */
 /**@ignore @typeder {import("@renderer/models/memory/Memory")} Memory */
+/**@ignore @typedef {import("@renderer/ui/memory/MemoryArea")}        */
 
 /**
  * The memory visualization service
@@ -18,6 +19,8 @@ class MemoryVisService extends Service {
   
   /** @type {MemoryVis[]} */
   #visualizations
+  /** @type {MemoryArea} */
+  #memoryArea
 
   /**
    * Create a new MemoryVisService instance
@@ -25,6 +28,7 @@ class MemoryVisService extends Service {
   constructor() {
     super("MemoryVisService")
     this.#visualizations = []
+    this.#memoryArea = App.ui.memory
   }
 
   /** @returns {MemoryVis|undefined} */
@@ -40,7 +44,7 @@ class MemoryVisService extends Service {
 
   /** @returns {MemoryVis|undefined} */
   findById(id) {
-
+    return this.#visualizations.find(vis => vis.id === id)
   }
 
   /** @returns {Memory[]} */
@@ -60,15 +64,17 @@ class MemoryVisService extends Service {
 
   /**
    * Create a new memory view and return a handler to it
-   * @param {Memory}
-   * @returns {MemoryView|undefined}
+   * @param {Memory} memory
+   * @returns {MemoryVis|undefined}
    */
   create(memory) {
     if ( this.find(memory))
       return App.Logger.warn("[mem-vis-service] A visualization of the requested memory already exists")
-    let res = new MemoryVis(memory)
-    //toto
-    return res
+    let vis = new MemoryVis(memory)
+    App.Logger.debug("[vis]", "created", vis.id, "for", memory.toString())
+    this.#visualizations.push(vis)
+    //todo
+    return vis
   }
 
   /**
@@ -87,11 +93,21 @@ class MemoryVisService extends Service {
   }
 
   /**
-   * @param {MemoryView}
-   * @returns {MemoryViewService} this
+   * @param {MemoryVis}
+   * @returns {MemoryVisService} this
    */
-  remove(memoryView) {
-
+  remove(memoryVis) {
+    let found = false
+    for ( let i = 0; i < this.#visualizations.length; ++i )
+      if ( this.#visualizations[i].equals(memoryVis)) {
+        found = true
+        this.#visualizations.splice(i, 1)
+        memoryVis.dispose()
+        break
+      }
+    if ( !found)
+      App.Logger.warn("[vis]", "Requested removal of unknown MemoryVis. No action taken" )
+    return this
   }
 
   /**

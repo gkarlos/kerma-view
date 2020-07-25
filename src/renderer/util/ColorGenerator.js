@@ -27,7 +27,7 @@ class ColorGenerator {
    */
   constructor(count=1) {
     this.#n = Number.isInteger(count) && Number.isFinite(count) ? count : 1
-    this.#seed = random.getRandomIntInclusive(1, 0xFFFFFFFF)
+    this.#seed = random.getRandomInt(1, 0xFFFFFFFF)
     this.#current = 0
     this.#colors = randomColor({
       luminosity: 'light',
