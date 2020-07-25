@@ -1,6 +1,7 @@
 /** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
 
 /**
+ * View of a memory visualization
  * @memberof module:memory-vis
  */
 class MemoryVisView {

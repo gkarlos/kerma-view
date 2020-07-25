@@ -1,4 +1,6 @@
 const Service = require('@renderer/services/Service')
+const App     = require('@renderer/app')
+const MemoryVis = require('@renderer/services/memory-vis/MemoryVis')
 
 /**@ignore @typedef {import("@renderer/services/memory-vis/MemoryVis")} MemoryVis */
 /**@ignore @typeder {import("@renderer/models/memory/Memory")} Memory */
@@ -6,10 +8,10 @@ const Service = require('@renderer/services/Service')
 /**
  * The memory visualization service
  * This service can be used to visualize some memory (see {@link module:memory.Memory})
- * The service mentains no context, i.e it will display the memory and return a controller
- * to it; it is not aware for instance which kernel the memory belongs too etc. This means
- * that when analysis for a different kernel takes place, the current visualization must
- * be removed explicitely. See {@link module:memory-vis.MemoryVisService#removeAll}
+ * The service mentains no context, i.e it will only create and render the memory and 
+ * return a controller to it. This means that when analysis for a different kernel takes place, 
+ * the current visualization(s) must be removed explicitely. See {@link module:memory-vis.MemoryVisService#removeAll}
+ * The service only mentains a list of the currently open visualizations and an API to query them
  * @memberof module:memory-vis
  */
 class MemoryVisService extends Service {
@@ -21,17 +23,52 @@ class MemoryVisService extends Service {
    * Create a new MemoryVisService instance
    */
   constructor() {
-    super("MemoryViewService")
+    super("MemoryVisService")
     this.#visualizations = []
+  }
+
+  /** @returns {MemoryVis|undefined} */
+  find(memory) {
+    return this.#visualizations.find(vis => vis.getMemory().equals(memory))
+  }
+
+  /** @returns {MemoryVis|undefined} */
+  findByName(name) {
+    return this.#visualizations.find(vis => 
+        vis.getMemory().getSrc() && (vis.getMemory().getSrc().getName() === name))
+  }
+
+  /** @returns {MemoryVis|undefined} */
+  findById(id) {
+
+  }
+
+  /** @returns {Memory[]} */
+  getAll() {
+    return this.#visualizations
+  }
+
+  /** @returns {String[]} */
+  getAllNames() {
+    let res = []
+    this.#visualizations.forEach(vis => {
+      let src = vis.getMemory().getSrc()
+      res.push( src !== undefined? src.getName() : "")
+    })
+    return res
   }
 
   /**
    * Create a new memory view and return a handler to it
    * @param {Memory}
-   * @returns {MemoryView}
+   * @returns {MemoryView|undefined}
    */
   create(memory) {
-
+    if ( this.find(memory))
+      return App.Logger.warn("[mem-vis-service] A visualization of the requested memory already exists")
+    let res = new MemoryVis(memory)
+    //toto
+    return res
   }
 
   /**
