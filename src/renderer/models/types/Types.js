@@ -70,6 +70,7 @@ class Types {
    */
   static getArrayType(elementType, dim) {
     try {
+
       return new Types.ArrayType(elementType, dim)
     } catch (e) {
       throw new Error(e)

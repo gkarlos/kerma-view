@@ -35,7 +35,7 @@ class Component {
      * So for now users must know what kind of node is used. <br/>
      * This is meant to be changed as we progressively move away from jQuery
      */
-    this.node = null;
+    // this.node = null;
   }
 
   /**

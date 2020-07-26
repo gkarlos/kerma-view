@@ -26,6 +26,9 @@ TODO:
 
 -----
 ## Check
+- zoomable grid
+    - https://stackoverflow.com/questions/53310138/creating-a-draggable-and-scaleable-grid-in-html5
+    
 - Exec 
     - https://github.com/compiler-explorer/compiler-explorer/blob/master/lib/exec.js
 - Heatmap of the arrays accessed per thread. 

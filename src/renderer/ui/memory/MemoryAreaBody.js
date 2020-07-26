@@ -1,8 +1,8 @@
 'use-strict'
 
 const Component        = require('@renderer/ui/component/Component')
-const MemoryVisualizer = require('./MemoryVisualizer')
-const Memory           = require('@renderer/models/memory').Memory
+
+/**@ignore @typedef {import("@renderer/services/memory-vis/MemoryVis")} MemoryVis */
 
 /**
  * The body of the memory are. This is roughly a collection
@@ -13,8 +13,9 @@ const Memory           = require('@renderer/models/memory').Memory
  * @memberof module:memory-ui
  */
 class MemoryAreaBody extends Component {
-  /**@type {Boolean}*/ #installed
-  /**@type {Boolean}*/ #rendered
+  /**@type {Boolean}     */ #installed
+  /**@type {Boolean}     */ #rendered
+  /**@type {MemoryVis[]} */ #visualizations
 
   /**
    * 
@@ -24,9 +25,9 @@ class MemoryAreaBody extends Component {
   constructor(id, container) {
     super(id, container)
     this.name = `MemoryAreaBody[${this.id}]`
-    this.visualizers = []
-    this.#installed = false
-    this.#rendered = false
+    this.#visualizations = []
+    this.#installed  = false
+    this.#rendered   = false
   }
 
   /** @returns {MemoryAreaBody} */
@@ -34,6 +35,7 @@ class MemoryAreaBody extends Component {
     if ( !this.isInstalled()) {
       this.render()
       $(this.node).appendTo(this.container)
+      this.#visualizations.forEach(vis => this.memoryList.append(vis.render()))
       this.#installed = true
     }
     return this
@@ -41,42 +43,77 @@ class MemoryAreaBody extends Component {
 
   /**
    * Render to the DOM
-   * The first call creates the DOM node and renders
-   * all available visualizers.
-   * Subsequent calls remove the 'contents' of the DOM node (i.e the visualizers)
-   * and re-render them. That is because new visualizers may have been-added or
-   * removed
+   * @returns {JQuery}
    */
   render() {
+    console
     if ( !this.isRendered()) {
-      this.node = $(`<div class="list-group" id="${this.id}"></div>`)
-      this.memoryList = $(`<ul class="list-group" id="heatmap-example"></ul>`).appendTo(this.node)
+      this.node = $(`<div id="${this.id}"></div>`)
+      this.memoryList = $(`<div id="memory-vis-list"></div>`).appendTo(this.node)
       this.node.css("max-width", "100%")
-              .css("max-height", "90vh")
-              .css("overflow-y", "scroll")
+               .css("max-height", "90vh")
+               .css("overflow-y", "scroll")
+      this.#rendered = true
     }
     
-    // else {
-    //   // re-render
-    //   $('.memory-visualizer').remove()
-    // }
-
-    // this.visualizers.forEach(visualizer => visualizer.render())
-    this.rendered = true
-    return this;
+    return this.node;
   }
 
   /**
-   * @param {Memory} memory A Memory object
+   * Add a MemoryVis. 
+   * If the component is installed the vis will also be rendered to the DOM. 
+   * If the component is not installed the vis will be render at the next call of `install()`
+   * @param {MemoryVis} vis
+   * @returns {MemoryAreaBody} 
    */
-  addMemory(memory) {
-    
-    let viz = new MemoryVisualizer(memory, `mem-viz-${memory.getName()}`, `#${this.id}`)
-
-    this.visualizers.push(viz)
-
-    this.memoryList.append(viz.render())
+  add(vis) {
+    this.#visualizations.push(vis)
+    if ( this.isInstalled())
+      $(this.memoryList).append(vis.getView().render())
+    return this
   }
+
+  /**
+   * Remove a MemoryVis. If the vis is part of this component it will be removed.
+   * If the vis was not registered with this component (i.e was not added with `add()`),
+   * no action is taken.
+   * @param {MemoryVis} vis
+   * @returns {MemoryAreaBody} 
+   */
+  remove(vis) {
+    for ( let i = 0; i < this.#visualizations.length; ++i) {
+      if ( this.#visualizations[i].equals(vis)) {
+        this.memoryList.remove(vis.render())
+        break;
+      }
+    }
+    return this
+  }
+
+  /**
+   * Remove all currently displaying visualizations
+   * @returns {MemoryAreaBody}
+   */
+  removeAll() {
+    this.#visualizations.forEach(vis => this.memoryList.remove(vis.render()))
+    return this
+  }
+
+
+  
+
+
+  // /**
+  //  * @param {Memory} memory A Memory object
+  //  */
+  // addMemory(memory) {
+    
+  //   let viz = new MemoryVisualizer(memory, `mem-viz-${memory.getName()}`, `#${this.id}`)
+
+  //   this.visualizers.push(viz)
+
+  //   this.memoryList.append(vrender())
+  // }
 
   useDefaultControls() {
 

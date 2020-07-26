@@ -1,8 +1,9 @@
 const {uuid} = require('@renderer/util/random')
 
 /** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
-/** @ignore @typedef {impo`} */
+/** @ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")`} MemoryVisView */
 
+const MemoryVisView = require('@renderer/services/memory-vis/view/MemoryVisView')
 
 /**
  * Controller for a memory Visualization
@@ -10,8 +11,9 @@ const {uuid} = require('@renderer/util/random')
  */
 class MemoryVis {
 
-  /** @type {Memory} */ #memory
-  /** @type {String} */ #id
+  /** @type {Memory} */        #memory
+  /** @type {String} */        #id
+  /** @type {MemoryVisView} */ #view
 
   /**
    * Create a new MemoryVis instance
@@ -19,7 +21,8 @@ class MemoryVis {
    */
   constructor(memory) {
     this.#memory = memory
-    this.#id = uuid(10)
+    this.#id     = uuid(10)
+    this.#view   = new MemoryVisView(memory)
   }
 
   /** @type {String} */
@@ -27,10 +30,6 @@ class MemoryVis {
 
   /**@type {Memory}*/ get memory() { return this.#memory }
 
-  /** @returns {Memory} */
-  getMemory() {
-    return this.#memory
-  }
 
   /**
    * @returns {MemoryVis} this
@@ -38,6 +37,31 @@ class MemoryVis {
   dispose() {
     //todo
   }
+
+
+
+
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** @returns {MemoryVisView} */
+  get view() { return this.#view }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** @returns {MemoryVisView} */
+  getView() { return this.#view }
+
+  /** @returns {Memory} */
+  getMemory() { return this.#memory }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
 
   /**
    * @param {MemoryVis} other 

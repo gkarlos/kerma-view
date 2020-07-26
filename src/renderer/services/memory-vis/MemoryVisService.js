@@ -4,7 +4,7 @@ const MemoryVis = require('@renderer/services/memory-vis/MemoryVis')
 
 /**@ignore @typedef {import("@renderer/services/memory-vis/MemoryVis")} MemoryVis */
 /**@ignore @typeder {import("@renderer/models/memory/Memory")} Memory */
-/**@ignore @typedef {import("@renderer/ui/memory/MemoryArea")}        */
+/**@ignore @typedef {import("@renderer/ui/memory/MemoryArea")} MemoryArea */
 
 /**
  * The memory visualization service
@@ -73,7 +73,7 @@ class MemoryVisService extends Service {
     let vis = new MemoryVis(memory)
     App.Logger.debug("[vis]", "created", vis.id, "for", memory.toString())
     this.#visualizations.push(vis)
-    //todo
+    this.#memoryArea.add(vis)
     return vis
   }
 

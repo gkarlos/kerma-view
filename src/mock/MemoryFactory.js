@@ -43,7 +43,7 @@ module.exports = function() {
         declContext: `__global__ void ${kernelNames[getRandomInt(0, kernelNames.length - 1)]}(${type} *${name})`
       })
 
-      mem.getType().addAlias("value_t")
+      mem.getType().addAlias(type)
       mem.setSrc(src)
 
       return mem

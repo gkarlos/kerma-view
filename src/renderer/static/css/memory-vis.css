@@ -1,0 +1,17 @@
+#memory-area .card-header {
+    padding: 10px;
+}
+
+#memory-area .card-header .title {
+    padding: 5px;
+    vertical-align: middle;
+}
+
+#memory-area .card-body {
+    overflow: auto;
+}
+
+#memory-vis-list {
+    width: 100%;
+    background-color: transparent;
+}

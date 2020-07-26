@@ -5,7 +5,7 @@
  */
 module.exports = {
   MemoryVis        : require('./MemoryVis'),
-  MemoryVisView    : require('./MemoryVisView'),
+  MemoryVisView    : require('./view/MemoryVisView'),
   MemoryVisModel   : require('./MemoryVisModel'),
   MemoryVisService : require('./MemoryVisService')
 }

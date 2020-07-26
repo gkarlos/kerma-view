@@ -3,22 +3,28 @@ const MemoryAreaTitleBar = require('./MemoryAreaTitlebar')
 const MemoryAreaBody = require('./MemoryAreaBody')
 const App = require('@renderer/app')
 
+
+/**@ignore @typedef {import("@renderer/services/memory-vis/MemoryVis")} MemoryVis */
+
 /**
  * The main container for memory visualizations
  * @memberof module:memory-ui
  */
 class MemoryArea extends Component {
-  /**@type {Boolean}*/ #installed
-  /**@type {Boolean}*/ #rendered
+  /**@type {MemoryAreaTitleBar} */ #title
+  /**@type {MemoryAreaBody}     */ #body
+  /**@type {JQuery}             */ #node
+  /**@type {Boolean}            */ #installed
+  /**@type {Boolean}            */ #rendered
 
   constructor() {
     super("memory-area", "#right")
     this.name = `MemoryArea[${this.id}]`
     this.#installed = false
     this.#rendered = false
-    this.node  = $(`<div class="card" id="${this.id}"></div>`)
-    this.title = new MemoryAreaTitleBar("memory-area-titlebar", this.node)
-    this.body  = new MemoryAreaBody("memory-area-body", this.node)
+    this.#node  = $(`<div class="" id="${this.id}"></div>`)
+    this.#title = new MemoryAreaTitleBar("memory-area-titlebar", this.node)
+    this.#body  = new MemoryAreaBody("memory-area-body", this.node)
     App.ui.registerComponent(this)
   }
 
@@ -29,8 +35,6 @@ class MemoryArea extends Component {
       this.title.install()
       this.body.install()
       $(this.container).append(this.node)
-      
-
       this.title.setTitle("Memory")
       this.#installed = true
     }
@@ -48,25 +52,42 @@ class MemoryArea extends Component {
   }
 
   /**
-   * Add a memory to the memory area 
+   * @param {MemoryVis} vis
    * @returns {MemoryArea} this
    */
-  addMemory(memory) {
-    this.body.addMemory(memory)
+  add(vis) {
+    this.body.add(vis)
     return this
   }
-
+  
   /**
-   * Remove a memory from the memory area (if its already part of it)
-   * @param {*} memory 
+   * @param {MemoryVis} vis
+   * @returns {MemoryArea} this
    */
-  removeMemory(memory) {
-
+  remove(vis) {
+    this.body.remove(vis)
   }
 
-  getMemory(name) {
-    return this.body.getMemory(name)
-  }
+  // /**
+  //  * Add a memory to the memory area 
+  //  * @returns {MemoryArea} this
+  //  */
+  // addMemory(memory) {
+  //   this.body.addMemory(memory)
+  //   return this
+  // }
+
+  // /**
+  //  * Remove a memory from the memory area (if its already part of it)
+  //  * @param {*} memory 
+  //  */
+  // removeMemory(memory) {
+
+  // }
+
+  // getMemory(name) {
+  //   return this.body.getMemory(name)
+  // }
 
   useDefaultControls() {
     // this.title.useDefaultControls()
@@ -82,6 +103,17 @@ class MemoryArea extends Component {
 
   /** @returns {Boolean} */
   isInstalled() { return this.#installed }
+
+
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** @type {JQuery} */
+  get node() { return this.#node }
+  /** @type {MemoryAreaTitleBar} */
+  get title() { return this.#title}
+  /** @type {MemoryAreaBody} */
+  get body() { return this.#body }
 }
 
 module.exports = MemoryArea
