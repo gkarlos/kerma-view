@@ -15,3 +15,74 @@
     width: 100%;
     background-color: transparent;
 }
+
+
+.memory-vis {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    border: none;
+    border-left: 6px solid grey;
+}
+
+
+/**
+ ** HEADER
+ **/
+
+.memory-vis-header {
+    padding-left: 4px;
+    font-size: 12px
+}
+
+.memory-vis-header .memory-name {
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 4px;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.memory-vis-header .memory-name-src {
+    cursor: pointer;
+}
+
+.memory-vis-header .memory-name-src:hover {
+    opacity: 0.5;
+}
+
+
+
+.memory-vis-header > .memory-type {
+    margin-left: 5px;
+}
+
+.memory-vis-header > .memory-type-title {
+    margin-left: 4px
+}
+
+.memory-vis-header > .memory-type-popover {
+    font-family: monospace;
+}
+
+
+/**
+ ** MEMORY-NAME POPOVER
+ **/
+.memory-name-popover-header {
+    display: block;
+    font-size: 10px;
+    padding: 4px;
+}
+
+.memory-name-popover-body {
+    padding: 4px;
+    font-family: monospace;
+    word-wrap: break-word;
+    word-break: break-all;
+    color: grey;
+}
+
+.memory-name-popover-body > p {
+    margin-block-end: 0px;
+}

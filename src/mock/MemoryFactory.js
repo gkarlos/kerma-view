@@ -11,6 +11,7 @@ module.exports = function() {
   } = require('@renderer/util/random')
   const Memory         = require('@renderer/models/memory/Memory')
   const MemorySrc      = require('@renderer/models/source/MemorySrc')
+  const SrcRange       = require('@renderer/models/source/SrcRange')
   const Types          = require('@renderer/models/types/Types')
   const AddressSpace   = require('@renderer/models/cuda/CudaAddressSpace')
   const App            = require('@renderer/app')
@@ -18,6 +19,7 @@ module.exports = function() {
   var unitType    = [Types.Int32, Types.Int64]
   var types       = ["int", "myType", "value_t", "VALUE", "DATA_TYPE"]
   var kernelNames = ["mykernel", "kernel", "kernelA", "addKernel", "sumKernel"]
+  var addrSpaces   = [AddressSpace.Constant, AddressSpace.Local, AddressSpace.Shared, AddressSpace.Global]
 
   return {
     /**
@@ -32,15 +34,16 @@ module.exports = function() {
 
       let mem = new Memory(
           Types.getArrayType(unitType[getRandomInt(0, unitType.length - 1)], dim), 
-          getRandomInt(0,1)? AddressSpace.Shared: AddressSpace.Global)
+          addrSpaces[getRandomInt(0, addrSpaces.length - 1)])
 
       let name = `mock_mem_${uuid(4)}`
       let type = types[getRandomInt(0, types.length - 1)]
 
       let src = new MemorySrc({
         name: name,
-        type: type,
-        declContext: `__global__ void ${kernelNames[getRandomInt(0, kernelNames.length - 1)]}(${type} *${name})`
+        decl: `${type} *${name}`,
+        declContext: `__global__ void ${kernelNames[getRandomInt(0, kernelNames.length - 1)]}(${type} *${name})`,
+        range: new SrcRange({fromLine: getRandomInt(1, 100), fromColumn: 2})
       })
 
       mem.getType().addAlias(type)
@@ -62,7 +65,7 @@ module.exports = function() {
 
       let mem = new Memory(
           Types.getArrayType(unitType[getRandomInt(0, unitType.length - 1)], dim), 
-          getRandomInt(0,1)? AddressSpace.Shared: AddressSpace.Global)
+          addrSpaces[getRandomInt(0, addrSpaces.length - 1)])
 
       let name = `mock_mem_${uuid(4)}`
       let type = types[getRandomInt(0, types.length - 1)]
@@ -70,7 +73,9 @@ module.exports = function() {
       let src = new MemorySrc({
         name: name,
         type: type,
-        declContext: `__global__ void ${kernelNames[getRandomInt(0, kernelNames.length)]}(${type} *${name})`
+        decl: `${type} *${name}`,
+        declContext: `__global__ void ${kernelNames[getRandomInt(0, kernelNames.length)]}(${type} *${name})`,
+        range: new SrcRange({fromLine: getRandomInt(1, 100), fromColumn: 2})
       })
 
       mem.getType().addAlias(type)

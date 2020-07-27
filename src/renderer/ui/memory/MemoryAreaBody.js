@@ -48,11 +48,10 @@ class MemoryAreaBody extends Component {
   render() {
     console
     if ( !this.isRendered()) {
-      this.node = $(`<div id="${this.id}"></div>`)
+      this.node = $(`<div id="${this.id}" data-simplebar></div>`)
       this.memoryList = $(`<div id="memory-vis-list"></div>`).appendTo(this.node)
       this.node.css("max-width", "100%")
                .css("max-height", "90vh")
-               .css("overflow-y", "scroll")
       this.#rendered = true
     }
     

@@ -22,7 +22,7 @@ class MemorySrc extends SrcInfo {
    * @param {String}      [opts.name]
    * @param {String[]}    [opts.qualifiers]
    * @param {String}      [opts.decl]
-   * @param {String}      [opts.declcontext]
+   * @param {String}      [opts.declContext]
    * @param {String}      [opts.filename]
    * @param {SrcRange}    [opts.range]
    */
@@ -32,7 +32,7 @@ class MemorySrc extends SrcInfo {
     this.#name        = opts.name
     this.#qualifiers  = opts.qualifiers || []
     this.#decl        = opts.decl
-    this.#declContext = opts.declcontext
+    this.#declContext = opts.declContext
   }
 
   /** @type {String} */

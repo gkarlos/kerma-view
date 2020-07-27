@@ -10,7 +10,7 @@ class CudaAddressSpace {}
 CudaAddressSpace.Local  = new AddrSpace("local", 5)
 
 /** @type {AddrSpace} */
-CudaAddressSpace.Global = new AddrSpace("constant", 4)
+CudaAddressSpace.Constant = new AddrSpace("constant", 4)
 
 /** @type {AddrSpace} */
 CudaAddressSpace.Shared = new AddrSpace("shared", 3)
@@ -19,9 +19,9 @@ CudaAddressSpace.Shared = new AddrSpace("shared", 3)
 CudaAddressSpace.Global = new AddrSpace("global", 1)
 
 /** @type {AddrSpace} */
-CudaAddressSpace.Local  = new AddrSpace("generic", 0)
+CudaAddressSpace.Generic  = new AddrSpace("generic", 0)
 
 /** @type {AddrSpace} */
-CudaAddressSpace.Local  = new AddrSpace("unknown", -1)
+CudaAddressSpace.Unknown  = new AddrSpace("unknown", -1)
 
 module.exports = CudaAddressSpace

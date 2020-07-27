@@ -21,12 +21,11 @@ class MemoryVis {
    */
   constructor(memory) {
     this.#memory = memory
-    this.#id     = uuid(10)
     this.#view   = new MemoryVisView(memory)
   }
 
   /** @type {String} */
-  get id() { return this.#id }
+  get id() { return this.#view.id }
 
   /**@type {Memory}*/ get memory() { return this.#memory }
 
