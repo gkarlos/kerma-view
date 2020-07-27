@@ -69,6 +69,11 @@
 /**
  ** MEMORY-NAME POPOVER
  **/
+
+.memory-name-popover {
+    max-width: 10%;
+}
+
 .memory-name-popover-header {
     display: block;
     font-size: 10px;
@@ -81,8 +86,14 @@
     word-wrap: break-word;
     word-break: break-all;
     color: grey;
+    font-weight: 100;
 }
 
 .memory-name-popover-body > p {
     margin-block-end: 0px;
+}
+
+.memory-name-popover-body .emph {
+    color: green;
+    font-weight: 900;
 }
