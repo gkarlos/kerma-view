@@ -3,8 +3,8 @@ const App          = require('@renderer/app')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
 const { CuWarp,
-        CudaIndex,
-        CudaThread} = require('@renderer/models/cuda')
+        CuIndex,
+        CuThread} = require('@renderer/models/cuda')
 
 /** @ignore @typedef {import("@renderer/models/cuda/CuWarp")} CuWarp */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
@@ -186,7 +186,7 @@ class ComputeSelectionThreadView extends Component {
     $(thread).on('mouseleave', () => thread.popover("hide"))
 
     if ( !unusable)
-      $(thread).click({thread: new CudaThread(this.#model.getBlockSelection(), warp.getFirstThreadIndex() + lane)}, (event) => {
+      $(thread).click({thread: new CuThread(this.#model.getBlockSelection(), warp.getFirstThreadIndex() + lane)}, (event) => {
         if ( !this.#model.hasThreadSelected() || !(this.#model.getThreadSelection().equals(event.data.thread))) {
           self.#selected && self.#selected.removeClass("thread-selector-item-selected")
           self.#selected = thread

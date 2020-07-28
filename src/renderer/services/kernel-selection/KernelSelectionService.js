@@ -87,7 +87,7 @@ class KernelSelectionService extends Service {
         isKernel : true
       })
 
-      let CuKernel = new CuKernel(i, kernelFI)
+      let cuKernel = new CuKernel(i, kernelFI)
 
       kernel.launches.forEach((launch, j) => {
         let caller    = new FunctionSrc({ name : launch.caller.source.name, type : launch.caller.source.type, arguments : launch.caller.source.signature})
@@ -100,12 +100,12 @@ class KernelSelectionService extends Service {
           caller : caller
         })
 
-        let CuLaunch = new CuLaunch(CuKernel, new CuGrid(1024, j % 2 == 0? 1000 : 200), { id : j, source: launchFCS})
-        CuKernel.addLaunch(CuLaunch)
+        let cuLaunch = new CuLaunch(cuKernel, new CuGrid(1024, j % 2 == 0? 1000 : 200), { id : j, source: launchFCS})
+        cuKernel.addLaunch(cuLaunch)
       })
 
 
-      kernels.push(CuKernel)
+      kernels.push(cuKernel)
     })
 
     return selection? selection.addKernels(kernels) : this.createEmpty().addKernels(kernels)
