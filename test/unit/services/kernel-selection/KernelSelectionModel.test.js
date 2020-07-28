@@ -2,7 +2,7 @@ require('module-alias/register')
 const expect = require('chai').expect
 
 const KernelSelectionModel = require('@renderer/services/kernel-selection/KernelSelectionModel')
-const CudaKernel = require('@renderer/models/cuda/CudaKernel')
+const CuKernel = require('@renderer/models/cuda/CuKernel')
 const FunctionSrc = require('@renderer/models/source/FunctionSrc')
 
 describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
@@ -15,13 +15,13 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("addKernel", () => {
     it("should correctly insert a kernel", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       expect(model.addKernel(kernel).numOptions).to.equal(1)
     })
 
     it("should insert duplicates", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       expect(model.addKernel(kernel).addKernel(kernel).numOptions).to.equal(2)
     })
   })
@@ -29,7 +29,7 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("removeKernel", () => {
     it("should remove the kernel correctly", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       model.addKernel(kernel)
       model.removeKernel(kernel)
       expect(model.numOptions).to.equal(0)
@@ -37,14 +37,14 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
 
     it("should be no-op if arg does exist", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       model.removeKernel(kernel)
       expect(model.numOptions).to.equal(0)
     })
 
     it("should remove the first instance of duplicate", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       model.addKernel(kernel)
       model.addKernel(kernel)
       model.removeKernel(kernel)
@@ -53,7 +53,7 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
 
     it("should clear selection if that option is removed", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       model.addKernel(kernel)
       expect(model.selectKernel(kernel)).to.be.true
       expect(model.hasSelection()).to.be.true
@@ -65,7 +65,7 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("removeAllKernels", () => {
     it("should remove everything correctly", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       model.addKernel(kernel)
       model.addKernel(kernel)
       model.addKernel(kernel)
@@ -78,7 +78,7 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
 
     it("should clear the selection", () => {
       let model = new KernelSelectionModel()
-      let kernel = new CudaKernel(0, new FunctionSrc({filename:"test.cu"}))
+      let kernel = new CuKernel(0, new FunctionSrc({filename:"test.cu"}))
       model.addKernel(kernel)
       model.addKernel(kernel)
       model.addKernel(kernel)
@@ -93,8 +93,8 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("selectKernel", () => {
     it("should find an existing kernel", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
-      let kernel2 = new CudaKernel(1, new FunctionSrc({name:"kernel2"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel2 = new CuKernel(1, new FunctionSrc({name:"kernel2"}))
 
       model.addKernel(kernel1).addKernel(kernel2)
 
@@ -107,8 +107,8 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
 
     it("should not select a kernel that doesnt exist", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
-      let kernel2 = new CudaKernel(1, new FunctionSrc({name:"kernel2"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel2 = new CuKernel(1, new FunctionSrc({name:"kernel2"}))
 
       model.addKernel(kernel1)
 
@@ -124,8 +124,8 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("selectKernelByName", () => {
     it("should select an existing kernel", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
-      let kernel2 = new CudaKernel(1, new FunctionSrc({name:"kernel2"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel2 = new CuKernel(1, new FunctionSrc({name:"kernel2"}))
       model.addKernel(kernel1).addKernel(kernel2)
       let success = model.selectKernelByName("kernel2")
       expect(success).to.be.true
@@ -136,8 +136,8 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
     
     it("should not select a kernel that doesnt exist", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
-      let kernel2 = new CudaKernel(1, new FunctionSrc({name:"kernel2"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel2 = new CuKernel(1, new FunctionSrc({name:"kernel2"}))
       model.addKernel(kernel1).addKernel(kernel2)
       let success = model.selectKernelByName("kernel3")
       expect(success).to.be.false
@@ -149,8 +149,8 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("selectKernelById", () => {
     it("should select an existing kernel", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
-      let kernel2 = new CudaKernel(1, new FunctionSrc({name:"kernel2"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel2 = new CuKernel(1, new FunctionSrc({name:"kernel2"}))
       model.addKernel(kernel1).addKernel(kernel2)
       let success = model.selectKernelById(1)
       expect(success).to.be.true
@@ -161,8 +161,8 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
     
     it("should not select a kernel that doesnt exist", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
-      let kernel2 = new CudaKernel(1, new FunctionSrc({name:"kernel2"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel2 = new CuKernel(1, new FunctionSrc({name:"kernel2"}))
       model.addKernel(kernel1).addKernel(kernel2)
       let success = model.selectKernelByName(15)
       expect(success).to.be.false
@@ -174,7 +174,7 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("clearSelection", () => {
     it("should work with selection", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
       model.addKernel(kernel1)
       model.selectKernel(kernel1)
       model.clearSelection()
@@ -191,14 +191,14 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("hasKernel", () => {
     it("should be true after kernel added", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
       model.addKernel(kernel1)
       expect(model.hasKernel(kernel1)).to.be.true
     })
 
     it("should be false if the kernel does not exist", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
       expect(model.hasKernel(kernel1)).to.be.false
     })
   })
@@ -206,14 +206,14 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("hasKernelWithName", () => {
     it("should be true after kernel added", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
       model.addKernel(kernel1)
       expect(model.hasKernelWithName("kernel")).to.be.true
     })
 
     it("should be false if the kernel does not exist", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
       expect(model.hasKernelWithName("kernel")).to.be.false
     })
   })
@@ -221,14 +221,14 @@ describe("renderer/services/kernel-selection/KernelSelectionModel", () => {
   describe("hasKernelWithId", () => {
     it("should be true after kernel added", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
       model.addKernel(kernel1)
       expect(model.hasKernelWithId(0)).to.be.true
     })
 
     it("should be false if the kernel does not exist", () => {
       let model = new KernelSelectionModel()
-      let kernel1 = new CudaKernel(0, new FunctionSrc({name:"kernel"}))
+      let kernel1 = new CuKernel(0, new FunctionSrc({name:"kernel"}))
       expect(model.hasKernelWithId(0)).to.be.false
     })
   })

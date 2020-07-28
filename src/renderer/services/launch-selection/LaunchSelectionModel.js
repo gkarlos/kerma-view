@@ -1,23 +1,23 @@
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
 
-const CudaLaunch = require("@renderer/models/cuda/CudaLaunch")
+const CuLaunch = require("@renderer/models/cuda/CuLaunch")
 const App = require('@renderer/app')
 
 /**
  * @memberof module:launch-selection
  */
 class LaunchSelectionModel {
-  /** @type {Array.<CudaLaunch>} */
+  /** @type {Array.<CuLaunch>} */
   #options
-  /** @type {CudaLaunch} */
+  /** @type {CuLaunch} */
   #selection
-  /** @type {CudaKernel} */
+  /** @type {CuKernel} */
   #kernel
 
   /**
    * Create a new LaunchSelectionModel instance
-   * @param {CudaKernel}
+   * @param {CuKernel}
    */
   constructor(kernel) {
     this.#options = []
@@ -26,7 +26,7 @@ class LaunchSelectionModel {
   }
 
   /**
-   * @type {Array.<CudaLaunch>}
+   * @type {Array.<CuLaunch>}
    */
   get options() { return this.#options }
 
@@ -55,12 +55,12 @@ class LaunchSelectionModel {
 
   /**
    * Add a kernel launch option
-   * @param {CudaLaunch} kernel A CudaLaunch object
+   * @param {CuLaunch} kernel A CuLaunch object
    * @returns {LaunchSelectionModel} this
    */ 
   addLaunch(launch) {
     // App.Logger.trace("LaunchSelectionModel","Adding launch: ", launch.toString())
-    if ( launch instanceof CudaLaunch)
+    if ( launch instanceof CuLaunch)
       this.#options.push(launch)
     return this
   }
@@ -68,7 +68,7 @@ class LaunchSelectionModel {
   /**
    * Remove a kernel launch of the available options
    * If the launch is currently selected, the selection is cleared
-   * @param {CudaLaunch} launch A CudaLaunch
+   * @param {CuLaunch} launch A CuLaunch
    * @returns {LaunchSelectionModel} this
    */
   removeLaunch(launch) {
@@ -94,7 +94,7 @@ class LaunchSelectionModel {
 
   /**
    * Select a launch
-   * @param {CudaLaunch} kernel A CudaLaunch
+   * @param {CuLaunch} kernel A CuLaunch
    * @returns {Boolean} `true` if the launch was found. `false` otherwise
    */
   selectLaunch(launch) {
@@ -123,7 +123,7 @@ class LaunchSelectionModel {
 
   /**
    * Retrieve the current selection or `null` if one does not exist
-   * @returns {CudaLaunch}
+   * @returns {CuLaunch}
    */
   getSelection() { return this.#selection }
 
@@ -144,7 +144,7 @@ class LaunchSelectionModel {
 
   /**
    * Check if a launch exists in the available options
-   * @param {CudaLaunch} launch
+   * @param {CuLaunch} launch
    * @returns {Boolean}
    */
   hasLaunch(launch) {
@@ -166,8 +166,8 @@ class LaunchSelectionModel {
 
   /**
    * Search for a launch in the options and retrieve it if it exists
-   * @param {CudaLaunch} launch
-   * @returns {CudaLaunch} The launch if found. `undefined` otherwise 
+   * @param {CuLaunch} launch
+   * @returns {CuLaunch} The launch if found. `undefined` otherwise 
    */
   findLaunch(laucnh) {
     return this.#options.find(l => l.equals(launch))
@@ -176,7 +176,7 @@ class LaunchSelectionModel {
   /**
    * Search for a launch with that id in the options and retrieve it if it exists
    * @param {Number} kernel
-   * @returns {CudaLaunch} The launch if found. `undefined` otherwise 
+   * @returns {CuLaunch} The launch if found. `undefined` otherwise 
    */
   findLaunchWithId(id) {
     return this.#options.find(l => l.id === id)

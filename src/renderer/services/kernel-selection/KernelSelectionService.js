@@ -1,12 +1,12 @@
 const KernelSelection  = require('@renderer/services/kernel-selection/KernelSelection')
 const SrcRange         = require('@renderer/models/source/SrcRange')
 const Service          = require('@renderer/services/Service')
-const CudaKernel       = require('@renderer/models/cuda/CudaKernel')
+const CuKernel       = require('@renderer/models/cuda/CuKernel')
 const FunctionCallSrc  = require('@renderer/models/source')
-const CudaLaunch = require('@renderer/models/cuda/CudaLaunch')
-const CudaBlock  = require('@renderer/models/cuda/CudaBlock')
-const CudaGrid   = require('@renderer/models/cuda/CudaGrid')
-const CudaDim    = require('@renderer/models/cuda/CudaDim')
+const CuLaunch = require('@renderer/models/cuda/CuLaunch')
+const CuBlock  = require('@renderer/models/cuda/CuBlock')
+const CuGrid   = require('@renderer/models/cuda/CuGrid')
+const CuDim    = require('@renderer/models/cuda/CuDim')
 
 /**@ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback*/
 
@@ -35,7 +35,7 @@ class KernelSelectionService extends Service {
 
   /**
    * Create a new KernelSelection for a given list of kernels
-   * @param {CudaKernel[]} kernels An array of CudaKernel objects
+   * @param {CuKernel[]} kernels An array of CuKernel objects
    * @param {Boolean} [makeCurrent] Make the selection the currently displayed selection
    * @returns {KernelSelection}
    */
@@ -70,7 +70,7 @@ class KernelSelectionService extends Service {
    * @param {KernelSelection} selection 
    */
   createMock(selection=null) {
-    const CudaKernel = require('@renderer/models/cuda/CudaKernel')
+    const CuKernel = require('@renderer/models/cuda/CuKernel')
     const FunctionSrc = require('@renderer/models/source/FunctionSrc')
     const FunctionCallSrc = require('@renderer/models/source/FunctionCallSrc')
     const Mock = require('@mock/cuda-source')
@@ -87,12 +87,12 @@ class KernelSelectionService extends Service {
         isKernel : true
       })
 
-      let cudaKernel = new CudaKernel(i, kernelFI)
+      let CuKernel = new CuKernel(i, kernelFI)
 
       kernel.launches.forEach((launch, j) => {
         let caller    = new FunctionSrc({ name : launch.caller.source.name, type : launch.caller.source.type, arguments : launch.caller.source.signature})
         let launchFCS = new FunctionCallSrc({
-          name : cudaKernel.name,
+          name : CuKernel.name,
           isKernelLaunch : true,
           launchParams : launch.source.params,
           range : SrcRange.fromArray(launch.source.range),
@@ -100,12 +100,12 @@ class KernelSelectionService extends Service {
           caller : caller
         })
 
-        let cudaLaunch = new CudaLaunch(cudaKernel, new CudaGrid(1024, j % 2 == 0? 1000 : 200), { id : j, source: launchFCS})
-        cudaKernel.addLaunch(cudaLaunch)
+        let CuLaunch = new CuLaunch(CuKernel, new CuGrid(1024, j % 2 == 0? 1000 : 200), { id : j, source: launchFCS})
+        CuKernel.addLaunch(CuLaunch)
       })
 
 
-      kernels.push(cudaKernel)
+      kernels.push(CuKernel)
     })
 
     return selection? selection.addKernels(kernels) : this.createEmpty().addKernels(kernels)

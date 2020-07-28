@@ -1,8 +1,8 @@
 const ComputeSelectionMode = require('@renderer/services/compute-selection/ComputeSelectionMode')
 const ComputeSelectionView = require('@renderer/services/compute-selection/ComputeSelectionView')
 const ComputeSelectionModel = require('@renderer/services/compute-selection/ComputeSelectionModel')
-const CudaGrid = require('@renderer/models/cuda/CudaGrid')
-const CudaDim = require('@renderer/models/cuda/CudaDim')
+const CuGrid = require('@renderer/models/cuda/CuGrid')
+const CuDim = require('@renderer/models/cuda/CuDim')
 const ThreadMode = ComputeSelectionMode.Thread
 const WarpMode = ComputeSelectionMode.Warp
 
@@ -10,9 +10,9 @@ const WarpMode = ComputeSelectionMode.Warp
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionView")} ComputeSelectionView */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode")} ComputeSelectionMode */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread*/
-/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp*/
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch*/
+/** @ignore @typedef {import("@renderer/models/cuda/CuThread")} CuThread*/
+/** @ignore @typedef {import("@renderer/models/cuda/CuWarp")} CuWarp*/
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch*/
 
 /**
  * A compute unit selection controller.
@@ -30,7 +30,7 @@ class ComputeSelection {
 
   /**
    * Create a new ComputeSelection
-   * @param {CudaLaunch} launch A Cuda kernel launch
+   * @param {CuLaunch} launch A Cuda kernel launch
    */
   constructor(launch) {
     this.#model = new ComputeSelectionModel(launch)
@@ -43,13 +43,13 @@ class ComputeSelection {
 
   /** 
    * Grid description of this selection
-   * @type {CudaGrid}
+   * @type {CuGrid}
    */
   get grid() { return this.#model.grid }
 
   /**
    * Block description of this selection
-   * @type {CudaDim}
+   * @type {CuDim}
    */
   get block() { return this.#model.grid.block }
 

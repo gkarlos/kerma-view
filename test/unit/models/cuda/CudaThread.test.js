@@ -1,16 +1,16 @@
 require('module-alias/register')
 
-const Thread   = require('@renderer/models/cuda/CudaThread')
-const CudaGrid = require('@renderer/models/cuda/CudaGrid')
-const Block    = require('@renderer/models/cuda/CudaBlock')
-const CudaDim  = require('@renderer/models/cuda/CudaDim')
+const Thread   = require('@renderer/models/cuda/CuThread')
+const CuGrid = require('@renderer/models/cuda/CuGrid')
+const Block    = require('@renderer/models/cuda/CuBlock')
+const CuDim  = require('@renderer/models/cuda/CuDim')
 
 const expect = require('chai').expect
 
-describe("renderer/models/cuda/CudaThread", () => {
+describe("renderer/models/cuda/CuThread", () => {
 
-  const Block512_0   = new Block(new CudaGrid(16,512), 0)
-  const Block100x6_0 = new Block(new CudaGrid(16, new CudaDim(100,6)), 0)
+  const Block512_0   = new Block(new CuGrid(16,512), 0)
+  const Block100x6_0 = new Block(new CuGrid(16, new CuDim(100,6)), 0)
 
   describe("constructor", () => {
     it("should throw with missing arguments",     () => expect(() => new Thread()).to.throw())

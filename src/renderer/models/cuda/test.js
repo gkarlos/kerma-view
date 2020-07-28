@@ -1,7 +1,7 @@
 require('module-alias/register')
-const CudaGrid = require('./CudaGrid')
+const CuGrid = require('./CuGrid')
 const { CudaBlock } = require('.')
 
-let grid = new CudaGrid(10,10)
+let grid = new CuGrid(10,10)
 
 let block = grid.getBlock('asd')

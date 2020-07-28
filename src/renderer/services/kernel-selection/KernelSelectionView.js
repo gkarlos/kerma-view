@@ -17,7 +17,7 @@ const ColorGenerator  = require('@renderer/util/ColorGenerator')
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnEnabledCallback} KernelSelectionOnEnabledCallback */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnDisabledCallback} KernelSelectionOnDisabledCallback */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionModel")} KernelSelectionModel */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
+/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
 
 /**
  * @memberof module:kernel-selection
@@ -87,7 +87,7 @@ class KernelSelectionView extends Component {
 
       /**
        * We need this indirection because the selectize callback accepts a String argument but
-       * we want our API to accept a CudaKernel argument
+       * we want our API to accept a CuKernel argument
        */
       this.#viewimpl.on('change', (id) => {
         if ( id.length > 0) {
@@ -174,7 +174,7 @@ class KernelSelectionView extends Component {
 
   /**
    * Add a kernel to the options
-   * @param {CudaKernel} kernel A CudaKernel object
+   * @param {CuKernel} kernel A CuKernel object
    * @returns {KernelSelectionView} this
    */
   addKernel(kernel) {
@@ -185,7 +185,7 @@ class KernelSelectionView extends Component {
 
   /**
    * Remove a kernel from the options
-   * @param {CudaKernel} kernel A CudaKernel object
+   * @param {CuKernel} kernel A CuKernel object
    * @returns {KernelSelectionView} this
    */
   removeKernel(kernel) {
@@ -204,7 +204,7 @@ class KernelSelectionView extends Component {
 
   /**
    * Retrieve the current selected kernel, if one exists
-   * @returns {CudaKernel} The selected kernel, `undefined` otherwise
+   * @returns {CuKernel} The selected kernel, `undefined` otherwise
    */
   getSelection() {
     return this.#model.findKernelWithId( parseInt(this.#viewimpl.getValue()))
@@ -212,7 +212,7 @@ class KernelSelectionView extends Component {
 
   /**
    * Retrieve the value field of the selected kernel used in the selector drop down
-   * In this case we are using the kernel's id (see {@link module:cuda.CudaKernel#id}) 
+   * In this case we are using the kernel's id (see {@link module:cuda.CuKernel#id}) 
    * to make the selection
    * @returns {Number} The id of the selected kernel. `-1` otherwise
    */

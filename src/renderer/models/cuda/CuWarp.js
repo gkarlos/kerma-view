@@ -1,10 +1,10 @@
-const Limits = require('@renderer/models/cuda/CudaLimits')
-const CudaIndex = require('@renderer/models/cuda/CudaIndex')
+const Limits = require('@renderer/models/cuda/CuLimits')
+const CuIndex = require('@renderer/models/cuda/CuIndex')
 
-const isCudaBlock = require('@renderer/models/cuda').isCudaBlock
+const isCuBlock = require('@renderer/models/cuda').isCuBlock
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
+/** @ignore @typedef {import("@renderer/models/cuda/CuBlock")} CuBlock */
+/** @ignore @typedef {import("@renderer/models/cuda/CuIndex")} CuIndex */
 
 /**
  * Represents a Cuda Warp. This class is meant to be used to 
@@ -12,31 +12,31 @@ const isCudaBlock = require('@renderer/models/cuda').isCudaBlock
  * 
  * @memberof module:cuda
  */
-class CudaWarp {
+class CuWarp {
   
-  /** @type CudaBlock */ #block
+  /** @type CuBlock */ #block
   /** @type Number    */ #index
   /** @type Number    */ #usableLanes
   /** @type Number    */ #unusableLanes
 
   /**
    * 
-   * @param {CudaBlock} block The CudaBlock this warp is part of 
-   * @param {CudaIndex|Number} index Linear index for the position of the warp in its block
+   * @param {CuBlock} block The CuBlock this warp is part of 
+   * @param {CuIndex|Number} index Linear index for the position of the warp in its block
    */
   constructor(block, index) {
-    if (index instanceof CudaIndex) {
+    if (index instanceof CuIndex) {
       if (!index.is1D())
         throw new Error("Invalid index. Must be 1D")
       if ( index.x >= block.numWarps)
         throw new Error(`Invalid warp index '${index.toString()}' for block ${block.toString()}`)
-      this.#index = CudaIndex.linearize(index, block.dim)
+      this.#index = CuIndex.linearize(index, block.dim)
     } else if (Number.isInteger(index)) {
       if ( index >= block.numWarps)
         throw new Error(`Invalid warp index '${index}' for block ${block.toString()}`)
       this.#index = index
     } else {
-      throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
+      throw new Error(`Invalid argument 'index'. Must be an Integer or CuIndex instance`)
     }
 
     this.#block = block
@@ -50,8 +50,8 @@ class CudaWarp {
   /** 
    * Compute the number of usable threads in a warp
    * @protected 
-   * @param {CudaBlock} block
-   * @param {Number|CudaIndex} warpIndex
+   * @param {CuBlock} block
+   * @param {Number|CuIndex} warpIndex
    * */
   _computeUsableLanes(block, warpIndex) {
     if ( block.hasWarpWithInactiveLanes()) {
@@ -67,19 +67,19 @@ class CudaWarp {
 
   /**
    * Set the block this warp belongs to
-   * @param {CudaBlock} block 
-   * @returns {CudaWarp} this
+   * @param {CuBlock} block 
+   * @returns {CuWarp} this
    */
   setBlock(block) {
-    if ( !isCudaBlock(block))
-      throw new Error('block must be a CudaBlock')
+    if ( !isCuBlock(block))
+      throw new Error('block must be a CuBlock')
     this.#block = block
     return this
   }
 
   /** 
    * Retrieve the block this warp is part of
-   * @returns {CudaBlock}
+   * @returns {CuBlock}
    */
   getBlock() { return this.#block } 
 
@@ -169,11 +169,11 @@ class CudaWarp {
 
   /**
    * Compare warps for value-equality
-   * @param {CudaWarp} other 
+   * @param {CuWarp} other 
    * @return {Boolean}
    */
   equals(other) {
-      return (other instanceof CudaWarp) 
+      return (other instanceof CuWarp) 
         && this.getBlock().equals(other.getBlock())
         && this.getIndex() === other.getIndex()
         && this.getNumUsableLanes() === other.getNumUsableLanes()
@@ -187,8 +187,8 @@ class CudaWarp {
    */
   toString(short=false) {
     return short ? `#${this.getIndex()}, ${this.getNumUsableLanes()}/${this.getNumUnusableLanes()}, [${this.getFirstThreadIndex()}, ${this.hasUnusableLanes()? this.getLastUsableThreadIndex() + "/" : ""}${this.getLastThreadIndex()}]` 
-      : `CudaWarp(id: ${this.getIndex()}, block: ${this.#block.toString()}, usable: ${this.getNumUsableLanes()})`
+      : `CuWarp(id: ${this.getIndex()}, block: ${this.#block.toString()}, usable: ${this.getNumUsableLanes()})`
   }
 }
 
-module.exports = CudaWarp
+module.exports = CuWarp

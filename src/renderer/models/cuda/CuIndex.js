@@ -2,16 +2,16 @@ const Index = require('@renderer/models/Index')
 
 /** @ignore @typedef import("@renderer/models/Dim") Dim */
 /** @ignore @typedef import("@renderer/models/cuda/CudaDim") Dim */
-/** @ignore @typedef import("@renderer/models/cuda/CudaIndex") CudaIndex */
+/** @ignore @typedef import("@renderer/models/cuda/CuIndex") CuIndex */
 /**
  * Represents a 2D index value. Can be used index a thread or
  * index into an array. **Row-major** order is assumed
  * 
  * @memberof module:cuda
  */
-class CudaIndex extends Index {
+class CuIndex extends Index {
   /**
-   * Creates a new `CudaIndex` object
+   * Creates a new `CuIndex` object
    *
    * @param {Number} [row] Value for the row, (y) dimension.
    * @param {Number} col Value for the col (x) dimension.
@@ -40,7 +40,7 @@ class CudaIndex extends Index {
 
   /**
    * Transform 2D index to 1D index
-   * @param   {Index|CudaIndex} index A 2D index
+   * @param   {Index|CuIndex} index A 2D index
    * @param   {Dim|CudaDim} dim A cuda dim description
    * @throws  {Error} If args are invalid. **Only 2D Dims are supported**
    * @returns {Number} 
@@ -60,10 +60,10 @@ class CudaIndex extends Index {
 
     /**
    * Transform a 1-dimensional index to a 2-dimensional index
-   * @param   {Number|Index|CudaIndex} index A 1-Dimensional index. If a Index is passed and the y-dimension > 1 then it is returned as is.
+   * @param   {Number|Index|CuIndex} index A 1-Dimensional index. If a Index is passed and the y-dimension > 1 then it is returned as is.
    * @param   {Dim|CudaDim} dim A cuda dim description
    * @throws  {Error} If args are invalid. **Only 2D Dims are supported**
-   * @returns {CudaIndex} 
+   * @returns {CuIndex} 
    */
   static delinearize(index, dim) {
     if ( index === undefined) throw new Error('Missing required argument `index`')
@@ -90,10 +90,10 @@ class CudaIndex extends Index {
     if ( row >= dim.y || col >= dim.x)
       throw new Error(`Argument missmatch. Index ${index.toString()} not valid for dims ${dim.toString()}`)
 
-    return new CudaIndex(row, col)
+    return new CuIndex(row, col)
   }
 }
 
-CudaIndex.Unknown = new CudaIndex('unknown')
+CuIndex.Unknown = new CuIndex('unknown')
 
-module.exports = CudaIndex
+module.exports = CuIndex

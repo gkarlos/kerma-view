@@ -1,6 +1,6 @@
-/** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaBlock */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
+/** @ignore @typedef {import("@renderer/models/cuda/CuGrid")} CuGrid */
+/** @ignore @typedef {import("@renderer/models/cuda/CuGrid")} CudaBlock */
+/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
 /** @ignore @typedef {import("@renderer/models/source/FunctionCallSrc")} FunctionCallSrc */
 
 const FunctionSrc = require("../source/FunctionSrc")
@@ -8,16 +8,16 @@ const FunctionSrc = require("../source/FunctionSrc")
 /**
  * Model for a Cuda kernel launch
  */
-class CudaLaunch {
+class CuLaunch {
 
   /** @type {Number}           */ #id       
-  /** @type {CudaGrid}         */ #grid
-  /** @type {CudaKernel}       */ #kernel
+  /** @type {CuGrid}         */ #grid
+  /** @type {CuKernel}       */ #kernel
   /** @type {FunctionCallSrc} */ #source
 
   /** 
-   * @param {CudaKernel} kernel The Kernel this launch is for
-   * @param {CudaGrid} dims
+   * @param {CuKernel} kernel The Kernel this launch is for
+   * @param {CuGrid} dims
    * @param {Object} props Optional properties
    * @param {Number} [props.id] An id for this launch
    * @param {FunctionCallSrc} [props.source] Source info about the launch
@@ -32,11 +32,11 @@ class CudaLaunch {
 
   /** 
    * The kernel this launch is relevant to
-   * @type {CudaKernel} 
+   * @type {CuKernel} 
    */
   get kernel() { return this.#kernel }
 
-  /** @type {CudaGrid} */
+  /** @type {CuGrid} */
   get grid() { return this.#grid }
 
   /** @type {CudaBlock} */
@@ -52,11 +52,11 @@ class CudaLaunch {
   get id() { return this.#id }
 
   /**
-   * Compare with another CudaLaunch for equality
-   * @param {CudaLaunch} other 
+   * Compare with another CuLaunch for equality
+   * @param {CuLaunch} other 
    */
   equals(other) {
-    return ( other instanceof CudaLaunch)
+    return ( other instanceof CuLaunch)
       && this.#grid.equals(other.grid)
       && this.kernel.equals(other.kernel)
       && ((this.#source && other.source && this.#source.equals(other.source)) || (!this.#source && !other.source))
@@ -75,4 +75,4 @@ class CudaLaunch {
 
 }
 
-module.exports = CudaLaunch
+module.exports = CuLaunch

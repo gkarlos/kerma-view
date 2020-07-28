@@ -3,10 +3,10 @@ const ComputeSelection  = require('@renderer/services/compute-selection/ComputeS
 const App     = require('@renderer/app')
 const ComputeSelectionMode = require('./ComputeSelectionMode')
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")}   CudaGrid   */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")}  CudaBlock  */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaThread")} CudaThread */
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CuGrid")}   CuGrid   */
+/** @ignore @typedef {import("@renderer/models/cuda/CuBlock")}  CuBlock  */
+/** @ignore @typedef {import("@renderer/models/cuda/CuThread")} CuThread */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection")} ComputeSelection */
 /** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnBlockChangeCallback}  ComputeSelectionOnBlockChangeCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection/").ComputeSelectionOnUnitSelectCallback }  ComputeSelectionOnUnitSelectCallback  */
@@ -76,7 +76,7 @@ class ComputeSelectionService extends Service {
 
   /**
    * Check if a selection for a given launch exists and if so return it
-   * @param {CudaLaunch} launch
+   * @param {CuLaunch} launch
    * @returns {ComputeSelection|undefined}
    */
   lookupForLaunch(launch) {
@@ -85,7 +85,7 @@ class ComputeSelectionService extends Service {
 
   /**
    * Create a new ComputeSelection for a given kernel launch
-   * @param {CudaLaunch} launch
+   * @param {CuLaunch} launch
    * @param {Boolean} activate immediately activate this selection upon creation
    * @returns {ComputeSelection}
    */
@@ -108,7 +108,7 @@ class ComputeSelectionService extends Service {
   /**
    * Lookup the saved selections if one exists for the provided kernel launch and if so use it.
    * If none exists one will be created
-   * @param {CudaLaunch} launch 
+   * @param {CuLaunch} launch 
    * @param {Boolean} activate
    * @returns {ComputeSelection}
    */

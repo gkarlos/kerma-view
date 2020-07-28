@@ -7,9 +7,9 @@ const Dim = require('@renderer/models/Dim')
  * @memberof module:cuda
  * @extends {Dim}
  */
-class CudaDim extends Dim {
+class CuDim extends Dim {
   /**
-   * Create a new CudaDim instance
+   * Create a new CuDim instance
    * @param {Number} x Size of the x-dimension (Number of columns)
    * @param {Number} [y] Size of the y-dimension (Number of rows)
    * @param {Number} [z] Size of the z-dimension (Number of layers)
@@ -23,14 +23,14 @@ class CudaDim extends Dim {
   }
 
   /**
-   * Factory method to create a new CudaDim instance
+   * Factory method to create a new CuDim instance
    * @param {Number} x Size of the x-dimension (Number of columns)
    * @param {Number} [y] Size of the y-dimension (Number of rows)
    * @param {Number} [z] Size of the z-dimension (Number of layers)
    */
   static of(x, y=1, z=1) {
-    return new CudaDim(x,y,z)
+    return new CuDim(x,y,z)
   }
 }
 
-module.exports = CudaDim
+module.exports = CuDim

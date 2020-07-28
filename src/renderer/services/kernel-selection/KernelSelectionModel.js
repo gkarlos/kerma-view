@@ -1,15 +1,15 @@
-/** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
+/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
 
-const { CudaKernel } = require("@renderer/models/cuda")
+const { CuKernel } = require("@renderer/models/cuda")
 
 /**
  * @memberof module:kernel-selection
  */
 class KernelSelectionModel {
 
-  /** @type {Array.<CudaKernel>} */
+  /** @type {Array.<CuKernel>} */
   #options
-  /** @type {CudaKernel} */
+  /** @type {CuKernel} */
   #selection
 
   /**
@@ -21,7 +21,7 @@ class KernelSelectionModel {
   }
 
   /**
-   * @type {Array.<CudaKernel>}
+   * @type {Array.<CuKernel>}
    */
   get options() { return this.#options }
 
@@ -32,11 +32,11 @@ class KernelSelectionModel {
 
   /**
    * Add a kernel option
-   * @param {CudaKernel} kernel A CudaKernel
+   * @param {CuKernel} kernel A CuKernel
    * @returns {KernelSelectionModel} this
    */
   addKernel(kernel) {
-    if ( kernel instanceof CudaKernel)
+    if ( kernel instanceof CuKernel)
       this.#options.push(kernel)
     return this
   }
@@ -44,7 +44,7 @@ class KernelSelectionModel {
   /**
    * Remove a kernel from the available options
    * If the kernel is currently selected, the selection is cleared
-   * @param {CudaKernel} kernel A CudaKernel
+   * @param {CuKernel} kernel A CuKernel
    * @returns {KernelSelectionModel} this
    */
   removeKernel(kernel) {
@@ -70,7 +70,7 @@ class KernelSelectionModel {
 
   /**
    * Select a kernel
-   * @param {CudaKernel} kernel A CudaKernel
+   * @param {CuKernel} kernel A CuKernel
    * @returns {Boolean} `true` if the kernel was found. `false` otherwise
    */
   selectKernel(kernel) {  
@@ -114,7 +114,7 @@ class KernelSelectionModel {
 
   /**
    * Retrieve the current selection or `null` if one does not exist
-   * @returns {CudaKernel}
+   * @returns {CuKernel}
    */
   getSelection() { return this.#selection }
 
@@ -135,7 +135,7 @@ class KernelSelectionModel {
 
   /**
    * Check if a kernel exists in the available options
-   * @param {CudaKernel} kernel
+   * @param {CuKernel} kernel
    * @returns {Boolean}
    */
   hasKernel(kernel) {
@@ -169,8 +169,8 @@ class KernelSelectionModel {
 
   /**
    * Search for a kernel in the options and retrieve it if it exists
-   * @param {CudaKernel} kernel
-   * @returns {CudaKernel} The kernel if found. `undefined` otherwise 
+   * @param {CuKernel} kernel
+   * @returns {CuKernel} The kernel if found. `undefined` otherwise 
    */
   findKernel(kernel) {
     return this.#options.find((ker) => ker.equals(kernel))
@@ -179,7 +179,7 @@ class KernelSelectionModel {
   /**
    * Search for a kernel with that name in the options and retrieve it if it exists
    * @param {String} kernel
-   * @returns {CudaKernel} The kernel if found. `undefined` otherwise 
+   * @returns {CuKernel} The kernel if found. `undefined` otherwise 
    */
   findKernelWithName(name) {
     return this.#options.find((ker) => ker.source.name === name)
@@ -188,7 +188,7 @@ class KernelSelectionModel {
   /**
    * Search for a kernel with that id in the options and retrieve it if it exists
    * @param {Number} kernel
-   * @returns {CudaKernel} The kernel if found. `undefined` otherwise 
+   * @returns {CuKernel} The kernel if found. `undefined` otherwise 
    */
   findKernelWithId(id) {
     return this.#options.find((ker) => ker.id === id)

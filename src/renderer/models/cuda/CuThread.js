@@ -1,10 +1,10 @@
-const CudaIndex = require('@renderer/models/cuda/CudaIndex')
-const CudaWarp = require('@renderer/models/cuda/CudaWarp')
-const CudaLimits = require('@renderer/models/cuda/CudaLimits')
+const CuIndex = require('@renderer/models/cuda/CuIndex')
+const CuWarp = require('@renderer/models/cuda/CuWarp')
+const CuLimits = require('@renderer/models/cuda/CuLimits')
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaBlock")} CudaBlock */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")}  CudaWarp  */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaIndex")} CudaIndex */
+/** @ignore @typedef {import("@renderer/models/cuda/CuBlock")} CuBlock */
+/** @ignore @typedef {import("@renderer/models/cuda/CuWarp")}  CuWarp  */
+/** @ignore @typedef {import("@renderer/models/cuda/CuIndex")} CuIndex */
 
 /**
  * Represents a Cuda thread.  This class is meant to be used to 
@@ -12,21 +12,21 @@ const CudaLimits = require('@renderer/models/cuda/CudaLimits')
  * 
  * @memberof module:cuda
  */
-class CudaThread {
-  /** @type {CudaBlock} */ #block
-  /** @type {CudaIndex} */ #index
-  /** @type {CudaIndex} */ #globalIndex
-  /** @type {CudaWarp}  */ #warp
+class CuThread {
+  /** @type {CuBlock} */ #block
+  /** @type {CuIndex} */ #index
+  /** @type {CuIndex} */ #globalIndex
+  /** @type {CuWarp}  */ #warp
   
   /**
-   * Create a new CudaThread instance
-   * @param {CudaBlock} block The block this therad belongs to. This must refer to a specific block in the grid, i.e a block with an index
-   * @param {CudaIndex|Number} index 
+   * Create a new CuThread instance
+   * @param {CuBlock} block The block this therad belongs to. This must refer to a specific block in the grid, i.e a block with an index
+   * @param {CuIndex|Number} index 
    */
   constructor(block, index) {
     if ( !block)
       throw new Error(`Missing required argument 'block'`)
-    if ( index instanceof CudaIndex) {
+    if ( index instanceof CuIndex) {
       if ( index.x >= block.x)
         throw new Error(`Invalid thread index '${index.toString()}' for block '${block.toString()}'`)
       if ( index.is2D() && index.y >= block.y)
@@ -35,9 +35,9 @@ class CudaThread {
     } else if ( Number.isInteger(index)) {
       if ( index >= block.size)
         throw new Error(`Invalid thread index '${index}' for block '${block.toString()}'`)
-      this.#index = new CudaIndex(index)
+      this.#index = new CuIndex(index)
     } else {
-      throw new Error(`Invalid argument 'index'. Must be an Integer or CudaIndex instance`)
+      throw new Error(`Invalid argument 'index'. Must be an Integer or CuIndex instance`)
     }
 
     // TODO #globalIndex = ?
@@ -45,7 +45,7 @@ class CudaThread {
     this.#warp = undefined
   }
 
-  /** @type {CudaIndex} */
+  /** @type {CuIndex} */
   get index() { return this.#index }
 
   /** @type {Number} */
@@ -54,7 +54,7 @@ class CudaThread {
   /** @type {Number} */
   get y() { return this.#index.y }
 
-  /** @type {CudaIndex} */
+  /** @type {CuIndex} */
   get globalIndex() { return this.#globalIndex }
 
   /** @type {Number} */
@@ -65,7 +65,7 @@ class CudaThread {
 
   /**
    * Retrieve the index of this thread within its block
-   * @returns {CudaIndex}
+   * @returns {CuIndex}
    */
   getIndex() {
     return this.#index
@@ -73,7 +73,7 @@ class CudaThread {
 
   /**
    * Retrieve the global index of this thread
-   * @returns {CudaIndex}
+   * @returns {CuIndex}
    */
   getGlobalIndex() {
     return this.#globalIndex
@@ -81,17 +81,17 @@ class CudaThread {
 
   /**
    * Retrieve the block this thread is part of
-   * @returns {CudaBlock}
+   * @returns {CuBlock}
    */
   getBlock() { return this.#block }
 
   /**
    * Retrieve the warp (within its block) this thread belongs to
-   * @returns {CudaWarp}
+   * @returns {CuWarp}
    */
   getWarp() { 
     if ( this.#warp === undefined)
-      this.#warp = new CudaWarp( this.#block, CudaIndex.linearize(this.#index, this.#block.dim) / CudaLimits.warpSize)
+      this.#warp = new CuWarp( this.#block, CuIndex.linearize(this.#index, this.#block.dim) / CuLimits.warpSize)
     return this.#warp
   }
 
@@ -100,7 +100,7 @@ class CudaThread {
    * @returns {Number}
    */
   getLane() {
-    return CudaIndex.linearize(this.index, this.getBlock().dim) % CudaLimits.warpSize
+    return CuIndex.linearize(this.index, this.getBlock().dim) % CuLimits.warpSize
   }
 
   /**
@@ -108,7 +108,7 @@ class CudaThread {
    * @returns {Boolean}
    */
   inUsableLane() {
-    return CudaIndex.linearize(this.index, this.getBlock().dim) <= this.getWarp().getLastUsableThread()
+    return CuIndex.linearize(this.index, this.getBlock().dim) <= this.getWarp().getLastUsableThread()
   }
 
   /**
@@ -117,17 +117,17 @@ class CudaThread {
    * @returns {Boolean}
    */
   inUnusableLane() {
-    return CudaIndex.linearize(this.index, this.getBlock().dim) > this.getWarp().getLastUsableThread()
+    return CuIndex.linearize(this.index, this.getBlock().dim) > this.getWarp().getLastUsableThread()
   }
 
   /**
    * Compare with another thread for equality
    * Two threads are considered equal if they belong to the same block and have the same index
    * within the block
-   * @param {CudaThread} other 
+   * @param {CuThread} other 
    */
   equals(other) {
-    return ( other instanceof CudaThread)
+    return ( other instanceof CuThread)
       && this.#block.equals(other.getBlock())
       && this.#index.equals(other.getIndex())
   }
@@ -137,4 +137,4 @@ class CudaThread {
   }
 }
 
-module.exports = CudaThread
+module.exports = CuThread

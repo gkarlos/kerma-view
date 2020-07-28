@@ -13,13 +13,13 @@ module.exports = function() {
   const MemorySrc      = require('@renderer/models/source/MemorySrc')
   const SrcRange       = require('@renderer/models/source/SrcRange')
   const Types          = require('@renderer/models/types/Types')
-  const AddressSpace   = require('@renderer/models/cuda/CudaAddressSpace')
+  const CuAddrSpace   = require('@renderer/models/cuda/CuAddrSpace')
   const App            = require('@renderer/app')
 
   var unitType    = [Types.Int32, Types.Int64]
   var types       = ["int", "myType", "value_t", "VALUE", "DATA_TYPE"]
   var kernelNames = ["mykernel", "kernel", "kernelA", "addKernel", "sumKernel"]
-  var addrSpaces   = [AddressSpace.Constant, AddressSpace.Local, AddressSpace.Shared, AddressSpace.Global]
+  var addrSpaces   = [CuAddrSpace.Constant, CuAddrSpace.Local, CuAddrSpace.Shared, CuAddrSpace.Global]
 
   return {
     /**

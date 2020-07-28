@@ -1,11 +1,11 @@
 const Mode      = require('./ComputeSelectionMode')
-const CudaWarp = require('@renderer/models/cuda/CudaWarp')
-const CudaThread = require('@renderer/models/cuda/CudaThread')
+const CuWarp = require('@renderer/models/cuda/CuWarp')
+const CuThread = require('@renderer/models/cuda/CuThread')
 const CudaIndex = require('@renderer/models/cuda').Index
 const CudaBlock = require('@renderer/models/cuda').Block
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaGrid")} CudaGrid */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CuGrid")} CuGrid */
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionMode").} ComputeSelectionMode */
 
 /**
@@ -14,20 +14,20 @@ const CudaBlock = require('@renderer/models/cuda').Block
  */
 class ComputeSelectionModel {
 
-  /** @type {CudaLaunch} */
+  /** @type {CuLaunch} */
   #launch
-  /** @type {CudaGrid} */
+  /** @type {CuGrid} */
   #gridDescription
   /** @type {ComputeSelectionMode} */
   #mode
   /** @type {CudaBlock} */
   #blockSelection
-  /** @type {CudaWarp | CudaThread} */
+  /** @type {CuWarp | CuThread} */
   #unitSelection
 
   /**
    * Create a new ComputeSelectionModel
-   * @param {CudaLaunch} launch A Cuda kernel launch
+   * @param {CuLaunch} launch A Cuda kernel launch
    * @param {ComputeSelectionMode} [mode] Optionally set the mode upon creation. {@link module:compute-selection.ComputeSelectionMode.Thread} by default
    */
   constructor(launch, mode=Mode.Default) {
@@ -43,7 +43,7 @@ class ComputeSelectionModel {
   /**
    * The grid description this selection is relevant for
    * @readonly
-   * @type {CudaGrid}
+   * @type {CuGrid}
    */
   get grid() { return this.#gridDescription }
 
@@ -64,13 +64,13 @@ class ComputeSelectionModel {
   /**
    * The relevant Cuda kernel launch
    * @readonly
-   * @type {CudaLaunch}
+   * @type {CuLaunch}
    */
   get launch() { return this.#launch }
 
   /**
    * Get the grid description this selection is relevant for
-   * @returns {CudaGrid}
+   * @returns {CuGrid}
    */
   getGrid() { return this.#gridDescription }
 
@@ -88,7 +88,7 @@ class ComputeSelectionModel {
 
   /**
    * Get the relevant Cuda kernel launch
-   * @returns {CudaLaunch}
+   * @returns {CuLaunch}
    */
   getLaunch() { return this.#launch }
 
@@ -98,21 +98,21 @@ class ComputeSelectionModel {
   getBlockSelection() { return this.#blockSelection }
 
   /**
-   * @return {CudaWarp|CudaThread}
+   * @return {CuWarp|CuThread}
    */
   getUnitSelection() {
     return this.#unitSelection
   }
 
   /**
-   * @returns {CudaWarp}
+   * @returns {CuWarp}
    */
   getWarpSelection() {
     return this.inWarpMode()? this.#unitSelection : undefined
   }
 
   /**
-   * @returns {CudaThread}
+   * @returns {CuThread}
    */
   getThreadSelection() {
     return this.inThreadMode()? this.#unitSelection : undefined
@@ -207,12 +207,12 @@ class ComputeSelectionModel {
 
   /**
    * Select a warp in the selected block
-   * @param {CudaWarp} warp 
+   * @param {CuWarp} warp 
    * @returns {ComputeSelectionModel} this
    */
   selectWarp(warp) {
-    if ( !(warp instanceof CudaWarp))
-      throw new Error('warp must be a CudaWarp')
+    if ( !(warp instanceof CuWarp))
+      throw new Error('warp must be a CuWarp')
     this.#unitSelection = warp
     if ( this.inThreadMode())
       this.#mode = Mode.Warp
@@ -232,11 +232,11 @@ class ComputeSelectionModel {
 
   /**
    * Select a thread in the selected block
-   * @param {CudaThread} thread 
+   * @param {CuThread} thread 
    */
   selectThread(thread) {
-    if ( !(thread instanceof CudaThread))
-      throw new Error('thread must be a CudaThread')
+    if ( !(thread instanceof CuThread))
+      throw new Error('thread must be a CuThread')
     this.#unitSelection = thread
     if ( this.inWarpMode())
       this.#mode = Mode.Thread

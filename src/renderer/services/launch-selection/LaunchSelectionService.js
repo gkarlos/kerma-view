@@ -3,8 +3,8 @@ const Service = require('@renderer/services/Service')
 const { Launch } = require('@renderer/models/cuda')
 
 /**@ignore @typedef {import("@renderer/services/launch-selection/LaunchSelection").LaunchSelectionOnSelectCallback} LaunchSelectionOnSelectCallback */
-/**@ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
-/**@ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
+/**@ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
+/**@ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
 
 class LaunchSelectionService extends Service {
 
@@ -24,7 +24,7 @@ class LaunchSelectionService extends Service {
 
   /**
    * Create a new KernelSelection for a given list of kernels
-   * @param {CudaLaunch[]} launches An array of CudaLaunch objects
+   * @param {CuLaunch[]} launches An array of CuLaunch objects
    * @param {Boolean} [makeCurrent] Make the selection the currently displayed selection
    * @returns {LaunchSelection}
    */
@@ -50,7 +50,7 @@ class LaunchSelectionService extends Service {
 
   /**
    * 
-   * @param {CudaKernel} kernel 
+   * @param {CuKernel} kernel 
    * @param {Boolean} makeCurrent 
    */
   createForKernel(kernel, makeCurrent) {

@@ -9,7 +9,7 @@ const Component      = require('@renderer/ui/component/Component')
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelection").LaunchSelectionOnEnabledCallback} LaunchSelectionOnEnabledCallback */
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelection").LaunchSelectionOnDisabledCallback} LaunchSelectionOnDisabledCallback */
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionModel")} LaunchSelectionModel */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
 
 /**
  * @memberof module:launch-selection
@@ -66,7 +66,7 @@ class LaunchSelectionView extends Component {
 
       /**
        * We need this indirection because the selectize callback accepts a String argument but
-       * we want our API to accept a CudaLaunch argument
+       * we want our API to accept a CuLaunch argument
        */
       this.#viewimpl.on('change', (id) => {
         if ( id.length > 0) {
@@ -149,7 +149,7 @@ class LaunchSelectionView extends Component {
 
   /**
    * Add a launch to the options
-   * @param {CudaLaunch} launch A CudaLaunch object
+   * @param {CuLaunch} launch A CuLaunch object
    * @returns {LaunchSelectionView} this
    */
   addLaunch(launch) {
@@ -161,7 +161,7 @@ class LaunchSelectionView extends Component {
 
   /**
    * Remove a launch from the options
-   * @param {CudaLaunch} launch A CudaLaunch object
+   * @param {CuLaunch} launch A CuLaunch object
    * @returns {LaunchSelectionView} this
    */
   removeLaunch(launch) {
@@ -180,7 +180,7 @@ class LaunchSelectionView extends Component {
 
   /**
    * Retrieve the current selected kernel launch
-   * @returns {CudaLaunch} The selected kernel launch if one exists, `undefined` otherwise
+   * @returns {CuLaunch} The selected kernel launch if one exists, `undefined` otherwise
    */
   getSelection() {
     return this.#model.findLaunchWithId( parseInt(this.#viewimpl.getValue()))
@@ -188,7 +188,7 @@ class LaunchSelectionView extends Component {
 
   /**
    * Retrieve the value field of the selected launch, used in the selector drop down
-   * In this case we are using the launche's id (see {@link module:cuda.CudaLaunch#id}) 
+   * In this case we are using the launche's id (see {@link module:cuda.CuLaunch#id}) 
    * to make the selection
    * @returns {Number} The id of the selected kernel. `-1` otherwise
    */
@@ -240,7 +240,7 @@ class LaunchSelectionView extends Component {
   }
 
   /**
-   * @param {CudaLaunch} launch 
+   * @param {CuLaunch} launch 
    * @param {function(String)} escape 
    */
   static #renderSelected = ( launch, escape) => {
@@ -252,7 +252,7 @@ class LaunchSelectionView extends Component {
   }
 
   /**
-   * @param {CudaLaunch} launch 
+   * @param {CuLaunch} launch 
    * @param {function(String)} escape 
    */
   static #renderOption = ( launch, escape) => {

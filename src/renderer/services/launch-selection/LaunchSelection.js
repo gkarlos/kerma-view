@@ -2,7 +2,7 @@
 
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionModel")} LaunchSelectionModel */
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionView")} LaunchSelectionView */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
 
 const LaunchSelectionModel = require('@renderer/services/launch-selection/LaunchSelectionModel')
 const LaunchSelectionView = require('@renderer/services/launch-selection/LaunchSelectionView')
@@ -23,7 +23,7 @@ class LaunchSelection {
   
   /**
    * Create a new LaunchSelection instance
-   * @param {Array.<CudaLaunch>} [launches] An array of CudaLaunch objects to be used as options
+   * @param {Array.<CuLaunch>} [launches] An array of CuLaunch objects to be used as options
    */
   constructor(launches=[]) {
     this.#model = new LaunchSelectionModel()
@@ -51,7 +51,7 @@ class LaunchSelection {
 
   /**
    * The available options of this LaunchSelection
-   * @type {Array.<CudaLaunch>} 
+   * @type {Array.<CuLaunch>} 
    */
   get options() { return this.#model.options }
 
@@ -67,7 +67,7 @@ class LaunchSelection {
 
   /**
    * Add a launch to the options
-   * @param {CudaLaunch} launch A CudaLaunch
+   * @param {CuLaunch} launch A CuLaunch
    * @param {Boolean} [enable] 
    *  If set, the selection will be enabled (if currently disabled) after the launch is added
    * @returns {KernelSelection} this
@@ -83,7 +83,7 @@ class LaunchSelection {
 
   /**
    * Add multiple launch options
-   * @param {Array.<CudaLaunch>} launches An array of CudaLaunch objects
+   * @param {Array.<CuLaunch>} launches An array of CuLaunch objects
    * @param {Boolean} [enable] 
    *  If set, the selection will be enabled after the launches are added
    * @returns {LaunchSelection} this
@@ -99,7 +99,7 @@ class LaunchSelection {
   /**
    * Remove a launch from the options
    * If there are no options left the selection gets disabled
-   * @param {CudaLaunch} launch 
+   * @param {CuLaunch} launch 
    * @param {Boolean} [keepEnabled] 
    *  If set, the selection will not get disabled if there are no options left
    * @returns {LaunchSelection} this
@@ -114,7 +114,7 @@ class LaunchSelection {
 
   /**
    * Remove a number of launches from the options
-   * @param {Array.<CudaLaunch>} launches An array of CudaLaunch objects
+   * @param {Array.<CuLaunch>} launches An array of CuLaunch objects
    * @param {Boolean} [keepEnabled]
    *   If set, the selection will not get disabled if there are no options left after the removal
    * @returns {LaunchSelection} this 
@@ -138,7 +138,7 @@ class LaunchSelection {
 
   /**
    * Retrieve the currently selected option, if one exists
-   * @returns {CudaLaunch} The select CudaLaunch if it exists. `null` otherwise
+   * @returns {CuLaunch} The select CuLaunch if it exists. `null` otherwise
    */
   getSelection() { return this.#model.getSelection() }
 
@@ -154,7 +154,7 @@ class LaunchSelection {
 
   /**
    * Check if a launch exists as an option
-   * @param {CudaLaunch} launch
+   * @param {CuLaunch} launch
    * @returns {Boolean} 
    */
   hasLaunch(launch) {
@@ -277,7 +277,7 @@ LaunchSelection.Events = {
 /**
  * @callback LaunchSelectionOnSelectCallback
  * @memberof module:launch-selection
- * @param {CudaLaunch} launch The selected kernel launch
+ * @param {CuLaunch} launch The selected kernel launch
  */
 
 /**

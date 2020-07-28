@@ -1,15 +1,15 @@
 /** @ignore @typedef {import("@renderer/models/source/FunctionSrc")} FunctionSrc */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
 
 /**
  * @memberof module:cuda
  */
-class CudaKernel {
+class CuKernel {
   /** @type {Number} */
   #id
   /** @type {FunctionSrc} */
   #source
-  /** @type {Array.<CudaLaunch>} */
+  /** @type {Array.<CuLaunch>} */
   #launches
   /** @type {String} */
   #color
@@ -33,7 +33,7 @@ class CudaKernel {
   /** @type {String} */
   get name() { return this.#source.name }
 
-  /** @type {Array.<CudaLaunch>} */
+  /** @type {Array.<CuLaunch>} */
   get launches() { return this.#launches }
 
   /** @type {String} */
@@ -50,8 +50,8 @@ class CudaKernel {
   }
 
   /**
-   * @param {CudaLaunch} launch 
-   * @returns {CudaKernel} this
+   * @param {CuLaunch} launch 
+   * @returns {CuKernel} this
    */
   addLaunch(launch) {
     if (launch)
@@ -61,10 +61,10 @@ class CudaKernel {
 
   /**
    * Compare with another kernel for equality
-   * @param {CudaKernel} other 
+   * @param {CuKernel} other 
    */
   equals(other) {
-    return (other instanceof CudaKernel)
+    return (other instanceof CuKernel)
       && this.#id === other.id
       && !(this.#source === null || other.source === null)
       && this.#source.equals(other.source)
@@ -89,4 +89,4 @@ class CudaKernel {
   
 }
 
-module.exports = CudaKernel
+module.exports = CuKernel

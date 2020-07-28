@@ -7,8 +7,8 @@ const Events = require("@renderer/services/compute-selection/Events")
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").ComputeSelectionOnWarpSelectCallback}   ComputeSelectionOnWarpSelectCallback */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelection").} */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
-/** @ignore @typedef {import("@renderer/models/cuda/CudaLaunch")} CudaLaunch */
+/** @ignore @typedef {import("@renderer/models/cuda/CuWarp")} CuWarp */
+/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
 
 /**
  * @memberof module:compute-selection
@@ -198,7 +198,7 @@ class ComputeSelectionWarpView extends Component {
    * Render how usable/unusable lanes are displayed
    * Output controlled by #options.usableThreadsMode 
    * @ignore
-   * @param {CudaWarp} warp
+   * @param {CuWarp} warp
    * @param {JQuery} containerText
    * @param {JQuery} containerBar
    */
@@ -241,7 +241,7 @@ class ComputeSelectionWarpView extends Component {
 
   /**
    * Render a specific warp
-   * @param {CudaWarp} warp 
+   * @param {CuWarp} warp 
    */
   _renderWarp(warp) {
     let res =  $(`<div class="list-group-item warp-selector-item" data-warp-id=${warp.getIndex()}></div>`)

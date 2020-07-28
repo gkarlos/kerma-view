@@ -12,7 +12,7 @@
  *   This module includes all the available events
  *-----------------------------------------------------------------*/
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaKernel")} CudaKernel */
+/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
 
 
 module.exports = {
@@ -36,7 +36,7 @@ module.exports = {
   
   /** 
    * @event 
-   * @param {CudaKernel} kernel
+   * @param {CuKernel} kernel
    */
   INPUT_KERNEL_SELECTED : "input:kernel-selected",
 

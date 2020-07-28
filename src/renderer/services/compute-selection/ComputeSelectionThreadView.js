@@ -2,11 +2,11 @@ const Component    = require('@renderer/ui/component/Component')
 const App          = require('@renderer/app')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
-const { CudaWarp,
+const { CuWarp,
         CudaIndex,
         CudaThread} = require('@renderer/models/cuda')
 
-/** @ignore @typedef {import("@renderer/models/cuda/CudaWarp")} CudaWarp */
+/** @ignore @typedef {import("@renderer/models/cuda/CuWarp")} CuWarp */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 
 /**
@@ -154,7 +154,7 @@ class ComputeSelectionThreadView extends Component {
 
   /**
    * Render a thread in a warp
-   * @param {CudaWarp} warp 
+   * @param {CuWarp} warp 
    * @param {Number} lane
    */
   _renderThread(warp, lane, unusable=false) {
@@ -176,7 +176,7 @@ class ComputeSelectionThreadView extends Component {
             <span class="value">${warp.getFirstThreadIndex() + lane}</span>
             <span class="key">glob:</span>
             <span class="value">${
-              this.#model.getBlockSelection().getFirstGlobalLinearThreadIdx() + (warp.getIndex() * CudaWarp.Size) + lane
+              this.#model.getBlockSelection().getFirstGlobalLinearThreadIdx() + (warp.getIndex() * CuWarp.Size) + lane
             }
           </div>
           `
@@ -200,7 +200,7 @@ class ComputeSelectionThreadView extends Component {
 
   /**
    * Render a warp in the view
-   * @param {CudaWarp} warp 
+   * @param {CuWarp} warp 
    */
   _renderWarp(warp) {
 
@@ -220,8 +220,8 @@ class ComputeSelectionThreadView extends Component {
     secondRow.append($(`<span class="middle-index">${warp.getFirstThreadIndex() + 16}</span>`))
     let halfWarp1 = $(`<div class="halfwarp"></div>`)
 
-    for ( let lane = 0; lane < CudaWarp.Size; ++lane )
-      if ( lane < CudaWarp.Size / 2)
+    for ( let lane = 0; lane < CuWarp.Size; ++lane )
+      if ( lane < CuWarp.Size / 2)
         halfWarp0.append(this._renderThread(warp, lane, warp.getLastUsableLaneIndex() < lane))
       else
         halfWarp1.append(this._renderThread(warp, lane, warp.getLastUsableLaneIndex() < lane))

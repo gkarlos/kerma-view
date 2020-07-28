@@ -1,11 +1,11 @@
-/** @ignore @typedef {import("@renderer/models/cuda/CudaDim")} CudaDim */
+/** @ignore @typedef {import("@renderer/models/cuda/CuDim")} CuDim */
 
 /** 
  * @class 
  * @memberof module:cuda
  * @hideconstructor
  */
-class CudaLimits {
+class CuLimits {
 
   static cc2 = {
     
@@ -18,6 +18,14 @@ class CudaLimits {
   static cc7 = {
 
   }
+
+
+  /** 
+   * Size of the default runtime heap size. In bytes
+   * More: {@link https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#heap-memory-allocation}
+   * @type {Number} 
+   */
+  static defaultRuntimeHeapSize = 8 * (1 << 20) // 8M
 
 
   /** Min number of threads in the x-dimension */
@@ -61,10 +69,10 @@ class CudaLimits {
 
   /**
    * 
-   * @param {CudaDim} dim 
+   * @param {CuDim} dim 
    */
   static validBlockDim(dim) {
-    return CudaLimits.validBlockDims(dim.x, dim.y, dim.z)
+    return CuLimits.validBlockDims(dim.x, dim.y, dim.z)
   }
 
   /**
@@ -77,13 +85,13 @@ class CudaLimits {
     if ( !x || !Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(z)) 
       return false
     
-    if ( x < CudaLimits.minBlockX || x > CudaLimits.maxBlockX || y < CudaLimits.minBlockY || y > CudaLimits.maxBlockY 
-      || z < CudaLimits.minBlockZ || z > CudaLimits.maxBlockZ )
+    if ( x < CuLimits.minBlockX || x > CuLimits.maxBlockX || y < CuLimits.minBlockY || y > CuLimits.maxBlockY 
+      || z < CuLimits.minBlockZ || z > CuLimits.maxBlockZ )
       return false
 
     let total = x * y * z
     
-    if ( total < CudaLimits.minBlockSize || total > CudaLimits.maxBlockSize )
+    if ( total < CuLimits.minBlockSize || total > CuLimits.maxBlockSize )
       return false
     
     return true
@@ -91,10 +99,10 @@ class CudaLimits {
 
   /**
    * 
-   * @param {CudaDim} dim 
+   * @param {CuDim} dim 
    */
   static validGridDim(dim) {
-    return CudaLimits.validGridDims(dim.x, dim.y, dim.z)
+    return CuLimits.validGridDims(dim.x, dim.y, dim.z)
   }
 
   /**
@@ -106,16 +114,16 @@ class CudaLimits {
     if ( !x || !Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(z)) 
       return false
     
-    if ( x < CudaLimits.minGridX || x > CudaLimits.maxGridX || y < CudaLimits.minGridY || y > CudaLimits.maxGridY || z < CudaLimits.minGridZ || z > CudaLimits.maxGridZ )
+    if ( x < CuLimits.minGridX || x > CuLimits.maxGridX || y < CuLimits.minGridY || y > CuLimits.maxGridY || z < CuLimits.minGridZ || z > CuLimits.maxGridZ )
       return false
 
     let total = x * y * z
 
-    if ( total < CudaLimits.minGridSize || total > CudaLimits.maxGridSize )
+    if ( total < CuLimits.minGridSize || total > CuLimits.maxGridSize )
       return false
     
     return true
   }
 }
 
-module.exports = CudaLimits
+module.exports = CuLimits
