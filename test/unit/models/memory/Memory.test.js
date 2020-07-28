@@ -5,7 +5,7 @@ const expect = require('chai').expect
 const Memory = require('@renderer/models/memory/Memory')
 const Dim    = require('@renderer/models/Dim')
 const Types  = require('@renderer/models/types/Types')
-const { AddressSpace } = require('@renderer/models/cuda')
+const AddressSpace = require('@renderer/models/cuda/CuAddrSpace')
 
 describe('renderer/models/memory/Memory', () => {
   describe("constructor", () => {
