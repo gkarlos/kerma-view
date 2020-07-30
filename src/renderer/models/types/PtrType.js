@@ -17,20 +17,15 @@ class PtrType extends Type {
    * @param {AddressSpace} addrSpace
    * @param {Number}       [bits=64]
    */
-  constructor(pointeeTy, addrSpace, bits=PtrType.DefaultWidth) {
+  constructor(pointeeTy, bits=PtrType.DefaultWidth) {
     if ( !pointeeTy)
       throw new Error("Missing required argument 'pointeeTy'")
     if ( !(pointeeTy instanceof Type))
       throw new Error("pointeeTy must be an instance of Type")
-    if ( addrSpace === undefined || addrSpace === null)
-      throw new Error("Missing required argument 'addrSpace'")
-    if ( !(addrSpace instanceof AddressSpace))
-      throw new Error("addrSpace must be an instance of AddressSpace")
     if ( bits !== 32 && bits !== 64)
       throw new Error("Pointers can only be 32 or 64 bits")
     super("pointer", bits)
     this.#pointeeTy = pointeeTy
-    this.#addrSpace = addrSpace
   }
 
   /**
@@ -38,13 +33,6 @@ class PtrType extends Type {
    */
   getPointeeType() {
     return this.#pointeeTy
-  }
-
-  /**
-   * @returns {AddressSpace}
-   */
-  getAddressSpace() {
-    return this.#addrSpace
   }
 
   /** @returns {Boolean} */
@@ -81,7 +69,6 @@ class PtrType extends Type {
     return (other instanceof PtrType)
       && super.equals(other)
       && this.getPointeeType().equals(other.getPointeeType())
-      && this.#addrSpace.equals(other.getAddressSpace())
   } 
 
   /** 
@@ -93,12 +80,11 @@ class PtrType extends Type {
 
   /**
    * @param {Type}         pointeeTy
-   * @param {AddressSpace} addrSpace
    * @param {Number}       [bits=64]
    * @returns {PtrType}
    */
-  static get(pointeeTy, addrSpace, bits=64) {
-    return new PtrType(pointeeTy, addrSpace, bits)
+  static get(pointeeTy, bits=64) {
+    return new PtrType(pointeeTy, bits)
   }
 }
 

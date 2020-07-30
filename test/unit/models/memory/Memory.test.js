@@ -36,7 +36,7 @@ describe('renderer/models/memory/Memory', () => {
     })
 
     it("i16* ==> 1", () => {
-      expect(new Memory(new Types.PtrType(Types.Int16, AddressSpace.Local), AddressSpace.Global).getNumElements()).to.equal(1)
+      expect(new Memory(new Types.PtrType(Types.Int16), AddressSpace.Global).getNumElements()).to.equal(1)
     })
 
     it("{ i32, i32 } ==> 1", () => {
@@ -47,8 +47,7 @@ describe('renderer/models/memory/Memory', () => {
       expect(
         new Memory(
           new Types.PtrType( 
-            new Types.StructType([Types.Int32, Types.Int32]), 
-            AddressSpace.Global),
+            new Types.StructType([Types.Int32, Types.Int32])),
           AddressSpace.Global
         ).getNumElements()
       ).to.equal(1)
@@ -90,7 +89,7 @@ describe('renderer/models/memory/Memory', () => {
     })
 
     it("i16* ==> 8", () => {
-      expect(new Memory(new Types.PtrType(Types.Int16, AddressSpace.Local), AddressSpace.Global).getSize()).to.equal(Types.DefaultPointerWidthBytes)
+      expect(new Memory(new Types.PtrType(Types.Int16), AddressSpace.Global).getSize()).to.equal(Types.DefaultPointerWidthBytes)
     })
 
     it("{ i32, i32 } ==> 8", () => {
@@ -101,8 +100,7 @@ describe('renderer/models/memory/Memory', () => {
       expect(
         new Memory(
           new Types.PtrType( 
-            new Types.StructType([Types.Int32, Types.Int32, Types.Int32]), 
-            AddressSpace.Global),
+            new Types.StructType([Types.Int32, Types.Int32, Types.Int32])),
           AddressSpace.Global
         ).getSize()
       ).to.equal(8)
