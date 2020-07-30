@@ -1,6 +1,8 @@
 /**@ignore @typedef {import("@renderer/models/Dim")} Dim */
+/**@ignore @typedef {import("@renderer/models/types/Type")} Type */
 
 const ArrayType = require("./ArrayType")
+const PtrType = require("./PtrType")
 
 /**
  * @memberof module:types
@@ -70,10 +72,35 @@ class Types {
    */
   static getArrayType(elementType, dim) {
     try {
-
       return new Types.ArrayType(elementType, dim)
     } catch (e) {
       throw new Error(e)
+    }
+  }
+
+  /**
+   * Create a pointer type
+   * @param {Type} pointeeType 
+   * @param {Number} bits 
+   * @returns {PtrType}
+   */
+  static getPtrType(pointeeType, bits) {
+    try {
+      return new Types.PtrType(pointeeType, bits)
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
+  /**
+   * 
+   * @param {Type} type 
+   */
+  static pp(type) {
+    if ( type.isBasicType())
+      return type.toString()
+    else {
+      
     }
   }
 }
