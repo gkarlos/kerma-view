@@ -74,7 +74,7 @@ module.exports = function() {
         name: name,
         type: type,
         decl: `${type} *${name}`,
-        declContext: `__global__ void ${kernelNames[getRandomInt(0, kernelNames.length)]}(${type} *${name})`,
+        declContext: `__global__ void ${kernelNames[getRandomInt(0, kernelNames.length - 1)]}(${type} *${name})`,
         range: new SrcRange({fromLine: getRandomInt(1, 100), fromColumn: 2})
       })
 
