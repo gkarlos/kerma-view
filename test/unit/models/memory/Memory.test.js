@@ -3,6 +3,7 @@ require('module-alias/register')
 const expect = require('chai').expect
 
 const Memory = require('@renderer/models/memory/Memory')
+const Pointer = require('@renderer/models/memory/Pointer')
 const Dim    = require('@renderer/models/Dim')
 const Types  = require('@renderer/models/types/Types')
 const AddressSpace = require('@renderer/models/cuda/CuAddrSpace')
@@ -269,6 +270,13 @@ describe('renderer/models/memory/Memory', () => {
       let mem2 = new Memory( Types.getArrayType(Types.Int32, 1024), AddressSpace.Local)
       expect(mem1.equals(mem2)).to.be.false
     })
+  })
+
+  describe("getPtr", () => {
+    let mem = new Memory( Types.getArrayType(Types.UInt32, 1024), AddressSpace.Local)
+    let ptr = new Pointer( Types.getPtrType(Types.getArrayType(Types.UInt32, 1024)), AddressSpace.Unknown)
+    ptr.setPointee(mem)
+    expect(mem.getPtr().equals(ptr)).to.be.true
   })
 
 })

@@ -6,6 +6,7 @@ const MemorySrc = require("@renderer/models/source/MemorySrc")
 const AddressSpace = require("@renderer/models/memory/AddressSpace")
 const Type      = require("@renderer/models/types/Type")
 
+
 /**
  * Models arbitrary memory
  * 
@@ -15,6 +16,8 @@ class Memory {
   /**@type {Type}         */ #type
   /**@type {AddressSpace} */ #addrSpace
   /**@type {MemorySrc}    */ #src
+
+  static Src = MemorySrc
 
   /**
    * @param {Type}         type      Type of this memory  
@@ -33,9 +36,9 @@ class Memory {
     if ( src && !(src instanceof MemorySrc))
       throw new Error("src must be MemorySrc instance")
     
-    this.#type = type
-    this.#addrSpace = addrSpace
-    this.#src = src
+    this.#type          = type
+    this.#addrSpace     = addrSpace
+    this.#src           = src
   }
 
   /** @type {Type} */
@@ -180,6 +183,19 @@ class Memory {
     }
 
     return false
+  }
+
+  /**
+   * Create a pointer to this memory.
+   * The created pointer will reside at address space {@link module:memory.AddressSpace.Unknown}
+   * and must be explicitly set afterwards.
+   * 
+   * @returns {Pointer}
+   */
+  getPtr() {
+    const Pointer = require('@renderer/models/memory/Pointer')
+    return new Pointer( new Pointer.Type(this.#type), AddressSpace.Unknown)
+                .setPointee(this)
   }
 
   /**
