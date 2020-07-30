@@ -38,4 +38,7 @@ class AddressSpace {
   }
 }
 
+/** @type {AddressSpace} */
+AddressSpace.Unknown = new AddressSpace("unknown", -1)
+
 module.exports = AddressSpace

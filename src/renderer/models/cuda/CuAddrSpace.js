@@ -22,6 +22,6 @@ CuAddrSpace.Global = new AddrSpace("global", 1)
 CuAddrSpace.Generic  = new AddrSpace("generic", 0)
 
 /** @type {AddrSpace} */
-CuAddrSpace.Unknown  = new AddrSpace("unknown", -1)
+CuAddrSpace.Unknown  = AddrSpace.Unknown
 
 module.exports = CuAddrSpace
