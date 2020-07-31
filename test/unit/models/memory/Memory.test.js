@@ -18,8 +18,12 @@ describe('renderer/models/memory/Memory', () => {
       expect(() => new Memory(2)).to.throw()
     })
 
-    it("should throw when missing arg:addrSpace", () => {
-      expect(() => new Memory( Types.Double)).to.throw()
+    it("should not throw when missing arg:addrSpace", () => {
+      expect(() => new Memory( Types.Double)).to.not.throw()
+    })
+
+    it("should have unknown address space if argument is missing", () => {
+      expect(new Memory(Types.Double).getAddressSpace().equals(AddressSpace.Unknown)).to.be.true
     })
 
     it("should throw when invalid type of arg:addrSpace", () => {
@@ -273,10 +277,22 @@ describe('renderer/models/memory/Memory', () => {
   })
 
   describe("getPtr", () => {
-    let mem = new Memory( Types.getArrayType(Types.UInt32, 1024), AddressSpace.Local)
-    let ptr = new Pointer( Types.getPtrType(Types.getArrayType(Types.UInt32, 1024)), AddressSpace.Unknown)
-    ptr.setPointee(mem)
-    expect(mem.getPtr().equals(ptr)).to.be.true
+    it("should return the right pointer [1024 x .i32]", () => {
+      let mem = new Memory( Types.getArrayType(Types.UInt32, 1024), AddressSpace.Local)
+      let ptr = new Pointer( Types.getPtrType(Types.getArrayType(Types.UInt32, 1024)), AddressSpace.Unknown)
+      ptr.setPointee(mem)
+      expect(mem.getPtr().equals(ptr)).to.be.true
+    })
+
+    it("should return the right pointer { i32, .i32 }", () => {
+      let mem = new Memory(Types.getStuctType(Types.Int32, Types.UInt32))
+
+      let ptr = mem.getPtr()
+
+      expect(ptr.getPointee().equals(mem)).to.be.true
+      expect(ptr.getPointee().getType().isAggregateType()).to.be.true
+      expect(ptr.getPointee().getType().getName()).equals('struct')
+    })
   })
 
 })
