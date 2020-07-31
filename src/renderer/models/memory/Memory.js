@@ -2,13 +2,26 @@
 /**@ignore @typedef {import("@renderer/models/Dim")} Dim    */
 /**@ignore @typedef {import("@renderer/models/types/Type")} */
 
-const MemorySrc = require("@renderer/models/source/MemorySrc")
+const MemorySrc    = require("@renderer/models/source/MemorySrc")
 const AddressSpace = require("@renderer/models/memory/AddressSpace")
-const Type      = require("@renderer/models/types/Type")
+const Type         = require("@renderer/models/types/Type")
 
 
 /**
- * Models arbitrary memory
+ * Models arbitrary memory memory range at some address space
+ * It can be used to represented both stack alocated memory, e.g `x, myArray` in:
+ * ```
+ * int x = ...
+ * int myArray[10] = ...
+ * ```
+ * as well as heap allocated memory, i.e the pointee of the result
+ * of malloc-like calls
+ * 
+ * In kernel code it can be used to represent the memory pointed to
+ * by kernel arguments or any memory allocated from the kernel itself.
+ * 
+ * Again, this class is used to refer to contiguous memory ranges;
+ * pointers are explicitely modeled by {@link module:memory.Pointer}
  * 
  * @memberof module:memory
  */
@@ -21,10 +34,10 @@ class Memory {
 
   /**
    * @param {Type}         type      Type of this memory  
-   * @param {AddressSpace} addrSpace The address space of this memory 
+   * @param {AddressSpace} [addrSpace=AddressSpace.Unknown] The address space of this memory 
    * @param {MemorySrc}    [src]     Source info for this memory
    */
-  constructor(type, addrSpace, src) {
+  constructor(type, addrSpace=AddressSpace.Unknown, src) {
     if ( !type)
       throw new Error("Missing required argument type")
     if ( !(type instanceof Type))
@@ -86,6 +99,14 @@ class Memory {
   }
 
   /**
+   * Check if the memory has src info associated
+   * @returns {Boolean}
+   */
+  hasSrc() {
+    return !!this.#src
+  }
+
+  /**
    * Retrieve the name of this memory
    * @returns {String}
    */
@@ -116,8 +137,7 @@ class Memory {
       return this.#type.getRequiredBytes()
     } else {
       return this.#type.getDim().getSize() * this.#type.getElementType().getRequiredBytes()
-    }
-      
+    }   
   }
 
   /**
