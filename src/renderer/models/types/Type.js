@@ -1,5 +1,5 @@
 /**
- * Base class for all types
+ * Base class for all types.
  * Usually this class should not be used directly to create types
  * Most common types can be retrieve through {@link module:types.Types}
  * @memberof module:types
@@ -51,11 +51,24 @@ class Type {
   isNested() { return this.getNesting() > 0 }
 
   /** 
+   * Add an alias for this type. A type aliases is just a String
    * @param {String} alias
    * @returns {Type}
    */
   addAlias(alias) {
     this.#aliases.push(alias)
+    return this
+  }
+
+  /**
+   * Add multiple aliases for this type.
+   * @param {...String} aliases 
+   * @returns {Type}
+   */
+  addAliases(...aliases) {
+    if ( aliases) {
+      aliases.forEach(alias => this.#aliases.push(alias))
+    }
     return this
   }
 
@@ -68,7 +81,7 @@ class Type {
   } 
 
   /**
-   * @returns {Booleean}
+   * @returns {Boolean}
    */
   hasAliases() {
     return this.#aliases.length > 0
@@ -121,6 +134,13 @@ class Type {
     return (other instanceof Type)
       && this.#name === other.name
       && this.#bits === other.getBitWidth()
+  }
+
+  /** 
+   * @returns {Type}
+   */
+  copy() {
+    return new Type(this.#name, this.#bits).addAliases(this.#aliases)
   }
 
   /**
