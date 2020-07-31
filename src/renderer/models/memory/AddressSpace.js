@@ -36,6 +36,13 @@ class AddressSpace {
       && this.#name === other.name
       && this.#value === other.value
   }
+
+  /**
+   * @returns {AddressSpace}
+   */
+  copy() {
+    return new AddressSpace(this.#name, this.#value)
+  }
 }
 
 /** @type {AddressSpace} */
