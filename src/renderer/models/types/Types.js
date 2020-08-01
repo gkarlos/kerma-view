@@ -93,14 +93,34 @@ class Types {
   }
 
   /**
-   * 
-   * @param {Type} type 
+   * @param {Type} type
+   * @returns {String}
    */
-  static pp(type) {
-    if ( type.isBasicType())
-      return type.toString()
-    else {
-      
+  static pp(type, indent="") {
+    if ( type.isPtrType()) {
+      return `${indent}${Types.pp(type.getPointeeType())}*`
+    } else if ( type.isArrayType()) {
+      let res = ""
+      if ( type.getDim().is1D()) {
+        res += `${indent}[${type.getDim().x} x`
+      } else if ( type.getDim().is2D()) {
+        res += `${indent}[${type.getDim().x} x ${type.getDim().y} x`
+      } else {
+        res += `${indent}[${type.getDim().x} x ${type.getDim().y} x ${type.getDim().z} x`
+      }
+      if ( type.getElementType().isStructType())
+        return res + "\n" + Types.pp(type.getElementType(), indent + "  ") + "\n]"
+      else
+        return res + Types.pp(type.getElementType()) + "]"
+    } else if ( type.isBasicType()) {
+      return `${indent}${type.toString()}`
+    } else {
+      let res = `${indent}${type.name} {\n`
+      type.getElementTypes().forEach((ty, i) => {
+        res += `${Types.pp(ty, (indent + "  "))}${i < type.getElementTypes().length - 1? "," : ""}\n`
+      })
+      res += `${indent}}`
+      return res
     }
   }
 }
