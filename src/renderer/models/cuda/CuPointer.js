@@ -1,13 +1,8 @@
 const Pointer      = require('@renderer/models/memory/Pointer')
 const PtrType      = Pointer.Type
-
 const AddressSpace = require("@renderer/models/cuda/CuAddrSpace")
 const CuMemory     = require('@renderer/models/cuda/CuMemory')
 const CuAddrSpace  = require('@renderer/models/cuda/CuAddrSpace')
-const Pointer      = require('@renderer/models/memory/Pointer')
-const CuAddrSpace = require('@renderer/models/cuda/CuAddrSpace')
-const CuMemory = require('@renderer/models/cuda/CuMemory')
-
 
 /**
  * @memberof module:cuda
@@ -15,7 +10,8 @@ const CuMemory = require('@renderer/models/cuda/CuMemory')
 class CuPointer extends Pointer {
 
   /** @type {Boolean} */ #materialized
-
+  /** @type {Boolean} */ #kernelArg
+ 
   /**
    * @param {PtrType}       type        Type of this pointer  
    * @param {AddressSpace} [addrSpace] The address space of this pointer. **Note** this is *not* the pointee's adrress space
@@ -23,6 +19,16 @@ class CuPointer extends Pointer {
    */
   constructor(type, addrSpace=CuAddrSpace.Local, src) {
     super(type, addrSpace, src)
+    this.#materialized = false
+    this.#kernelArg = false
+  }
+
+  /**
+   * Make this pointer an alias to another pointer
+   * @returns {CuPointer} this
+   */
+  aliases(pointer) {
+    if ( pointer)
   }
 
   /**
@@ -66,6 +72,17 @@ class CuPointer extends Pointer {
   }
 
   /**
+   * Set whether this pointer is an argument to a kernel
+   * @param {Boolean} val 
+   * @returns {CuPointer} this
+   */
+  setKernelArg(val) {
+    this.#kernelArg = !!val
+    return this
+  }
+
+
+  /**
    * Check whether the pointer is materialized. i.e is a valid
    * pointer in the kernel source code
    * 
@@ -74,7 +91,34 @@ class CuPointer extends Pointer {
   isMaterialized() {
     return this.#materialized
   }
-  
+
+  /**
+   * @returns {Boolean}
+   */
+  isKernelArg() {
+    return this.#kernelArg
+  }
+
+  pointsToSharedMemory() {
+    if ( this.getPointee()) {
+
+    }
+    return false
+  }
+
+  pointsToGlobalMemory() {
+    if ( this.getPointee()) {
+
+    }
+    return false
+  }
+
+  pointsToConstantMemory() {
+    if ( this.getPointee()) {
+
+    }
+    return false
+  }
 }
 
 module.exports = CuPointer

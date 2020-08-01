@@ -2,6 +2,7 @@
 
 const MemoryVisViewHeader  = require('@renderer/services/memory-vis/view/MemoryVisViewHeader')
 const { CudaAddressSpace } = require("@renderer/models/cuda")
+const Types = require('@renderer/models/types/Types')
 const {uuid} = require('@renderer/util/random')
 
 /**
@@ -47,6 +48,7 @@ class MemoryVisView {
       
       this.#rendered = true
     }
+
     return this.node
   }
 

@@ -5,12 +5,13 @@
 /** @ignore @typedef {import("@renderer/models/types/StructType")} StructType */
 
 const { left } = require("cli-color/move")
+const Types = require('@renderer/models/types/Types')
 
 /** @param {Memory} memory */
 function renderMemoryName(memory, uuid) {
   //TODO
 
-  let res = $('<div class"memory-name"wrapper"></div>')
+  let res = $('<div class"memory-name-wrapper"></div>')
   let name = $(`<span class="memory-name">${memory.getSrc().getName()}</span>`).appendTo(res)
 
   
@@ -19,16 +20,29 @@ function renderMemoryName(memory, uuid) {
 
   let source = $(`<span class="memory-name-src" id="mem${uuid}"><i class="fas fa-code"></i></span>`).prependTo(res)
   source.popover({
-    title: `<i class="fas fa-at"></i><a href="#"> ${src.getRange().fromLine}:${src.getRange().fromColumn}</a>`,
+    title: `Source @ <a href="#">${src.getRange().fromLine}:${src.getRange().fromColumn}</a>`,
     trigger: 'manual',
     html: true,
     placement: 'left',
     container: 'body',
     content: `
-      <p>
-        <span> ${src.getDeclContext().substring(0, declPos)}</span>
-        <span class="emph"> ${src.getDecl()}</span>
-        <span> ${src.getDeclContext().substring(declPos  + src.getDecl().length , src.getDeclContext().length)}</span>...
+      <p class="memory-name-context">
+        <span class="line">
+          <span class="line-number">${src.getRange().fromLine - 1}</span> 
+          <span class="implied-content"> ...</span>
+        </span>
+        <span class="line line-emph">
+          <span class="line-number line-number-highlighted">${src.getRange().fromLine}</span> 
+          <span class="line-content">${src.getDeclContext().substring(0, declPos)}</span>
+          <span class="line-content emph"> ${src.getDecl()}</span>
+          <span class="line-content"> 
+            ${src.getDeclContext().substring(declPos  + src.getDecl().length , src.getDeclContext().length)}
+          </span>
+        </span>
+        <span class="line">
+          <span class="line-number">${src.getRange().fromLine + 1}</span>
+          <span class="implied-content"> ...</span>
+        </span>
       </p>
     `,
     template: `
@@ -49,43 +63,122 @@ function renderMemoryName(memory, uuid) {
   $(document).click(e => {
     let exclude1 = $(source)
     let exclude2 = $(`.memory-name-popover-${uuid}`)
-    if ( !$(exclude1).is(e.target) && $(exclude1).has(e.target).length === 0 && !$(exclude2).is(e.target) && $(exclude2).has(e.target).length === 0)
+    if ( !$(exclude1).is(e.target) && $(exclude1).has(e.target).length === 0 && !$(exclude2).is(e.target) && $(exclude2).has(e.target).length === 0) {
       source.popover('hide')
+      source.removeClass("opacity-50")
+    }
   })
-  
-  
-    // .on("mouseover", () =>  $(source).popover('show'))
-    // .on("mouseout", () => $(source).popover('hide'))
 
   return res
 }
 
 /** @param {Memory} memory */
-function renderMemoryType(memory) {
+function renderMemoryType(memory, uuid) {
 
-  /** @param {Type} ty */
-  function renderArrayTy(ty) {
-    /** @param {Type} ty */
-    function renderArrayOfBasicTypes(ty) {
+  let res = $(`<span class="memory-type-wrapper"></span>`)
 
+  let tyTitle = $(`
+    <span class="memory-type-title">
+      
+    </span>`).appendTo(res)
+
+  let tyVal = $(`<span class="memory-type-value"></span>`).appendTo(res)
+
+  /** @param {Type} type */
+  function renderType(type) {
+    let val = Types.pp(type)
+    let res
+
+    if ( val.length < 20) {
+      res = $(`<a href="#" onclick="return false;">${type.toString()}</a>`)
+    } else {
+      if ( type.isStructType()) {
+        res = $(`<a href="#" onclick="return false">{...}</a>`)
+      } else {
+        res = $(`<a href="#" onclick="return false">...</a>`)
+      }
     }
 
-    /** @param {Type} ty */
-    function renderArrayOfStructs(ty) {
+    res.popover({
+      title: "Type",
+      html: true,
+      trigger: 'manual',
+      container: 'body',
+      content: `
+        <div class="memory-type-content">
+          <pre>${Types.pp(type)}</pre>
+        </div>
+      `,
+      template: `
+      <div class="popover memory-type-popover-${uuid}" role="tooltip">
+        <div class="arrow"></div>
+        <span class="popover-header memory-type-popover-header"></span>
+        <div class="popover-body memory-type-popover-body"></div>
+      </div>`
+    })
 
-    }
+    res.on('click', () => {
+      res.popover('toggle')
+    })
+    
+    //hide popover when clicking anywhere else
+    $(document).click(e => {
+      let exclude1 = $(res)
+      let exclude2 = $(`.memory-type-popover-${uuid}`)
+      if ( !$(exclude1).is(e.target) && $(exclude1).has(e.target).length === 0 && !$(exclude2).is(e.target) && $(exclude2).has(e.target).length === 0)
+        res.popover('hide')
+    })
+
+    return res
   }
 
+  let typeToRender = memory.getType()
 
+  if ( memory.isArray())
+    typeToRender = memory.getType().getElementType()
+  
+  renderType(typeToRender).appendTo(tyVal)
 
-  let res = $(`<span class="memory-type"></span>`)
-  let tyTitle = $(`<span class="memory-type-title">ty:</span>`).appendTo(res)
-  let tyVal = $(`<span class="memory-type-value"><a href="#" onclick="return false;"> ${memory.getType().toString()}</a></span>`).appendTo(res)
-  tyVal.popover({
-    title : "type"
-  })
 
   return res
+}
+
+/** 
+ * @param {Memory} memory
+ * @returns {JQuery}
+ */
+function renderMemorySize(memory) {
+
+  let res = $(`<span class="memory-size-wrapper"></span>`)
+  // let sizeTitle = $(`<span class="memory-size-title"></span>`).appendTo(res)
+  let sizeValue = $(`<span class="memory-size-value"></span>`).appendTo(res)
+
+  if ( memory.getType().isArrayType()) {
+    if ( memory.getType().getDim().is1D()) {
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x-dim">${memory.getType().getDim().x}</span>`))
+    } else if ( memory.getType().getDim().is2D()) {
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x-dim">${memory.getType().getDim().x}</span>`))
+      sizeValue.append($(`<span><i class="fas fa-times times"></i></span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="y-dim">${memory.getType().getDim().y}</span>`))
+    } else {
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x-dim">${memory.getType().getDim().x}</span>`))
+      sizeValue.append($(`<span class="memory-size-value-times><i class="fas fa-times"></i></span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="y-dim">${memory.getType().getDim().y}</span>`))
+      sizeValue.append($(`<span class="memory-size-value-times><i class="fas fa-times"></i></span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="z-dim">${memory.getType().getDim().z}</span>`))
+    }
+  } else {
+    sizeValue.append($(`<span class="memory-size-value-dim-value">1</span>`))
+  }
+
+  return res
+}
+
+/**
+ * @returns {JQuery}
+ */
+function renderSeparator() {
+  return $(`<div class="border-left d-sm-none d-md-block memory-vis-header-separator" style="width: 0px;"></div>`)
 }
 
 /**
@@ -98,6 +191,7 @@ class MemoryVisViewHeader {
   /** @type {Boolean}        */ #rendered
   /** @type {JQuery}         */ #memoryName
   /** @type {JQuery}         */ #memoryType
+  /** @type {JQuery}         */ #memorySize
 
   /**
    * @param {MemoryVisView} view 
@@ -117,7 +211,11 @@ class MemoryVisViewHeader {
         </div>`)
 
       this.#memoryName = renderMemoryName(this.#view.memory, this.#view.id).appendTo(this.node)
+                         renderSeparator().appendTo(this.node)
       
+      this.#memorySize = renderMemorySize(this.#view.memory, this.#view.id).appendTo(this.node)
+                         renderSeparator().appendTo(this.node)
+                         
       this.#memoryType = renderMemoryType(this.#view.memory, this.#view.id).appendTo(this.node)
 
       this.#rendered = true

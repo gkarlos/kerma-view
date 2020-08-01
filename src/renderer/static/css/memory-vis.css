@@ -51,38 +51,60 @@
     opacity: 0.5;
 }
 
+.memory-vis-header-separator {
+    margin-left: 7px;
+    margin-right: 7px;
+}
 
 
-.memory-vis-header > .memory-type {
+/* .memory-vis-header > .memory-type {
     margin-left: 5px;
 }
 
 .memory-vis-header > .memory-type-title {
     margin-left: 4px
-}
+} */
 
 .memory-vis-header > .memory-type-popover {
     font-family: monospace;
 }
 
-
-/**
- ** MEMORY-NAME POPOVER
- **/
-
-.memory-name-popover {
-    max-width: 10%;
+.memory-size-title {
+    margin-right: 5px;
 }
 
-.memory-name-popover-header {
+.memory-size-value-dim-value {
+    cursor: pointer;
+    /* font-family: Consolas; */
+}
+
+.memory-size-value .times {
+    font-size: 8px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+
+/**
+ ** POPOVERS
+ **/
+
+.memory-name-popover,
+.memory-type-popover {
+    max-width: 15%;
+}
+
+.memory-name-popover-header,
+.memory-type-popover-header {
     display: block;
     font-size: 10px;
     padding: 4px;
 }
 
-.memory-name-popover-body {
+.memory-name-popover-body,
+.memory-type-popover-body {
     padding: 4px;
-    font-family: monospace;
+    font-family: Consolas;
     word-wrap: break-word;
     word-break: break-all;
     color: grey;
@@ -94,6 +116,45 @@
 }
 
 .memory-name-popover-body .emph {
-    color: green;
+    color: darkolivegreen;
     font-weight: 900;
+}
+
+.memory-name-context {
+    display: flex;
+    flex-direction: column;    
+}
+
+.memory-name-context .line {
+    font-family: Consolas;
+    line-height: 1.2;
+    font-size: 11px;
+}
+
+.memory-name-context .line-emph {
+    font-size: 12px;
+}
+
+.memory-name-context .line-number {
+    opacity: 1;
+    color: black;
+    font-size: 10px;
+}
+
+.memory-name-context .line-content {
+    font-size: 11px;
+}
+
+.memory-name-context .line-number-highlighted {
+    font-weight: bold;
+    font-style: normal;
+}
+
+.memory-name-context .line .implied-content {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.memory-type-content > pre {
+    font-family: Consolas;
+    margin-bottom: 0px;
 }

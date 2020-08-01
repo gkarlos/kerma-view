@@ -1,4 +1,4 @@
-const {uuid} = require('@renderer/util/random')
+
 
 /** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
 /** @ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")`} MemoryVisView */
