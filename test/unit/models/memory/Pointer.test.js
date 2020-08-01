@@ -159,6 +159,132 @@ describe('renderer/models/memory/Pointer', () => {
       expect(ptr.hasPointee()).to.be.false
       expect(ptr.getPointee()).to.be.undefined
     })
+
+    it("pointer and alias should link to each other", () => {
+      let ptr = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+
+      expect(() => alias.aliases(ptr)).to.not.throw()
+      expect(alias.getAliased().equals(ptr)).to.be.true
+      expect(ptr.hasAlias(alias)).to.be.true
+    })
+  })
+
+
+  describe("addAlias", () => {
+    it("should not add duplicates", () => {
+      let ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+      expect(() => ptr.addAlias(alias)).to.not.throw()
+      expect(ptr.getAliases().length).to.equal(1)
+      ptr.addAlias(alias)
+      expect(ptr.getAliases().length).to.equal(1)
+    })
+
+    it("alias @post should be aliases @pre + 1", () => {
+      let ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+      let pre = ptr.getAliases().length
+      ptr.addAlias(alias)
+      expect(ptr.getAliases().length).to.equal(pre + 1)
+    })
+
+    it("should have the same effect as calling aliases() on the alias", () => {
+
+      let ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+
+      expect(() => alias.aliases(ptr)).to.not.throw()
+      expect(ptr.isAlias()).to.be.false
+      expect(ptr.isAliased()).to.be.true
+      expect(ptr.hasAlias(alias)).to.be.true
+      expect(alias.isAlias()).to.be.true
+      expect(alias.isAliased()).to.be.false
+      expect(alias.getAliased().equals(ptr)).to.be.true
+
+      ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      alias = new Pointer(Types.getPtrType( Types.Int16))
+
+      expect(() => ptr.addAlias(alias)).to.not.throw()
+      expect(ptr.isAlias()).to.be.false
+      expect(ptr.isAliased()).to.be.true
+      expect(ptr.hasAlias(alias)).to.be.true
+      expect(alias.isAlias()).to.be.true
+      expect(alias.isAliased()).to.be.false
+      expect(alias.getAliased().equals(ptr)).to.be.true
+    })
+  })
+
+  describe("removeAlias", () => {
+    it("@post aliases should be @pre aliases - 1", () => {
+      let ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+
+      expect(() => alias.aliases(ptr)).to.not.throw()
+
+      let pre = ptr.getAliases().length
+
+      ptr.removeAlias(alias)
+
+      expect(ptr.getAliases().length).to.equal(pre - 1)
+    }) 
+
+    it("@post ptr and alias should not link to each other", () => {
+      let ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+
+      expect(() => alias.aliases(ptr)).to.not.throw()
+      expect(alias.getAliased()).to.not.be.undefined
+      expect(alias.getAliased().equals(ptr)).to.be.true
+      ptr.removeAlias(alias)
+      expect(ptr.hasAlias(alias)).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+    })
+
+    it("should be idempotent", () => {
+      let ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+
+      expect(() => alias.aliases(ptr)).to.not.throw()
+
+      let pre = ptr.getAliases().length
+
+      ptr.removeAlias(alias)
+
+      expect(ptr.getAliases().length).to.equal(pre - 1)
+      expect(ptr.hasAlias(alias)).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+
+      ptr.removeAlias(alias)
+
+      expect(ptr.getAliases().length).to.equal(pre - 1)
+      expect(ptr.hasAlias(alias)).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+
+      ptr.removeAlias(alias)
+
+      expect(ptr.getAliases().length).to.equal(pre - 1)
+      expect(ptr.hasAlias(alias)).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+
+      ptr.removeAlias(alias)
+
+      expect(ptr.getAliases().length).to.equal(pre - 1)
+      expect(ptr.hasAlias(alias)).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+
+      ptr.removeAlias(alias)
+
+      expect(ptr.getAliases().length).to.equal(pre - 1)
+      expect(ptr.hasAlias(alias)).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+
+      ptr.removeAlias(alias)
+
+      expect(ptr.getAliases().length).to.equal(pre - 1)
+      expect(ptr.hasAlias(alias)).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+    })
   })
 
   describe("clearAlias", () => {
@@ -167,21 +293,40 @@ describe('renderer/models/memory/Pointer', () => {
         /* type */Types.getPtrType( Types.getArrayType(Types.Int32, 1024)), 
         /* addr */AddressSpace.Local)
 
-      let mem = new Memory(Types.getArrayType(Types.Int32, 1024))
-
-      ptr.setPointee(mem)
-
       let alias = new Pointer( 
         /* type */Types.getPtrType( Types.getArrayType(Types.Int32, 1024)), 
         /* addr */AddressSpace.Local)
 
       alias.aliases(ptr)
+
       expect(alias.isAlias()).to.be.true
       expect(alias.getAliased().equals(ptr)).to.be.true
+      expect(ptr.hasAlias(alias)).to.be.true
 
       alias.clearAlias()
 
       expect(alias.isAlias()).to.be.false
+      expect(ptr.isAliased()).to.be.false
+    })
+
+    it("should have the same effect as calling removeAlias(..) on the aliased pointer", () => {
+      let ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      let alias = new Pointer(Types.getPtrType( Types.Int16))
+      expect(() => alias.aliases(ptr)).to.not.throw()
+
+      alias.clearAlias()
+      expect(alias.isAlias()).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+      expect(ptr.isAliased()).to.be.false
+
+      ptr   = new Pointer(Types.getPtrType( Types.Int16))
+      alias = new Pointer(Types.getPtrType( Types.Int16))
+      expect(() => ptr.addAlias(alias)).to.not.throw()
+
+      ptr.removeAlias(alias)
+      expect(alias.isAlias()).to.be.false
+      expect(alias.getAliased()).to.be.undefined
+      expect(ptr.isAliased()).to.be.false
     })
   })
 })

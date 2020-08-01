@@ -1,6 +1,7 @@
 const AddressSpace = require("@renderer/models/memory/AddressSpace")
 const Memory       = require('@renderer/models/memory/Memory')
 const PtrType      = require('@renderer/models/types/PtrType')
+const { timeThursday } = require("d3")
 
 /**
  * This class is used to model pointers. A Pointer is a piece of
@@ -37,8 +38,9 @@ class Pointer extends Memory {
   /** @type {PtrType} The base type of all pointers */
   static Type = require('@renderer/models/types/PtrType')
 
-  /** @type {Memory}  */ #memory
-  /** @type {Pointer} */ #aliasFor
+  /** @type {Memory}    */ #memory
+  /** @type {Pointer}   */ #aliased
+  /** @type {Pointer[]} */ #aliases
 
   /**
    * @param {PtrType}      type      Type of this pointer  
@@ -55,6 +57,7 @@ class Pointer extends Memory {
     if ( src && !(src instanceof Memory.Src))
       throw new Error("src must be MemorySrc instance")
     super(type, addrSpace, src)
+    this.#aliases = []
   }
 
   /** @type {PtrType} */
@@ -86,10 +89,77 @@ class Pointer extends Memory {
       if ( !this.type.equals(pointer.type))
         throw new Error(`type missmatch: ${this.type.toString()} vs. ${pointer.type.toString()}`)
       
-      this.#memory   = pointer.getPointee()
-      this.#aliasFor = pointer
+      if ( pointer.equals(this.#aliased))
+        return this
+
+      if ( this.#aliased)
+        this.clearAlias()
+
+      this.#memory  = pointer.getPointee()
+      this.#aliased = pointer
+
+      if ( !this.#aliased.hasAlias(this))
+        this.#aliased.addAlias(this)
     }
     return this
+  }
+
+  /**
+   * Add an alias to this pointer
+   * @param {Pointer} pointer 
+   * @returns {Pointer} this
+   */
+  addAlias(pointer) {
+    if ( pointer) {
+      if ( !(pointer instanceof Pointer))
+        throw new Error("pointer must be an instance of Pointer")
+      
+      if ( !this.#aliases.find(alias => alias.equals(pointer))) {
+        this.#aliases.push(pointer)
+        pointer.aliases(this)
+      }
+    }
+    return this
+  }
+
+  /**
+   * @param {Pointer} pointer 
+   * @returns {Pointer} this
+   */
+  removeAlias(pointer) {
+    if ( pointer) {
+      for ( let i = 0; i < this.#aliases.length; ++ i)
+        if ( this.#aliases[i].equals(pointer)) {
+          this.#aliases.splice(i, 1)
+          pointer.clearAlias()
+          break
+        }
+    }
+    return this
+  }
+
+  /**
+   * @param {Boolean} pointer 
+   */
+  hasAlias(pointer) {
+    return !!this.#aliases.find(alias => alias.equals(pointer))
+  }
+
+  /**
+   * @returns {Pointer} this
+   */
+  removeAllAliases() {
+    let old = this.#aliases
+    this.#aliased = []
+    old.forEach(alias => alias.clearAlias())
+    return this
+  }
+
+  /**
+   * @returns {Pointer[]}
+   */
+  getAliases() {
+    return this.#aliases
   }
 
   /**
@@ -97,15 +167,24 @@ class Pointer extends Memory {
    * @returns {Boolean}
    */
   isAlias() {
-    return !!this.#aliasFor
+    return !!this.#aliased
   }
 
   /**
-   * Removed the pointer this pointer aliases (if one exists)
+   * Check if this pointer has aliases
+   * @returns {Boolean}
+   */
+  isAliased() {
+    return this.#aliases.length > 0
+  }
+
+  /**
+   * Make this pointer not an alias anymore
    * @returns {Pointer} this
    */
   clearAlias() {
-    this.#aliasFor = undefined
+    this.#aliased.removeAlias(this)
+    this.#aliased = undefined
     return this
   }
 
@@ -114,7 +193,7 @@ class Pointer extends Memory {
    * @returns {Pointer|undefined}
    */
   getAliased() {
-    return this.#aliasFor
+    return this.#aliased
   }
 
   /**
@@ -169,7 +248,6 @@ class Pointer extends Memory {
   }
 
   /**
-   * 
    * @param {Pointer} other 
    * @returns {Boolean}
    */
