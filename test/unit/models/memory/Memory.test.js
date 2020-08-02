@@ -295,4 +295,12 @@ describe('renderer/models/memory/Memory', () => {
     })
   })
 
+  describe("materialized"), () => {
+    it("should not be materialized without src", () => {
+      let mem = new Memory(Types.getStuctType(Types.Int32, Types.UInt32))
+      expect(mem.isMaterialized()).to.be.false
+    })
+    
+  })
+
 })

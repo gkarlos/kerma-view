@@ -7,18 +7,18 @@
 const { left } = require("cli-color/move")
 const Types = require('@renderer/models/types/Types')
 
-/** @param {Memory} memory */
-function renderMemoryName(memory, uuid) {
-  //TODO
+/** 
+ * @param {Memory} memory 
+ */
+function renderMemorySource(memory, uuid) {
 
-  let res = $('<div class"memory-name-wrapper"></div>')
-  let name = $(`<span class="memory-name">${memory.getSrc().getName()}</span>`).appendTo(res)
+  let res = $('<div class="memory-src-wrapper" title="Source"></div>').tooltip({delay: 300})
 
-  
-  let src = memory.getSrc()
-  let declPos = src.getDeclContext().indexOf(src.getDecl())
+  let src = memory.getSrc(),
+      declPos = src.getDeclContext().indexOf(src.getDecl())
 
-  let source = $(`<span class="memory-name-src" id="mem${uuid}"><i class="fas fa-code"></i></span>`).prependTo(res)
+  let source = $(`<span class="memory-src" id="mem${uuid}"><i class="fas fa-code"></i></span>`).appendTo(res)
+
   source.popover({
     title: `Source @ <a href="#">${src.getRange().fromLine}:${src.getRange().fromColumn}</a>`,
     trigger: 'manual',
@@ -26,7 +26,7 @@ function renderMemoryName(memory, uuid) {
     placement: 'left',
     container: 'body',
     content: `
-      <p class="memory-name-context">
+      <p class="memory-src-context">
         <span class="line">
           <span class="line-number">${src.getRange().fromLine - 1}</span> 
           <span class="implied-content"> ...</span>
@@ -46,29 +46,41 @@ function renderMemoryName(memory, uuid) {
       </p>
     `,
     template: `
-      <div class="popover memory-name-popover memory-name-popover-${uuid}" role="tooltip">
+      <div class="popover memory-src-popover memory-src-popover-${uuid}" role="tooltip">
         <div class="arrow"></div>
-        <span class="popover-header memory-name-popover-header" id="mem${uuid}"></span>
-        <div class="popover-body memory-name-popover-body" id="mem${uuid}"></div>
+        <span class="popover-header memory-src-popover-header" id="mem${uuid}"></span>
+        <div class="popover-body memory-src-popover-body" id="mem${uuid}"></div>
       </div>`
-  }).on("click", () => {
+  })
+  
+  res.on("click", () => {
     source.popover('toggle')
-    if ( !$(source).hasClass("opacity-50") )
-      $(source).addClass("opacity-50")
+    res.tooltip('hide')
+    if ( !$(res).hasClass("active") )
+      $(res).addClass("active")
     else
-      $(source).removeClass("opacity-50")
+      $(res).removeClass("active")
   })
 
   //hide popover when clicking anywhere else
   $(document).click(e => {
     let exclude1 = $(source)
-    let exclude2 = $(`.memory-name-popover-${uuid}`)
+    let exclude2 = $(`.memory-src-popover-${uuid}`)
     if ( !$(exclude1).is(e.target) && $(exclude1).has(e.target).length === 0 && !$(exclude2).is(e.target) && $(exclude2).has(e.target).length === 0) {
       source.popover('hide')
-      source.removeClass("opacity-50")
+      res.removeClass("active")
     }
   })
 
+  return res
+}
+
+/** 
+ * @param {Memory} memory 
+ */
+function renderMemoryName(memory, uuid) {
+  let res = $('<div class="memory-name-wrapper"></div>')
+  let name = $(`<span class="memory-name">${memory.getSrc().getName()}</span>`).appendTo(res)
   return res
 }
 
@@ -77,10 +89,10 @@ function renderMemoryType(memory, uuid) {
 
   let res = $(`<span class="memory-type-wrapper"></span>`)
 
-  let tyTitle = $(`
-    <span class="memory-type-title">
-      
-    </span>`).appendTo(res)
+  if ( MemoryVisViewHeader.Options.showTitles)
+    $(`<span class="memory-type-title" title="Type"><i class="fas fa-font"></i></span>`)
+      .appendTo(res)
+      .tooltip()
 
   let tyVal = $(`<span class="memory-type-value"></span>`).appendTo(res)
 
@@ -144,33 +156,58 @@ function renderMemoryType(memory, uuid) {
 }
 
 /** 
+ * Render the number of elements in this memory
  * @param {Memory} memory
  * @returns {JQuery}
  */
 function renderMemorySize(memory) {
 
   let res = $(`<span class="memory-size-wrapper"></span>`)
-  // let sizeTitle = $(`<span class="memory-size-title"></span>`).appendTo(res)
+  
+  // if ( MemoryVisViewHeader.Options.showTitles)
+  //   $(`<span class="memory-size-title" title="dimensions"><i class="fas fa-ruler"></i></span>`).tooltip().appendTo(res)
+  
   let sizeValue = $(`<span class="memory-size-value"></span>`).appendTo(res)
 
   if ( memory.getType().isArrayType()) {
     if ( memory.getType().getDim().is1D()) {
-      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x-dim">${memory.getType().getDim().x}</span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x">${memory.getType().getDim().x}</span>`).tooltip({delay: 300}))
     } else if ( memory.getType().getDim().is2D()) {
-      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x-dim">${memory.getType().getDim().x}</span>`))
-      sizeValue.append($(`<span><i class="fas fa-times times"></i></span>`))
-      sizeValue.append($(`<span class="memory-size-value-dim-value" title="y-dim">${memory.getType().getDim().y}</span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x">${memory.getType().getDim().x}</span>`).tooltip({delay: 300}))
+      sizeValue.append($(`<span class="memory-size-value-dim-times"><i class="fas fa-times times"></i></span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="y">${memory.getType().getDim().y}</span>`).tooltip({delay: 300}))
     } else {
-      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x-dim">${memory.getType().getDim().x}</span>`))
-      sizeValue.append($(`<span class="memory-size-value-times><i class="fas fa-times"></i></span>`))
-      sizeValue.append($(`<span class="memory-size-value-dim-value" title="y-dim">${memory.getType().getDim().y}</span>`))
-      sizeValue.append($(`<span class="memory-size-value-times><i class="fas fa-times"></i></span>`))
-      sizeValue.append($(`<span class="memory-size-value-dim-value" title="z-dim">${memory.getType().getDim().z}</span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="x">${memory.getType().getDim().x}</span>`).tooltip({delay: 300}))
+      sizeValue.append($(`<span class="memory-size-value-dim-times"><i class="fas fa-times"></i></span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="y">${memory.getType().getDim().y}</span>`).tooltip({delay: 300}))
+      sizeValue.append($(`<span class="memory-size-value-dim-times"><i class="fas fa-times"></i></span>`))
+      sizeValue.append($(`<span class="memory-size-value-dim-value" title="z">${memory.getType().getDim().z}</span>`).tooltip({delay: 300}))
     }
   } else {
     sizeValue.append($(`<span class="memory-size-value-dim-value">1</span>`))
   }
 
+  return res
+}
+
+/**
+ * Render the size of 
+ * @param {Memory} memory 
+ */
+function renderMemoryTypeSize(memory) {
+
+  let res = $(`<span class="memory-type-size-wrapper"></span>`)
+
+  /** @type {Type} */
+  let type = memory.isArray() ? memory.getType().getElementType() : memory.getType()
+  
+  if ( MemoryVisViewHeader.Options.showTitles)
+    $(`<span class="memory-type-size-title" title="Size (bytes)"><i class="fas fa-text-width"></i></span>`).appendTo(res).tooltip()
+  
+  let typeSizeValue = $(`<span class="memory-type-size-value">${type.getRequiredBytes()}</span>`).appendTo(res)
+
+  if ( !MemoryVisViewHeader.Options.showTitles)
+    typeSizeValue.tooltip({title: "Width"})
   return res
 }
 
@@ -182,16 +219,25 @@ function renderSeparator() {
 }
 
 /**
+ * The header of a memory visualization
+ * 
  * @memberof module:memory-vis
  */
 class MemoryVisViewHeader {
+
+  static Options = {
+    showTitles: true
+  }
+
   static MAX_VISIBLE_NAME = 10
 
   /** @type {MemoryVisView}  */ #view
   /** @type {Boolean}        */ #rendered
+  /** @type {JQuery}         */ #memorySrc
   /** @type {JQuery}         */ #memoryName
   /** @type {JQuery}         */ #memoryType
   /** @type {JQuery}         */ #memorySize
+  /** @type {JQuery}         */ #memoryTypeSize
 
   /**
    * @param {MemoryVisView} view 
@@ -210,6 +256,9 @@ class MemoryVisViewHeader {
         <div class="top-bar btn-toolbar bg-light memory-vis-header" role="toolbar" aria-label="Toolbar with button groups">
         </div>`)
 
+      this.#memorySrc  = renderMemorySource(this.#view.memory, this.#view.id).appendTo(this.node)
+                         renderSeparator().appendTo(this.node)
+
       this.#memoryName = renderMemoryName(this.#view.memory, this.#view.id).appendTo(this.node)
                          renderSeparator().appendTo(this.node)
       
@@ -217,9 +266,15 @@ class MemoryVisViewHeader {
                          renderSeparator().appendTo(this.node)
                          
       this.#memoryType = renderMemoryType(this.#view.memory, this.#view.id).appendTo(this.node)
+                         renderSeparator().appendTo(this.node)
+      
+      this.#memoryTypeSize = renderMemoryTypeSize(this.#view.memory, this.#view.id).appendTo(this.node)
+                             renderSeparator().appendTo(this.node)
+      console.log(this.#memoryTypeSize)
 
       this.#rendered = true
     }
+
     return this.node
   }
 

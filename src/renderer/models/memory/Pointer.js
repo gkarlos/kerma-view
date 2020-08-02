@@ -1,7 +1,6 @@
 const AddressSpace = require("@renderer/models/memory/AddressSpace")
 const Memory       = require('@renderer/models/memory/Memory')
 const PtrType      = require('@renderer/models/types/PtrType')
-const { timeThursday } = require("d3")
 
 /**
  * This class is used to model pointers. A Pointer is a piece of
@@ -60,6 +59,7 @@ class Pointer extends Memory {
       throw new Error("src must be MemorySrc instance")
     super(type, addrSpace, src)
     this.#aliases = []
+    this.#materialized = false
   }
 
   /** @type {PtrType} */

@@ -29,6 +29,7 @@ class Memory {
   /**@type {Type}         */ #type
   /**@type {AddressSpace} */ #addrSpace
   /**@type {MemorySrc}    */ #src
+  /**@type {Boolean}      */ #materialized
 
   static Src = MemorySrc
 
@@ -52,6 +53,7 @@ class Memory {
     this.#type          = type
     this.#addrSpace     = addrSpace
     this.#src           = src
+    this.#materialized  = !!src
   }
 
   /** @type {Type} */
@@ -138,6 +140,24 @@ class Memory {
     } else {
       return this.#type.getDim().getSize() * this.#type.getElementType().getRequiredBytes()
     }   
+  }
+
+  /**
+   * Mark this as materialized. I.e it exists in source code
+   * @param {Boolean} materialized
+   * @returns {Pointer} this 
+   */
+  setMaterialized(materialized=true) {
+    this.#materialized = !!materialized
+    return this
+  }
+  
+
+  /** 
+   * @type {Boolean} 
+   */
+  isMaterialized() { 
+    return this.#materialized 
   }
 
   /**

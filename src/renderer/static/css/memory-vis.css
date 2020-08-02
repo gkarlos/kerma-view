@@ -31,14 +31,12 @@
  **/
 
 .memory-vis-header {
-    padding-left: 4px;
     font-size: 12px
 }
 
 .memory-vis-header .memory-name {
     font-size: 12px;
     font-weight: 500;
-    margin-left: 4px;
     display: inline-block;
     vertical-align: text-bottom;
 }
@@ -51,10 +49,10 @@
     opacity: 0.5;
 }
 
-.memory-vis-header-separator {
+/* .memory-vis-header-separator {
     margin-left: 7px;
     margin-right: 7px;
-}
+} */
 
 
 /* .memory-vis-header > .memory-type {
@@ -69,19 +67,65 @@
     font-family: monospace;
 }
 
+.memory-src-wrapper, .memory-name-wrapper, .memory-size-wrapper,
+.memory-type-wrapper,.memory-type-size-wrapper {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.memory-src-wrapper:hover {
+    cursor: pointer;
+}
+
+.memory-src-wrapper:hover,
+.memory-src-wrapper.active {
+    box-sizing: border-box;
+    /* color: lightgoldenrodyellow; */
+    color: rgba(0,0,0,0.5);
+    background-clip: padding-box;
+    background:  #eff0f1;
+}
+
 .memory-size-title {
     margin-right: 5px;
 }
 
 .memory-size-value-dim-value {
-    cursor: pointer;
+    cursor: default;
     /* font-family: Consolas; */
 }
 
-.memory-size-value .times {
+.memory-size-value-dim-times {
     font-size: 8px;
+    opacity: 0.7;
     margin-left: 2px;
     margin-right: 2px;
+}
+
+.memory-type-title {
+    margin-right: 4px;
+}
+
+.memory-type-size-wrapper {
+    cursor: default;
+}
+
+.memory-type-size-title {
+    margin-right: 4px;
+}
+
+.memory-size-title,
+.memory-type-title,
+.memory-type-size-title {
+    cursor: default;
+    opacity: 0.5;
+    font-weight: 100;
+}
+
+.memory-size-title:hover,
+.memory-type-title:hover,
+.memory-type-size-title:hover {
+    opacity: 0.7;
 }
 
 
@@ -89,19 +133,19 @@
  ** POPOVERS
  **/
 
-.memory-name-popover,
+.memory-src-popover,
 .memory-type-popover {
     max-width: 15%;
 }
 
-.memory-name-popover-header,
+.memory-src-popover-header,
 .memory-type-popover-header {
     display: block;
     font-size: 10px;
     padding: 4px;
 }
 
-.memory-name-popover-body,
+.memory-src-popover-body,
 .memory-type-popover-body {
     padding: 4px;
     font-family: Consolas;
@@ -111,46 +155,46 @@
     font-weight: 100;
 }
 
-.memory-name-popover-body > p {
+.memory-src-popover-body > p {
     margin-block-end: 0px;
 }
 
-.memory-name-popover-body .emph {
+.memory-src-popover-body .emph {
     color: darkolivegreen;
     font-weight: 900;
 }
 
-.memory-name-context {
+.memory-src-context {
     display: flex;
     flex-direction: column;    
 }
 
-.memory-name-context .line {
+.memory-src-context .line {
     font-family: Consolas;
     line-height: 1.2;
     font-size: 11px;
 }
 
-.memory-name-context .line-emph {
+.memory-src-context .line-emph {
     font-size: 12px;
 }
 
-.memory-name-context .line-number {
+.memory-src-context .line-number {
     opacity: 1;
     color: black;
     font-size: 10px;
 }
 
-.memory-name-context .line-content {
+.memory-src-context .line-content {
     font-size: 11px;
 }
 
-.memory-name-context .line-number-highlighted {
+.memory-src-context .line-number-highlighted {
     font-weight: bold;
     font-style: normal;
 }
 
-.memory-name-context .line .implied-content {
+.memory-src-context .line .implied-content {
     font-family: Arial, Helvetica, sans-serif;
 }
 
