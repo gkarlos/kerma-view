@@ -24,8 +24,10 @@ const { timeThursday } = require("d3")
  * to its first element. See the example below.
  * 
  * ```
- * let ptrA = new Pointer(Types.getPtrType(Types.UInt32), ...)         // pointer to 32bit unsigned integer
- * let ptrB = new Pointer(Types.getArrayType(Types.UInt32, 1024), ...) // pointer to a 1D array of 1024 32bit unsigned integers
+ * // pointer to 32bit unsigned integer
+ * let ptrA = new Pointer(Types.getPtrType(Types.UInt32), ...)        
+ * // pointer to a 1D array of 1024 32bit unsigned integers 
+ * let ptrB = new Pointer(Types.getPtrType(Types.getArrayType(Types.UInt32, 1024), ...)) 
  * ```
  * In this example `ptrA` cannot be used to point to the array ptrB points to. 
  * Also `ptrB` pointing to the entire array, also (implicitely) points to the first element of the array.

@@ -28,7 +28,6 @@ class CuPointer extends Pointer {
    * @returns {CuPointer} this
    */
   aliases(pointer) {
-    if ( pointer)
   }
 
   /**
