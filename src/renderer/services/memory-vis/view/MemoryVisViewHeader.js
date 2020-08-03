@@ -219,6 +219,41 @@ function renderSeparator() {
 }
 
 /**
+ * @param {MemoryVisView} view
+ * @returns {JQuery}
+ */
+function renderCollapseControl(view, node) {
+  let res = $(`<div class="memory-vis-collapse"></div>`)
+  let icon = $(`<i class="fas ${view.isCollapsed() ? 'fa-angle-double-down' : 'fa-angle-double-up'}"></i>`).appendTo(res)
+
+  res.on("click", () => view.toggleCollapse(() => {
+    icon.removeClass('fa-angle-double-down')
+    icon.addClass('fa-angle-double-up')
+    res.addClass('opacity-70')
+  }, () => {
+    icon.removeClass('fa-angle-double-up')
+    icon.addClass('fa-angle-double-down')
+    res.removeClass('opacity-70')
+  }))
+
+  node.dblclick( e => {
+    if ( e.target === node[0]) 
+      view.toggleCollapse(() => {
+        icon.removeClass('fa-angle-double-down')
+        icon.addClass('fa-angle-double-up')
+        res.addClass('opacity-70')
+      }, () => {
+        icon.removeClass('fa-angle-double-up')
+        icon.addClass('fa-angle-double-down')
+        res.removeClass('opacity-70')
+      })
+  })
+
+  return res
+}
+
+
+/**
  * The header of a memory visualization
  * 
  * @memberof module:memory-vis
@@ -238,6 +273,9 @@ class MemoryVisViewHeader {
   /** @type {JQuery}         */ #memoryType
   /** @type {JQuery}         */ #memorySize
   /** @type {JQuery}         */ #memoryTypeSize
+  /** @type {JQuery}         */ #collapseControl
+
+  /** @type {JQuery}         */ node
 
   /**
    * @param {MemoryVisView} view 
@@ -253,7 +291,7 @@ class MemoryVisViewHeader {
   render() {
     if ( !this.isRendered()) {
       this.node = $(`
-        <div class="top-bar btn-toolbar bg-light memory-vis-header" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="top-bar btn-toolbar card-header bg-light memory-vis-header" role="toolbar" aria-label="Toolbar with button groups">
         </div>`)
 
       this.#memorySrc  = renderMemorySource(this.#view.memory, this.#view.id).appendTo(this.node)
@@ -270,10 +308,14 @@ class MemoryVisViewHeader {
       
       this.#memoryTypeSize = renderMemoryTypeSize(this.#view.memory, this.#view.id).appendTo(this.node)
                              renderSeparator().appendTo(this.node)
-      console.log(this.#memoryTypeSize)
+                             renderSeparator().appendTo(this.node)
+
+      this.#collapseControl = renderCollapseControl(this.#view, this.node).appendTo(this.node)
 
       this.#rendered = true
     }
+
+    console.log(this.node)
 
     return this.node
   }

@@ -1,5 +1,5 @@
-#memory-area .card-header {
-    padding: 10px;
+#memory-area-titlebar{
+    padding: 10px !important;
 }
 
 #memory-area .card-header .title {
@@ -11,11 +11,28 @@
     overflow: auto;
 }
 
+#memory-area {
+    height: 100%;
+}
+
+#memory-area-body {
+    height: 100%;
+}
+
 #memory-vis-list {
     width: 100%;
     background-color: transparent;
 }
 
+#memory-area-body .simplebar-track.simplebar-vertical {
+    right: -10px;
+}
+
+/********************/
+/********************/
+/********************/
+/********************/
+/********************/
 
 .memory-vis {
     margin-top: 4px;
@@ -34,6 +51,25 @@
     font-size: 12px
 }
 
+.memory-vis-header.card-header {
+    padding: 1px;
+}
+
+.memory-vis-header .memory-vis-collapse {
+    display: inline-block;
+    right: 0px;
+    position: absolute;
+    cursor: pointer;
+    padding-left: 7px;
+    padding-right: 5px;
+    border-left: 1px solid #dee2e6!important
+}
+
+.memory-vis-header .memory-vis-collapse:hover {
+    /* color: rgba(0,0,0,0.5); */
+    opacity: 0.5 !important;
+}
+
 .memory-vis-header .memory-name {
     font-size: 12px;
     font-weight: 500;
@@ -48,20 +84,6 @@
 .memory-vis-header .memory-name-src:hover {
     opacity: 0.5;
 }
-
-/* .memory-vis-header-separator {
-    margin-left: 7px;
-    margin-right: 7px;
-} */
-
-
-/* .memory-vis-header > .memory-type {
-    margin-left: 5px;
-}
-
-.memory-vis-header > .memory-type-title {
-    margin-left: 4px
-} */
 
 .memory-vis-header > .memory-type-popover {
     font-family: monospace;
@@ -130,7 +152,7 @@
 
 
 /**
- ** POPOVERS
+ ** HEADER-POPOVERS
  **/
 
 .memory-src-popover,
@@ -201,4 +223,19 @@
 .memory-type-content > pre {
     font-family: Consolas;
     margin-bottom: 0px;
+}
+
+
+/**
+ ** BODY
+ **/
+.memory-vis-body {
+    height: 100px;
+    /* max-height: none;
+    overflow: hidden; */
+    will-change: transform;
+    /* contain: content;
+    animation-name: verticalExpand;
+    animation-duration: 1000ms;
+    animation-timing-function: step-end; */
 }
