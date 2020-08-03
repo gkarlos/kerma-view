@@ -22,7 +22,7 @@ class MemoryVisView {
   ////////////////////////////////
   ////////////////////////////////
   
-  Options = {
+  static Options = {
     startCollapsed : true
   }
 
@@ -59,7 +59,7 @@ class MemoryVisView {
     this.#id = uuid(10)
     this.#memory = memory
     this.#rendered = false
-    this.#collapsed = this.Options.startCollapsed
+    this.#collapsed = MemoryVisView.Options.startCollapsed
     this.#header = new MemoryVisViewHeader(this)
     this.#grid = new MemoryVisViewGrid(this)
   }
