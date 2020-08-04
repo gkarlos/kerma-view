@@ -43,18 +43,6 @@ class MemoryVisView {
   /** @type {JQuery}              */ #body
   /** @type {MemoryVisViewGrid}   */ #grid
 
-                              
-  ////////////////////////////////
-  ////////////////////////////////
-  ////////////////////////////////
-
-  /** @returns {JQuery} */
-  #renderNode = function() {
-    let res = $(`<div class="card w-100 memory-vis" id="${this.id}"></div>`)
-        res.css("border-color", MemoryVisView.AddrSpaceColors[this.#model.memory.getAddressSpace().getValue()])
-    return res
-  }
-
   ////////////////////////////////
   ////////////////////////////////
   ////////////////////////////////
@@ -76,7 +64,10 @@ class MemoryVisView {
   ////////////////////////////////
 
   /** @type {String} */
-  get id() { return this.#id }
+  get id() { return this.#model.id }
+
+  /** @type {MemoryVisModel} */
+  get model() { return this.#model }
 
   /** @type {Memory} */
   get memory() { return this.#model.getMemory() }
@@ -146,6 +137,17 @@ class MemoryVisView {
   ////////////////////////////////
   ////////////////////////////////
 
+  /** @returns {JQuery} */
+  #renderNode = function() {
+    let res = $(`<div class="card w-100 memory-vis" id="${this.id}"></div>`)
+        res.css("border-color", MemoryVisView.AddrSpaceColors[this.#model.memory.getAddressSpace().getValue()])
+    return res
+  }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
   /**
    * Create a DOM element for this view
    * and return it.
@@ -162,6 +164,8 @@ class MemoryVisView {
 
       if ( MemoryVisView.Options.startCollapsed)
         this.collapse()
+      
+      $(this.#body).ready(() => this.#grid.render())
     }
 
     return this.#node

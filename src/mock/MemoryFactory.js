@@ -49,7 +49,7 @@ module.exports = function() {
       mem.getType().addAlias(type)
       mem.setSrc(src)
 
-      console.log(Types.pp(mem.getType()))
+      // console.log(Types.pp(mem.getType()))
       return mem
     },
 
