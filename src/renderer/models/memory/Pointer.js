@@ -42,6 +42,7 @@ class Pointer extends Memory {
   /** @type {Memory}    */ #memory
   /** @type {Pointer}   */ #aliased
   /** @type {Pointer[]} */ #aliases
+  /** @type {Boolean}   */ #materialized
 
   /**
    * @param {PtrType}      type      Type of this pointer  
