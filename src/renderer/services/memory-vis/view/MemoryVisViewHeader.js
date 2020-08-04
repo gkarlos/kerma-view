@@ -314,7 +314,7 @@ class MemoryVisViewHeader {
       this.#rendered = true
     }
 
-    console.log(this.node)
+    // console.log(this.node)
 
     return this.node
   }
