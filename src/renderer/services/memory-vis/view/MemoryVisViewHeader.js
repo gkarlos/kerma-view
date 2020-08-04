@@ -307,7 +307,6 @@ class MemoryVisViewHeader {
       
       this.#memoryTypeSize = renderMemoryTypeSize(this.#view.memory, this.#view.id).appendTo(this.node)
                              renderSeparator().appendTo(this.node)
-                             renderSeparator().appendTo(this.node)
 
       this.#collapseControl = renderCollapseControl(this.#view, this.node).appendTo(this.node)
 
