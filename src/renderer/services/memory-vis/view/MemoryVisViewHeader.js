@@ -4,7 +4,6 @@
 /** @ignore @typedef {import("@renderer/models/types/ArrayType")} ArrayType */
 /** @ignore @typedef {import("@renderer/models/types/StructType")} StructType */
 
-const { left } = require("cli-color/move")
 const Types = require('@renderer/models/types/Types')
 
 /** 

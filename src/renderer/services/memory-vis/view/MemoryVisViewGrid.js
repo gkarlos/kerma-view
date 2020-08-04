@@ -1,5 +1,8 @@
 /**@ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")} MemoryVisView*/
 
+/**
+ * @memberof module:memory-vis
+ */
 class MemoryVisViewGrid {
   static DEFAULT_VIEWPORT = {x: 'auto', y: 'auto'}
   static DEFAULT_SIZE     = 20
