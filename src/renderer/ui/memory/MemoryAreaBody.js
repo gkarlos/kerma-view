@@ -1,11 +1,11 @@
 'use-strict'
 
-const Component        = require('@renderer/ui/component/Component')
+const Component = require('@renderer/ui/component/Component')
 
 /**@ignore @typedef {import("@renderer/services/memory-vis/MemoryVis")} MemoryVis */
 
 /**
- * The body of the memory are. This is roughly a collection
+ * The body of the memory area. This is roughly a collection
  * of {@link MemoryVis} objects.
  * 
  * This class is only meant to be used within {@link MemoryArea}
@@ -30,6 +30,21 @@ class MemoryAreaBody extends Component {
     this.#rendered   = false
   }
 
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** @returns {Boolean} */
+  isRendered() { return this.#rendered }
+
+  /** @returns {Boolean} */
+  isInstalled() { return this.#installed }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+
   /** @returns {MemoryAreaBody} */
   install() {
     if ( !this.isInstalled()) {
@@ -46,7 +61,6 @@ class MemoryAreaBody extends Component {
    * @returns {JQuery}
    */
   render() {
-    console
     if ( !this.isRendered()) {
       this.node = $(`<div id="${this.id}" data-simplebar></div>`)
       this.memoryList = $(`<div id="memory-vis-list"></div>`).appendTo(this.node)
@@ -54,14 +68,17 @@ class MemoryAreaBody extends Component {
                .css("max-height", "90vh")
       this.#rendered = true
     }
-    
     return this.node;
   }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
 
   /**
    * Add a MemoryVis. 
    * If the component is installed the vis will also be rendered to the DOM. 
-   * If the component is not installed the vis will be render at the next call of `install()`
+   * If the component is not installed the vis will be rendered at the next call of `install()`
    * @param {MemoryVis} vis
    * @returns {MemoryAreaBody} 
    */
@@ -98,34 +115,9 @@ class MemoryAreaBody extends Component {
     return this
   }
 
-
-  
-
-
-  // /**
-  //  * @param {Memory} memory A Memory object
-  //  */
-  // addMemory(memory) {
-    
-  //   let viz = new MemoryVisualizer(memory, `mem-viz-${memory.getName()}`, `#${this.id}`)
-
-  //   this.visualizers.push(viz)
-
-  //   this.memoryList.append(vrender())
-  // }
-
   useDefaultControls() {
-
+    //TODO: remove me
   }
-
-  ////////////////////////////////
-  ////////////////////////////////
-
-  /** @returns {Boolean} */
-  isRendered() { return this.#rendered }
-
-  /** @returns {Boolean} */
-  isInstalled() { return this.#installed }
 }
 
 module.exports = MemoryAreaBody
