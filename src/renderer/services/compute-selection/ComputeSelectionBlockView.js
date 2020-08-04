@@ -2,7 +2,7 @@ const Component    = require('@renderer/ui/component/Component')
 const EventEmitter = require('events').EventEmitter
 const Events       = require('@renderer/services/compute-selection/Events')
 const App          = require('@renderer/app')
-const { CudaIndex, CudaBlock } = require('@renderer/models/cuda')
+const { CuBlock, CuIndex } = require('@renderer/models/cuda')
 
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionModel")} ComputeSelectionModel */
 /** @ignore @typedef {import("@renderer/services/compute-selection").ComputeSelectionOnBlockChangeCallback} ComputeSelectionOnBlockChangeCallback*/
@@ -224,7 +224,7 @@ class ComputeSelectionBlockView extends Component {
 
       function blockChangeHandler() {
         let oldBlock = self.#model.getBlockSelection()
-        self.#model.selectBlockByIdx(new CudaIndex(parseInt(yInput[0].value), parseInt(xInput[0].value)))
+        self.#model.selectBlockByIdx(new CuIndex(parseInt(yInput[0].value), parseInt(xInput[0].value)))
         let newBlock = self.#model.getBlockSelection()
         if ( !oldBlock.equals(newBlock))
           self.#emitter.emit(Events.BlockChange, oldBlock, newBlock)
