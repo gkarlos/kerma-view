@@ -3,6 +3,7 @@
 
 const MemoryVisViewHeader  = require('@renderer/services/memory-vis/view/MemoryVisViewHeader')
 const MemoryVisViewGrid = require('@renderer/services/memory-vis/view/MemoryVisViewGrid')
+const MemoryVisViewGridToolbar = require('@renderer/services/memory-vis/view/MemoryVisViewGridToolbar')
 
 /**
  * View of a memory visualization
@@ -42,6 +43,7 @@ class MemoryVisView {
   /** @type {MemoryVisViewHeader} */ #header
   /** @type {JQuery}              */ #body
   /** @type {MemoryVisViewGrid}   */ #grid
+  /** @type {MemoryVisViewGridToolbar} */ #gridToolbar
 
   ////////////////////////////////
   ////////////////////////////////
@@ -57,6 +59,7 @@ class MemoryVisView {
     this.#collapsed = MemoryVisView.Options.startCollapsed
     this.#header = new MemoryVisViewHeader(this)
     this.#grid = new MemoryVisViewGrid(this)
+    this.#gridToolbar = new MemoryVisViewGridToolbar(this)
   }
 
   ////////////////////////////////
@@ -165,7 +168,10 @@ class MemoryVisView {
       if ( MemoryVisView.Options.startCollapsed)
         this.collapse()
       
-      $(this.#body).ready(() => this.#grid.render())
+      $(this.#body).ready(() => {
+        this.#gridToolbar.render()
+        this.#grid.render()
+      })
     }
 
     return this.#node
