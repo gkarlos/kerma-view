@@ -27,12 +27,14 @@ class MemoryVisViewGrid {
     },
 
     grid : {
-      padding: 10
+      padding: 10,
+      width: undefined,
+      height: undefined
     },
 
     cell : {
-      sizes: [5, 10, 15, 20, 25, 30, 35],
-      sizeIdx: 1,    // px
+      sizes: [8, 10, 12, 14, 16, 20, 22, 24, 26, 28],
+      sizeIdx: 2,    // px
       get size() { return this.sizes[this.sizeIdx]},
       spacing: 3  // px
     }, 
@@ -85,31 +87,82 @@ class MemoryVisViewGrid {
   ////////////////////////////////
   ////////////////////////////////
 
-  /** @returns {Boolean} */
+  /** 
+   * Check if size can be increased further
+   * @returns {Boolean}
+   */
   canIncreaseSize() { return this.Options.cell.sizeIdx < this.Options.cell.sizes.length - 1}
 
   /**
-   * 
+   * Check if size can be decreased further 
+   * @returns {Boolean}
+   */
+  canDecreaseSize() { return this.Options.cell.sizeIdx > 0 }
+
+  /**
+   * Retrieve the current size. The value returned corresponds
+   * to the size of the cells of the grid, in px 
+   * @returns Number 
+   */
+  getSize() { return this.Options.cell.size }
+
+  /**
+   * Increase the size of (the cells of) the grid
    */
   increaseSize() {
     //TODO
     this.Options.cell.sizeIdx = (this.Options.cell.sizeIdx + 1) % this.Options.cell.sizes.length
+    this._resize()
+  }
 
-    let w = (this.Options.viewport.x + 1) * (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding
-    let h = this.Options.viewport.y * (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding
+  /**
+   * Decrease the size of (the cells of) the grid
+   */
+  decreaseSize() {
+    this.Options.cell.sizeIdx = (this.Options.cell.sizeIdx - 1) % this.Options.cell.sizes.length
+    this._resize()
+  }
 
-    //adjusted viewport
-  
+  /**
+   * Reset the grid's size to the default value
+   */
+  resetSize() {
+    //TODO
+  }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** 
+   * Resize the svg based on the current size options.
+   * See {@link MemoryVisViewGrid#Options}
+   */
+  _resize() {
+
+    let oldWidth = this.Options.grid.width, oldHeight = this.Options.grid.height
+
+    this.Options.grid.width  = (this.Options.viewport.x + 1) * (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding
+    this.Options.grid.height = this.Options.viewport.y * (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding
+
+    // do nothing if we are not rendered
+    if ( !this.isRendered())
+      return
+
+    // do nothing if no changes
+    if ( oldWidth === this.Options.grid.width && oldHeight === this.Options.grid.height)
+      return
+
     let self = this
 
-    
-    this.#svg.attr('width', w).attr('height', h)
-
+    // resize wrapper
     this.#node.height(parseInt(this.#svg.attr('height')))
 
-    // this.#svg.attr('viewbox', `0 0 ${w} ${h}`)
-    this.#yAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
-
+    // resize the svg
+    this.#svg.attr('width', this.Options.grid.width)
+             .attr('height', this.Options.grid.height)
+    
+    // resize text
     this.#svg.selectAll('text').each(function() { 
       let label = d3.select(this)
       label
@@ -117,25 +170,16 @@ class MemoryVisViewGrid {
         .attr('font-size',  `${self.Options.cell.size}px`)
     })
 
-
+    // resize cells
     this.#svg.selectAll('rect').each( function(d){
       let newX = (d3.select(this).attr('pos-x') + 1) * (self.Options.cell.size + self.Options.cell.spacing)
       let newY = d3.select(this).attr('pos-y') * (self.Options.cell.size + self.Options.cell.spacing)
       d3.select(this).attr('width', self.Options.cell.size)
                      .attr('height', self.Options.cell.size)
-                     .attr('viewbox', `0 0 ${w} ${h}`)
                      .attr('y', 2 + parseInt(d3.select(this).attr('pos-y')) * (self.Options.cell.size + self.Options.cell.spacing))
                      .attr('x', (parseInt(d3.select(this).attr('pos-x')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
     })
   }
-
-  decreaseSize() {
-    //TODO
-  }
-
-  ////////////////////////////////
-  ////////////////////////////////
-  ////////////////////////////////
 
   _computeRequiredWidth() {
     this.Options.viewport.x = Math.floor(this.Options.viewport.xMax)
