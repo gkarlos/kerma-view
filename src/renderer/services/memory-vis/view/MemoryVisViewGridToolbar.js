@@ -24,8 +24,8 @@ class MemoryVisViewGridToolbar {
       this.#node = $(`<div class="btn-toolbar" class="memory-vis-grid-toolbar"></div>`)
         .appendTo(this.#view.body)
 
-      this.#decSizeButton = $(`<button type="button" class="btn btn-xs btn-outline-primary"><i class="fas fa-minus-square"></i></button>`).appendTo(this.#node)
-      this.#incSizeButton = $(`<button type="button" class="btn btn-xs btn-outline-primary"><i class="fas fa-plus-square"></i></button>`).appendTo(this.#node)
+      this.#decSizeButton = $(`<button type="button" class="btn kv-btn kv-btn-sm"><i class="fas fa-minus-square"></i></button>`).appendTo(this.#node)
+      this.#incSizeButton = $(`<button type="button" class="btn kv-btn kv-btn-sm"><i class="fas fa-plus-square"></i></button>`).appendTo(this.#node)
 
       let self = this
       this.#incSizeButton.on('click', () => {

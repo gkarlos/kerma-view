@@ -246,9 +246,30 @@
 .memory-vis-grid {
     width: auto;
     height: 100%;
-    max-height: 100%;
+    max-height: 300px;
     max-width: 100%;
-    overflow: auto;
+    overflow-x: auto;
+}
+
+/* .memory-vis-grid:hover::-webkit-scrollbar {
+    height: 13px;
+    width: 13px;
+} */
+
+.memory-vis-grid::-webkit-scrollbar {
+    height: 4px;
+    width: 0px;
+    margin-right: 5px;
+}
+
+.memory-vis-grid::-webkit-scrollbar-thumb {
+    background: lightgrey;
+}
+
+
+.memory-vis-grid::-webkit-scrollbar-thumb:hover {
+    height: 8px;
+    background: grey;
 }
 
 .memory-vis-cell {

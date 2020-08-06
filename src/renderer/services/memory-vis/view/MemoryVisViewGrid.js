@@ -102,7 +102,11 @@ class MemoryVisViewGrid {
   
     let self = this
 
+    
     this.#svg.attr('width', w).attr('height', h)
+
+    this.#node.height(parseInt(this.#svg.attr('height')))
+
     // this.#svg.attr('viewbox', `0 0 ${w} ${h}`)
     this.#yAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
 

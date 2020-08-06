@@ -26,6 +26,18 @@
   /* text-shadow:0px 1px 0px #ffffff; */
 }
 
+.kv-btn-sm {
+  padding: 0px;
+  min-width: 25px;
+  width: 25px !important;
+  height: 25px !important;
+  padding: unset !important;
+}
+
+.kv-btn:hover {
+
+}
+
 .kv-btn:hover {
   background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
   background-color:#f6f6f6;

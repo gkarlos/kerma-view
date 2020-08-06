@@ -22,8 +22,6 @@ function renderMemorySource(memory, uuid) {
     title: `Source @ <a href="#">${src.getRange().fromLine}:${src.getRange().fromColumn}</a>`,
     trigger: 'manual',
     html: true,
-    placement: 'left',
-    container: 'body',
     content: `
       <p class="memory-src-context">
         <span class="line">
