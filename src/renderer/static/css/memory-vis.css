@@ -245,10 +245,11 @@
  **/
 .memory-vis-grid {
     width: auto;
-    height: 100%;
-    max-height: 300px;
+    height: auto;
+    /* max-height: 300px; */
     max-width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
 }
 
 /* .memory-vis-grid:hover::-webkit-scrollbar {
@@ -279,7 +280,7 @@
     fill: #ebedf0;
     /* stroke: rgba(27, 31, 35, 0.4); */
     /* stroke-width:  0.3; */
-    overflow:visible
+    /* overflow:visible */
 }
 
 .memory-vis-cell:hover{

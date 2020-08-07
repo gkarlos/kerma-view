@@ -72,7 +72,6 @@ class MemoryVisViewGrid {
       this.Options.viewport.x = Math.min(ty.getDim().x, this.Options.viewport.x)
       this.Options.viewport.y = Math.min(ty.getDim().y, this.Options.viewport.y)
     }
-    console.log(this.Options.cell.size)
   }
 
   ////////////////////////////////
@@ -112,7 +111,7 @@ class MemoryVisViewGrid {
   increaseSize() {
     //TODO
     this.Options.cell.sizeIdx = (this.Options.cell.sizeIdx + 1) % this.Options.cell.sizes.length
-    this._resize()
+    this._adjustSize()
   }
 
   /**
@@ -120,7 +119,7 @@ class MemoryVisViewGrid {
    */
   decreaseSize() {
     this.Options.cell.sizeIdx = (this.Options.cell.sizeIdx - 1) % this.Options.cell.sizes.length
-    this._resize()
+    this._adjustSize()
   }
 
   /**
@@ -138,12 +137,12 @@ class MemoryVisViewGrid {
    * Resize the svg based on the current size options.
    * See {@link MemoryVisViewGrid#Options}
    */
-  _resize() {
+  _adjustSize() {
 
     let oldWidth = this.Options.grid.width, oldHeight = this.Options.grid.height
 
-    this.Options.grid.width  = (this.Options.viewport.x + 1) * (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding
-    this.Options.grid.height = this.Options.viewport.y * (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding
+    this.Options.grid.width  = (this.Options.viewport.x + 1) * (this.Options.cell.size + this.Options.cell.spacing)
+    this.Options.grid.height = (this.Options.viewport.y - 1) * (this.Options.cell.size + this.Options.cell.spacing) + this.Options.cell.size
 
     // do nothing if we are not rendered
     if ( !this.isRendered())
@@ -155,8 +154,7 @@ class MemoryVisViewGrid {
 
     let self = this
 
-    // resize wrapper
-    this.#node.height(parseInt(this.#svg.attr('height')))
+    console.log("Size:", this.Options.grid.width, this.Options.grid.height)
 
     // resize the svg
     this.#svg.attr('width', this.Options.grid.width)
@@ -171,14 +169,22 @@ class MemoryVisViewGrid {
     })
 
     // resize cells
-    this.#svg.selectAll('rect').each( function(d){
-      let newX = (d3.select(this).attr('pos-x') + 1) * (self.Options.cell.size + self.Options.cell.spacing)
-      let newY = d3.select(this).attr('pos-y') * (self.Options.cell.size + self.Options.cell.spacing)
-      d3.select(this).attr('width', self.Options.cell.size)
-                     .attr('height', self.Options.cell.size)
-                     .attr('y', 2 + parseInt(d3.select(this).attr('pos-y')) * (self.Options.cell.size + self.Options.cell.spacing))
-                     .attr('x', (parseInt(d3.select(this).attr('pos-x')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
+    this.#svg.selectAll('rect').each( function() {
+      d3.select(this)
+        .attr('width', self.Options.cell.size)
+        .attr('height', self.Options.cell.size)
+        .attr('y', parseInt(d3.select(this).attr('pos-y')) * (self.Options.cell.size + self.Options.cell.spacing))
+        .attr('x', (parseInt(d3.select(this).attr('pos-x')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
+        .attr('rx', 2)
+        .attr('ry', 2)
     })
+
+        // resize wrapper
+        this.#node.css('height', this.Options.grid.height + this.Options.grid.padding * 2)
+                  .css('padding-top', this.Options.grid.padding)
+                  .css('padding-bottom', this.Options.grid.padding)
+
+
   }
 
   _computeRequiredWidth() {
@@ -193,29 +199,24 @@ class MemoryVisViewGrid {
   }
   
   _drawSvg() {
-    let w = (this.Options.viewport.x + 1) * 
-            (this.Options.cell.sizes[this.Options.cell.sizes.length -1] + this.Options.cell.spacing) + 3 * this.Options.grid.padding
-    let h = this.Options.viewport.y * 
-            (this.Options.cell.sizes[this.Options.cell.sizes.length -1] + this.Options.cell.spacing) + 3 * this.Options.grid.padding
+    this.#svg = 
+      d3.select(this.#node[0])
+        .style('display', 'block')
+        .append('svg')
+        .attr('class', 'memory-vis-grid-svg')
+        //  .style('padding', '10px')
+        // .style('display', 'block')
+        // .style('overflow', 'auto')     
+  }
 
-    let vw = (this.Options.viewport.x + 1) * 
-             (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding,
-        vh = this.Options.viewport.y * 
-             (this.Options.cell.size + this.Options.cell.spacing) + 3 * this.Options.grid.padding
-
-    console.log(`svg.size: ${w}x${h} for memory: ${this.#view.model.getMemory().toString()}`)
-
-    return d3.select(this.#node[0])
-             .style('position', 'relative')
-             .append('svg')
-             .attr('width', vw)
-             .attr('height', vh)
-            //  .attr('viewbox', `0 0 ${this.Options.viewport.x} ${this.Options.viewport.y}`)
-             .attr('class', 'memory-vis-grid-svg')
-             .style('padding', '10px')
-             .style('display', 'block')
-             .style('overflow', 'auto')
-             
+  _drawCells() {
+    // this.#cells = this.#svg.append('g').attr('id', 'cells').attr('transform','translate(0, 0)')
+    
+    // create the cells
+    for ( let i = 0; i < this.Options.viewport.y; ++i) {
+      for ( let j = 0; j < this.Options.viewport.x; ++j)
+        this._drawCell(this.#svg, j, i)
+    }
   }
 
   /**
@@ -224,14 +225,13 @@ class MemoryVisViewGrid {
    * @param {Number} y
    */
   _drawCell(svg, x, y) {
-    svg.append('rect').attr('y', 2 + y * (this.Options.cell.size + this.Options.cell.spacing))
-        .attr('x', (x + 1) * (this.Options.cell.size + this.Options.cell.spacing))
-        .attr('rx', 2)
-        .attr('ry', 2)
+    svg.append('rect')
+        // .attr('y', 2 + y * (this.Options.cell.size + this.Options.cell.spacing))
+        // .attr('x', (x + 1) * (this.Options.cell.size + this.Options.cell.spacing))
         .attr('pos-x', x)
         .attr('pos-y', y)
-        .attr('width', this.Options.cell.size)
-        .attr('height', this.Options.cell.size) 
+        // .attr('width', this.Options.cell.size)
+        // .attr('height', this.Options.cell.size) 
         .attr('class', 'memory-vis-cell')
   }
 
@@ -259,13 +259,11 @@ class MemoryVisViewGrid {
       this.#containerResizeObserver = new ResizeObserver(() => console.log("svg resized"))
 
       this.#node = this._renderNode()
+      
+      this._drawSvg()
+      this._drawCells()
 
-      $(document).ready(() => {
-        console.log($(this.#view.body).width())
-        console.log($(this.#node).width())
-      })
-
-      this.#svg = this._drawSvg()
+      
 
       // add the listener only when the svg is created to avoid
       // acting on the initial rendering of this.#node
@@ -273,17 +271,12 @@ class MemoryVisViewGrid {
 
 
       this.#yAxis = this.#svg.append('g')
-      this.#cells = this.#svg.append('g').attr('id', 'cells').attr('transform','translate(0, 0)')
-    
-      // create the cells
-      for ( let i = 0; i < this.Options.viewport.y; ++i) {
-        for ( let j = 0; j < this.Options.viewport.x; ++j)
-          this._drawCell(this.#svg, j, i)
-      }
+
 
       this._drawYAxis(this.#yAxis)
 
       this.#rendered = true
+      this._adjustSize()
     }
     return this.#node
   }
