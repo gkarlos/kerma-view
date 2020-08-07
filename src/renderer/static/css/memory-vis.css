@@ -247,9 +247,11 @@
     width: auto;
     height: auto;
     /* max-height: 300px; */
+    display: inline-grid;
     max-width: 100%;
-    overflow-x: auto;
+    overflow-x: scroll;
     overflow-y: hidden;
+    overflow-anchor: unset;
 }
 
 /* .memory-vis-grid:hover::-webkit-scrollbar {
@@ -269,7 +271,7 @@
 
 
 .memory-vis-grid::-webkit-scrollbar-thumb:hover {
-    height: 8px;
+    /* height: 8px; */
     background: grey;
 }
 
@@ -280,12 +282,13 @@
     fill: #ebedf0;
     /* stroke: rgba(27, 31, 35, 0.4); */
     /* stroke-width:  0.3; */
-    /* overflow:visible */
+    overflow:visible
 }
 
 .memory-vis-cell:hover{
-    stroke: cadetblue;
-    stroke-width: 1px;
+    /* stroke: cadetblue; */
+    /* stroke-width: 1px; */
+    outline-color: cadetblue;
 }
 
 /**

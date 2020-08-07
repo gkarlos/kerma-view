@@ -71,6 +71,7 @@ class MemoryVisViewGrid {
       let ty = view.model.getMemory().getType()
       this.Options.viewport.x = Math.min(ty.getDim().x, this.Options.viewport.x)
       this.Options.viewport.y = Math.min(ty.getDim().y, this.Options.viewport.y)
+      console.log("Viewport", ty.getDim().y, ty.getDim().x)
     }
   }
 
@@ -139,10 +140,11 @@ class MemoryVisViewGrid {
    */
   _adjustSize() {
 
-    let oldWidth = this.Options.grid.width, oldHeight = this.Options.grid.height
+    let oldWidth  = this.Options.grid.width, 
+        oldHeight = this.Options.grid.height
 
     this.Options.grid.width  = (this.Options.viewport.x + 1) * (this.Options.cell.size + this.Options.cell.spacing)
-    this.Options.grid.height = (this.Options.viewport.y - 1) * (this.Options.cell.size + this.Options.cell.spacing) + this.Options.cell.size
+    this.Options.grid.height = (this.Options.viewport.y * this.Options.cell.size) + (this.Options.viewport.y - 1) * this.Options.cell.spacing
 
     // do nothing if we are not rendered
     if ( !this.isRendered())
@@ -153,7 +155,10 @@ class MemoryVisViewGrid {
       return
 
     let self = this
-
+    // resize wrapper
+    this.#node.css('height', this.Options.grid.height + this.Options.grid.padding * 2)
+              .css('padding-top', this.Options.grid.padding)
+              .css('padding-bottom', this.Options.grid.padding)
     console.log("Size:", this.Options.grid.width, this.Options.grid.height)
 
     // resize the svg
@@ -177,12 +182,10 @@ class MemoryVisViewGrid {
         .attr('x', (parseInt(d3.select(this).attr('pos-x')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
         .attr('rx', 2)
         .attr('ry', 2)
+      console.log(d3.select(this).attr('y'))
     })
 
-        // resize wrapper
-        this.#node.css('height', this.Options.grid.height + this.Options.grid.padding * 2)
-                  .css('padding-top', this.Options.grid.padding)
-                  .css('padding-bottom', this.Options.grid.padding)
+
 
 
   }
@@ -201,7 +204,7 @@ class MemoryVisViewGrid {
   _drawSvg() {
     this.#svg = 
       d3.select(this.#node[0])
-        .style('display', 'block')
+        // .style('display', 'block')
         .append('svg')
         .attr('class', 'memory-vis-grid-svg')
         //  .style('padding', '10px')
@@ -259,7 +262,7 @@ class MemoryVisViewGrid {
       this.#containerResizeObserver = new ResizeObserver(() => console.log("svg resized"))
 
       this.#node = this._renderNode()
-      
+
       this._drawSvg()
       this._drawCells()
 
