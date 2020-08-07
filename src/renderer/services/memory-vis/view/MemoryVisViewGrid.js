@@ -182,12 +182,7 @@ class MemoryVisViewGrid {
         .attr('x', (parseInt(d3.select(this).attr('pos-x')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
         .attr('rx', 2)
         .attr('ry', 2)
-      console.log(d3.select(this).attr('y'))
     })
-
-
-
-
   }
 
   _computeRequiredWidth() {
