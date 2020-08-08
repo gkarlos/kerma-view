@@ -183,6 +183,14 @@ class MemoryVisViewGrid {
         .attr('rx', 2)
         .attr('ry', 2)
     })
+
+    // adjust size of axis
+    let y = d3.scaleLinear().domain([0, this.Options.viewport.y - 1]).range([this.Options.cell.size / 2, this.Options.grid.height - this.Options.cell.size / 2])
+
+    this.#yAxis.attr("transform", `translate(${this.Options.cell.size + 10},0)`).call(d3.axisLeft(y))
+                                                    .call(g => g.select('.domain').remove())
+                                                    .call(g => g.selectAll('.tick').select('line').remove())
+    
   }
 
   _computeRequiredWidth() {
@@ -199,12 +207,8 @@ class MemoryVisViewGrid {
   _drawSvg() {
     this.#svg = 
       d3.select(this.#node[0])
-        // .style('display', 'block')
         .append('svg')
-        .attr('class', 'memory-vis-grid-svg')
-        //  .style('padding', '10px')
-        // .style('display', 'block')
-        // .style('overflow', 'auto')     
+        .attr('class', 'memory-vis-grid-svg')  
   }
 
   _drawCells() {
@@ -236,14 +240,15 @@ class MemoryVisViewGrid {
   /**
    * @param {d3.Selection<SVGElement>} yAxis 
    */
-  _drawYAxis(yAxis) {
-    for ( let i = 0; i < this.Options.viewport.y; ++i)
-      yAxis.append('text').text(i)
-           .attr('x', 0)
-           .attr('pos-y', i)
-           .attr('pos-x', 0)
-           .attr('y', this.Options.grid.padding + i * (this.Options.cell.size + this.Options.cell.spacing))
-           .attr('font-size',  `${this.Options.cell.size}px`)
+  _drawYAxis() {
+    this.#yAxis = this.#svg.append('g')
+    // for ( let i = 0; i < this.Options.viewport.y; ++i)
+    //   yAxis.append('text').text(i)
+    //        .attr('x', 0)
+    //        .attr('pos-y', i)
+    //        .attr('pos-x', 0)
+    //        .attr('y', this.Options.grid.padding + i * (this.Options.cell.size + this.Options.cell.spacing))
+    //        .attr('font-size',  `${this.Options.cell.size}px`)
   }
 
   ////////////////////////////////
@@ -260,18 +265,12 @@ class MemoryVisViewGrid {
 
       this._drawSvg()
       this._drawCells()
-
+      this._drawYAxis()
       
 
       // add the listener only when the svg is created to avoid
       // acting on the initial rendering of this.#node
       this.#svg.on('ready', () => observer.observe( $(this.#node)[0]))
-
-
-      this.#yAxis = this.#svg.append('g')
-
-
-      this._drawYAxis(this.#yAxis)
 
       this.#rendered = true
       this._adjustSize()
