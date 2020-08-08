@@ -15,7 +15,7 @@ describe("models/type/StructType", () => {
     })
 
     it("should return the right value", () => {
-      expect(new StructType([], "myStruct").getName()).to.equal("myStruct")
+      expect(new StructType([], "myStruct").getName()).to.equal("struct myStruct")
     })
   })
 
