@@ -21,6 +21,7 @@ function renderMemorySource(memory, uuid) {
   source.popover({
     title: `Source @ <a href="#">${src.getRange().fromLine}:${src.getRange().fromColumn}</a>`,
     trigger: 'manual',
+    placement: 'left',
     html: true,
     content: `
       <p class="memory-src-context">
@@ -95,11 +96,11 @@ function renderMemoryType(memory, uuid) {
 
   /** @param {Type} type */
   function renderType(type) {
-    let val = Types.pp(type)
+    let val = type.toString()
     let res
 
     if ( val.length < 20) {
-      res = $(`<a href="#" onclick="return false;">${type.toString()}</a>`)
+      res = $(`<a href="#" onclick="return false;">${val}</a>`)
     } else {
       if ( type.isStructType()) {
         res = $(`<a href="#" onclick="return false">{...}</a>`)
@@ -115,7 +116,7 @@ function renderMemoryType(memory, uuid) {
       container: 'body',
       content: `
         <div class="memory-type-content">
-          <pre>${Types.pp(type)}</pre>
+          <pre>${type.pp(true)}</pre>
         </div>
       `,
       template: `

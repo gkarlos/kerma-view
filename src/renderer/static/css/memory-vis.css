@@ -170,10 +170,17 @@
     padding: 4px;
 }
 
+.memory-src-popover-body {
+    padding: 4px
+}
+
+.memory-type-popover-body {
+    padding: 5px;
+}
+
 .memory-src-popover-body,
 .memory-type-popover-body {
-    padding: 4px;
-    font-family: Consolas;
+    font-family: Consolas, 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback';
     word-wrap: break-word;
     word-break: break-all;
     color: grey;
