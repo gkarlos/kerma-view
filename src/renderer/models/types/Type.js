@@ -129,6 +129,11 @@ class Type {
     return this.name + this.#bits.toString()
   } 
 
+  /** @returns {String} */
+  pp() {
+    return this.toString()
+  }
+
   /** @returns {Boolean} */
   equals(other) {
     return (other instanceof Type)

@@ -11,7 +11,7 @@ class StructType extends Type {
   /**
    * @param {Type[]} elementTypes
    */
-  constructor(elementTypes=[], name="struct") {
+  constructor(elementTypes=[], name) {
 
     let selfElemTypes = []
     
@@ -23,7 +23,7 @@ class StructType extends Type {
       selfElemTypes.push(ty)
     })
 
-    super(name || "struct", selfElemTypes.reduce((accu, ty) => accu + ty.getBitWidth(), 0))
+    super(`struct${name? " " + name : ""}`, selfElemTypes.reduce((accu, ty) => accu + ty.getBitWidth(), 0))
     this.#elementTypes = selfElemTypes
   }
 
@@ -90,6 +90,28 @@ class StructType extends Type {
         res += ","
     })
     return res + " }"
+  }
+
+  /** 
+   * @param {Boolean} [includeAliases=false]
+   * @returns {String} 
+   */
+  pp(includeAliases=false,indent="") {
+    let res = `${indent}${this.name} {\n`
+    this.#elementTypes.forEach((ty, i) => {
+      res += `${ty.pp(includeAliases, (indent + "  "))}${i < this.#elementTypes.length - 1? "," : ""}\n`
+    })
+    res += `${indent}}:${this.getRequiredBytes()}`
+    if ( includeAliases && this.hasAliases()) {
+      res += " ("
+      this.getAliases().forEach((alias, i) => {
+        res += alias
+        if ( i < this.getAliases().length - 1)
+          res += ","
+      });
+      res += ")"
+    }
+    return res
   }
 
   /**

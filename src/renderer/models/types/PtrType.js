@@ -78,6 +78,24 @@ class PtrType extends Type {
     return this.#pointeeTy.toString() + "*"
   }
 
+  /** 
+   * @param {Boolean} [includeAliases=false]
+   * @returns {String} 
+   */
+  pp(includeAliases=false, indent="") {
+    let res = `${indent}${this.getPointeeType().pp(includeAliases)} *:${this.getRequiredBytes()}`
+    if ( includeAliases && this.hasAliases()) {
+      res += " ("
+      this.getAliases().forEach((alias, i) => {
+        res += alias
+        if ( i < this.getAliases().length - 1)
+          res += ","
+      });
+      res += ")"
+    }
+    return res
+  }
+
   /**
    * @param {Type}         pointeeTy
    * @param {Number}       [bits=64]

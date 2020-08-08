@@ -28,11 +28,11 @@ class Types {
   /** */ static UInt64 = new Types.IntType(64, false)
 
   /** */ static Float32 = new Types.FloatType(32)
-  /** */ static Float64 = new Types.FloatType(64)
+  /** */ static Float64 = new Types.FloatType(64).addAlias("double")
   /** */ static Float = Types.Float32
   /** */ static Double = Types.Float64
 
-  /** */ static Boolean = new Types.IntType(1, false).addAlias("bool").addAlias("boolean")
+  /** */ static Boolean = new Types.IntType(1, false).addAlias("bool")
 
   /** */ static DefaultPointerWidth      = Types.PtrType.DefaultWidth
   /** */ static DefaultPointerWidthBytes = Types.PtrType.DefaultWidth / 8
@@ -89,38 +89,6 @@ class Types {
       return new Types.PtrType(pointeeType, bits)
     } catch (e) {
       throw new Error(e)
-    }
-  }
-
-  /**
-   * @param {Type} type
-   * @returns {String}
-   */
-  static pp(type, indent="") {
-    if ( type.isPtrType()) {
-      return `${indent}${Types.pp(type.getPointeeType())}*`
-    } else if ( type.isArrayType()) {
-      let res = ""
-      if ( type.getDim().is1D()) {
-        res += `${indent}[${type.getDim().x} x`
-      } else if ( type.getDim().is2D()) {
-        res += `${indent}[${type.getDim().x} x ${type.getDim().y} x`
-      } else {
-        res += `${indent}[${type.getDim().x} x ${type.getDim().y} x ${type.getDim().z} x`
-      }
-      if ( type.getElementType().isStructType())
-        return res + "\n" + Types.pp(type.getElementType(), indent + "  ") + "\n]"
-      else
-        return res + Types.pp(type.getElementType()) + "]"
-    } else if ( type.isBasicType()) {
-      return `${indent}${type.toString()}`
-    } else {
-      let res = `${indent}${type.name} {\n`
-      type.getElementTypes().forEach((ty, i) => {
-        res += `${Types.pp(ty, (indent + "  "))}${i < type.getElementTypes().length - 1? "," : ""}\n`
-      })
-      res += `${indent}}`
-      return res
     }
   }
 }

@@ -31,11 +31,31 @@ class FloatType extends Type {
     return "f" + this.bits.toString()
   } 
 
+  /** 
+   * @param {Boolean} [includeAliases=false]
+   * @returns {String} 
+   */
+  pp(includeAliases=false,indent="") {
+    let res = `${indent}float:${this.getRequiredBytes()}`
+    if ( includeAliases && this.hasAliases()) {
+      res += " ("
+      this.getAliases().forEach((alias, i) => {
+        res += alias
+        if ( i < this.getAliases().length - 1)
+          res += ","
+      });
+      res += ")"
+    }
+    return res
+  }
+
   /** @returns {Boolean} */
   equals(other) {
     return (other instanceof FloatType)
       && super.equals(other)
   }
+
+
   
   /**
    * Create a new IntType instance

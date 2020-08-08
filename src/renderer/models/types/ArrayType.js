@@ -75,6 +75,24 @@ class ArrayType extends Type {
     }
   }
 
+  /** 
+   * @param {Boolean} [includeAliases=false]
+   * @returns {String} 
+   */
+  pp(includeAliases=false,indent="") {
+    let res = `[${this.#elementType.pp()}]:${this.getRequiredBytes()}`
+    if ( includeAliases && this.hasAliases()) {
+      res += " ("
+      this.getAliases().forEach((alias, i) => {
+        res += alias
+        if ( i < this.getAliases().length - 1)
+          res += ","
+      });
+      res += ")"
+    }
+    return res
+  }
+
   /**
    * @param {ArrayType}
    * @returns {Boolean}
