@@ -16,7 +16,17 @@ module.exports = function() {
   const CuAddrSpace   = require('@renderer/models/cuda/CuAddrSpace')
   const App            = require('@renderer/app')
 
-  var unitType    = [Types.Int32, Types.Int64, Types.getStuctType(Types.Int16, Types.Int32), Types.getStuctType(Types.Int16, Types.Int32, Types.Boolean), Types.getStuctType(Types.UInt32, Types.Boolean, Types.Boolean)]
+  var unitType    = [ 
+                      Types.Int32, 
+                      Types.Int64, 
+                      Types.UInt64, 
+                      Types.Boolean,
+                      Types.getStuctType(Types.Int16, Types.Int32),
+                      Types.getStuctType(Types.UInt32, Types.Float, Types.Double), 
+                      Types.getStuctType(Types.Int16, Types.Int32, Types.Boolean),
+                      Types.getStuctType(Types.Double, Types.getStuctType(Types.Int16, Types.UInt64)),
+                      Types.getStuctType(Types.Float, Types.getNamedStructType("mystruct_t", Types.Int16, Types.UInt64))
+                    ]
   var types       = ["int", "myType", "value_t", "VALUE", "DATA_TYPE"]
   var kernelNames = ["mykernel", "kernel", "kernelA", "addKernel", "sumKernel"]
   var addrSpaces   = [CuAddrSpace.Constant, CuAddrSpace.Local, CuAddrSpace.Shared, CuAddrSpace.Global]
