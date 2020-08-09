@@ -34,6 +34,14 @@
   padding: unset !important;
 }
 
+.kv-btn-xs {
+  padding: 0px;
+  min-width: 20px;
+  width: 20px !important;
+  height: 20px !important;
+  padding: unset !important;
+}
+
 .kv-btn:hover {
   background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
   background-color:#f6f6f6;
