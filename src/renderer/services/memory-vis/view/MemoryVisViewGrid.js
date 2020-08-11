@@ -1,8 +1,10 @@
 /**@ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")} MemoryVisView */
 /**@ignore @typedef {import("@renderer/models/types/ArrayType")} ArrayType */
+/** @ignore @typedef {import("@renderer/models/Index")} Index */
 
 const d3 = require('d3')
-const { ResizeObserver } = require('resize-observer')
+
+const Index = require('@renderer/models/Index')
 
 /**
  * @memberof module:memory-vis
@@ -293,6 +295,7 @@ class MemoryVisViewGrid {
       // add the listener only when the svg is created to avoid
       // acting on the initial rendering of this.#node
       this.#svg.on('ready', () => observer.observe( $(this.#node)[0]))
+      this.read(new Index(1,1))
 
       this.#rendered = true
       this._adjust()
@@ -300,6 +303,16 @@ class MemoryVisViewGrid {
     return this.#node
   }
 
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /**
+   * @param {Index} idx
+   */
+  read(idx) {
+    console.log("Reading:", idx.toString())
+  }
 
 
 }

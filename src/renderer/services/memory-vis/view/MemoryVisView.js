@@ -1,5 +1,6 @@
 /** @ignore @typedef {import("@renderer/services/memory-vis/MemoryVisModel")} MemoryVisModel */
 /** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
+/** @ignore @typedef {import("@renderer/models/Index")} Index */
 
 const MemoryVisViewHeader  = require('@renderer/services/memory-vis/view/MemoryVisViewHeader')
 const MemoryVisViewGrid = require('@renderer/services/memory-vis/view/MemoryVisViewGrid')
@@ -151,6 +152,12 @@ class MemoryVisView {
   ////////////////////////////////
   ////////////////////////////////
 
+  /**
+   * @param {Index} idx
+   */
+  read(idx) {
+    this.#grid.read(idx)
+  }
 
   ////////////////////////////////
   ////////////////////////////////
