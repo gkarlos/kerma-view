@@ -4,8 +4,6 @@
 
 const d3 = require('d3')
 
-const Index = require('@renderer/models/Index')
-
 /**
  * @memberof module:memory-vis
  */
@@ -295,6 +293,8 @@ class MemoryVisViewGrid {
       // add the listener only when the svg is created to avoid
       // acting on the initial rendering of this.#node
       this.#svg.on('ready', () => observer.observe( $(this.#node)[0]))
+
+      let Index = require('@renderer/models/Index')
       this.read(new Index(1,1))
 
       this.#rendered = true
