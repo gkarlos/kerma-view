@@ -58,7 +58,7 @@ class MemoryVisViewGrid {
   /** @type {MemoryVisView} */ #view
   /** @type {Boolean}       */ #rendered
   /** @type {JQuery}        */ #node
-  /** @type {JQuery}        */ #nodeId
+  /** @type {String}        */ #nodeId
   /** @type {JQuery}        */ #wrapper
   /** @type {d3.Selection<SVGElement>} */ #svg
   /** @type {d3.Selection<SVGElement>} */ #cells
@@ -246,7 +246,7 @@ class MemoryVisViewGrid {
     // create the cells
     for ( let i = 0; i < this.Options.viewport.y; ++i) {
       for ( let j = 0; j < this.Options.viewport.x; ++j)
-        this._drawCell(this.#cells, j, i)
+        this._createCell(this.#cells, j, i)
     }
   }
 
@@ -256,11 +256,17 @@ class MemoryVisViewGrid {
    * @param {Number} x
    * @param {Number} y
    */
-  _drawCell(svg, x, y) {
+  _createCell(svg, x, y) {
+    let self = this
     svg.append('rect')
         .attr('pos-x', x)
         .attr('pos-y', y)
         .attr('class', 'memory-vis-cell')
+        .on('mouseover', () => {
+          self.#view.tooltip.contents(`<span class="grid-tooltip-text">${y},${x}</span>`)
+          self.#view.tooltip.show()
+        })
+        .on('mouseout', () => self.#view.tooltip.hide())
   }
 
   /**

@@ -4,6 +4,7 @@
 
 const MemoryVisViewHeader  = require('@renderer/services/memory-vis/view/MemoryVisViewHeader')
 const MemoryVisViewGrid = require('@renderer/services/memory-vis/view/MemoryVisViewGrid')
+const MemoryVisViewGridTooltip = require('@renderer/services/memory-vis/view/MemoryVisViewGridTooltip')
 const MemoryVisViewGridToolbar = require('@renderer/services/memory-vis/view/MemoryVisViewGridToolbar')
 
 /**
@@ -44,6 +45,7 @@ class MemoryVisView {
   /** @type {MemoryVisViewHeader} */ #header
   /** @type {JQuery}              */ #body
   /** @type {MemoryVisViewGrid}   */ #grid
+  /** @type {MemoryVisViewGridTooltip} */ #gridTooltip
   /** @type {MemoryVisViewGridToolbar} */ #gridToolbar
 
   ////////////////////////////////
@@ -60,6 +62,7 @@ class MemoryVisView {
     this.#collapsed = MemoryVisView.Options.startCollapsed
     this.#header = new MemoryVisViewHeader(this)
     this.#grid = new MemoryVisViewGrid(this)
+    this.#gridTooltip = new MemoryVisViewGridTooltip(this)
     this.#gridToolbar = new MemoryVisViewGridToolbar(this)
   }
 
@@ -84,6 +87,9 @@ class MemoryVisView {
 
   /** @type {MemoryVisViewGrid} */
   get grid() { return this.#grid }
+
+  /** @type {MemoryVisViewGridTooltip} */
+  get tooltip() { return this.#gridTooltip }
 
   ////////////////////////////////
   ////////////////////////////////
@@ -181,6 +187,7 @@ class MemoryVisView {
         this.collapse()
       
       $(this.#body).ready(() => {
+        this.#gridTooltip.render()
         this.#gridToolbar.render()
         this.#grid.render()
       })

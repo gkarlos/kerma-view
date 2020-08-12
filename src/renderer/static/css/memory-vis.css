@@ -304,6 +304,8 @@
  .memory-vis-grid-toolbar {
      /* width:100%;
      height: 30px; */
+     width: 25%;
+     float: right;
      display: flex;
      flex-direction: row;
      /* justify-content: stretch; */
@@ -325,3 +327,22 @@
  /* .memory-vis-toolbar-button-right {
      margin-right: 5px;
  } */
+
+ /**
+ ** Grid Tooltip
+ **/
+.memory-vis-grid-tooltip {
+    will-change: transform;
+    width: 50%;
+    float: left;
+    line-height: 1;
+    /* transition: opacity 2s; */
+}
+
+.grid-tooltip-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: grey;
+    margin-left: 5px;
+    transition: visibility 0s, opacity 0.5s linear;
+}
