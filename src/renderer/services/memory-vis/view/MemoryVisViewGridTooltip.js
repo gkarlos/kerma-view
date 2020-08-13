@@ -35,11 +35,11 @@ class MemoryVisViewGridTooltip {
 
 
   show() {
-    this.#node.show()
+    // this.#node.show()
   }
 
   hide() {
-    this.#node.hide()
+    this.#node.html('')
   }
 
   contents(html) {
@@ -62,7 +62,7 @@ class MemoryVisViewGridTooltip {
 
   render() {
     if ( !this.isRendered()) {
-      this.#node = this._renderNode().appendTo(this.#view.body)
+      this.#node = this._renderNode().appendTo(this.#view.toolbar.node)
     }
     return this.#node
   }

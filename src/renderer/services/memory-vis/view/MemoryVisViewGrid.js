@@ -195,16 +195,21 @@ class MemoryVisViewGrid {
         .call(g => g.select('.domain').remove())
         .call(g => g.selectAll('.tick').select('line').remove())
                                                     
-    this.#yAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
+    this.#yAxis.selectAll('text').attr('font-size', `${Math.max(self.Options.cell.size - 5, 7)}px`)
                                  .style('fill', '#767676')
   }
 
   _adjustXAxis() {
     let self = this
-    console.log(this.#xAxis.selectAll('text'))
+    // this.#xAxis.attr("transform", `translate(0,0)`)
     this.#xAxis.selectAll('text').each( function(d, i, nodes) {
-      d3.select(nodes[i]).attr('x', (self.Options.cell.size + self.Options.cell.spacing) + parseInt(d3.select(nodes[i]).attr('pos')) * 16 * (self.Options.cell.size + self.Options.cell.spacing))
-                  .text(parseInt(d3.select(nodes[i]).attr('pos')) * 16)
+        d3.select(nodes[i])
+          .text((i + 1) * 16)
+          .attr('x', (self.Options.cell.size + self.Options.cell.spacing) + parseInt(d3.select(nodes[i]).attr('pos')) * 16 * (self.Options.cell.size + self.Options.cell.spacing))
+          .attr('font-size', `${Math.max(self.Options.cell.size - 5, 7)}px`)
+          .attr('text-align', 'center')
+          .attr('y', self.Options.cell.size)
+          .style('fill', '#767676')
     })
   }
 
@@ -275,8 +280,8 @@ class MemoryVisViewGrid {
         .attr('pos-y', y)
         .attr('class', 'memory-vis-cell')
         .on('mouseover', () => {
-          self.#view.tooltip.contents(`<span class="grid-tooltip-text">${y},${x}</span>`)
-          self.#view.tooltip.show()
+          self.#view.toolbar.tooltip.contents(`<span class="grid-tooltip-text">${y},${x}</span>`)
+          self.#view.toolbar.tooltip.show()
         })
         .on('mouseout', () => self.#view.tooltip.hide())
   }
@@ -299,20 +304,12 @@ class MemoryVisViewGrid {
     let self = this
     this.#xAxis = this.#svg.append('g').attr('id', `${this.#nodeId}-xaxis`)
     this.#xAxis.append('text')
-               .attr('pos', 0)
-               .attr('y', self.Options.cell.size)
-    this.#xAxis.append('text')
                .attr('pos', 1) 
-               .attr('y', self.Options.cell.size)  
     this.#xAxis.append('text')
                .attr('pos', 2)
-               .attr('y', self.Options.cell.size)
     this.#xAxis.append('text')
                .attr('pos', 3)
-               .attr('y', self.Options.cell.size)
-    this.#xAxis.append('text')
-               .attr('pos', 3)
-               .attr('y', self.Options.cell.size)
+
     this.#xAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
                .style('fill', '#767676')
   }

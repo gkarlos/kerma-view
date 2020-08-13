@@ -1,7 +1,9 @@
 /**@ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")} MemoryVisView */
 /**@ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisViewGrid")} MemoryVisViewGrid */
+/**@ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisViewGridTooltip")} MemoryVisViewGridTooltip */
 
 const App = require('@renderer/app')
+const MemoryVisViewGridTooltip = require("./MemoryVisViewGridTooltip")
 
 class MemoryVisViewGridToolbar {
 
@@ -15,6 +17,7 @@ class MemoryVisViewGridToolbar {
   /** @type {JQuery}        */ #rightButton
   /** @type {JQuery}        */ #upButton
   /** @type {JQuery}        */ #downButton
+  /** @type {MemoryVisViewGridTooltip} */ #tooltip
   
   
   /**
@@ -25,18 +28,30 @@ class MemoryVisViewGridToolbar {
     this.#rendered = false
   } 
 
+  /**
+   * @type {JQuery}
+   */
+  get node() { return this.#node }
+
+  /** @type {MemoryVisViewGridTooltip} */
+  get tooltip() { return this.#tooltip}
+
   isRendered() { return this.#rendered }
 
+  _createTooltip() {
+    this.#tooltip = new MemoryVisViewGridTooltip(this.#view)
+    this.#tooltip.render()
+  }
+
   _createZoomButtons() {
-    this.#leftButton  = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-left"><i class="fas fa-angle-left"></i></i></button>`).appendTo(this.#node)
-    this.#upButton    = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-up"><i class="fas fa-angle-up"></i></button>`).appendTo(this.#node)
-    this.#downButton  = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-down"><i class="fas fa-angle-down"></i></i></button>`).appendTo(this.#node)
-    this.#rightButton = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-right"><i class="fas fa-angle-right"></i></i></button>`).appendTo(this.#node)
-
-    this.#incSizeButton = $(`<button type="button" class="btn kv-btn kv-btn-xs"><i class="fas fa-search-plus"></i></button>`).appendTo(this.#node)
-    this.#decSizeButton = $(`<button type="button" class="btn kv-btn kv-btn-xs"><i class="fas fa-search-minus"></i></button>`).appendTo(this.#node)
     this.#resetSizeButton = $(`<button type="button" class="btn kv-btn kv-btn-xs"><i class="fas fa-compress" title="Reset"></i></button>`).appendTo(this.#node)
-
+    this.#decSizeButton = $(`<button type="button" class="btn kv-btn kv-btn-xs"><i class="fas fa-search-minus"></i></button>`).appendTo(this.#node)
+    this.#incSizeButton = $(`<button type="button" class="btn kv-btn kv-btn-xs"><i class="fas fa-search-plus"></i></button>`).appendTo(this.#node)
+    this.#rightButton = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-right"><i class="fas fa-angle-right"></i></i></button>`).appendTo(this.#node)
+    this.#downButton  = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-down"><i class="fas fa-angle-down"></i></i></button>`).appendTo(this.#node)
+    this.#upButton    = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-up"><i class="fas fa-angle-up"></i></button>`).appendTo(this.#node)
+    this.#leftButton  = $(`<button type="button" class="btn kv-btn kv-btn-xs memory-vis-toolbar-button-left"><i class="fas fa-angle-left"></i></i></button>`).appendTo(this.#node)
+    
     let self = this
 
     this.#incSizeButton.on('click', () => {
@@ -75,6 +90,7 @@ class MemoryVisViewGridToolbar {
       this.#node = $(`<div class="btn-toolbar memory-vis-grid-toolbar" class="memory-vis-grid-toolbar"></div>`)
         .appendTo(this.#view.body)
 
+      this._createTooltip()
       this._createZoomButtons()
 
       this.#rendered = true
