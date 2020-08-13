@@ -346,3 +346,13 @@
     margin-left: 5px;
     transition: visibility 0s, opacity 0.5s linear;
 }
+
+/**
+ ** grid axis
+ **/
+
+grid-x-axis text {
+    fill:black;   /* <== Set the fill */
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    cursor: move;
+}

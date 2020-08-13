@@ -63,6 +63,7 @@ class MemoryVisViewGrid {
   /** @type {d3.Selection<SVGElement>} */ #svg
   /** @type {d3.Selection<SVGElement>} */ #cells
   /** @type {d3.Selection<SVGElement>} */ #yAxis
+  /** @type {d3.Selection<SVGElement>} */ #xAxis
   /** @type {d3.ScaleLinear}           */ #yScale
   /** @type {ResizeObserver} */ #containerResizeObserver
 
@@ -167,7 +168,7 @@ class MemoryVisViewGrid {
       d3.select(this)
         .attr('width', self.Options.cell.size)
         .attr('height', self.Options.cell.size)
-        .attr('y', parseInt(d3.select(this).attr('pos-y')) * (self.Options.cell.size + self.Options.cell.spacing))
+        .attr('y', (parseInt(d3.select(this).attr('pos-y')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
         .attr('x', (parseInt(d3.select(this).attr('pos-x')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
         .attr('rx', 2)
         .attr('ry', 2)
@@ -187,7 +188,7 @@ class MemoryVisViewGrid {
 
     this.#yScale.range(r)
 
-    this.#yAxis.attr("transform", `translate(${self.Options.cell.size + 10},0)`)
+    this.#yAxis.attr("transform", `translate(${self.Options.cell.size + 10},${self.Options.cell.size + self.Options.cell.spacing})`)
         .call(d3.axisLeft(self.#yScale)
                 .tickValues(this.#yScale.domain())
                 .tickFormat(d3.format("d")))
@@ -196,6 +197,15 @@ class MemoryVisViewGrid {
                                                     
     this.#yAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
                                  .style('fill', '#767676')
+  }
+
+  _adjustXAxis() {
+    let self = this
+    console.log(this.#xAxis.selectAll('text'))
+    this.#xAxis.selectAll('text').each( function(d, i, nodes) {
+      d3.select(nodes[i]).attr('x', (self.Options.cell.size + self.Options.cell.spacing) + parseInt(d3.select(nodes[i]).attr('pos')) * 16 * (self.Options.cell.size + self.Options.cell.spacing))
+                  .text(parseInt(d3.select(nodes[i]).attr('pos')) * 16)
+    })
   }
 
   /** 
@@ -207,7 +217,8 @@ class MemoryVisViewGrid {
         oldHeight = this.Options.grid.height
 
     this.Options.grid.width  = (this.Options.viewport.x + 1) * (this.Options.cell.size + this.Options.cell.spacing)
-    this.Options.grid.height = (this.Options.viewport.y * this.Options.cell.size) + (this.Options.viewport.y - 1) * this.Options.cell.spacing
+    // this.Options.grid.height = ((this.Options.viewport.y + 1) * this.Options.cell.size) + (this.Options.viewport.y) * this.Options.cell.spacing
+    this.Options.grid.height  = (this.Options.viewport.y + 1) * (this.Options.cell.size + this.Options.cell.spacing)   
 
     // do nothing if we are not rendered
     if ( !this.isRendered())
@@ -220,6 +231,7 @@ class MemoryVisViewGrid {
     this._adjustNode()
     this._adjustSvg()
     this._adjustCells()
+    this._adjustXAxis()
     this._adjustYAxis()
   }
 
@@ -241,7 +253,7 @@ class MemoryVisViewGrid {
    * Create the grid cells
    */
   _createCells() {
-    this.#cells = this.#svg.append('g').attr('id', 'cells').attr('transform','translate(0, 0)')
+    this.#cells = this.#svg.append('g').attr('id', `${this.#nodeId}-cells`).attr('transform','translate(0, 0)')
     
     // create the cells
     for ( let i = 0; i < this.Options.viewport.y; ++i) {
@@ -271,14 +283,38 @@ class MemoryVisViewGrid {
 
   /**
    * Create the yAxis of the vis
-   * @param {d3.Selection<SVGElement>} yAxis 
    */
   _createYAxis() {
-    this.#yAxis = this.#svg.append('g').attr('id', 'yaxis')
+    this.#yAxis = this.#svg.append('g').attr('id', `${this.#nodeId}-yaxis`)
     if ( this.Options.viewport.y === 1)
       this.#yScale = d3.scaleLinear().domain([0,0])
     else
       this.#yScale = d3.scaleLinear().domain([...Array(this.Options.viewport.y).keys()])
+  }
+
+  /**
+   * Create the yAxis of the vis 
+   */
+  _createXAxis() {
+    let self = this
+    this.#xAxis = this.#svg.append('g').attr('id', `${this.#nodeId}-xaxis`)
+    this.#xAxis.append('text')
+               .attr('pos', 0)
+               .attr('y', self.Options.cell.size)
+    this.#xAxis.append('text')
+               .attr('pos', 1) 
+               .attr('y', self.Options.cell.size)  
+    this.#xAxis.append('text')
+               .attr('pos', 2)
+               .attr('y', self.Options.cell.size)
+    this.#xAxis.append('text')
+               .attr('pos', 3)
+               .attr('y', self.Options.cell.size)
+    this.#xAxis.append('text')
+               .attr('pos', 3)
+               .attr('y', self.Options.cell.size)
+    this.#xAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
+               .style('fill', '#767676')
   }
 
   ////////////////////////////////
@@ -294,6 +330,7 @@ class MemoryVisViewGrid {
       this._createNode()
       this._createSvg()
       this._createCells()
+      this._createXAxis()
       this._createYAxis()
 
       // add the listener only when the svg is created to avoid
