@@ -23,7 +23,17 @@ class MemoryVisViewGrid {
 
     viewport: {
       x: MemoryVisViewGrid.DEFAULT_VIEWPORT.x,
-      y: MemoryVisViewGrid.DEFAULT_VIEWPORT.y
+      y: MemoryVisViewGrid.DEFAULT_VIEWPORT.y,
+      range: {
+        x: {
+          from: 0,
+          to: undefined
+        },
+        y: {
+          from: 0,
+          to: undefined
+        }
+      }
     },
 
     grid : {
@@ -86,6 +96,11 @@ class MemoryVisViewGrid {
       let ty = view.model.getMemory().getType()
       this.Options.viewport.x = Math.min(ty.getDim().x, this.Options.viewport.x)
       this.Options.viewport.y = Math.min(ty.getDim().y, this.Options.viewport.y)
+      this.Options.viewport.range.x.to = this.Options.viewport.x
+      this.Options.viewport.range.y.to = this.Options.viewport.y
+    } else {
+      this.Options.viewport.x = 1
+      this.Options.viewport.y = 1
     }
   }
 
@@ -144,6 +159,14 @@ class MemoryVisViewGrid {
   resetSize() {
     this.Options.cell.sizeIdx = this.Options.cell.sizes.indexOf(MemoryVisViewGrid.DEFAULT_SIZE)
     this._adjust()
+  }
+
+  hNext() {
+    
+  }
+
+  hPrev() {
+
   }
 
   ////////////////////////////////
