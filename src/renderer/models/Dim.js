@@ -211,6 +211,9 @@ class Dim {
 }
 
 /** @type {Dim} */
+Dim.Unit = new Dim(1,1,1);
+
+/** @type {Dim} */
 Dim.lin2 = new Dim(2)
 
 /** @type {Dim} */
