@@ -3,6 +3,7 @@ require('module-alias/register')
 const expect = require('chai').expect
 
 const Types = require('@renderer/models/types/Types')
+const Dim = require('@renderer/models/Dim')
 
 describe("models/types/IntType", () => {
   describe("equals", () => {
@@ -51,6 +52,14 @@ describe("models/types/IntType", () => {
     it("should not be prefixed with .", () => {
       expect(Types.Float32.toString()).to.equal("f32")
       expect(Types.Float64.toString()).to.equal("f64")
+    })
+  })
+
+  describe("getDim", () => {
+    it("should always be 1,1,1", () => {
+      expect(Types.Float32.getDim().equals(Dim.Unit));
+      expect(Types.Float64.getDim().equals(Dim.Unit));
+      expect(Types.Double.getDim().equals(Dim.Unit))
     })
   })
 })

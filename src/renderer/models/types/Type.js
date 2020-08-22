@@ -1,3 +1,5 @@
+const Dim  = require('@renderer/models/Dim')
+
 /**
  * Base class for all types.
  * Usually this class should not be used directly to create types
@@ -8,6 +10,7 @@ class Type {
   /** @type {String}   */ #name
   /** @type {Number}   */ #bits
   /** @type {String[]} */ #aliases
+  /** @type {Dim}      */ #dim
 
   /**
    * @param {String} name 
@@ -18,6 +21,7 @@ class Type {
     this.#name  = name
     this.#bits  = bits
     this.#aliases = []
+    this.#dim = new Dim(1,1,1);
   }
 
   /** @type {String}    */
@@ -26,9 +30,15 @@ class Type {
   /** @type {Number}    */
   get bits() { return this.#bits }
 
+  /** @type {Dim} */
+  get dim() { return this.#dim }
+
   /** @returns {String} */
   getName() { return this.#name }
 
+  /** @returns {Dim} */
+  getDim() { return this.#dim }
+  
   /** @returns {Number} */
   getBitWidth() { return this.#bits }
 

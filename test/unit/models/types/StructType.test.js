@@ -177,8 +177,16 @@ describe("models/type/StructType", () => {
     })
   })
 
-
-
+  describe("getDim", () => {
+    it("should always be 1,1,1", () => {
+      expect(new StructType([Types.Boolean, Types.Float], "myStruct").getDim().equals(Dim.Unit));
+      expect(new StructType([Types.Int16, Types.Int16]).getDim().equals(Dim.Unit));
+      let structi32x2 = new StructType([Types.Int32, Types.Int32])
+      let t1 = new ArrayType(structi32x2, new Dim(1024, 512))
+      let t2 = new StructType([Types.Int64, Types.Int8])
+      expect(new StructType([t1, t2]).getDim().equals(Dim.Unit))
+    })
+  })
 
  
 })

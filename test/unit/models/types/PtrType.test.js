@@ -101,5 +101,13 @@ describe("models/types/PtrType", () => {
       let ptr2 = new PtrType(Types.Double, 64)
       expect(ptr1.equals(ptr2)).to.be.false
     })
+
+    describe("getDim", () => {
+      it("should always be 1,1,1", () => {
+        expect(new PtrType(Types.Float32).getDim().equals(Dim.Unit));
+        expect(new PtrType(Types.Double).getDim().equals(Dim.Unit));
+        expect(new PtrType(Types.Int64).getDim().equals(Dim.Unit));
+      })
+    })
   })
 })

@@ -3,8 +3,15 @@ require('module-alias/register')
 const expect = require('chai').expect
 
 const Type = require('@renderer/models/types/Type')
+const Dim = require('@renderer/models/Dim')
 
 describe("models/types/Type", () => {
+  describe("constructor", () => {
+    it("should have 1x1x1 dim", () => {
+      expect(new Type("int", 32).getDim().equals(new Dim(1,1,1))).to.be.true
+    })
+  })
+
   describe("toString", () => {
     it("int32", () => {
       expect(new Type("int", 32).toString()).to.equal("int32")
