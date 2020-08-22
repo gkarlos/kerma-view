@@ -24,6 +24,11 @@ describe("models/types/ArrayType", () => {
     })
   })
 
+  describe("getDim", () => {
+    let ty = new ArrayType(Types.Int32, new Dim(1000,1000))
+    expect(ty.getDim().equals(new Dim(1000,1000))).to.be.true
+  })
+
   describe("getByteWidth", () => {
     it("[16 x i32] ==> 64", () => {
       let ty = new ArrayType(Types.Int32, 16)
