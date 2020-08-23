@@ -83,6 +83,22 @@ class MemoryVisViewGridToolbar {
       }
     })
 
+    this.#rightButton.on('click', () => {
+      let oldRange = self.#view.grid.getXRange();
+      self.#view.grid.right();
+      let newRange = self.#view.grid.getXRange();
+      let changed = oldRange[0] != newRange[0]
+      App.Logger.debug("[user-action]", `Shift vis ${self.#view.id} right.`, `Visible x-range: ${newRange}`, !changed? "(no change)" : "");
+    })
+
+    this.#leftButton.on('click', () => {
+      let oldRange = self.#view.grid.getXRange();
+      self.#view.grid.left();
+      let newRange = self.#view.grid.getXRange();
+      let changed = oldRange[0] != newRange[0]
+      App.Logger.debug("[user-action]", `Shift vis ${self.#view.id} left.`, `Visible x-range: ${newRange}`, !changed? "(no change)" : "");
+    })
+
   }
 
   render() {

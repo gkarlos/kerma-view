@@ -16,24 +16,15 @@ class MemoryVisViewGrid {
   ////////////////////////////////
 
   Options = {
-    container: {
-      width: '100%',
-      height: '300px'
-    },
+    container: { width: '100%', height: '300px' },
 
     viewport: {
       x: MemoryVisViewGrid.DEFAULT_VIEWPORT.x,
       y: MemoryVisViewGrid.DEFAULT_VIEWPORT.y,
       range: {
-        x: {
-          from: 0,
-          to: undefined
-        },
-        y: {
-          from: 0,
-          to: undefined
-        }
-      }
+        x: { lo: 0, hi: MemoryVisViewGrid.DEFAULT_VIEWPORT.x },
+        y: { lo: 0, hi: MemoryVisViewGrid.DEFAULT_VIEWPORT.y }
+      },
     },
 
     grid : {
@@ -43,13 +34,7 @@ class MemoryVisViewGrid {
     },
 
     axis: {
-      y : {
-        ticks : []
-      },
-
-      x : {
-
-      }
+      tickEvery: 8
     },
 
     cell : {
@@ -91,17 +76,17 @@ class MemoryVisViewGrid {
 
     this.Options.cell.sizeIdx = this.Options.cell.sizes.indexOf(MemoryVisViewGrid.DEFAULT_SIZE)
 
-    if ( view.model.getMemory().isArray()) {
-      /** @type {ArrayType} */
-      let ty = view.model.getMemory().getType()
-      this.Options.viewport.x = Math.min(ty.getDim().x, this.Options.viewport.x)
-      this.Options.viewport.y = Math.min(ty.getDim().y, this.Options.viewport.y)
-      this.Options.viewport.range.x.to = this.Options.viewport.x
-      this.Options.viewport.range.y.to = this.Options.viewport.y
-    } else {
-      this.Options.viewport.x = 1
-      this.Options.viewport.y = 1
-    }
+    // if ( view.model.getMemory().isArray()) {
+    //   /** @type {ArrayType} */
+    let ty = view.model.getMemory().getType()
+    this.Options.viewport.x = Math.min(ty.getDim().x, this.Options.viewport.x)
+    this.Options.viewport.y = Math.min(ty.getDim().y, this.Options.viewport.y)
+    this.Options.viewport.range.x.hi = this.Options.viewport.x
+    this.Options.viewport.range.y.hi = this.Options.viewport.y
+    // } else {
+    //   this.Options.viewport.x = 1
+    //   this.Options.viewport.y = 1
+    // }
   }
 
   ////////////////////////////////
@@ -161,13 +146,57 @@ class MemoryVisViewGrid {
     this._adjust()
   }
 
-  hNext() {
-    
+  
+  /**
+   * @returns {Number[]}
+   */
+  getXRange() {
+    return [this.Options.viewport.range.x.lo, this.Options.viewport.range.x.hi];
   }
 
-  hPrev() {
-
+  /** 
+   * @returns {Number[]}
+   */
+  getYRange() {
+    return [this.Options.viewport.range.y.lo, this.Options.viewport.range.y.hi];
   }
+
+  /**
+   * Shift the grid to the right
+   * The amount is deterined by `Options.viewport.x`
+   * @returns {MemoryVisViewGrid}
+   */
+  right() {
+    let ty = this.#view.model.getMemory().getType()
+    if ( ty.getDim().x > this.Options.viewport.range.x.hi) { //can mode right
+      this.Options.viewport.range.x.lo += this.Options.viewport.x;
+      this.Options.viewport.range.x.hi = 
+        Math.min(this.Options.viewport.range.x.hi + this.Options.viewport.x, ty.getDim().x)
+      if ( this.isRendered())
+        this._adjust();
+    }
+    return this
+  }
+
+  /**
+   * Shift the grid to the left
+   * The amount is determined by `Options.viewport.x`
+   * @returns {MemoryVisViewGrid}
+   */
+  left() {
+    let ty = this.#view.model.getMemory().getType()
+    if ( this.Options.viewport.range.x.lo > 0) { //can move left
+      this.Options.viewport.range.x.lo -= this.Options.viewport.x;
+      if ( this.Options.viewport.range.x.hi === ty.getDim().x)
+        this.Options.viewport.range.x.hi -= Math.floor(ty.getDim().x % this.Options.viewport.x)
+      else
+        this.Options.viewport.range.x.hi -= this.Options.viewport.x;
+      if ( this.isRendered())
+        this._adjust();
+    }
+    return this;
+  }
+
 
   ////////////////////////////////
   ////////////////////////////////
@@ -227,8 +256,9 @@ class MemoryVisViewGrid {
     // this.#xAxis.attr("transform", `translate(0,0)`)
     this.#xAxis.selectAll('text').each( function(d, i, nodes) {
         d3.select(nodes[i])
-          .text((i + 1) * 16)
-          .attr('x', (self.Options.cell.size + self.Options.cell.spacing) + parseInt(d3.select(nodes[i]).attr('pos')) * 16 * (self.Options.cell.size + self.Options.cell.spacing))
+          .text(self.Options.viewport.range.x.lo + (i + 1) * self.Options.axis.tickEvery)
+          .attr('x', (self.Options.cell.size + self.Options.cell.spacing) 
+                    + parseInt(d3.select(nodes[i]).attr('pos')) * self.Options.axis.tickEvery * (self.Options.cell.size + self.Options.cell.spacing))
           .attr('font-size', `${Math.max(self.Options.cell.size - 5, 7)}px`)
           .attr('text-align', 'center')
           .attr('y', self.Options.cell.size)
@@ -253,8 +283,8 @@ class MemoryVisViewGrid {
       return
 
     // do nothing if no changes
-    if ( oldWidth === this.Options.grid.width && oldHeight === this.Options.grid.height)
-      return
+    // if ( oldWidth !== this.Options.grid.width || oldHeight !== this.Options.grid.height) {}
+    //   return
 
     this._adjustNode()
     this._adjustSvg()
@@ -303,7 +333,7 @@ class MemoryVisViewGrid {
         .attr('pos-y', y)
         .attr('class', 'memory-vis-cell')
         .on('mouseover', () => {
-          self.#view.toolbar.tooltip.contents(`<span class="grid-tooltip-text">${y},${x}</span>`)
+          self.#view.toolbar.tooltip.contents(`<span class="grid-tooltip-text">${self.Options.viewport.range.y.lo + y},${self.Options.viewport.range.x.lo + x}</span>`)
           self.#view.toolbar.tooltip.show()
         })
         .on('mouseout', () => self.#view.tooltip.hide())
@@ -326,12 +356,11 @@ class MemoryVisViewGrid {
   _createXAxis() {
     let self = this
     this.#xAxis = this.#svg.append('g').attr('id', `${this.#nodeId}-xaxis`)
-    this.#xAxis.append('text')
-               .attr('pos', 1) 
-    this.#xAxis.append('text')
-               .attr('pos', 2)
-    this.#xAxis.append('text')
-               .attr('pos', 3)
+
+    let numTicks = this.Options.viewport.x / this.Options.axis.tickEvery - 1;
+
+    for ( let i = 0; i < numTicks; ++i )
+      this.#xAxis.append('text').attr('pos', i + 1)
 
     this.#xAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
                .style('fill', '#767676')
@@ -375,6 +404,7 @@ class MemoryVisViewGrid {
    */
   read(idx) {
     console.log("Reading:", idx.toString())
+    
   }
 
 
