@@ -35,7 +35,7 @@ describe("models/types/PtrType", () => {
     it(".i32*", () => {
       let pointeeTy = Types.UInt32
       let ptrTy = new PtrType(pointeeTy)
-      expect(ptrTy.toString()).to.equal(".i32*")
+      expect(ptrTy.toString()).to.equal("u32*")
     })
   })
 

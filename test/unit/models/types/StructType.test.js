@@ -57,7 +57,7 @@ describe("models/type/StructType", () => {
     })
 
     it("{ .i1, f64 }", () => {
-      expect(new StructType([Types.Boolean, Types.Double]).toString()).to.equal("{ .i1, f64 }")
+      expect(new StructType([Types.Boolean, Types.Double]).toString()).to.equal("{ u1, f64 }")
     })
 
     it("{ i8, i16, i32, i64 }", () => {

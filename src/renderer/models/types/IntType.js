@@ -30,7 +30,7 @@ class IntType extends Type {
 
   /** @returns {String} */
   toString() {
-    return (this.isUnsigned()? "." : "") + "i" + this.bits.toString()
+    return (this.isUnsigned()? 'u' : 'i') + this.bits.toString()
   } 
 
   /** 

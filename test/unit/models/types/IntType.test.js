@@ -60,13 +60,13 @@ describe("models/types/IntType", () => {
   })
 
   describe("toString", () => {
-    it("unsigned should be prefixed with .", () => {
-      expect(Types.UInt16.toString()).to.equal(".i16")
-      expect(Types.UInt32.toString()).to.equal(".i32")
-      expect(Types.UInt64.toString()).to.equal(".i64")
+    it("unsigned should be prefixed with u", () => {
+      expect(Types.UInt16.toString()).to.equal("u16")
+      expect(Types.UInt32.toString()).to.equal("u32")
+      expect(Types.UInt64.toString()).to.equal("u64")
     })
 
-    it("signed should not be prefixed with .", () => {
+    it("signed should not be prefixed with i", () => {
       expect(Types.Int16.toString()).to.equal("i16")
       expect(Types.Int32.toString()).to.equal("i32")
       expect(Types.Int64.toString()).to.equal("i64")
