@@ -1,0 +1,4138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Type</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        
+                            
+                                <a class="dropdown-item" href="tutorial-Installation.html">
+                                    Installation
+                                </a>
+                            
+                        
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="module-cl-parse.html">parse</a></li><li><a href="module-cl-tags.html">tags</a></li><li><a href="module-settings-Builds.html">Builds</a></li><li><a href="module-settings-defaults.html">defaults</a></li><li><a href="module-settings-SupportedEditors.html">SupportedEditors</a></li></ul><h3>Classes</h3><ul><li><a href="CuLaunch.html">CuLaunch</a></li><li><a href="CuMemory.html">CuMemory</a></li><li><a href="MemoryVisViewGridToolbar.html">MemoryVisViewGridToolbar</a></li><li><a href="module-codenav.CodenavService.html">CodenavService</a></li><li><a href="module-codenav.CodenavToolbar.html">CodenavToolbar</a></li><li><a href="module-ColorGenerator-ColorGenerator.html">ColorGenerator</a></li><li><a href="module-component.html#.Component">Component</a></li><li><a href="module-compute-selection.ComputeSelection.html">ComputeSelection</a></li><li><a href="module-compute-selection.ComputeSelectionBlockView.html">ComputeSelectionBlockView</a></li><li><a href="module-compute-selection.ComputeSelectionMode.html">ComputeSelectionMode</a></li><li><a href="module-compute-selection.ComputeSelectionModel.html">ComputeSelectionModel</a></li><li><a href="module-compute-selection.ComputeSelectionModeView.html">ComputeSelectionModeView</a></li><li><a href="module-compute-selection.ComputeSelectionService.html">ComputeSelectionService</a></li><li><a href="module-compute-selection.ComputeSelectionThreadView.html">ComputeSelectionThreadView</a></li><li><a href="module-compute-selection.ComputeSelectionView.html">ComputeSelectionView</a></li><li><a href="module-compute-selection.ComputeSelectionWarpView.html">ComputeSelectionWarpView</a></li><li><a href="module-console.ConsoleButton.html">ConsoleButton</a></li><li><a href="module-containers.Container.html">Container</a></li><li><a href="module-containers.MainSelectionArea.html">MainSelectionArea</a></li><li><a href="module-cuda.CuBlock.html">CuBlock</a></li><li><a href="module-cuda.CuDim.html">CuDim</a></li><li><a href="module-cuda.CuGrid.html">CuGrid</a></li><li><a href="module-cuda.CuIndex.html">CuIndex</a></li><li><a href="module-cuda.CuKernel.html">CuKernel</a></li><li><a href="module-cuda.CuLimits.html">CuLimits</a></li><li><a href="module-cuda.CuPointer.html">CuPointer</a></li><li><a href="module-cuda.CuThread.html">CuThread</a></li><li><a href="module-cuda.CuWarp.html">CuWarp</a></li><li><a href="module-cuda%250Ahttps___docs.nvidia.com_cuda_nvvm-ir-spec_index.html_address-space.CuAddrSpace.html">CuAddrSpace</a></li><li><a href="module-editor.Editor.html">Editor</a></li><li><a href="module-editor.EditorTab.html">EditorTab</a></li><li><a href="module-editor.EditorTabs.html">EditorTabs</a></li><li><a href="module-editor.EditorTabsAdd.html">EditorTabsAdd</a></li><li><a href="module-editor.EditorToolbar.html">EditorToolbar</a></li><li><a href="module-input-toolbar.InputToolbar.html">InputToolbar</a></li><li><a href="module-kernel-selection.KernelSelection.html">KernelSelection</a></li><li><a href="module-kernel-selection.KernelSelectionModel.html">KernelSelectionModel</a></li><li><a href="module-kernel-selection.KernelSelectionService.html">KernelSelectionService</a></li><li><a href="module-kernel-selection.KernelSelectionView.html">KernelSelectionView</a></li><li><a href="module-launch-selection.LaunchSelection.html">LaunchSelection</a></li><li><a href="module-launch-selection.LaunchSelectionModel.html">LaunchSelectionModel</a></li><li><a href="module-launch-selection.LaunchSelectionView.html">LaunchSelectionView</a></li><li><a href="module-layout.BaseLayout.html">BaseLayout</a></li><li><a href="module-layout.ElectronLayout.html">ElectronLayout</a></li><li><a href="module-log.ConsoleLogger.html">ConsoleLogger</a></li><li><a href="module-log.Logger.html">Logger</a></li><li><a href="module-log.LogLevel.html">LogLevel</a></li><li><a href="module-memory.AddressSpace.html">AddressSpace</a></li><li><a href="module-memory.Memory.html">Memory</a></li><li><a href="module-memory.Pointer.html">Pointer</a></li><li><a href="module-memory-ui.AddRandomMemoryButton.html">AddRandomMemoryButton</a></li><li><a href="module-memory-ui.MemoryArea.html">MemoryArea</a></li><li><a href="module-memory-ui.MemoryAreaBody.html">MemoryAreaBody</a></li><li><a href="module-memory-ui.MemoryAreaTitleBar.html">MemoryAreaTitleBar</a></li><li><a href="module-memory-ui.MemoryVisualizer.html">MemoryVisualizer</a></li><li><a href="module-memory-ui.MemoryVisualizerCells.html">MemoryVisualizerCells</a></li><li><a href="module-memory-ui.MemoryVisualizerToolbar.html">MemoryVisualizerToolbar</a></li><li><a href="module-memory-vis.MemoryVis.html">MemoryVis</a></li><li><a href="module-memory-vis.MemoryVisModel.html">MemoryVisModel</a></li><li><a href="module-memory-vis.MemoryVisService.html">MemoryVisService</a></li><li><a href="module-memory-vis.MemoryVisView.html">MemoryVisView</a></li><li><a href="module-memory-vis.MemoryVisViewGrid.html">MemoryVisViewGrid</a></li><li><a href="module-memory-vis.MemoryVisViewHeader.html">MemoryVisViewHeader</a></li><li><a href="module-notification.NotificationModel.html">NotificationModel</a></li><li><a href="module-notification.NotificationService.html">NotificationService</a></li><li><a href="module-notification.NotificationView.html">NotificationView</a></li><li><a href="module-notification.ProgressNotificationModel.html">ProgressNotificationModel</a></li><li><a href="module-notification.ProgressNotificationView.html">ProgressNotificationView</a></li><li><a href="module-selectors.KernelLaunchSelector.html">KernelLaunchSelector</a></li><li><a href="module-selectors.KernelSelector.html">KernelSelector</a></li><li><a href="module-selectors.Selector.html">Selector</a></li><li><a href="module-source.FunctionCallSrc.html">FunctionCallSrc</a></li><li><a href="module-source.FunctionSrc.html">FunctionSrc</a></li><li><a href="module-source.MemorySrc.html">MemorySrc</a></li><li><a href="module-source.SrcInfo.html">SrcInfo</a></li><li><a href="module-source.SrcLoc.html">SrcLoc</a></li><li><a href="module-source.SrcRange.html">SrcRange</a></li><li><a href="module-toolbars.CodeNavToolbar.html">CodeNavToolbar</a></li><li><a href="module-toolbars.InfoButton.html">InfoButton</a></li><li><a href="module-toolbars.MainToolbar.html">MainToolbar</a></li><li><a href="module-toolbars.NotificationButton.html">NotificationButton</a></li><li><a href="module-toolbars.SessionRestartButton.html">SessionRestartButton</a></li><li><a href="module-toolbars.SettingsButton.html">SettingsButton</a></li><li><a href="module-toolbars.UtilityToolbar.html">UtilityToolbar</a></li><li><a href="module-types.ArrayType.html">ArrayType</a></li><li><a href="module-types.FloatType.html">FloatType</a></li><li><a href="module-types.IntType.html">IntType</a></li><li><a href="module-types.PtrType.html">PtrType</a></li><li><a href="module-types.StructType.html">StructType</a></li><li><a href="module-types.Type.html">Type</a></li><li><a href="module-types.Types.html">Types</a></li><li><a href="module-util_error-CLError.html">CLError</a></li><li><a href="module-util_error-FileNotFoundError.html">FileNotFoundError</a></li><li><a href="module-util_error-InternalError.html">InternalError</a></li></ul><h3>Events</h3><ul><li><a href="module-compute-selection.html#.event:BlockSelect">BlockSelect</a></li><li><a href="module-compute-selection.html#.event:ModeChange">ModeChange</a></li><li><a href="module-compute-selection.html#.event:ThreadSelect">ThreadSelect</a></li><li><a href="module-compute-selection.html#.event:UnitSelect">UnitSelect</a></li><li><a href="module-compute-selection.html#.event:WarpSelect">WarpSelect</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:disabled">disabled</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:enabled">enabled</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:select">select</a></li><li><a href="module-launch-selection.KernelSelection.html#.event:select">select</a></li><li><a href="module-renderer_events.html#.event:EDITOR_INPUT_LOADED">EDITOR_INPUT_LOADED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_LOADED">EDITOR_LOADED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_TAB_SELECTED">EDITOR_TAB_SELECTED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_VALUE_CHANGED">EDITOR_VALUE_CHANGED</a></li><li><a href="module-renderer_events.html#.event:INPUT_FILE_SELECTED">INPUT_FILE_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_KERNEL_LAUNCH_SELECTED">INPUT_KERNEL_LAUNCH_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_KERNEL_SELECTED">INPUT_KERNEL_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_TYPE_SELECTED">INPUT_TYPE_SELECTED</a></li><li><a href="module-renderer_events.html#.event:SESSION_KILLED">SESSION_KILLED</a></li><li><a href="module-renderer_events.html#.event:SESSION_NEW">SESSION_NEW</a></li><li><a href="module-renderer_events.html#.event:UI_COMPONENT_READY">UI_COMPONENT_READY</a></li><li><a href="module-renderer_events.html#.event:UI_COMPONENTS_READY">UI_COMPONENTS_READY</a></li><li><a href="module-renderer_events.html#.event:UI_READY">UI_READY</a></li><li><a href="module-renderer_events.html#.event:UI_RESIZE">UI_RESIZE</a></li></ul><h3>Global</h3><ul><li><a href="global.html#codenav">codenav</a></li><li><a href="global.html#createComponents">createComponents</a></li><li><a href="global.html#createContainers">createContainers</a></li><li><a href="global.html#editor">editor</a></li><li><a href="global.html#isPowerOf2">isPowerOf2</a></li><li><a href="global.html#loadMonacoAsync">loadMonacoAsync</a></li><li><a href="global.html#mainSelection">mainSelection</a></li><li><a href="global.html#registerComponent">registerComponent</a></li><li><a href="global.html#renderCollapseControl">renderCollapseControl</a></li><li><a href="global.html#renderMemoryName">renderMemoryName</a></li><li><a href="global.html#renderMemorySize">renderMemorySize</a></li><li><a href="global.html#renderMemorySource">renderMemorySource</a></li><li><a href="global.html#renderMemoryType">renderMemoryType</a></li><li><a href="global.html#renderMemoryTypeSize">renderMemoryTypeSize</a></li><li><a href="global.html#renderSeparator">renderSeparator</a></li><li><a href="global.html#Selectize">Selectize</a></li><li><a href="global.html#startCollapsed">startCollapsed</a></li><li><a href="global.html#usableThreadsMode">usableThreadsMode</a></li><li><a href="global.html#x">x</a></li><li><a href="global.html#y">y</a></li></ul></div><div class="category"><h2>Common</h2><h3>Modules</h3><ul><li><a href="module-release.html">release</a></li><li><a href="module-settings.html">settings</a></li></ul><h3>Modules / util</h3><ul><li><a href="module-traits.html">traits</a></li><li><a href="module-util_devtools.html">util/devtools</a></li><li><a href="module-util_error.html">util/error</a></li></ul></div><div class="category"><h2>Main</h2><h3>Modules</h3><ul><li><a href="module-cl.html">cl</a></li><li><a href="module-config.html">config</a></li><li><a href="module-main.html">main</a></li><li><a href="module-perf.html">perf</a></li><li><a href="module-shortcuts.html">shortcuts</a></li><li><a href="module-window.html">window</a></li></ul></div><div class="category"><h2>Mock</h2><h3>Modules</h3><ul><li><a href="module-MemoryFactory.html">MemoryFactory</a></li></ul></div><div class="category"><h2>Renderer</h2><h3>Modules / main</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-main.html">main</a></li></ul><h3>Modules / services</h3><ul><li><a href="module-codenav.html">codenav</a></li><li><a href="module-compute-selection.html">compute-selection</a></li><li><a href="module-kernel-selection.html">kernel-selection</a></li><li><a href="module-launch-selection.html">launch-selection</a></li><li><a href="module-log.html">log</a></li><li><a href="module-memory-vis.html">memory-vis</a></li><li><a href="module-notification.html">notification</a></li></ul><h3>Modules / util</h3><ul><li><a href="module-ColorGenerator.html">ColorGenerator</a></li><li><a href="module-random.html">random</a></li><li><a href="module-string.html">string</a></li></ul><h3>Modules / ui</h3><ul><li><a href="module-component.html">component</a></li><li><a href="module-console.html">console</a></li><li><a href="module-memory-ui.html">memory-ui</a></li></ul><h3>Modules / Ui</h3><ul><li><a href="module-containers.html">containers</a></li><li><a href="module-editor.html">editor</a></li><li><a href="module-layout.html">layout</a></li><li><a href="module-MenuSeparator.html">MenuSeparator</a></li><li><a href="module-selectors.html">selectors</a></li><li><a href="module-toolbars.html">toolbars</a></li></ul><h3>Modules / models</h3><ul><li><a href="module-cuda.html">cuda</a></li><li><a href="module-memory.html">memory</a></li><li><a href="module-source.html">source</a></li><li><a href="module-types.html">types</a></li></ul><h3>Modules / extensions</h3><ul><li><a href="module-jquery.html">jquery</a></li></ul><h3>Modules</h3><ul><li><a href="module-renderer_events.html">renderer/events</a></li><li><a href="module-session.html">session</a></li></ul><h3>Classes / models</h3><ul><li><a href="Dim.html">Dim</a></li><li><a href="Index_.html">Index</a></li></ul><h3>Classes / ui</h3><ul><li><a href="RefreshButton.html">RefreshButton</a></li><li><a href="Ui.html">Ui</a></li></ul><h3>Classes / services</h3><ul><li><a href="Service.html">Service</a></li><li><a href="ServiceState.html">ServiceState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Class</p>
+                    <h1>Type</h1>
+                </header>
+                
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-types.html">types</a>~</span>Type<span class="signature">(name, bits, align)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Base class for all types.
+Usually this class should not be used directly to create types
+Most common types can be retrieve through <a href="module-types.Types.html"><code>module:types.Types</code></a></p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class='vertical-section'>
+                <div class="members">
+                    <div class="member">
+                        <div class=name>
+                            <span class="tag">Constructor</span>
+                        </div>
+                        
+
+
+    
+    <h4 class="name" id="Type">
+        <a class="href-link" href="#Type">#</a>
+        
+        <span class="code-name">
+            
+                new Type<span class="signature">(name, bits, align)</span><span class="type-signature"></span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>name</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">String</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>bits</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>align</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line20">line 20</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        
+    
+    </div>
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Members</h1>
+            <div class="members">
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">Number</span>
+
+
+    </span>
+
+<h4 class="name" id="bits">
+    <a class="href-link" href="#bits">#</a>
+    
+    <span class="code-name">
+        bits
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line31">line 31</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type"><a href="Dim.html">Dim</a></span>
+
+
+    </span>
+
+<h4 class="name" id="dim">
+    <a class="href-link" href="#dim">#</a>
+    
+    <span class="code-name">
+        dim
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line34">line 34</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    <span class="method-parameter is-pulled-right">
+        <label>Type:</label>
+        
+<span class="param-type">String</span>
+
+
+    </span>
+
+<h4 class="name" id="name">
+    <a class="href-link" href="#name">#</a>
+    
+    <span class="code-name">
+        name
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line28">line 28</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+        <div class='vertical-section'>
+            <h1>Methods</h1>
+            <div class="members">
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id=".get">
+        <a class="href-link" href="#.get">#</a>
+        
+            
+                <span class='tag'>static</span>
+            
+        
+        <span class="code-name">
+            
+                get<span class="signature">(name, bits, align)</span><span class="type-signature"> &rarr; {Type}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>name</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">String</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>bits</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>align</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Number</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line167">line 167</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Type</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="addAlias">
+        <a class="href-link" href="#addAlias">#</a>
+        
+        <span class="code-name">
+            
+                addAlias<span class="signature">(alias)</span><span class="type-signature"> &rarr; {Type}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script><p>Add an alias for this type. A type aliases is just a String</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>alias</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">String</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line68">line 68</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Type</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="addAliases">
+        <a class="href-link" href="#addAliases">#</a>
+        
+        <span class="code-name">
+            
+                addAliases<span class="signature">(&hellip;aliases)</span><span class="type-signature"> &rarr; {Type}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script><p>Add multiple aliases for this type.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>aliases</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">String</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+
+      
+
+      
+          &lt;repeatable><br>
+      
+      </td>
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line78">line 78</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Type</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="copy">
+        <a class="href-link" href="#copy">#</a>
+        
+        <span class="code-name">
+            
+                copy<span class="signature">()</span><span class="type-signature"> &rarr; {Type}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line157">line 157</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Type</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="equals">
+        <a class="href-link" href="#equals">#</a>
+        
+        <span class="code-name">
+            
+                equals<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line148">line 148</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getAliases">
+        <a class="href-link" href="#getAliases">#</a>
+        
+        <span class="code-name">
+            
+                getAliases<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;String>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line58">line 58</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Array.&lt;String></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getBitWidth">
+        <a class="href-link" href="#getBitWidth">#</a>
+        
+        <span class="code-name">
+            
+                getBitWidth<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line43">line 43</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Number</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getByteWidth">
+        <a class="href-link" href="#getByteWidth">#</a>
+        
+        <span class="code-name">
+            
+                getByteWidth<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line46">line 46</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Number</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getDim">
+        <a class="href-link" href="#getDim">#</a>
+        
+        <span class="code-name">
+            
+                getDim<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Dim.html">Dim</a>}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line40">line 40</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type"><a href="Dim.html">Dim</a></span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getName">
+        <a class="href-link" href="#getName">#</a>
+        
+        <span class="code-name">
+            
+                getName<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line37">line 37</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">String</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getNesting">
+        <a class="href-link" href="#getNesting">#</a>
+        
+        <span class="code-name">
+            
+                getNesting<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line55">line 55</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Number</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getRequiredBits">
+        <a class="href-link" href="#getRequiredBits">#</a>
+        
+        <span class="code-name">
+            
+                getRequiredBits<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line49">line 49</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Number</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="getRequiredBytes">
+        <a class="href-link" href="#getRequiredBytes">#</a>
+        
+        <span class="code-name">
+            
+                getRequiredBytes<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line52">line 52</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Number</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="hasAlias">
+        <a class="href-link" href="#hasAlias">#</a>
+        
+        <span class="code-name">
+            
+                hasAlias<span class="signature">(alias)</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+<div class="table-container">
+    <table class="params table">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            
+<tr class="deep-level-0">
+  
+      <td class="name"><code>alias</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">String</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"></td>
+</tr>
+
+
+        
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line89">line 89</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="hasAliases">
+        <a class="href-link" href="#hasAliases">#</a>
+        
+        <span class="code-name">
+            
+                hasAliases<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line96">line 96</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isAggregateType">
+        <a class="href-link" href="#isAggregateType">#</a>
+        
+        <span class="code-name">
+            
+                isAggregateType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line119">line 119</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isArrayType">
+        <a class="href-link" href="#isArrayType">#</a>
+        
+        <span class="code-name">
+            
+                isArrayType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line101">line 101</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isBasicType">
+        <a class="href-link" href="#isBasicType">#</a>
+        
+        <span class="code-name">
+            
+                isBasicType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line116">line 116</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isFloatType">
+        <a class="href-link" href="#isFloatType">#</a>
+        
+        <span class="code-name">
+            
+                isFloatType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line113">line 113</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isIntType">
+        <a class="href-link" href="#isIntType">#</a>
+        
+        <span class="code-name">
+            
+                isIntType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line110">line 110</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isNested">
+        <a class="href-link" href="#isNested">#</a>
+        
+        <span class="code-name">
+            
+                isNested<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line61">line 61</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Number</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isPtrType">
+        <a class="href-link" href="#isPtrType">#</a>
+        
+        <span class="code-name">
+            
+                isPtrType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line104">line 104</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isStructType">
+        <a class="href-link" href="#isStructType">#</a>
+        
+        <span class="code-name">
+            
+                isStructType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line107">line 107</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isValidArrayElementType">
+        <a class="href-link" href="#isValidArrayElementType">#</a>
+        
+            
+                <span class='tag'>abstract</span>
+            
+        
+        <span class="code-name">
+            
+                isValidArrayElementType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line125">line 125</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="isValidStructElementType">
+        <a class="href-link" href="#isValidStructElementType">#</a>
+        
+            
+                <span class='tag'>abstract</span>
+            
+        
+        <span class="code-name">
+            
+                isValidStructElementType<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line133">line 133</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="pp">
+        <a class="href-link" href="#pp">#</a>
+        
+        <span class="code-name">
+            
+                pp<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line143">line 143</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">String</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+                <div class="member">
+
+
+    
+    <h4 class="name" id="toString">
+        <a class="href-link" href="#toString">#</a>
+        
+        <span class="code-name">
+            
+                toString<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span>
+            
+        </span>
+    </h4>
+    
+
+    
+    
+    <div class="description">
+        <script type="text/javascript" src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="renderer_models_types_Type.js.html" class="button">View Source</a>
+            <span>
+                <a href="renderer_models_types_Type.js.html">renderer/models/types/Type.js</a>, <a href="renderer_models_types_Type.js.html#line138">line 138</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">String</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+</div>
+            
+            </div>
+        </div>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

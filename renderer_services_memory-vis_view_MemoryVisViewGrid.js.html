@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> renderer/services/memory-vis/view/MemoryVisViewGrid.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        
+                            
+                                <a class="dropdown-item" href="tutorial-Installation.html">
+                                    Installation
+                                </a>
+                            
+                        
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="module-cl-parse.html">parse</a></li><li><a href="module-cl-tags.html">tags</a></li><li><a href="module-settings-Builds.html">Builds</a></li><li><a href="module-settings-defaults.html">defaults</a></li><li><a href="module-settings-SupportedEditors.html">SupportedEditors</a></li></ul><h3>Classes</h3><ul><li><a href="CuLaunch.html">CuLaunch</a></li><li><a href="CuMemory.html">CuMemory</a></li><li><a href="MemoryVisViewGridToolbar.html">MemoryVisViewGridToolbar</a></li><li><a href="module-codenav.CodenavService.html">CodenavService</a></li><li><a href="module-codenav.CodenavToolbar.html">CodenavToolbar</a></li><li><a href="module-ColorGenerator-ColorGenerator.html">ColorGenerator</a></li><li><a href="module-component.html#.Component">Component</a></li><li><a href="module-compute-selection.ComputeSelection.html">ComputeSelection</a></li><li><a href="module-compute-selection.ComputeSelectionBlockView.html">ComputeSelectionBlockView</a></li><li><a href="module-compute-selection.ComputeSelectionMode.html">ComputeSelectionMode</a></li><li><a href="module-compute-selection.ComputeSelectionModel.html">ComputeSelectionModel</a></li><li><a href="module-compute-selection.ComputeSelectionModeView.html">ComputeSelectionModeView</a></li><li><a href="module-compute-selection.ComputeSelectionService.html">ComputeSelectionService</a></li><li><a href="module-compute-selection.ComputeSelectionThreadView.html">ComputeSelectionThreadView</a></li><li><a href="module-compute-selection.ComputeSelectionView.html">ComputeSelectionView</a></li><li><a href="module-compute-selection.ComputeSelectionWarpView.html">ComputeSelectionWarpView</a></li><li><a href="module-console.ConsoleButton.html">ConsoleButton</a></li><li><a href="module-containers.Container.html">Container</a></li><li><a href="module-containers.MainSelectionArea.html">MainSelectionArea</a></li><li><a href="module-cuda.CuBlock.html">CuBlock</a></li><li><a href="module-cuda.CuDim.html">CuDim</a></li><li><a href="module-cuda.CuGrid.html">CuGrid</a></li><li><a href="module-cuda.CuIndex.html">CuIndex</a></li><li><a href="module-cuda.CuKernel.html">CuKernel</a></li><li><a href="module-cuda.CuLimits.html">CuLimits</a></li><li><a href="module-cuda.CuPointer.html">CuPointer</a></li><li><a href="module-cuda.CuThread.html">CuThread</a></li><li><a href="module-cuda.CuWarp.html">CuWarp</a></li><li><a href="module-cuda%250Ahttps___docs.nvidia.com_cuda_nvvm-ir-spec_index.html_address-space.CuAddrSpace.html">CuAddrSpace</a></li><li><a href="module-editor.Editor.html">Editor</a></li><li><a href="module-editor.EditorTab.html">EditorTab</a></li><li><a href="module-editor.EditorTabs.html">EditorTabs</a></li><li><a href="module-editor.EditorTabsAdd.html">EditorTabsAdd</a></li><li><a href="module-editor.EditorToolbar.html">EditorToolbar</a></li><li><a href="module-input-toolbar.InputToolbar.html">InputToolbar</a></li><li><a href="module-kernel-selection.KernelSelection.html">KernelSelection</a></li><li><a href="module-kernel-selection.KernelSelectionModel.html">KernelSelectionModel</a></li><li><a href="module-kernel-selection.KernelSelectionService.html">KernelSelectionService</a></li><li><a href="module-kernel-selection.KernelSelectionView.html">KernelSelectionView</a></li><li><a href="module-launch-selection.LaunchSelection.html">LaunchSelection</a></li><li><a href="module-launch-selection.LaunchSelectionModel.html">LaunchSelectionModel</a></li><li><a href="module-launch-selection.LaunchSelectionView.html">LaunchSelectionView</a></li><li><a href="module-layout.BaseLayout.html">BaseLayout</a></li><li><a href="module-layout.ElectronLayout.html">ElectronLayout</a></li><li><a href="module-log.ConsoleLogger.html">ConsoleLogger</a></li><li><a href="module-log.Logger.html">Logger</a></li><li><a href="module-log.LogLevel.html">LogLevel</a></li><li><a href="module-memory.AddressSpace.html">AddressSpace</a></li><li><a href="module-memory.Memory.html">Memory</a></li><li><a href="module-memory.Pointer.html">Pointer</a></li><li><a href="module-memory-ui.AddRandomMemoryButton.html">AddRandomMemoryButton</a></li><li><a href="module-memory-ui.MemoryArea.html">MemoryArea</a></li><li><a href="module-memory-ui.MemoryAreaBody.html">MemoryAreaBody</a></li><li><a href="module-memory-ui.MemoryAreaTitleBar.html">MemoryAreaTitleBar</a></li><li><a href="module-memory-ui.MemoryVisualizer.html">MemoryVisualizer</a></li><li><a href="module-memory-ui.MemoryVisualizerCells.html">MemoryVisualizerCells</a></li><li><a href="module-memory-ui.MemoryVisualizerToolbar.html">MemoryVisualizerToolbar</a></li><li><a href="module-memory-vis.MemoryVis.html">MemoryVis</a></li><li><a href="module-memory-vis.MemoryVisModel.html">MemoryVisModel</a></li><li><a href="module-memory-vis.MemoryVisService.html">MemoryVisService</a></li><li><a href="module-memory-vis.MemoryVisView.html">MemoryVisView</a></li><li><a href="module-memory-vis.MemoryVisViewGrid.html">MemoryVisViewGrid</a></li><li><a href="module-memory-vis.MemoryVisViewHeader.html">MemoryVisViewHeader</a></li><li><a href="module-notification.NotificationModel.html">NotificationModel</a></li><li><a href="module-notification.NotificationService.html">NotificationService</a></li><li><a href="module-notification.NotificationView.html">NotificationView</a></li><li><a href="module-notification.ProgressNotificationModel.html">ProgressNotificationModel</a></li><li><a href="module-notification.ProgressNotificationView.html">ProgressNotificationView</a></li><li><a href="module-selectors.KernelLaunchSelector.html">KernelLaunchSelector</a></li><li><a href="module-selectors.KernelSelector.html">KernelSelector</a></li><li><a href="module-selectors.Selector.html">Selector</a></li><li><a href="module-source.FunctionCallSrc.html">FunctionCallSrc</a></li><li><a href="module-source.FunctionSrc.html">FunctionSrc</a></li><li><a href="module-source.MemorySrc.html">MemorySrc</a></li><li><a href="module-source.SrcInfo.html">SrcInfo</a></li><li><a href="module-source.SrcLoc.html">SrcLoc</a></li><li><a href="module-source.SrcRange.html">SrcRange</a></li><li><a href="module-toolbars.CodeNavToolbar.html">CodeNavToolbar</a></li><li><a href="module-toolbars.InfoButton.html">InfoButton</a></li><li><a href="module-toolbars.MainToolbar.html">MainToolbar</a></li><li><a href="module-toolbars.NotificationButton.html">NotificationButton</a></li><li><a href="module-toolbars.SessionRestartButton.html">SessionRestartButton</a></li><li><a href="module-toolbars.SettingsButton.html">SettingsButton</a></li><li><a href="module-toolbars.UtilityToolbar.html">UtilityToolbar</a></li><li><a href="module-types.ArrayType.html">ArrayType</a></li><li><a href="module-types.FloatType.html">FloatType</a></li><li><a href="module-types.IntType.html">IntType</a></li><li><a href="module-types.PtrType.html">PtrType</a></li><li><a href="module-types.StructType.html">StructType</a></li><li><a href="module-types.Type.html">Type</a></li><li><a href="module-types.Types.html">Types</a></li><li><a href="module-util_error-CLError.html">CLError</a></li><li><a href="module-util_error-FileNotFoundError.html">FileNotFoundError</a></li><li><a href="module-util_error-InternalError.html">InternalError</a></li></ul><h3>Events</h3><ul><li><a href="module-compute-selection.html#.event:BlockSelect">BlockSelect</a></li><li><a href="module-compute-selection.html#.event:ModeChange">ModeChange</a></li><li><a href="module-compute-selection.html#.event:ThreadSelect">ThreadSelect</a></li><li><a href="module-compute-selection.html#.event:UnitSelect">UnitSelect</a></li><li><a href="module-compute-selection.html#.event:WarpSelect">WarpSelect</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:disabled">disabled</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:enabled">enabled</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:select">select</a></li><li><a href="module-launch-selection.KernelSelection.html#.event:select">select</a></li><li><a href="module-renderer_events.html#.event:EDITOR_INPUT_LOADED">EDITOR_INPUT_LOADED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_LOADED">EDITOR_LOADED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_TAB_SELECTED">EDITOR_TAB_SELECTED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_VALUE_CHANGED">EDITOR_VALUE_CHANGED</a></li><li><a href="module-renderer_events.html#.event:INPUT_FILE_SELECTED">INPUT_FILE_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_KERNEL_LAUNCH_SELECTED">INPUT_KERNEL_LAUNCH_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_KERNEL_SELECTED">INPUT_KERNEL_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_TYPE_SELECTED">INPUT_TYPE_SELECTED</a></li><li><a href="module-renderer_events.html#.event:SESSION_KILLED">SESSION_KILLED</a></li><li><a href="module-renderer_events.html#.event:SESSION_NEW">SESSION_NEW</a></li><li><a href="module-renderer_events.html#.event:UI_COMPONENT_READY">UI_COMPONENT_READY</a></li><li><a href="module-renderer_events.html#.event:UI_COMPONENTS_READY">UI_COMPONENTS_READY</a></li><li><a href="module-renderer_events.html#.event:UI_READY">UI_READY</a></li><li><a href="module-renderer_events.html#.event:UI_RESIZE">UI_RESIZE</a></li></ul><h3>Global</h3><ul><li><a href="global.html#codenav">codenav</a></li><li><a href="global.html#createComponents">createComponents</a></li><li><a href="global.html#createContainers">createContainers</a></li><li><a href="global.html#editor">editor</a></li><li><a href="global.html#isPowerOf2">isPowerOf2</a></li><li><a href="global.html#loadMonacoAsync">loadMonacoAsync</a></li><li><a href="global.html#mainSelection">mainSelection</a></li><li><a href="global.html#registerComponent">registerComponent</a></li><li><a href="global.html#renderCollapseControl">renderCollapseControl</a></li><li><a href="global.html#renderMemoryName">renderMemoryName</a></li><li><a href="global.html#renderMemorySize">renderMemorySize</a></li><li><a href="global.html#renderMemorySource">renderMemorySource</a></li><li><a href="global.html#renderMemoryType">renderMemoryType</a></li><li><a href="global.html#renderMemoryTypeSize">renderMemoryTypeSize</a></li><li><a href="global.html#renderSeparator">renderSeparator</a></li><li><a href="global.html#Selectize">Selectize</a></li><li><a href="global.html#startCollapsed">startCollapsed</a></li><li><a href="global.html#usableThreadsMode">usableThreadsMode</a></li><li><a href="global.html#x">x</a></li><li><a href="global.html#y">y</a></li></ul></div><div class="category"><h2>Common</h2><h3>Modules</h3><ul><li><a href="module-release.html">release</a></li><li><a href="module-settings.html">settings</a></li></ul><h3>Modules / util</h3><ul><li><a href="module-traits.html">traits</a></li><li><a href="module-util_devtools.html">util/devtools</a></li><li><a href="module-util_error.html">util/error</a></li></ul></div><div class="category"><h2>Main</h2><h3>Modules</h3><ul><li><a href="module-cl.html">cl</a></li><li><a href="module-config.html">config</a></li><li><a href="module-main.html">main</a></li><li><a href="module-perf.html">perf</a></li><li><a href="module-shortcuts.html">shortcuts</a></li><li><a href="module-window.html">window</a></li></ul></div><div class="category"><h2>Mock</h2><h3>Modules</h3><ul><li><a href="module-MemoryFactory.html">MemoryFactory</a></li></ul></div><div class="category"><h2>Renderer</h2><h3>Modules / main</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-main.html">main</a></li></ul><h3>Modules / services</h3><ul><li><a href="module-codenav.html">codenav</a></li><li><a href="module-compute-selection.html">compute-selection</a></li><li><a href="module-kernel-selection.html">kernel-selection</a></li><li><a href="module-launch-selection.html">launch-selection</a></li><li><a href="module-log.html">log</a></li><li><a href="module-memory-vis.html">memory-vis</a></li><li><a href="module-notification.html">notification</a></li></ul><h3>Modules / util</h3><ul><li><a href="module-ColorGenerator.html">ColorGenerator</a></li><li><a href="module-random.html">random</a></li><li><a href="module-string.html">string</a></li></ul><h3>Modules / ui</h3><ul><li><a href="module-component.html">component</a></li><li><a href="module-console.html">console</a></li><li><a href="module-memory-ui.html">memory-ui</a></li></ul><h3>Modules / Ui</h3><ul><li><a href="module-containers.html">containers</a></li><li><a href="module-editor.html">editor</a></li><li><a href="module-layout.html">layout</a></li><li><a href="module-MenuSeparator.html">MenuSeparator</a></li><li><a href="module-selectors.html">selectors</a></li><li><a href="module-toolbars.html">toolbars</a></li></ul><h3>Modules / models</h3><ul><li><a href="module-cuda.html">cuda</a></li><li><a href="module-memory.html">memory</a></li><li><a href="module-source.html">source</a></li><li><a href="module-types.html">types</a></li></ul><h3>Modules / extensions</h3><ul><li><a href="module-jquery.html">jquery</a></li></ul><h3>Modules</h3><ul><li><a href="module-renderer_events.html">renderer/events</a></li><li><a href="module-session.html">session</a></li></ul><h3>Classes / models</h3><ul><li><a href="Dim.html">Dim</a></li><li><a href="Index_.html">Index</a></li></ul><h3>Classes / ui</h3><ul><li><a href="RefreshButton.html">RefreshButton</a></li><li><a href="Ui.html">Ui</a></li></ul><h3>Classes / services</h3><ul><li><a href="Service.html">Service</a></li><li><a href="ServiceState.html">ServiceState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>renderer/services/memory-vis/view/MemoryVisViewGrid.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**@ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")} MemoryVisView */
+/**@ignore @typedef {import("@renderer/models/types/ArrayType")} ArrayType */
+/** @ignore @typedef {import("@renderer/models/Index")} Index */
+
+const d3 = require('d3')
+
+/**
+ * @memberof module:memory-vis
+ */
+class MemoryVisViewGrid {
+  static DEFAULT_VIEWPORT = {x: 64, y: 10}
+  static DEFAULT_SIZE     = 12
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  Options = {
+    container: { width: '100%', height: '300px' },
+
+    viewport: {
+      x: MemoryVisViewGrid.DEFAULT_VIEWPORT.x,
+      y: MemoryVisViewGrid.DEFAULT_VIEWPORT.y,
+      range: {
+        x: { lo: 0, hi: MemoryVisViewGrid.DEFAULT_VIEWPORT.x },
+        y: { lo: 0, hi: MemoryVisViewGrid.DEFAULT_VIEWPORT.y }
+      },
+    },
+
+    grid : {
+      padding: 10,
+      width: undefined,
+      height: undefined
+    },
+
+    axis: {
+      tickEvery: 8
+    },
+
+    cell : {
+      sizes: [8, 10, 12, 14, 16, 20, 22, 24, 26, 28],
+      sizeIdx: undefined,    // px
+      get size() { return this.sizes[this.sizeIdx]},
+      spacings: [2, 2, 2, 2, 2, 2, 3, 3, 3, 3,],
+      get spacing() { return this.spacings[this.sizeIdx]}
+    }, 
+  }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** @type {MemoryVisView} */ #view
+  /** @type {Boolean}       */ #rendered
+  /** @type {JQuery}        */ #node
+  /** @type {String}        */ #nodeId
+  /** @type {JQuery}        */ #wrapper
+  /** @type {d3.Selection&lt;SVGElement>} */ #svg
+  /** @type {d3.Selection&lt;SVGElement>} */ #cells
+  /** @type {d3.Selection&lt;SVGElement>} */ #yAxis
+  /** @type {d3.Selection&lt;SVGElement>} */ #xAxis
+  /** @type {d3.ScaleLinear}           */ #yScale
+  /** @type {ResizeObserver} */ #containerResizeObserver
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /**
+   * @param {MemoryVisView} view 
+   */
+  constructor(view) {
+    this.#view = view
+    this.#rendered = false
+    this.#nodeId = `grid-${this.#view.id}`
+
+    this.Options.cell.sizeIdx = this.Options.cell.sizes.indexOf(MemoryVisViewGrid.DEFAULT_SIZE)
+
+    // if ( view.model.getMemory().isArray()) {
+    //   /** @type {ArrayType} */
+    let ty = view.model.getMemory().getType()
+    this.Options.viewport.x = Math.min(ty.getDim().x, this.Options.viewport.x)
+    this.Options.viewport.y = Math.min(ty.getDim().y, this.Options.viewport.y)
+    this.Options.viewport.range.x.hi = this.Options.viewport.x
+    this.Options.viewport.range.y.hi = this.Options.viewport.y
+    // } else {
+    //   this.Options.viewport.x = 1
+    //   this.Options.viewport.y = 1
+    // }
+  }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** @returns {Boolean} */
+  isRendered() { return this.#rendered }
+
+  /** @returns {Boolean} */
+  isInDefaultSize() { return this.Options.cell.size === MemoryVisViewGrid.DEFAULT_SIZE }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /** 
+   * Check if size can be increased further
+   * @returns {Boolean}
+   */
+  canIncreaseSize() { return this.Options.cell.sizeIdx &lt; this.Options.cell.sizes.length - 1}
+
+  /**
+   * Check if size can be decreased further 
+   * @returns {Boolean}
+   */
+  canDecreaseSize() { return this.Options.cell.sizeIdx > 0 }
+
+  /**
+   * Retrieve the current size. The value returned corresponds
+   * to the size of the cells of the grid, in px 
+   * @returns Number 
+   */
+  getSize() { return this.Options.cell.size }
+
+  /**
+   * Increase the size of (the cells of) the grid
+   */
+  increaseSize() {
+    this.Options.cell.sizeIdx = (this.Options.cell.sizeIdx + 1) % this.Options.cell.sizes.length
+    this._adjust()
+  }
+
+  /**
+   * Decrease the size of (the cells of) the grid
+   */
+  decreaseSize() {
+    this.Options.cell.sizeIdx = (this.Options.cell.sizeIdx - 1) % this.Options.cell.sizes.length
+    this._adjust()
+  }
+
+  /**
+   * Reset the grid's size to the default value
+   */
+  resetSize() {
+    this.Options.cell.sizeIdx = this.Options.cell.sizes.indexOf(MemoryVisViewGrid.DEFAULT_SIZE)
+    this._adjust()
+  }
+
+  
+  /**
+   * @returns {Number[]}
+   */
+  getXRange() {
+    return [this.Options.viewport.range.x.lo, this.Options.viewport.range.x.hi];
+  }
+
+  /** 
+   * @returns {Number[]}
+   */
+  getYRange() {
+    return [this.Options.viewport.range.y.lo, this.Options.viewport.range.y.hi];
+  }
+
+  /**
+   * Shift the grid to the right
+   * The amount is deterined by `Options.viewport.x`
+   * @returns {MemoryVisViewGrid}
+   */
+  right() {
+    let ty = this.#view.model.getMemory().getType()
+    if ( ty.getDim().x > this.Options.viewport.range.x.hi) { //can mode right
+      this.Options.viewport.range.x.lo += this.Options.viewport.x;
+      this.Options.viewport.range.x.hi = 
+        Math.min(this.Options.viewport.range.x.hi + this.Options.viewport.x, ty.getDim().x)
+      if ( this.isRendered())
+        this._adjust();
+    }
+    return this
+  }
+
+  /**
+   * Shift the grid to the left
+   * The amount is determined by `Options.viewport.x`
+   * @returns {MemoryVisViewGrid}
+   */
+  left() {
+    let ty = this.#view.model.getMemory().getType()
+    if ( this.Options.viewport.range.x.lo > 0) { //can move left
+      this.Options.viewport.range.x.lo -= this.Options.viewport.x;
+      if ( this.Options.viewport.range.x.hi === ty.getDim().x)
+        this.Options.viewport.range.x.hi -= Math.floor(ty.getDim().x % this.Options.viewport.x)
+      else
+        this.Options.viewport.range.x.hi -= this.Options.viewport.x;
+      if ( this.isRendered())
+        this._adjust();
+    }
+    return this;
+  }
+
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  _adjustNode() {
+    this.#node.css('height', this.Options.grid.height + this.Options.grid.padding * 2)
+              .css('padding-top', this.Options.grid.padding)
+              .css('padding-bottom', this.Options.grid.padding)
+  }
+
+  _adjustSvg() {
+    this.#svg.attr('width', this.Options.grid.width)
+             .attr('height', this.Options.grid.height)
+  }
+
+  _adjustCells() {
+    let self = this
+
+    this.#cells.selectAll('rect').each( function() {
+      d3.select(this)
+        .attr('width', self.Options.cell.size)
+        .attr('height', self.Options.cell.size)
+        .attr('y', (parseInt(d3.select(this).attr('pos-y')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
+        .attr('x', (parseInt(d3.select(this).attr('pos-x')) + 1) * (self.Options.cell.size + self.Options.cell.spacing))
+        .attr('rx', 2)
+        .attr('ry', 2)
+    })
+  }
+
+  _adjustYAxis() {
+    let self = this
+    
+    let r = [Math.ceil(self.Options.cell.size / 2)]
+
+    if ( this.Options.viewport.y === 1)
+      r.push(r[0])
+    else
+      for ( let i = 1; i &lt; this.Options.viewport.y; ++i)
+        r.push(r[i - 1] + this.Options.cell.size + this.Options.cell.spacing)
+
+    this.#yScale.range(r)
+
+    this.#yAxis.attr("transform", `translate(${self.Options.cell.size + 10},${self.Options.cell.size + self.Options.cell.spacing})`)
+        .call(d3.axisLeft(self.#yScale)
+                .tickValues(this.#yScale.domain())
+                .tickFormat(d3.format("d")))
+        .call(g => g.select('.domain').remove())
+        .call(g => g.selectAll('.tick').select('line').remove())
+                                                    
+    this.#yAxis.selectAll('text').attr('font-size', `${Math.max(self.Options.cell.size - 5, 7)}px`)
+                                 .style('fill', '#767676')
+  }
+
+  _adjustXAxis() {
+    let self = this
+    // this.#xAxis.attr("transform", `translate(0,0)`)
+    this.#xAxis.selectAll('text').each( function(d, i, nodes) {
+        d3.select(nodes[i])
+          .text(self.Options.viewport.range.x.lo + (i + 1) * self.Options.axis.tickEvery)
+          .attr('x', (self.Options.cell.size + self.Options.cell.spacing) 
+                    + parseInt(d3.select(nodes[i]).attr('pos')) * self.Options.axis.tickEvery * (self.Options.cell.size + self.Options.cell.spacing))
+          .attr('font-size', `${Math.max(self.Options.cell.size - 5, 7)}px`)
+          .attr('text-align', 'center')
+          .attr('y', self.Options.cell.size)
+          .style('fill', '#767676')
+    })
+  }
+
+  /** 
+   * adjust the svg based on the current size options.
+   * See {@link MemoryVisViewGrid#Options}
+   */
+  _adjust() {
+    let oldWidth  = this.Options.grid.width, 
+        oldHeight = this.Options.grid.height
+
+    this.Options.grid.width  = (this.Options.viewport.x + 1) * (this.Options.cell.size + this.Options.cell.spacing)
+    // this.Options.grid.height = ((this.Options.viewport.y + 1) * this.Options.cell.size) + (this.Options.viewport.y) * this.Options.cell.spacing
+    this.Options.grid.height  = (this.Options.viewport.y + 1) * (this.Options.cell.size + this.Options.cell.spacing)   
+
+    // do nothing if we are not rendered
+    if ( !this.isRendered())
+      return
+
+    // do nothing if no changes
+    // if ( oldWidth !== this.Options.grid.width || oldHeight !== this.Options.grid.height) {}
+    //   return
+
+    this._adjustNode()
+    this._adjustSvg()
+    this._adjustCells()
+    this._adjustXAxis()
+    this._adjustYAxis()
+  }
+
+  _createNode() {
+    this.#node = 
+      $(`&lt;div class="memory-vis-grid" id=${this.#nodeId}>&lt;/div>`).appendTo(this.#view.body)
+            // .css('max-height', this.Options.container.height)
+            // .css('max-width', this.Options.container.width)
+  }
+  
+  _createSvg() {
+    this.#svg = 
+      d3.select(this.#node[0])
+        .append('svg')
+        .attr('class', 'memory-vis-grid-svg')  
+  }
+
+  /**
+   * Create the grid cells
+   */
+  _createCells() {
+    this.#cells = this.#svg.append('g').attr('id', `${this.#nodeId}-cells`).attr('transform','translate(0, 0)')
+    
+    // create the cells
+    for ( let i = 0; i &lt; this.Options.viewport.y; ++i) {
+      for ( let j = 0; j &lt; this.Options.viewport.x; ++j)
+        this._createCell(this.#cells, j, i)
+    }
+  }
+
+  /**
+   * Create a cell in the vis' grid
+   * @param {d3.Selection&lt;SVGElement>} svg
+   * @param {Number} x
+   * @param {Number} y
+   */
+  _createCell(svg, x, y) {
+    let self = this
+    svg.append('rect')
+        .attr('pos-x', x)
+        .attr('pos-y', y)
+        .attr('class', 'memory-vis-cell')
+        .on('mouseover', () => {
+          self.#view.toolbar.tooltip.contents(`&lt;span class="grid-tooltip-text">${self.Options.viewport.range.y.lo + y},${self.Options.viewport.range.x.lo + x}&lt;/span>`)
+          self.#view.toolbar.tooltip.show()
+        })
+        .on('mouseout', () => self.#view.tooltip.hide())
+  }
+
+  /**
+   * Create the yAxis of the vis
+   */
+  _createYAxis() {
+    this.#yAxis = this.#svg.append('g').attr('id', `${this.#nodeId}-yaxis`)
+    if ( this.Options.viewport.y === 1)
+      this.#yScale = d3.scaleLinear().domain([0,0])
+    else
+      this.#yScale = d3.scaleLinear().domain([...Array(this.Options.viewport.y).keys()])
+  }
+
+  /**
+   * Create the yAxis of the vis 
+   */
+  _createXAxis() {
+    let self = this
+    this.#xAxis = this.#svg.append('g').attr('id', `${this.#nodeId}-xaxis`)
+
+    let numTicks = this.Options.viewport.x / this.Options.axis.tickEvery - 1;
+
+    for ( let i = 0; i &lt; numTicks; ++i )
+      this.#xAxis.append('text').attr('pos', i + 1)
+
+    this.#xAxis.selectAll('text').attr('font-size', `${self.Options.cell.size}px`)
+               .style('fill', '#767676')
+  }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+
+  /** @returns {JQuery} */
+  render() {
+    if ( !this.isRendered()) {
+      this.#containerResizeObserver = new ResizeObserver(() => console.log("svg resized"))
+
+      this._createNode()
+      this._createSvg()
+      this._createCells()
+      this._createXAxis()
+      this._createYAxis()
+
+      // add the listener only when the svg is created to avoid
+      // acting on the initial rendering of this.#node
+      this.#svg.on('ready', () => observer.observe( $(this.#node)[0]))
+
+      let Index = require('@renderer/models/Index')
+      this.read(new Index(1,1))
+
+      this.#rendered = true
+      this._adjust()
+    }
+    return this.#node
+  }
+
+  ////////////////////////////////
+  ////////////////////////////////
+  ////////////////////////////////
+
+  /**
+   * @param {Index} idx
+   */
+  read(idx) {
+    console.log("Reading:", idx.toString())
+    
+  }
+
+
+}
+
+module.exports = MemoryVisViewGrid</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

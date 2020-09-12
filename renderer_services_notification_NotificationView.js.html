@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> renderer/services/notification/NotificationView.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                <div class="dropdown is-hoverable is-right">
+                    <a class="dropdown-trigger link">
+                        Tutorials
+                        <i class="fas fa-chevron-down fa-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                        
+                            
+                                <a class="dropdown-item" href="tutorial-Installation.html">
+                                    Installation
+                                </a>
+                            
+                        
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="module-cl-parse.html">parse</a></li><li><a href="module-cl-tags.html">tags</a></li><li><a href="module-settings-Builds.html">Builds</a></li><li><a href="module-settings-defaults.html">defaults</a></li><li><a href="module-settings-SupportedEditors.html">SupportedEditors</a></li></ul><h3>Classes</h3><ul><li><a href="CuLaunch.html">CuLaunch</a></li><li><a href="CuMemory.html">CuMemory</a></li><li><a href="MemoryVisViewGridToolbar.html">MemoryVisViewGridToolbar</a></li><li><a href="module-codenav.CodenavService.html">CodenavService</a></li><li><a href="module-codenav.CodenavToolbar.html">CodenavToolbar</a></li><li><a href="module-ColorGenerator-ColorGenerator.html">ColorGenerator</a></li><li><a href="module-component.html#.Component">Component</a></li><li><a href="module-compute-selection.ComputeSelection.html">ComputeSelection</a></li><li><a href="module-compute-selection.ComputeSelectionBlockView.html">ComputeSelectionBlockView</a></li><li><a href="module-compute-selection.ComputeSelectionMode.html">ComputeSelectionMode</a></li><li><a href="module-compute-selection.ComputeSelectionModel.html">ComputeSelectionModel</a></li><li><a href="module-compute-selection.ComputeSelectionModeView.html">ComputeSelectionModeView</a></li><li><a href="module-compute-selection.ComputeSelectionService.html">ComputeSelectionService</a></li><li><a href="module-compute-selection.ComputeSelectionThreadView.html">ComputeSelectionThreadView</a></li><li><a href="module-compute-selection.ComputeSelectionView.html">ComputeSelectionView</a></li><li><a href="module-compute-selection.ComputeSelectionWarpView.html">ComputeSelectionWarpView</a></li><li><a href="module-console.ConsoleButton.html">ConsoleButton</a></li><li><a href="module-containers.Container.html">Container</a></li><li><a href="module-containers.MainSelectionArea.html">MainSelectionArea</a></li><li><a href="module-cuda.CuBlock.html">CuBlock</a></li><li><a href="module-cuda.CuDim.html">CuDim</a></li><li><a href="module-cuda.CuGrid.html">CuGrid</a></li><li><a href="module-cuda.CuIndex.html">CuIndex</a></li><li><a href="module-cuda.CuKernel.html">CuKernel</a></li><li><a href="module-cuda.CuLimits.html">CuLimits</a></li><li><a href="module-cuda.CuPointer.html">CuPointer</a></li><li><a href="module-cuda.CuThread.html">CuThread</a></li><li><a href="module-cuda.CuWarp.html">CuWarp</a></li><li><a href="module-cuda%250Ahttps___docs.nvidia.com_cuda_nvvm-ir-spec_index.html_address-space.CuAddrSpace.html">CuAddrSpace</a></li><li><a href="module-editor.Editor.html">Editor</a></li><li><a href="module-editor.EditorTab.html">EditorTab</a></li><li><a href="module-editor.EditorTabs.html">EditorTabs</a></li><li><a href="module-editor.EditorTabsAdd.html">EditorTabsAdd</a></li><li><a href="module-editor.EditorToolbar.html">EditorToolbar</a></li><li><a href="module-input-toolbar.InputToolbar.html">InputToolbar</a></li><li><a href="module-kernel-selection.KernelSelection.html">KernelSelection</a></li><li><a href="module-kernel-selection.KernelSelectionModel.html">KernelSelectionModel</a></li><li><a href="module-kernel-selection.KernelSelectionService.html">KernelSelectionService</a></li><li><a href="module-kernel-selection.KernelSelectionView.html">KernelSelectionView</a></li><li><a href="module-launch-selection.LaunchSelection.html">LaunchSelection</a></li><li><a href="module-launch-selection.LaunchSelectionModel.html">LaunchSelectionModel</a></li><li><a href="module-launch-selection.LaunchSelectionView.html">LaunchSelectionView</a></li><li><a href="module-layout.BaseLayout.html">BaseLayout</a></li><li><a href="module-layout.ElectronLayout.html">ElectronLayout</a></li><li><a href="module-log.ConsoleLogger.html">ConsoleLogger</a></li><li><a href="module-log.Logger.html">Logger</a></li><li><a href="module-log.LogLevel.html">LogLevel</a></li><li><a href="module-memory.AddressSpace.html">AddressSpace</a></li><li><a href="module-memory.Memory.html">Memory</a></li><li><a href="module-memory.Pointer.html">Pointer</a></li><li><a href="module-memory-ui.AddRandomMemoryButton.html">AddRandomMemoryButton</a></li><li><a href="module-memory-ui.MemoryArea.html">MemoryArea</a></li><li><a href="module-memory-ui.MemoryAreaBody.html">MemoryAreaBody</a></li><li><a href="module-memory-ui.MemoryAreaTitleBar.html">MemoryAreaTitleBar</a></li><li><a href="module-memory-ui.MemoryVisualizer.html">MemoryVisualizer</a></li><li><a href="module-memory-ui.MemoryVisualizerCells.html">MemoryVisualizerCells</a></li><li><a href="module-memory-ui.MemoryVisualizerToolbar.html">MemoryVisualizerToolbar</a></li><li><a href="module-memory-vis.MemoryVis.html">MemoryVis</a></li><li><a href="module-memory-vis.MemoryVisModel.html">MemoryVisModel</a></li><li><a href="module-memory-vis.MemoryVisService.html">MemoryVisService</a></li><li><a href="module-memory-vis.MemoryVisView.html">MemoryVisView</a></li><li><a href="module-memory-vis.MemoryVisViewGrid.html">MemoryVisViewGrid</a></li><li><a href="module-memory-vis.MemoryVisViewHeader.html">MemoryVisViewHeader</a></li><li><a href="module-notification.NotificationModel.html">NotificationModel</a></li><li><a href="module-notification.NotificationService.html">NotificationService</a></li><li><a href="module-notification.NotificationView.html">NotificationView</a></li><li><a href="module-notification.ProgressNotificationModel.html">ProgressNotificationModel</a></li><li><a href="module-notification.ProgressNotificationView.html">ProgressNotificationView</a></li><li><a href="module-selectors.KernelLaunchSelector.html">KernelLaunchSelector</a></li><li><a href="module-selectors.KernelSelector.html">KernelSelector</a></li><li><a href="module-selectors.Selector.html">Selector</a></li><li><a href="module-source.FunctionCallSrc.html">FunctionCallSrc</a></li><li><a href="module-source.FunctionSrc.html">FunctionSrc</a></li><li><a href="module-source.MemorySrc.html">MemorySrc</a></li><li><a href="module-source.SrcInfo.html">SrcInfo</a></li><li><a href="module-source.SrcLoc.html">SrcLoc</a></li><li><a href="module-source.SrcRange.html">SrcRange</a></li><li><a href="module-toolbars.CodeNavToolbar.html">CodeNavToolbar</a></li><li><a href="module-toolbars.InfoButton.html">InfoButton</a></li><li><a href="module-toolbars.MainToolbar.html">MainToolbar</a></li><li><a href="module-toolbars.NotificationButton.html">NotificationButton</a></li><li><a href="module-toolbars.SessionRestartButton.html">SessionRestartButton</a></li><li><a href="module-toolbars.SettingsButton.html">SettingsButton</a></li><li><a href="module-toolbars.UtilityToolbar.html">UtilityToolbar</a></li><li><a href="module-types.ArrayType.html">ArrayType</a></li><li><a href="module-types.FloatType.html">FloatType</a></li><li><a href="module-types.IntType.html">IntType</a></li><li><a href="module-types.PtrType.html">PtrType</a></li><li><a href="module-types.StructType.html">StructType</a></li><li><a href="module-types.Type.html">Type</a></li><li><a href="module-types.Types.html">Types</a></li><li><a href="module-util_error-CLError.html">CLError</a></li><li><a href="module-util_error-FileNotFoundError.html">FileNotFoundError</a></li><li><a href="module-util_error-InternalError.html">InternalError</a></li></ul><h3>Events</h3><ul><li><a href="module-compute-selection.html#.event:BlockSelect">BlockSelect</a></li><li><a href="module-compute-selection.html#.event:ModeChange">ModeChange</a></li><li><a href="module-compute-selection.html#.event:ThreadSelect">ThreadSelect</a></li><li><a href="module-compute-selection.html#.event:UnitSelect">UnitSelect</a></li><li><a href="module-compute-selection.html#.event:WarpSelect">WarpSelect</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:disabled">disabled</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:enabled">enabled</a></li><li><a href="module-kernel-selection.KernelSelection.html#.event:select">select</a></li><li><a href="module-launch-selection.KernelSelection.html#.event:select">select</a></li><li><a href="module-renderer_events.html#.event:EDITOR_INPUT_LOADED">EDITOR_INPUT_LOADED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_LOADED">EDITOR_LOADED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_TAB_SELECTED">EDITOR_TAB_SELECTED</a></li><li><a href="module-renderer_events.html#.event:EDITOR_VALUE_CHANGED">EDITOR_VALUE_CHANGED</a></li><li><a href="module-renderer_events.html#.event:INPUT_FILE_SELECTED">INPUT_FILE_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_KERNEL_LAUNCH_SELECTED">INPUT_KERNEL_LAUNCH_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_KERNEL_SELECTED">INPUT_KERNEL_SELECTED</a></li><li><a href="module-renderer_events.html#.event:INPUT_TYPE_SELECTED">INPUT_TYPE_SELECTED</a></li><li><a href="module-renderer_events.html#.event:SESSION_KILLED">SESSION_KILLED</a></li><li><a href="module-renderer_events.html#.event:SESSION_NEW">SESSION_NEW</a></li><li><a href="module-renderer_events.html#.event:UI_COMPONENT_READY">UI_COMPONENT_READY</a></li><li><a href="module-renderer_events.html#.event:UI_COMPONENTS_READY">UI_COMPONENTS_READY</a></li><li><a href="module-renderer_events.html#.event:UI_READY">UI_READY</a></li><li><a href="module-renderer_events.html#.event:UI_RESIZE">UI_RESIZE</a></li></ul><h3>Global</h3><ul><li><a href="global.html#codenav">codenav</a></li><li><a href="global.html#createComponents">createComponents</a></li><li><a href="global.html#createContainers">createContainers</a></li><li><a href="global.html#editor">editor</a></li><li><a href="global.html#isPowerOf2">isPowerOf2</a></li><li><a href="global.html#loadMonacoAsync">loadMonacoAsync</a></li><li><a href="global.html#mainSelection">mainSelection</a></li><li><a href="global.html#registerComponent">registerComponent</a></li><li><a href="global.html#renderCollapseControl">renderCollapseControl</a></li><li><a href="global.html#renderMemoryName">renderMemoryName</a></li><li><a href="global.html#renderMemorySize">renderMemorySize</a></li><li><a href="global.html#renderMemorySource">renderMemorySource</a></li><li><a href="global.html#renderMemoryType">renderMemoryType</a></li><li><a href="global.html#renderMemoryTypeSize">renderMemoryTypeSize</a></li><li><a href="global.html#renderSeparator">renderSeparator</a></li><li><a href="global.html#Selectize">Selectize</a></li><li><a href="global.html#startCollapsed">startCollapsed</a></li><li><a href="global.html#usableThreadsMode">usableThreadsMode</a></li><li><a href="global.html#x">x</a></li><li><a href="global.html#y">y</a></li></ul></div><div class="category"><h2>Common</h2><h3>Modules</h3><ul><li><a href="module-release.html">release</a></li><li><a href="module-settings.html">settings</a></li></ul><h3>Modules / util</h3><ul><li><a href="module-traits.html">traits</a></li><li><a href="module-util_devtools.html">util/devtools</a></li><li><a href="module-util_error.html">util/error</a></li></ul></div><div class="category"><h2>Main</h2><h3>Modules</h3><ul><li><a href="module-cl.html">cl</a></li><li><a href="module-config.html">config</a></li><li><a href="module-main.html">main</a></li><li><a href="module-perf.html">perf</a></li><li><a href="module-shortcuts.html">shortcuts</a></li><li><a href="module-window.html">window</a></li></ul></div><div class="category"><h2>Mock</h2><h3>Modules</h3><ul><li><a href="module-MemoryFactory.html">MemoryFactory</a></li></ul></div><div class="category"><h2>Renderer</h2><h3>Modules / main</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-main.html">main</a></li></ul><h3>Modules / services</h3><ul><li><a href="module-codenav.html">codenav</a></li><li><a href="module-compute-selection.html">compute-selection</a></li><li><a href="module-kernel-selection.html">kernel-selection</a></li><li><a href="module-launch-selection.html">launch-selection</a></li><li><a href="module-log.html">log</a></li><li><a href="module-memory-vis.html">memory-vis</a></li><li><a href="module-notification.html">notification</a></li></ul><h3>Modules / util</h3><ul><li><a href="module-ColorGenerator.html">ColorGenerator</a></li><li><a href="module-random.html">random</a></li><li><a href="module-string.html">string</a></li></ul><h3>Modules / ui</h3><ul><li><a href="module-component.html">component</a></li><li><a href="module-console.html">console</a></li><li><a href="module-memory-ui.html">memory-ui</a></li></ul><h3>Modules / Ui</h3><ul><li><a href="module-containers.html">containers</a></li><li><a href="module-editor.html">editor</a></li><li><a href="module-layout.html">layout</a></li><li><a href="module-MenuSeparator.html">MenuSeparator</a></li><li><a href="module-selectors.html">selectors</a></li><li><a href="module-toolbars.html">toolbars</a></li></ul><h3>Modules / models</h3><ul><li><a href="module-cuda.html">cuda</a></li><li><a href="module-memory.html">memory</a></li><li><a href="module-source.html">source</a></li><li><a href="module-types.html">types</a></li></ul><h3>Modules / extensions</h3><ul><li><a href="module-jquery.html">jquery</a></li></ul><h3>Modules</h3><ul><li><a href="module-renderer_events.html">renderer/events</a></li><li><a href="module-session.html">session</a></li></ul><h3>Classes / models</h3><ul><li><a href="Dim.html">Dim</a></li><li><a href="Index_.html">Index</a></li></ul><h3>Classes / ui</h3><ul><li><a href="RefreshButton.html">RefreshButton</a></li><li><a href="Ui.html">Ui</a></li></ul><h3>Classes / services</h3><ul><li><a href="Service.html">Service</a></li><li><a href="ServiceState.html">ServiceState</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>renderer/services/notification/NotificationView.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const NotificationModel = require('@renderer/services/notification/NotificationModel')
+
+const BootstrapNotify   = require('@lib/bootstrap-notify')
+
+/** @ignore @typedef {import("./NotificationModel").} NotificationModel */
+
+/**
+ * This callback is part of the {@link module:notification.NotificationView} class.
+ * Fired when the notification is shown
+ * @callback NotificationOnShowCallback
+ * @param {NotificationModel} model The notification model instance
+ * @memberof module:notification
+ * @returns void
+ */
+
+/**
+ * This callback is part of the {@link module:notification.NotificationView} class.
+ * Fired when the notification is manually closed
+ * @callback NotificationOnHideCallback
+ * @param {NotificationModel} model The notification model instance
+ * @memberof module:notification
+ * @returns void
+ */
+
+/**
+ * This callback is part of the {@link module:notification.NotificationView} class.
+ * Fired when the notification data is changed
+ * @callback NotificationOnChangeCallback
+ * @param {NotificationModel} model The notification model instance
+ * @memberof module:notification
+ * @returns void
+ */
+
+
+/**
+ * This class renders a notification to the DOM
+ * 
+ * To avoid undecessary complexity (as the use cases are minimal for now)
+ * this class acts both as a view and a handler for notifications. That is,
+ * the {@link module:notification~NotificationService} operates (and returns)
+ * these object.
+ * 
+ * In the future we may explicitely add a NotificationHandler if the use cases
+ * get more complicated
+ * 
+ * @class
+ * @memberof module:notification
+ * @requires module:notification.NotificationModel
+ * @requires module:notification.NotificationView
+ * @requires bootstrap-notify&lt;external>
+ */
+class NotificationView {
+
+  /**
+   * @param {NotificationModel} model The model of this view
+   */
+  constructor(model) {
+    /** 
+     * @private 
+     * @type {NotificationModel}
+     * */
+    this.model = model
+    /**
+     * Reference to bootstrap-notify's notifcation object
+     */
+    this.viewimpl = undefined
+    /** @type {Array.&lt;NotificationOnShowCallback>}   */
+    this.onShowCallbacks = []
+    /** @type {Array.&lt;NotificationOnHideCallback>}  */
+    this.onHideCallbacks = []
+    /** @type {Array.&lt;NotificationOnChangeCallback>} */
+    this.onChangeCallbacks = []
+
+    this.sticky = false
+  }
+
+  /** 
+   * Make the notification sticky
+   * @returns {NotificationView} self
+   */
+  stick() {
+    this.sticky = true
+    return this;
+  }
+
+  /** 
+   * Check if the notification is sticky
+   * @returns {Boolean}
+   */
+  isSticky() {
+    return this.sticky
+  }
+
+  /**
+   * Retrieve the notification model
+   * 
+   * @returns {NotificationModel}
+   */
+  getModel() { return this.model }
+
+  /**
+   * Update the title of the notification
+   * 
+   * @param {String} title 
+   */
+  udpateTitle(title) { 
+    this.model.setTitle(title)
+    if ( this.viewimpl)
+      this.viewimpl.update('title', title)
+    this.onChangeCallbacks.forEach(callback => callback(this.model))
+    return this;
+  }
+
+  /**
+   * Update the type of the notification
+   * 
+   * @param {*} type 
+   */
+  updateType(type) {
+    this.model.setType(type)
+    if ( this.viewimpl) {
+      this.viewimpl.update('type', this.model.getType())
+      switch(type) {
+        case NotificationModel.Type.Info    : this.viewimpl.update('icon', NotificationView.Icon.Info); break;
+        case NotificationModel.Type.Error   : this.viewimpl.update('icon', NotificationView.Icon.Error); break;
+        case NotificationModel.Type.Success : this.viewimpl.update('icon', NotificationView.Icon.Success); break;
+        case NotificationModel.Type.Warning : this.viewimpl.update('icon', NotificationView.Icon.Warning); break;
+        case NotificationModel.Type.Default : this.viewimpl.update('icon', NotificationView.Icon.Info); break;
+        default : throw new Error(`Unknown Notification type: ${type}`)
+      }
+    }
+    this.onChangeCallbacks.forEach(callback => callback(this.model))
+    return this;
+  }
+
+  /**
+   * Update the message of the notification
+   * 
+   * @param {String} message 
+   */
+  updateMessage(message) {
+    this.model.setMessage(message)
+    if ( this.viewimpl)
+      this.viewimpl.update('message', message)
+    this.onChangeCallbacks.forEach(callback => callback(this.model))
+    return this;
+  }
+
+  /**
+   * Update the details of the notification
+   * 
+   * @param {String} details 
+   */
+  updateDetails(details) {
+    this.model.setDetails(details)
+    //TODO update viewimpl details
+    this.onChangeCallbacks.forEach(callback => callback(this.model))
+    return this;
+  }
+
+
+  /**
+   * Change the notification to a success
+   * @returns {NotificationView} self
+   */
+  success() { 
+    if( this.model.getType() != NotificationModel.Success) 
+      this.updateType(NotificationModel.Success) 
+    return this
+  }
+
+  /**
+   * Change the notification to an error
+   * @returns {NotificationView} self
+   */
+  error() {
+    if ( this.model.getType() != NotificationModel.Error)
+      this.updateType(Notification.Error)
+    return this
+  }
+
+
+  /**
+   * Show the notification 
+   * @returns {NotificationView} self
+   */
+  show() { 
+    if ( this.viewimpl)
+      delete this.viewimpl
+    this.viewimpl = this._renderNotification()
+    this.onShowCallbacks.forEach(callback => callback(this.model))
+    return this;
+  }
+
+  /**
+   * Hide the notification 
+   * @returns {this}
+   */
+  hide() { 
+    setTimeout(() => {
+      this.onHideCallbacks.forEach(callback => callback(this.model))
+      this.viewimpl.close()
+    }, NotificationView.HideDelay)
+    return this;
+  }
+
+  /**
+   * Register a callback to be invoked when the notification is displayed
+   * That is, the callback will be called when {@link NotificationView#show} is called
+   * 
+   * @param {NotificationOnShowCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered successfully
+   */
+  onShow(callback) { 
+    if ( typeof callback === 'function')
+      this.onShowCallbacks.push(callback) 
+    return this
+  }
+
+  /**
+   * Register a callback to be invoked when the notification gets (manually) closed
+   * That is, the callback will be called when {@link NotificationView#show} is called
+   * 
+   * @param {NotificationOnHideCallback} callback A callback
+   * @returns {Boolean} Whether the callback was registered successfully
+   */
+  onHide(callback) { 
+    if ( typeof callback === 'function')
+      this.onHideCallbacks.push(callback) 
+    return this
+  }
+
+  /**
+   * Register a callback to be fired when the notification data changes
+   * e.g on {@link NotificationHandler#updateTitle}
+   * @param {NotificationOnChangeCallback} callback A callback
+   * @returns {NotificationView}
+   */
+  onChange(callback) {
+    if ( typeof callback === 'function')
+      this.onChangeCallbacks.push(callback) 
+    return this
+  } 
+
+
+  //// Protected ///
+
+  /** @protected */
+  _renderNotification() {
+    switch(this.model.type) {
+      case NotificationModel.Type.Error:
+        return this._renderError()
+      case NotificationModel.Type.Info: 
+        return this._renderInfo()
+      case NotificationModel.Type.Success:
+        return this._renderSuccesss()
+      case NotificationModel.Type.Warning:
+        return this._renderWarning()
+      case NotificationModel.Type.Default:
+        return this._renderDefault()
+      default:
+        throw new Error(`Unknown type: '${this.model.type}'`)
+    }
+  }
+
+  
+  /** @protected */
+  _renderTitle() {
+    return `&lt;strong>${this.model.getTitle()}&lt;/strong>`
+  }
+
+
+  /** @protected */
+  _renderDetails() {
+    return this.model.hasDetails()? ` &lt;span class="text-muted"> ${this.model.getDetails()}&lt;/span>` : ""
+  }
+
+
+  /** @protected */
+  _renderMessage() {
+    return this.model.getMessage() + this._renderDetails()
+  }
+
+
+  /** @protected */
+  _renderError() { 
+    return $.notify({
+      icon: NotificationView.Icon.Error,
+      title: this._renderTitle(),
+      message: this._renderMessage()
+    }, 
+    {
+      allow_dismiss: NotificationView.Dismissable,
+      showProgressbar: false,
+      type   : 'danger',
+      delay  : this.isSticky()? 0 : NotificationView.Duration,
+      offset : 2,
+      placement : NotificationView.Position,
+      template  : NotificationView.Template,
+      animate: NotificationView.Animation
+    })
+  }
+
+
+  /** @protected */
+  _renderInfo() {
+    return $.notify({
+      icon: NotificationView.Icon.Info,
+      title: this._renderTitle(),
+      message: this._renderMessage()
+    }, 
+    {
+      allow_dismiss: NotificationView.Dismissable,
+      showProgressbar: false,
+      type   : 'info',
+      delay  : this.isSticky()? 0 : NotificationView.Duration,
+      offset : 2,
+      placement : NotificationView.Position,
+      template  : NotificationView.Template,
+      animate: NotificationView.Animation
+    })
+  }
+
+
+  /** @protected */
+  _renderSuccesss() {
+    return $.notify({
+      icon: NotificationView.Icon.Info,
+      title: this._renderTitle(),
+      message: this._renderMessage()
+    }, 
+    {
+      allow_dismiss: NotificationView.Dismissable,
+      showProgressbar: false,
+      type   : 'success',
+      delay  : this.isSticky()? 0 : NotificationView.Duration,
+      offset : 2,
+      placement : NotificationView.Position,
+      template  : NotificationView.Template,
+      animate: NotificationView.Animation
+    })
+  }
+
+
+  /** @protected */
+  _renderWarning() {
+    return $.notify({
+      icon: NotificationView.Icon.Warning,
+      title: this._renderTitle(),
+      message: this._renderMessage()
+    }, {
+      allow_dismiss: NotificationView.Dismissable,
+      showProgressbar: false,
+      type   : 'warning',
+      delay  : this.isSticky()? 0 : NotificationView.Duration,
+      offset : 2,
+      animate   : NotificationView.Animation,
+      placement : NotificationView.Position,
+      template  : NotificationView.Template
+    })
+  }
+
+  /** @protected */
+  _renderDefault() {
+    return $.notify({
+      icon: NotificationView.Icon.Default,
+      title: this._renderTitle(),
+      message: this._renderMessage()
+    }, {
+      allow_dismiss: NotificationView.Dismissable,
+      showProgressbar: true,
+      type   : 'dark',
+      delay  : this.isSticky()? 0 : NotificationView.Duration,
+      offset : 2,
+      animate   : NotificationView.Animation,
+      placement : NotificationView.Position,
+      template  : NotificationView.Template
+    })
+  }
+}
+
+/** 
+ * Default icons used for the various notifications
+ * @static
+ * @protected
+ */
+NotificationView.Icon = {
+  /** Default Info Icon        */Info    : 'fa fa-info-circle',
+  /** Default Error Icon       */Error   : 'fas fa-times-circle',
+  /** Default Success Icon     */Success : 'fa fa-check-circle',
+  /** Default Warning Icon     */Warning : 'fa fa-exclamation-triangle',
+  /** Default Notification Icon*/Default : 'fa fa-info-circle'
+}
+
+/**
+ * The notification template
+ * @static
+ */
+NotificationView.Template = `
+  &lt;div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">
+    &lt;button type="button" aria-hidden="true" class="close" data-notify="dismiss">×&lt;/button>
+    &lt;span data-notify="icon">&lt;/span>
+    &lt;span data-notify="title">{1}&lt;/span>
+    &lt;span data-notify="message">{2}&lt;/span>
+  &lt;/div>`
+
+/** @static */
+NotificationView.Animation = { exit: 'animate__animated animate__fadeOutRight' }
+/** @static */
+NotificationView.Position  = { from: "bottom", align: "right" }
+/** @static */
+NotificationView.Duration  = 5000
+/** @static */
+NotificationView.Dismissable = true
+
+/**
+ * Delay (in ms) for when the notification dissappers after hide() is called 
+ * @static
+ * @protected 
+ */
+NotificationView.HideDelay = 350
+
+module.exports = NotificationView</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>
