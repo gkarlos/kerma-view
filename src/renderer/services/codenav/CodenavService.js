@@ -10,7 +10,7 @@ class CodenavService extends Service {
 
   static toolbar = undefined
   static editor  = undefined
-  
+
   constructor() {
     super("CodenavService")
     if ( !CodenavService.toolbar)

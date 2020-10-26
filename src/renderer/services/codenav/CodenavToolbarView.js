@@ -19,7 +19,7 @@ class CodenavToolbarView extends Component {
 
   constructor() {
     let LOCATION_EDITOR_TOOLBAR = `#${App.ui.toolbar.editor.id}`
-    let LOCATION_TOP_TOOLBAR = `#${App.ui.layout.header.left.id}`
+    let LOCATION_TOP_TOOLBAR = `#${App.ui.layout.header.right.id}`
 
     super('codenav-toolbar', LOCATION_TOP_TOOLBAR)
     App.ui.toolbar.codenav = this
@@ -79,12 +79,11 @@ class CodenavToolbarView extends Component {
     if( this.isRendered())
       return this;
 
-    let Separator = require('@renderer/ui/MenuSeparator')
+    // let Separator = require('@renderer/ui/MenuSeparator')
 
-    this.separator1 = $(`
-      <div id="codenav-toolbar-separator" role="group" class="border-left d-sm-none d-md-block"></div>
-    `).appendTo(this.container)
-    
+    // this.separator1 = $(`
+    //   <div id="codenav-toolbar-separator" role="group" class="border-left d-sm-none d-md-block"></div>
+    // `).appendTo(this.container)
     this.node = $(`<div id='${this.id}'></div>`).appendTo(this.container)
 
     this._createStartStopButtons(this.node)

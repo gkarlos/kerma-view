@@ -1,7 +1,7 @@
 #codenav-toolbar {
     position: relative;
     /* right: 2px; */
-    float: right;
+    float: left;
 }
 
 #codenav-toolbar-separator {
