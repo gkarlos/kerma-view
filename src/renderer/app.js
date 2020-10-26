@@ -25,7 +25,7 @@ const App = {}
 /// ------------------- ///
 App.Electron = { remote : undefined, app : undefined}
 App.Electron.remote = require('electron').remote
-App._        = require('lodash')
+App._               = require('underscore')
 
 App.Emitter    = new (require('events'))()
 /** @method */ App.on         = App.Emitter.on

@@ -76,7 +76,7 @@
     "jquery": "^3.5.0",
     "jsdoc-inheritance-diagram": "^2.0.1",
     "json-rpc2": "^2.0.0",
-    "lodash": "^4.17.15",
+    "underscore": "^4.17.15",
     "mocha": "^7.1.2",
     "mocha-list-tests": "^1.0.2",
     "mochawesome": "^6.1.1",
