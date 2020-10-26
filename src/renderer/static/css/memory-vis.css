@@ -338,7 +338,7 @@
     will-change: transform;
     display: inline-block;
     width: 7%;
-    float: left;
+    /* float: left; */
     line-height: 1;
     /* transition: opacity 2s; */
 }
