@@ -4,6 +4,7 @@ const {dialog}  = require('electron').remote
 const {InternalError} = require('@common/util/error')
 const App = require('@renderer/app')
 const EventEmitter = require('events').EventEmitter;
+const path = require('path')
 
 /**
  * @memberof module:input
@@ -106,10 +107,15 @@ class InputToolbar extends Component {
 
     for ( let suite in App.Examples) {
       this.examplesDropdown.append(
-        $(`<h5 class="dropdown-header">${suite}</h5>`))
+        $(`<h5 class="dropdown-header">${suite}</h5>`));
 
-      for ( let example in App.Examples[suite])
-        this.examplesDropdown.append(`<a class="dropdown-item" href="#">${example}</a>`)
+      for ( let example in App.Examples[suite]) {
+        let exampleEntry = $(`<a class="dropdown-item" href="#">${example}</a>`).on("click", () => {
+          this.setPath(path.resolve(App.Examples[suite][example].path))
+          this.setArg(App.Examples[suite][example].args)
+        })
+        this.examplesDropdown.append(exampleEntry)
+      }
     }
 
 
@@ -127,17 +133,17 @@ class InputToolbar extends Component {
               .css("border-top-right-radius", "3px")
               .css("border-bottom-right-radius", "3px")
 
-    this.argsPre = $(`<div class="input-group-prepend" id="arg-input-pre"></div>`)
+    this.argPre = $(`<div class="input-group-prepend" id="arg-input-pre"></div>`)
       .appendTo(this.node)
       .css("margin-bottom", "2px")
       .css("margin-left", "2px")
 
     $(`<div class="input-group-text"><i class="fas fa-terminal"></i></div>`)
-      .appendTo(this.argsPre)
+      .appendTo(this.argPre)
       .css("border-top-left-radius", "3px")
       .css("border-bottom-left-radius", "3px")
 
-    this.inputArgs  = $(`
+    this.argInput  = $(`
       <input type="text" class="form-control" id="arg-input" placeholder="${this.argInputPrompt}" aria-label="" aria-describedby="">
     `).appendTo(this.node)
       .css("border-top-right-radius", "3px")
@@ -213,6 +219,11 @@ class InputToolbar extends Component {
     this.pathInput.val(val)
     this.pathInput.prop('title', val);
     this.enablePathSelectButton()
+  }
+
+  setArg(val) {
+    this.argInput.val(val);
+    this.argInput.prop('title', val);
   }
 
   resetArgInput() {
