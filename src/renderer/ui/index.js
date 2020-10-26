@@ -153,7 +153,7 @@ function createComponents(app) {
   /*====================================================================================*/
 
 
-  const InputToolbar          = require('@renderer/ui/toolbars/input/InputToolbar')
+  // const InputToolbar          = require('@renderer/ui/toolbars/input/InputToolbar')
   const UtilityToolbar        = require('@renderer/ui/toolbars/util/UtilityToolbar')
   const SessionControlToolbar = require('@renderer/ui/toolbars/SessionControlToolbar')
   /*====================================================================================*/
@@ -173,7 +173,7 @@ function createComponents(app) {
   /*====================================================================================*/
   // ui.toolbar.main    = registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))
 
-  Ui.toolbar.input   = new InputToolbar()
+  // Ui.toolbar.input   = new InputToolbar()
   Ui.toolbar.util    = registerComponent(new UtilityToolbar('utility-toolbar', `#${Ui.layout.header.right.id}`, app))
   // Ui.toolbar.session = registerComponent(new SessionControlToolbar("session-control-toolbar", `#${Ui.layout.header.right.id}`, app))
   /*====================================================================================*/

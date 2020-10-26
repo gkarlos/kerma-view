@@ -11,7 +11,7 @@
 
 // const { app } = require("electron")
 
-/** 
+/**
  * @exports App
  * @category Renderer
  * @subcategory main
@@ -26,12 +26,9 @@ App.Electron = require('electron').remote
 App._        = require('lodash')
 
 App.Emitter    = new (require('events'))()
-/** @method */
-App.on         = App.Emitter.on
-/** @method */
-App.emit       = App.Emitter.emit
-/** @method */
-App.once       = App.Emitter.once
+/** @method */ App.on         = App.Emitter.on
+/** @method */ App.emit       = App.Emitter.emit
+/** @method */ App.once       = App.Emitter.once
 App.eventNames = App.Emitter.eventNames
 
 App.Events = require('./events')
@@ -40,6 +37,7 @@ App.events = App.Events
 App.ui = require('@renderer/ui')
 
 App.Mock = require('@mock/cuda-source')
+App.Electron = { remote : undefined, app : undefined}
 
 /**
  * @property {module:log.ConsoleLogger} Log
@@ -47,49 +45,68 @@ App.Mock = require('@mock/cuda-source')
  * @property {module:kernel-selection.KernelSelectionService} KernelSelection
  */
 App.Services = {
-  /** @type {ConsoleLogger} */          
-  Log : undefined,
-  /** @type {NotificationService} */
-  Notification : undefined,
-  /** @type {KernelSelectionService} */
-  KernelSelection : undefined,
-  /** @type {LaunchSelectionService} */
-  LaunchSelection : undefined,
-  /** @type {ComputeSelectionService} */
-  ComputeSelection : undefined,
-  /** @type {CodenavService} */
-  Codenav : undefined,
-  /** @type {MemoryVisService} */
-  Vis : undefined,
-  
+  /** @type {ConsoleLogger}           */ Log : undefined,
+  /** @type {NotificationService}     */ Notification : undefined,
+  /** @type {KernelSelectionService}  */ KernelSelection : undefined,
+  /** @type {LaunchSelectionService}  */ LaunchSelection : undefined,
+  /** @type {ComputeSelectionService} */ ComputeSelection : undefined,
+  /** @type {CodenavService}          */ Codenav : undefined,
+  /** @type {MemoryVisService}        */ Vis : undefined,
+  /** @type {Boolean}                 */ preUiReady : false,
+  /** @type {Boolean}                 */ postUiReady : false,
   /** @type {Boolean} */
-  preUiReady : false,
+  get ready() {
+    return App.Services.preUiReady && app.Services.postUiReady
+  }
+}
+/** @type {NotificationService} */ App.Notifier
+/** @type {ConsoleLogger}       */ App.Logger
 
-  /** @type {Boolean} */
-  postUiReady : false,
-  
-  /** @type {Boolean} */
-  get ready() { 
-    return App.Services.preUiReady && app.Services.postUiReady 
+
+App.Examples = {
+  "Rodinia" : {
+    "b+tree":   { path: "examples/rodinia/b+tree/b+tree.cu", args: "file mil.txt command command.txt"},
+    "backprop": { args: "1000000" },
+    "bfs":      { args: "todo"},
+    "cfd":      { args: "todo"},
+    "gaussian": { args: "todo"},
+    "hotspot":  { args: "todo"},
+    "lavaMD":   { args: "todo"},
+    "lud":      { args: "todo"},
+    "nn":       { args: "todo"},
+    "nw":       { args: "todo"},
+    "particlefilter": { args: "todo"},
+    "pathfinder":     { args: "todo"},
+    "srad" :          { args: "todo"},
+    "streamcluster":  { args: "todo"}
+  },
+
+  "Polybench" : {
+    "2dconv":   { args: ""},
+    "2mm":      { args: ""},
+    "3dconv":   { args: ""},
+    "3mm":      { args: ""},
+    "atax":     { args: ""},
+    "bicg":     { args: ""},
+    "corr":     { args: ""},
+    "covar":    { args: ""},
+    "fdtd-2d":  { args: ""},
+    "gemm":     { args: ""},
+    "gesummv":  { args: ""},
+    "gramschm": { args: ""},
+    "mvt":      { args: ""},
+    "syr2k":    { args: ""},
+    "syrk":     { args: ""}
   }
 }
 
-App.Electron = { remote : undefined, app : undefined}
-
-
-App.input = {
-  path : undefined
-}
-
+App.Input = { path:"", args: ""};
 
 /// ------------------- ///
 ///      Shortcuts      ///
 /// ------------------- ///
 
-/** @type {NotificationService} */
-App.Notifier
-/** @type {ConsoleLogger} */   
-App.Logger
+
 
 /// ------------------- ///
 ///       Methods       ///
@@ -105,14 +122,13 @@ App.disableLogging = () => { App.Services.Log.disable() }
 ///         Main        ///
 /// ------------------- ///
 
-/** 
+/**
  * Entry point of the app
- * This is only meant to be called once. Subsequent calls are a no-op 
+ * This is only meant to be called once. Subsequent calls are a no-op
  * @method
  */
 App.main = function() {
-  if ( App.started) return false 
-  
+  if ( App.started) return false
   App.started = true
 
   const NotificationService       = require('./services/notification').NotificationService
@@ -122,18 +138,18 @@ App.main = function() {
   const ComputeSelectionService   = require('./services/compute-selection').ComputeSelectionService
   const MemoryVisService          = require('./services/memory-vis').MemoryVisService
   const CodenavService            = require("./services/codenav/CodenavService")
+  const InputService              = require("./services/input").InputService;
 
   const Events = App.Events
   const TAG = "[app]"
 
   /// Initialize servises that don't require the UI
   function initPreUiServices() {
-    if ( App.Services.preUiReady) return
-    
-    App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Debug, color: true, timestamps: true}).enable()
-    App.Logger = App.Services.Log
-
-    App.Services.preUiReady = true
+    if ( !App.Services.preUiReady) {
+      App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Debug, color: true, timestamps: true}).enable()
+      App.Logger = App.Services.Log
+      App.Services.preUiReady = true
+    }
   }
 
   /// Initialize servises that require the UI
@@ -146,6 +162,7 @@ App.main = function() {
     App.Services.ComputeSelection = new ComputeSelectionService().enable()
     App.Services.Vis              = new MemoryVisService().enable()
     App.Services.CodenavService   = new CodenavService().enable()
+    App.Services.InputService     = new InputService().enable()
     App.Notifier = App.Services.Notification
     // App.ComputeUnitSelector = App.Services.ComputeUnitSelectione
 

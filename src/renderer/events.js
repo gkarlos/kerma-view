@@ -26,6 +26,8 @@ module.exports = {
   /** @event */EDITOR_TAB_SELECTED : "editor:tab-selected",
   /** @event */EDITOR_VALUE_CHANGED: "editor:value-changed",
 
+  /** @event */KERMAD_INPUT_ERROR : "kermad:input-error",
+
   /** 
    * @event 
    * @param {String} filename

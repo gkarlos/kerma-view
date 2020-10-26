@@ -33,6 +33,7 @@ class Editor extends Component {
       //   'vs' : ''
       // }
     });
+    this.finishedLoading = false;
   }
 
   get tabs() { return App.ui.toolbar.editor.tabs }
@@ -65,6 +66,10 @@ class Editor extends Component {
       this.instance.layout()
   }
 
+  hasFinishedLoading() {
+    return this.finishedLoading;
+  }
+
   render() {
     if ( this.rendered ) {
       console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
@@ -90,6 +95,7 @@ class Editor extends Component {
         readOnly: true
       });
 
+      this.finishedLoading = true;
       App.emit(Events.EDITOR_LOADED, monaco)
       // this.tabs.select('Cuda')
     });
@@ -111,13 +117,15 @@ class Editor extends Component {
     let on = (event, cb) => App.on(event, cb)
     
     // User selected a file so load it to the editor
-    on(Events.INPUT_FILE_SELECTED, path => {
-      App.input.path = path
+    on(Events.INPUT_FILE_SELECTED, () => {
+      let path = App.Input.path;
       fs.readFile(path, 'utf-8', (err, data) => {
-        if ( err)
-          console.log('[error] failed to load file to the editor')
-          
-        App.input.content = data
+        if ( err) {
+          App.Logger.error('Editor open', err)
+          App.Notifier.error(`Could not open file '${path}'`)
+          return;
+        }
+        // App.input.content = data
         this.setValue(data);
         // TODO this delay is not really needed
         setTimeout(() => App.emit(Events.EDITOR_INPUT_LOADED), 500)
