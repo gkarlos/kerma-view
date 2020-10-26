@@ -9,6 +9,8 @@
 /** @ignore @typedef {import("@renderer/services/codenav/CodenavService")}                    CodenavService          */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
+const { allowUnknownOption } = require("commander")
+
 // const { app } = require("electron")
 
 /**
@@ -21,8 +23,8 @@ const App = {}
 /// ------------------- ///
 ///     Properties      ///
 /// ------------------- ///
-
-App.Electron = require('electron').remote
+App.Electron = { remote : undefined, app : undefined}
+App.Electron.remote = require('electron').remote
 App._        = require('lodash')
 
 App.Emitter    = new (require('events'))()
@@ -37,7 +39,7 @@ App.events = App.Events
 App.ui = require('@renderer/ui')
 
 App.Mock = require('@mock/cuda-source')
-App.Electron = { remote : undefined, app : undefined}
+
 
 /**
  * @property {module:log.ConsoleLogger} Log
@@ -62,42 +64,42 @@ App.Services = {
 /** @type {NotificationService} */ App.Notifier
 /** @type {ConsoleLogger}       */ App.Logger
 
-
 App.Examples = {
   "Rodinia" : {
-    "b+tree":   { path: "examples/rodinia/b+tree/b+tree.cu", args: "file mil.txt command command.txt"},
-    "backprop": { args: "1000000" },
-    "bfs":      { args: "todo"},
-    "cfd":      { args: "todo"},
-    "gaussian": { args: "todo"},
-    "hotspot":  { args: "todo"},
-    "lavaMD":   { args: "todo"},
-    "lud":      { args: "todo"},
-    "nn":       { args: "todo"},
-    "nw":       { args: "todo"},
-    "particlefilter": { args: "todo"},
-    "pathfinder":     { args: "todo"},
-    "srad" :          { args: "todo"},
-    "streamcluster":  { args: "todo"}
+    "b+tree":   { path: "examples/rodinia/cuda/b+tree/b+tree.cu", args: "file mil.txt command command.txt"},
+    "backprop": { path: "examples/rodinia/cuda/b+tree/backprop.cu", args: "1000000" },
+    "bfs":      { path: "examples/rodinia/cuda/b+tree/bfs.cu", args: "todo"},
+    "cfd":      { path: "examples/rodinia/cuda/b+tree/cfd.cu", args: "todo"},
+    "gaussian": { path: "examples/rodinia/cuda/b+tree/gaussian.cu", args: "todo"},
+    "hotspot":  { path: "examples/rodinia/cuda/b+tree/hotspot.cu", args: "todo"},
+    "lavaMD":   { path: "examples/rodinia/cuda/b+tree/lavaMD.cu", args: "todo"},
+    "lud":      { path: "examples/rodinia/cuda/b+tree/lud.cu", args: "todo"},
+    "nn":       { path: "examples/rodinia/cuda/b+tree/nn.cu", args: "todo"},
+    "nw":       { path: "examples/rodinia/cuda/b+tree/nw.cu", args: "todo"},
+    "particlefilter": { path: "examples/rodinia/cuda/b+tree/particlefilter.cu", args: "todo"},
+    "particlefilter.float": { path: "examples/rodinia/cuda/b+tree/particlefilter.float.cu", args: "todo"},
+    "pathfinder":     { path: "examples/rodinia/cuda/b+tree/pathfinder.cu", args: "todo"},
+    "srad" :          { path: "examples/rodinia/cuda/b+tree/srad.cu", args: "todo"},
+    "streamcluster":  { path: "examples/rodinia/cuda/b+tree/streamcluster.cu", args: "todo"}
   },
 
-  "Polybench" : {
-    "2dconv":   { args: ""},
-    "2mm":      { args: ""},
-    "3dconv":   { args: ""},
-    "3mm":      { args: ""},
-    "atax":     { args: ""},
-    "bicg":     { args: ""},
-    "corr":     { args: ""},
-    "covar":    { args: ""},
-    "fdtd-2d":  { args: ""},
-    "gemm":     { args: ""},
-    "gesummv":  { args: ""},
-    "gramschm": { args: ""},
-    "mvt":      { args: ""},
-    "syr2k":    { args: ""},
-    "syrk":     { args: ""}
-  }
+  // "Polybench" : {
+  //   "2dconv":   { args: ""},
+  //   "2mm":      { args: ""},
+  //   "3dconv":   { args: ""},
+  //   "3mm":      { args: ""},
+  //   "atax":     { args: ""},
+  //   "bicg":     { args: ""},
+  //   "corr":     { args: ""},
+  //   "covar":    { args: ""},
+  //   "fdtd-2d":  { args: ""},
+  //   "gemm":     { args: ""},
+  //   "gesummv":  { args: ""},
+  //   "gramschm": { args: ""},
+  //   "mvt":      { args: ""},
+  //   "syr2k":    { args: ""},
+  //   "syrk":     { args: ""}
+  // }
 }
 
 App.Input = { path:"", args: ""};
@@ -117,6 +119,9 @@ App.enableLogging  = () => { App.Services.Log.enable() }
 /** @method */
 App.disableLogging = () => { App.Services.Log.disable() }
 
+App.reload = () => {
+  App.Electron.remote.getCurrentWindow().reload();
+}
 
 /// ------------------- ///
 ///         Main        ///

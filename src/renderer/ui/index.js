@@ -168,7 +168,7 @@ function createComponents(app) {
   ///////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////
 
-  Ui.console.button  = registerComponent(new ConsoleButton("console-toggle-button", `#${Ui.layout.header.left.id}`, app))
+  // Ui.console.button  = registerComponent(new ConsoleButton("console-toggle-button", `#${Ui.layout.header.left.id}`, app))
   Ui.refresh.button  = registerComponent(new RefreshButton("top-refresh-button", `#${Ui.layout.header.left.id}`, app))
   /*====================================================================================*/
   // ui.toolbar.main    = registerComponent(new MainToolbar("main-toolbar", "#left-bottom", app))

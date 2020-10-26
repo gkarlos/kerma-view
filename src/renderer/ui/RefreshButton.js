@@ -42,19 +42,19 @@ class RefreshButton extends Component {
   render() {
     if ( this.rendered )
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
-    
     this.node = $(`
       <div role="group">
         <button class="btn kv-btn" id=${this.id} data-toggle="tooltip" data-placement="bottom" title="${this.tooltip}">
-          <i class="fas fa-sync-alt"></i>
+          <i class="fas fa-trash-restore"></i>
         </button>
       </div>
     `)
 
+    // <i class="fas fa-sync-alt"></i>
+
     this.node.css('margin-right', '2px')
              .css('margin-bottom', '2px')
 
-    
     this.node.tooltip({
       trigger : "hover"
     })
