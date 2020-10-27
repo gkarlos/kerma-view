@@ -10,20 +10,30 @@
  * @category Main
  * @description 
  *   The main/entry-point module
- *  
+ *
  *-----------------------------------------------------------------*/
 'use strict';
 require('v8-compile-cache')
 require('module-alias/register')
 
+require('dotenv').config()
+
+if( !process.env.KERMA_HOME) {
+  console.log("KERMA_HOME is not set. Please set in in .env")
+  process.exit()
+}
+
+const Logger          = require('./log')
+const Log             = new Logger({color: true, timestamps: true})
 const electron        = require('electron');
 const path            = require('path');
+const p               = require('@common/util/path')
 const app             = electron.app;
 const BrowserWindow   = electron.BrowserWindow;
 const menu            = electron.Menu;
 const dialog          = electron.dialog;
 const ipcMain         = electron.ipcMain;
-// const release         = require('@common/release')
+const spawn           = require('child_process').spawn
 const settings        = require('@common/settings')
 const fs              = require('@common/util/fs')
 const cl              = require('@main/cl')
@@ -47,14 +57,29 @@ app.args = cl.parse.list(process.argv, (error, result) => {
   if ( result.input) {
     app.input.path = result.input
     app.input.content = fs.readFileSync( app.input.path, "utf-8")
-    
   }
   return result;
 })
 
-
-
-// app.sessionManager = require('../session').sessionManager
+app.kermad = {}
+app.kermad.path = (() => {
+  let kermadPath = path.join(p.resolve(process.env.KERMA_HOME), "bin", "kermad")
+  cl.info(`kermad at ${kermadPath}`)
+  return kermadPath;
+})()
+app.kermad.proc = spawn(app.kermad.path, [])
+app.kermad.proc.stderr.setEncoding('utf-8')
+app.kermad.proc.stdout.setEncoding('utf-8')
+app.kermad.proc.stderr.on('data', (data)  => {
+  app.kermad.proc.stdout.removeAllListeners()
+  app.kermad.proc.stdout.on('data', (d) => console.log(d))
+  let d = data.split(':')
+  app.kermad.host = d[0]
+  app.kermad.port = d[1]
+  cl.info(`kermad listening on ${app.kermad.host}:${app.kermad.port}`)
+})
+app.kermad.proc.stdout.on('data', (data) => console.log(data))
+app.kermad.proc.on('close', (code) => console.log(`kermad exited with ${code}`))
 
 /**
  * Perform configuration steps

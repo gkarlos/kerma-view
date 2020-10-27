@@ -100,7 +100,7 @@ function write(msg, tag=null, subtag=null, more=null, expand=false) {
     return;
 
   let fulltag = "";
-  
+
   if ( settings.cl.tags && tag) {
     fulltag += tag.color(tag.text);
     if (subtag)
@@ -281,7 +281,8 @@ module.exports = {
   FileNotFoundError,
   error, warn, info, debug, verbose,
   parse,
-  tags
+  tags,
+  write
 }
 
 
