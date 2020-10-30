@@ -37,7 +37,8 @@
     "test-report:open": "run-script-os",
     "test-report:open:linux": "xdg-open test/report/index.html",
     "test-report:open:windows": "powershell Invoke-Item test/report/index.html",
-    "deps": "node scripts/build-external-deps.js"
+    "deps": "node scripts/build-external-deps.js",
+    "postinstall": "cd examples && ./gen_compile_db.sh"
   },
   "_moduleAliases": {
     "@root": ".",
@@ -74,6 +75,7 @@
     "electron-editor-context-menu": "^1.1.1",
     "electron-progressbar": "^1.2.0",
     "ispin": "^2.0.1",
+    "jayson": "^3.3.4",
     "jquery": "^3.5.0",
     "jsdoc-inheritance-diagram": "^2.0.1",
     "json-rpc2": "^2.0.0",
@@ -95,7 +97,6 @@
     "sloc": "^0.2.1",
     "split.js": "^1.5.11",
     "tui-jsdoc-template": "^1.2.2",
-    "underscore": "^4.17.15",
     "v8-compile-cache": "^2.1.0",
     "vizjs": "^2.1.1",
     "vscode-jsonrpc": "^5.0.1",
