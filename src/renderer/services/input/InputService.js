@@ -1,12 +1,17 @@
 const App     = require('@renderer/app')
 const Service = require('@renderer/services/Service')
-
+const path = require('path')
 const InputToolbar = require('@renderer/services/input/InputToolbar')
-const { Input } = require('@renderer/app')
 const fs = require('fs')
 
+/**
+ * @typedef {Object} Input
+ * @property {String} dir
+ * @property {String} source
+ * @property {String} compiledb
+ */
 
-/** @type InputToolbar*/ 
+/** @type InputToolbar*/
 var Toolbar = undefined;
 
 /**
@@ -14,26 +19,38 @@ var Toolbar = undefined;
  */
 class InputService extends Service {
 
+  #dir
+  #source
+  #compiledb
+
   constructor() {
     super("InputService")
     if ( !Toolbar) {
       Toolbar = new InputToolbar().render().disable();
-      if ( !App.ui.editor.hasFinishedLoading())
+      if ( !App.Editor)
         App.on(App.Events.EDITOR_LOADED, () => Toolbar.enable() )
       else
         Toolbar.enable();
     }
 
-    Toolbar.on('fileSelect', (path) => {
-      // 1. make sure the file exists
-      if ( !fs.existsSync(path)) {
-        App.Notifier.error(`Could not find file ${path}`)
-        setTimeout(() => {
-          Toolbar.resetPathInput();
-        }, 1500)
-      } else {
-        App.Input.path = path;
-        App.emit(App.Events.INPUT_FILE_SELECTED, path);
+    Toolbar.on('fileSelect', (sourcePath) => {
+      // 1. make sure the source file exists
+      if ( !fs.existsSync(sourcePath)) {
+        App.Notifier.error(`Could not find file ${sourcePath}`)
+        setTimeout(() => Toolbar.resetPathInput(), 1500)
+      }
+      // 2. make sure compile_commands.json exists
+      let sourcedir = path.dirname(sourcePath)
+      let compiledb = path.join( sourcedir, "compile_commands.json")
+      if ( fs.existsSync(compiledb)) {
+        this.#dir = sourcedir
+        this.#source = path.basename(sourcePath)
+        this.#compiledb = "compile_commands.json"
+        App.emit(App.Events.INPUT_SELECTED, this.getInput());
+      }
+      else {
+        App.Notifier.error(`Could not find compile_commands.json`)
+        setTimeout(() => Toolbar.resetPathInput(), 1500)
       }
     })
 
@@ -43,21 +60,43 @@ class InputService extends Service {
 
   reset() {
     Toolbar.reset();
+    this.#dir = undefined
+    this.#source = undefined
+    this.#compiledb = undefined
   }
 
-  getPath() {
-    return InputService.Toolbar.getPath()
+  getDir() {
+    return this.#dir || "";
+  }
+
+  getSource() {
+    return this.#source || "";
+  }
+
+  getCompileDb() {
+    return this.#compiledb || "";
+  }
+
+  getSourceDirectory() {
+    return this.#source? path.dirname(this.#source) : ""
   }
 
   getArgs() {
-    return InputService.Toolbar.getArgs()
+    return Toolbar.getArgs()
   }
 
+  /** @returns Input */
   getInput() {
     return {
-      path: InputService.Toolbar.getPath(),
-      args: InputService.Toolbar.getArgs()
+      dir: this.getDir(),
+      source: this.getSource(),
+      compiledb: this.getCompileDb(),
+      args: this.getArgs()
     }
+  }
+
+  onFileSelect(cb) {
+    Toolbar.on("fileSelect", cb);
   }
 }
 

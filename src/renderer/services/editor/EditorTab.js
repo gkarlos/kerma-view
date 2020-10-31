@@ -1,5 +1,5 @@
 const App          = require("@renderer/app")
-
+const EventEmitter = require("events").EventEmitter
 /**
  * @memberof module:editor
  */
@@ -12,6 +12,10 @@ class EditorTab {
   #title
   /** @type {JQuery} */
   #node
+  /** @type {String} */
+  #file
+  /** @type {JQuery} */
+  #nodeContent
   /** @type {Boolean} */
   #rendered
   /** @type {Boolean} */
@@ -22,18 +26,19 @@ class EditorTab {
   #active
   /** @type {EventEmitter} */
   #emitter
-
   /**
    * @param {String} name 
    * @param {String} [icon]
    * @param {String} [title]
    */
-  constructor(name, icon, title) {
+  constructor(name, icon, title, file) {
     this.#name     = name
     this.#icon     = icon
     this.#title    = title !== undefined? title : name
     this.#rendered = false
     this.#closable = true
+    this.#emitter = new EventEmitter()
+    this.#file = file
   }
 
   /** @type {String} */
@@ -47,6 +52,8 @@ class EditorTab {
 
   /** @type {JQuery} */
   get node() { return this.#node }
+
+  get file() { return this.#file }
 
   /**
    * @param {EditorTab}
@@ -88,8 +95,8 @@ class EditorTab {
     return this.#active
   }
 
-  /** 
-   * @returns {Boolean} 
+  /**
+   * @returns {Boolean}
    */
   isRendered() {
     return this.#rendered
@@ -144,15 +151,11 @@ class EditorTab {
 
   /**
    * @returns {JQuery}
-   */ 
+   */
   render() {
     if ( !this.isRendered()) {
-      this.#node = $(`
-        <li class="nav-item editor-tab" id="tab-${this.title}">
-        </li>
-      `)
-
-      let tabContent = $(`
+      this.#node = $(`<li class="nav-item editor-tab" id="tab-${this.title}"></li>`)
+      this.#nodeContent = $(`
         <a class="nav-link" href="#" role="tab">
           ${this.#icon}
           <span class="editor-tab-title">${this.#title}</span>
@@ -160,23 +163,21 @@ class EditorTab {
       `).appendTo(this.#node)
 
       let self = this
-
-      let tabCloseWrapper = $(`<span class="editor-tab-close-wrapper"></span>`).appendTo(tabContent)
+      let tabCloseWrapper = $(`<span class="editor-tab-close-wrapper"></span>`).appendTo(this.#nodeContent)
       let tabClose = $(`<i class="fas fa-times editor-tab-close"></i>`).appendTo(tabCloseWrapper)
 
-      tabContent
+      this.#nodeContent
         .on('click', (e) => {
           if ( e.target.classList.contains("editor-tab-close")) {
             // tab-close button pressed
-            if ( !self.canClose()) 
+            if ( !self.canClose())
               App.Notifier.info(`Tab '${self.title}' is not closable.`)
-            else {
+            else
               App.Logger.info("[user-action]", "Close tab:", self.title)
-              App.ui.toolbar.editor.tabs.close(self)
-            }
+            this.#emitter.emit('close', this)
           } else {
-            if ( !this.isActive())
-              App.ui.toolbar.editor.tabs.select(self)
+            // tab clicked
+            this.#emitter.emit('click', this)
           }
         })
         .on('mouseover', () => {
@@ -193,7 +194,11 @@ class EditorTab {
       this.deactivate()
     return this.#node
   }
-  
+
+
+  onClick(cb) { this.#emitter.on('click', cb) }
+  onClose(cb) { this.#emitter.on('close', cb) }
+
   /**
    * @returns {String}
    */

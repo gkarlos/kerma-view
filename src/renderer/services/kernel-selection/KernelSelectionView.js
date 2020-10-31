@@ -93,18 +93,15 @@ class KernelSelectionView extends Component {
         if ( id.length > 0) {
           let kernel = this.#model.findKernelWithId(parseInt(id))
           this.#emitter.emit('select', kernel)
-          App.emit(App.Events.INPUT_KERNEL_SELECTED, kernel)
         }
-          
-        
       })
 
       this.#rendered = true
     }
-    
+
     if ( !this.isEnabled()) 
       this.#viewimpl.disable()
-    
+
     return this
   }
 
@@ -114,11 +111,11 @@ class KernelSelectionView extends Component {
   /** @returns {Boolean} */
   isEnabled() { return this.#enabled }
 
-  /** 
+  /**
    * Enable the view
    * @param {Boolean} [silent] If set, the "enabled" event will not be triggered
    * @fires module:kernel-selection.KernelSelection.enabled
-   * @return {KernelSelectionView} this 
+   * @return {KernelSelectionView} this
    */
   enable(silent=false) {
     let wasDisabled = !this.isEnabled()
@@ -130,7 +127,7 @@ class KernelSelectionView extends Component {
       if ( !silent)
         this.#emitter.emit('enabled')
     }
-      
+
     return this;
   }
 
@@ -144,7 +141,6 @@ class KernelSelectionView extends Component {
     let wasEnabled = this.isEnabled()
 
     this.#enabled = false
-    
     if ( this.isRendered() && wasEnabled) {
       this.#viewimpl.disable()
       if ( !silent)
@@ -238,7 +234,6 @@ class KernelSelectionView extends Component {
   onSelect(callback) {
     if ( isFunction(callback))
       this.#emitter.on( 'select', callback)
-      // this.#onSelectCallbacks.push(callback)
     return this
   }
 
@@ -269,26 +264,30 @@ class KernelSelectionView extends Component {
   static #renderSelected = (kernel, escape) => {
     return `<div class="kernel-selection-selected-item">
               <div class="badge kernel-color" style="background-color:${kernel.color}"> </div>        
-              <span class="kernel-name">${kernel.source.name}<span>
+              <span class="kernel-name">${kernel.name}<span>
            </div>`
   }
-
+  // <!-- <td><span class="kernel-selection-kernel-signature">${kernel.source.arguments}</span></td> -->
+  // <div class="second-row">
+  // <span class="kernel-selection-second-row-title">src</span>
+  // <span class="kernel-selection-second-row-value">${kernel.name}</span>
+  // <span class="kernel-selection-second-row-title">line</span>
+  // <span class="kernel-selection-second-row-value">${kernel.range.fromLine}</span>
+  // </div>
   static #renderOption = (kernel, escape) => {
     return `<div>
               <div class="first-row">
                 <table>
                   <tr>
-                    <td><span class="kernel-selection-kernel-name badge" style="background-color: ${kernel.color}">${kernel.source.name}</span></td>
-                    <td><span class="kernel-selection-kernel-signature">${kernel.source.arguments}</span></td>
+                    <td>
+                      <span class="kernel-selection-kernel-name badge" style="background-color: ${kernel.color}">${kernel.name}</span>
+                      <span class="kernel-selection-second-row-title">line</span>
+                      <span class="kernel-selection-second-row-value">${kernel.range.fromLine}</span>
+                    </td>
                   </tr>
                 </table>
               </div>
-              <div class="second-row">
-                <span class="kernel-selection-second-row-title">src</span>
-                <span class="kernel-selection-second-row-value">${kernel.source.filename}</span>
-                <span class="kernel-selection-second-row-title">line</span>
-                <span class="kernel-selection-second-row-value">${kernel.source.range.fromLine}</span>
-              </div>
+
             </div>`
   }
 

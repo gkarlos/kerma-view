@@ -7,40 +7,34 @@
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionService")} ComputeSelectionService */
 /** @ignore @typedef {import("@renderer/services/memory-vis/MemoryVisService")}               MemoryVisService        */
 /** @ignore @typedef {import("@renderer/services/codenav/CodenavService")}                    CodenavService          */
+/** @ignore @typedef {import("@renderer/services/editor/EditorService")}                      EditorService           */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
-const { allowUnknownOption } = require("commander")
+const ColorGenerator = require("./util/ColorGenerator");
 
-// const { app } = require("electron")
+const Session = require("@renderer/session").Session;
 
+// const { allowUnknownOption } = require("commander");
 /**
  * @exports App
  * @category Renderer
  * @subcategory main
  */
 const App = {}
-
-/// ------------------- ///
-///     Properties      ///
-/// ------------------- ///
 App.Electron = { remote : undefined, app : undefined}
 App.Electron.remote = require('electron').remote
+App.remote = App.Electron.remote;
 App._               = require('underscore')
-
 App.Emitter    = new (require('events'))()
-/** @method */ App.on         = App.Emitter.on
-/** @method */ App.emit       = App.Emitter.emit
-/** @method */ App.once       = App.Emitter.once
+App.on         = App.Emitter.on
+App.emit       = App.Emitter.emit
+App.once       = App.Emitter.once
 App.eventNames = App.Emitter.eventNames
-
 App.Events = require('./events')
 App.events = App.Events
-
 App.ui = require('@renderer/ui')
-
 App.Mock = require('@mock/cuda-source')
-
-
+App.Kermad = undefined
 /**
  * @property {module:log.ConsoleLogger} Log
  * @property {module:notification.NotificationService} Notification
@@ -52,6 +46,7 @@ App.Services = {
   /** @type {KernelSelectionService}  */ KernelSelection : undefined,
   /** @type {LaunchSelectionService}  */ LaunchSelection : undefined,
   /** @type {ComputeSelectionService} */ ComputeSelection : undefined,
+  /** @type {EditorService}           */ Editor : undefined,
   /** @type {CodenavService}          */ Codenav : undefined,
   /** @type {MemoryVisService}        */ Vis : undefined,
   /** @type {Boolean}                 */ preUiReady : false,
@@ -61,54 +56,15 @@ App.Services = {
     return App.Services.preUiReady && app.Services.postUiReady
   }
 }
-/** @type {NotificationService} */ App.Notifier
-/** @type {ConsoleLogger}       */ App.Logger
-
-App.Examples = {
-  "Rodinia" : {
-    "b+tree":   { path: "examples/rodinia/cuda/b+tree/b+tree.cu", args: "file mil.txt command command.txt"},
-    "backprop": { path: "examples/rodinia/cuda/b+tree/backprop.cu", args: "1000000" },
-    "bfs":      { path: "examples/rodinia/cuda/b+tree/bfs.cu", args: "todo"},
-    "cfd":      { path: "examples/rodinia/cuda/b+tree/cfd.cu", args: "todo"},
-    "gaussian": { path: "examples/rodinia/cuda/b+tree/gaussian.cu", args: "todo"},
-    "hotspot":  { path: "examples/rodinia/cuda/b+tree/hotspot.cu", args: "todo"},
-    "lavaMD":   { path: "examples/rodinia/cuda/b+tree/lavaMD.cu", args: "todo"},
-    "lud":      { path: "examples/rodinia/cuda/b+tree/lud.cu", args: "todo"},
-    "nn":       { path: "examples/rodinia/cuda/b+tree/nn.cu", args: "todo"},
-    "nw":       { path: "examples/rodinia/cuda/b+tree/nw.cu", args: "todo"},
-    "particlefilter": { path: "examples/rodinia/cuda/b+tree/particlefilter.cu", args: "todo"},
-    "particlefilter.float": { path: "examples/rodinia/cuda/b+tree/particlefilter.float.cu", args: "todo"},
-    "pathfinder":     { path: "examples/rodinia/cuda/b+tree/pathfinder.cu", args: "todo"},
-    "srad" :          { path: "examples/rodinia/cuda/b+tree/srad.cu", args: "todo"},
-    "streamcluster":  { path: "examples/rodinia/cuda/b+tree/streamcluster.cu", args: "todo"}
-  },
-
-  // "Polybench" : {
-  //   "2dconv":   { args: ""},
-  //   "2mm":      { args: ""},
-  //   "3dconv":   { args: ""},
-  //   "3mm":      { args: ""},
-  //   "atax":     { args: ""},
-  //   "bicg":     { args: ""},
-  //   "corr":     { args: ""},
-  //   "covar":    { args: ""},
-  //   "fdtd-2d":  { args: ""},
-  //   "gemm":     { args: ""},
-  //   "gesummv":  { args: ""},
-  //   "gramschm": { args: ""},
-  //   "mvt":      { args: ""},
-  //   "syr2k":    { args: ""},
-  //   "syrk":     { args: ""}
-  // }
-}
-
-App.Input = { path:"", args: ""};
-
-/// ------------------- ///
-///      Shortcuts      ///
-/// ------------------- ///
-
-
+/** @type {NotificationService}    */ App.Notifier
+/** @type {ConsoleLogger}          */ App.Logger
+/** @type {EditorService}          */ App.Editor
+/** @type {Session}                */ App.Session
+/** @type {KernelSelectionService} */ App.KernelSelector
+// App.Session = {
+//   input: { source:"", compiledb: "", args: ""}
+// }
+App.Examples = App.remote.getGlobal("examples")
 
 /// ------------------- ///
 ///       Methods       ///
@@ -139,12 +95,13 @@ App.main = function() {
   const NotificationService       = require('./services/notification').NotificationService
   const ConsoleLogger             = require('./services/log').ConsoleLogger
   const KernelSelectionService    = require('./services/kernel-selection').KernelSelectionService
-  const LaunchSelectionService    = require('./services/launch-selection').LaunchSelectionService
+  // const LaunchSelectionService    = require('./services/launch-selection').LaunchSelectionService
   const ComputeSelectionService   = require('./services/compute-selection').ComputeSelectionService
   const MemoryVisService          = require('./services/memory-vis').MemoryVisService
   const CodenavService            = require("./services/codenav/CodenavService")
   const InputService              = require("./services/input").InputService;
-
+  const EditorService             = require('./services/editor/EditorService')
+  const Kermad = require('@renderer/client/KermadClient')
   const Events = App.Events
   const TAG = "[app]"
 
@@ -156,33 +113,30 @@ App.main = function() {
       App.Services.preUiReady = true
     }
   }
-
   /// Initialize servises that require the UI
   function initPostUiServices() {
     if ( App.Services.postUiReady) return
 
+    App.Services.Editor           = new EditorService()
     App.Services.Notification     = new NotificationService().enable()
     App.Services.KernelSelection  = new KernelSelectionService().enable()
-    App.Services.LaunchSelection  = new LaunchSelectionService().enable()
+    // App.Services.LaunchSelection  = new LaunchSelectionService().enable()
     App.Services.ComputeSelection = new ComputeSelectionService().enable()
     App.Services.Vis              = new MemoryVisService().enable()
     App.Services.CodenavService   = new CodenavService().enable()
-    App.Services.InputService     = new InputService().enable()
+    App.Services.Input            = new InputService().enable()
+    App.Editor = App.Services.Editor;
     App.Notifier = App.Services.Notification
-    // App.ComputeUnitSelector = App.Services.ComputeUnitSelectione
-
+    App.KernelSelector = App.Services.KernelSelection
+    App.Input = App.Services.InputService
     App.Services.postUiReady = true
-  }
+    // App.Services.KernelSelection.onSelect (
+    //   , //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
+    // )
 
-  function start() {
-    // Register some default callbacks for the kernel selection
-    App.Services.KernelSelection.defaultOnSelect (
-      kernel => App.Logger.debug(TAG, "User selected kernel:", kernel.toString(true)), //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
-    )
-
-    App.Services.LaunchSelection.defaultOnSelect(
-      launch => App.Logger.debug(TAG, "User selected launch:", launch.toString(true))
-    )
+    // App.Services.LaunchSelection.defaultOnSelect(
+    //   launch => App.Logger.debug(TAG, "User selected launch:", launch.toString(true))
+    // )
 
     App.Services.ComputeSelection
       .defaultOnUnitSelect(
@@ -195,35 +149,52 @@ App.main = function() {
         (oldBlock, newBlock) => App.Logger.debug(TAG, "User selected block:", newBlock.getIndex().toString())
       )
 
-    App.Services.KernelSelection.createEmpty(true)
-    App.Services.LaunchSelection.createEmpty(true)
+    // App.Services.KernelSelection.createEmpty(true)
+    // App.Services.LaunchSelection.createEmpty(true)
 
-    App.on( Events.INPUT_FILE_SELECTED, (filename) => {
-      App.Logger.debug(TAG, "User selected file:", filename)
-      App.Services.KernelSelection.activate(App.Services.KernelSelection.createMock().enable())
-    })
-
-    App.on( Events.INPUT_KERNEL_SELECTED, (kernel) => {
-      App.Services.LaunchSelection.activate(App.Services.LaunchSelection.createForKernel(kernel).enable())
-      App.Services.ComputeSelection.deactivateCurrent()
-    })
-
-    App.on( Events.INPUT_KERNEL_LAUNCH_SELECTED, (launch) => {
-      App.Services.ComputeSelection.activate(App.Services.ComputeSelection.getForLaunch(launch), true)
+    App.on( Events.INPUT_SELECTED, (input) => {
+      App.Logger.debug(TAG, "User selected file:", input.source)
+      App.Services.KernelSelection.enable()
     })
   }
 
-  /**
-   * 
-   */
   initPreUiServices()
   App.ui.init()
   App.on(Events.UI_READY, () => {
-    initPostUiServices()  
-    start()
+    initPostUiServices()
   })
 
-  return true
+
+  const { CuKernel } = require("./models/cuda");
+  const { SrcRange } = require("./models/source");
+
+  App.on(Events.INPUT_SELECTED, (input) => {
+    // 1. open the file in the editor
+    App.Editor
+      .openSource(input.source, input.dir)
+      .catch(err => {
+        App.Notifier.error(err)
+        App.Services.Input.reset()
+      })
+      // 2. send to kermad for proprocessing
+      .then(() => Kermad.StartSession(input.dir, input.source, input.compiledb))
+      .then((res) => {
+        App.Session = new Session()
+        let Col = new ColorGenerator(res['kernels'].length)
+        for ( let kern of res['kernels'])
+          App.Session.addKernel(new CuKernel(kern.id, kern.name,
+                                             SrcRange.fromArray(kern.range), Col.next()))
+        App.KernelSelector.addKernels(App.Session.getKernels())
+        App.Editor.highlightKernels(App.Session.getKernels())
+      })
+  })
+
+  App.on(Events.INPUT_KERNEL_SELECTED, (kernel) => {
+    App.Logger.debug(TAG, "User selected kernel:", kernel.toString(true))
+
+    App.Session.setKernel(kernel)
+    // 1. editor jump to kernel
+  })
 }
 
 module.exports = App

@@ -6,7 +6,7 @@ const CuWarp         = require('./CuWarp')
 const CuThread       = require('./CuThread')
 const CuIndex        = require('./CuIndex')
 const CuDim          = require('./CuDim')
-const CuLaunch       = require('./CuLaunch')
+// const CuLaunch       = require('./CuLaunch')
 const CuKernel       = require('./CuKernel')
 const CuAddrSpace      = require('./CuAddrSpace')
 
@@ -17,7 +17,7 @@ const Warp   = CuWarp
 const Thread = CuThread
 const Index  = CuIndex
 const Dim    = CuDim
-const Launch = CuLaunch
+// const Launch = CuLaunch
 const Kernel = CuKernel
 const AddrSpace = CuAddrSpace
 
@@ -95,7 +95,7 @@ module.exports = {
   Thread,
   Index,
   Dim,
-  Launch,
+  // Launch,
   Kernel,
   AddrSpace,
   CuLimits,

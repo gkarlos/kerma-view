@@ -2,9 +2,8 @@
 const Component      = require('@renderer/ui/component/Component')
 const Events         = require('@renderer/events')
 const App            = require('@renderer/app')
-const EditorTab      = require('@renderer/ui/editor/EditorTab')
-const EditorTabs     = require('@renderer/ui/editor/EditorTabs')
-const EditorTabsAdd  = require('@renderer/ui/editor/EditorTabsAdd')
+const EditorTab      = require('@renderer/services/editor/EditorTab')
+const EditorTabs     = require('@renderer/services/editor/EditorTabs')
 
 /**
  * @memberof module:editor
@@ -29,9 +28,6 @@ class EditorToolbar extends Component {
     this.#node = null
     this.#rendered = false
     this.#tabs = new EditorTabs(`#${this.id}`, App, true)
-    this.#add  = new EditorTabsAdd(`#${this.id}`)
-    App.ui.registerComponent(this)
-    // this.codenav = new CodeNavToolbar('codenav-toolbar', `#${this.id}`, App, true)
   }
 
   /** @type {EditorTabs} */
@@ -74,19 +70,13 @@ class EditorToolbar extends Component {
   render() {
     if ( ! this.isRendered() ) {
       this.node = $(`<div id=${this.id} class="nav-tabs"></div>`).appendTo(this.container)
-
-      this.add.render()
-
-      this.tabs.render()
-
-      // open only the cuda source tab
-      // this.#tabs.open(EditorTabs.TabSource, true)
+      this.#tabs.render()
       this.rendered = true
-
-      App.emit(Events.UI_COMPONENT_READY, this)
     }
     return this;
   }
+
+  onTabSelect(cb) { this.#tabs.onSelect(cb); }
 
   useDefaultControls() {
     // this.tabs.useDefaultControls()

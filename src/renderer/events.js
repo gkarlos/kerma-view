@@ -30,9 +30,12 @@ module.exports = {
 
   /** 
    * @event 
-   * @param {String} filename
+   * @param {Object} input
+   * @param {String} input.dir
+   * @param {String} input.source
+   * @param {String} input.compiledb
    */
-  INPUT_FILE_SELECTED : "input:selected",
+  INPUT_SELECTED : "input:selected",
   
   /** @event */INPUT_TYPE_SELECTED : "input:type-selected",
   

@@ -1,14 +1,14 @@
 /**--main/main.js-----------------------------------------------------/
  *
  * Part of the kerma project
- * 
+ *
  *------------------------------------------------------------------/
- * 
+ *
  * @file main/main.js
- * @author gkarlos 
+ * @author gkarlos
  * @module main
  * @category Main
- * @description 
+ * @description
  *   The main/entry-point module
  *
  *-----------------------------------------------------------------*/
@@ -18,13 +18,7 @@ require('module-alias/register')
 
 require('dotenv').config()
 
-if( !process.env.KERMA_HOME) {
-  console.log("KERMA_HOME is not set. Please set in in .env")
-  process.exit()
-}
-
 const Logger          = require('./log')
-const Log             = new Logger({color: true, timestamps: true})
 const electron        = require('electron');
 const path            = require('path');
 const p               = require('@common/util/path')
@@ -41,12 +35,24 @@ const perf            = require('@main/perf')
 const devtools        = require('@common/util/devtools')
 const ProgressBar     = require('electron-progressbar')
 
+const Log             = new Logger({color: true, timestamps: true})
+
+let shouldExit = false
+if( !process.env.KERMAD_IP) {
+  Log.error("KERMAD_IP is not set. Please set in in .env")
+  shouldExit = true
+}
+if ( !process.env.KERMAD_PORT) {
+  Log.error("KERMAD_PORT is not set. Please set it in .env")
+  shouldExit = true
+}
+if ( shouldExit) process.exit()
+
 // app.allowRendererProcessReuse = false
 app.root     = path.join(__dirname, "../../")
 app.iconPath = path.join(app.root, "assets", "icon-48.png")
 app.version  = require('../../package.json').version
 app.windows  = { main : null, loading: null}
-// app.input    = { path : null, content: null}
 app.title    = `KermaView v${app.getVersion()} | ${settings.build}.${process.arch} ${settings.debug?"[debug]":""}`
 
 app.args = cl.parse.list(process.argv, (error, result) => {
@@ -61,25 +67,51 @@ app.args = cl.parse.list(process.argv, (error, result) => {
   return result;
 })
 
-app.kermad = {}
-app.kermad.path = (() => {
-  let kermadPath = path.join(p.resolve(process.env.KERMA_HOME), "bin", "kermad")
-  cl.info(`kermad at ${kermadPath}`)
-  return kermadPath;
-})()
-app.kermad.proc = spawn(app.kermad.path, [])
-app.kermad.proc.stderr.setEncoding('utf-8')
-app.kermad.proc.stdout.setEncoding('utf-8')
-app.kermad.proc.stderr.on('data', (data)  => {
-  app.kermad.proc.stdout.removeAllListeners()
-  app.kermad.proc.stdout.on('data', (d) => console.log(d))
-  let d = data.split(':')
-  app.kermad.host = d[0]
-  app.kermad.port = d[1]
-  cl.info(`kermad listening on ${app.kermad.host}:${app.kermad.port}`)
-})
-app.kermad.proc.stdout.on('data', (data) => console.log(data))
-app.kermad.proc.on('close', (code) => console.log(`kermad exited with ${code}`))
+global.kermad = {
+  ip: process.env.KERMAD_IP,
+  port: process.env.KERMAD_PORT
+}
+
+global.examples = {
+  "Rodinia" : {
+    "b+tree":   { path: "examples/rodinia/cuda/b+tree/b+tree.cu", args: "file mil.txt command command.txt"},
+    "backprop": { path: "examples/rodinia/cuda/backprop/backprop.cu", args: "1000000" },
+    "bfs":      { path: "examples/rodinia/cuda/bfs/bfs.cu", args: "todo"},
+    "cfd":      { path: "examples/rodinia/cuda/gaussian/cfd.cu", args: "todo"},
+    "gaussian": { path: "examples/rodinia/cuda/gaussian/gaussian.cu", args: "todo"},
+    "hotspot":  { path: "examples/rodinia/cuda/hotspot/hotspot.cu", args: "todo"},
+    "lavaMD":   { path: "examples/rodinia/cuda/lavaMD/lavaMD.cu", args: "todo"},
+    "lud":      { path: "examples/rodinia/cuda/lud/lud.cu", args: "todo"},
+    "nn":       { path: "examples/rodinia/cuda/nn/nn.cu", args: "todo"},
+    "nw":       { path: "examples/rodinia/cuda/nw/nw.cu", args: "todo"},
+    "particlefilter": { path: "examples/rodinia/cuda/particlefilter/particlefilter.cu", args: "todo"},
+    "particlefilter.float": { path: "examples/rodinia/cuda/particlefilter/particlefilter.float.cu", args: "todo"},
+    "pathfinder":     { path: "examples/rodinia/cuda/pathfinder/pathfinder.cu", args: "todo"},
+    "srad" :          { path: "examples/rodinia/cuda/srad/srad.cu", args: "todo"},
+    "streamcluster":  { path: "examples/rodinia/cuda/streamcluster/streamcluster.cu", args: "todo"}
+  }
+}
+
+// Generate compilation databases
+// var GenCompileDB = spawn()
+// app.kermad.path = (() => {
+//   let kermadPath = path.join(p.resolve(process.env.KERMA_HOME), "bin", "kermad")
+//   cl.info(`kermad at ${kermadPath}`)
+//   return kermadPath;
+// })()
+// app.kermad.proc = spawn(app.kermad.path, [])
+// app.kermad.proc.stderr.setEncoding('utf-8')
+// app.kermad.proc.stdout.setEncoding('utf-8')
+// app.kermad.proc.stderr.on('data', (data)  => {
+//   app.kermad.proc.stdout.removeAllListeners()
+//   app.kermad.proc.stdout.on('data', (d) => console.log(d))
+//   let d = data.split(':')
+//   app.kermad.host = d[0]
+//   app.kermad.port = d[1]
+//   cl.info(`kermad listening on ${app.kermad.host}:${app.kermad.port}`)
+// })
+// app.kermad.proc.stdout.on('data', (data) => console.log(data))
+// app.kermad.proc.on('close', (code) => console.log(`kermad exited with ${code}`))
 
 /**
  * Perform configuration steps
@@ -100,7 +132,7 @@ function preConfigure() {
   if ( settings.window.maximized ) {
     settings.window.width = settings.display.width
     settings.window.height = settings.display.height
-  } 
+  }
 
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true //TODO Remove and fix
 
@@ -132,9 +164,8 @@ function createLoadingWindow() {
     cl.debug('Closing window \'loading\'')
     app.windows.loading = null;
   })
-  
+
   app.windows.loading = loading
-  
   return loading
 }
 

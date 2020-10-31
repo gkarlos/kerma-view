@@ -1,5 +1,5 @@
 const BaseLayout = require('./BaseLayout')
-const App   = require('@renderer/app')
+
 const Split = require('split.js')
 
 /**
@@ -39,29 +39,30 @@ const Split = require('split.js')
  * @property {HTMLDivElement} ElectronLayout.node
  */
 
+var App;
+
 /**
  * Defines the layout for the desktop (electron) app
- * 
+ *
  * @memberof module:layout
- * @extends BaseLayout 
+ * @extends BaseLayout
  */
 class ElectronLayout extends BaseLayout {
-  
-  /** 
+  /**
    * @param {string} [name] A name for this layout
    */
-  constructor(name="ElectronLayout") {
+  constructor(name = "ElectronLayout") {
     super(name)
 
-    /** 
+    /**
      * @type {Boolean}
      */
     this.rendered = false;
 
-    /** 
+    /**
      * @type {String}
      */
-    this.id   = null
+    this.id = null
 
     /**
      * @type {HTMLDivElement}
@@ -72,10 +73,10 @@ class ElectronLayout extends BaseLayout {
      * @type {ElectronLayoutHeader}
      */
     this.header = {
-      id : null,
-      node : null,
-      left : { id : null, node: null },
-      right : { id: null, node: null }
+      id: null,
+      node: null,
+      left: { id: null, node: null },
+      right: { id: null, node: null }
     }
 
     /**
@@ -109,7 +110,7 @@ class ElectronLayout extends BaseLayout {
      */
     this.footer = {
       id: null,
-      node : null,
+      node: null,
     }
   }
 
@@ -117,8 +118,11 @@ class ElectronLayout extends BaseLayout {
    * Render the layout
    */
   render() {
-    if ( this.rendered )
+    if (this.rendered)
       return console.log(`[warn] Layout [${this.name}] is already rendered. This is a no-op`)
+
+    if ( !App)
+      App = require('@renderer/app')
 
     /// Root
     let root = document.createElement('div')
@@ -129,7 +133,7 @@ class ElectronLayout extends BaseLayout {
     root.setAttribute("layout", this.name)
     this.node = root
     this.id = root.id
-    
+
     /// Header
     let header = document.createElement('div')
     header.id = "header"
@@ -143,7 +147,7 @@ class ElectronLayout extends BaseLayout {
     headerLeft.setAttribute("layout-element", "header.left")
     this.header.left.node = headerLeft
     this.header.left.id = headerLeft.id
-    
+
     let headerRight = document.createElement('div')
     headerRight.id = "header-right"
     headerRight.setAttribute("layout-element", "header.right")
@@ -179,7 +183,7 @@ class ElectronLayout extends BaseLayout {
     this.body.left.id = bodyLeft.id
 
     let bodyRight = document.createElement('div')
-    bodyRight.id= "right"
+    bodyRight.id = "right"
     bodyRight.classList.add("h-100", "right", "split")
     bodyRight.setAttribute("layout-element", "body.right")
     this.body.right.node = bodyRight
@@ -211,17 +215,20 @@ class ElectronLayout extends BaseLayout {
 
     document.body.appendChild(root)
 
-    this.body.split = Split(['#left', '#right'], { 
-      sizes: [50, 50], 
-      onDrag: () => App.emit(App.Events.UI_RESIZE)
+    this.body.split = Split(['#left', '#right'], {
+      sizes: [50, 50],
+      onDrag: () => {
+        console.log(App)
+        App.emit(App.Events.UI_RESIZE)
+      }
     })
 
     this.body.left.split = Split(['#left-top', '#left-bottom'], {
-      direction: 'vertical', 
+      direction: 'vertical',
       sizes: [50, 50],
       maxSize: 70,
-      cursor: 'row-resize', 
-      snapOffset : 0,
+      cursor: 'row-resize',
+      snapOffset: 0,
       dragInterval: 5,
       onDrag: () => App.emit(App.Events.UI_RESIZE)
     });

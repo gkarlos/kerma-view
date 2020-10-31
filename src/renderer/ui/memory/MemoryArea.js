@@ -46,6 +46,7 @@ class MemoryArea extends Component {
     if ( !this.isRendered()) {
       this.title.render()
       this.body.render()
+      this.#rendered = true
       App.emit(App.Events.UI_COMPONENT_READY, this);
     }
     return this.node
@@ -59,7 +60,7 @@ class MemoryArea extends Component {
     this.body.add(vis)
     return this
   }
-  
+
   /**
    * @param {MemoryVis} vis
    * @returns {MemoryArea} this

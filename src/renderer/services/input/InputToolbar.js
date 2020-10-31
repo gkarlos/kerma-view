@@ -99,7 +99,7 @@ class InputToolbar extends Component {
     this.pathExamplesButton = $(`
       <button class="btn kv-btn" type="button" id="path-examples-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="far fa-lightbulb"></i>
-      </button>`).appendTo(this.pathExamplesButtonWrapper);
+      </button>`).css("border-radius", "0px").appendTo(this.pathExamplesButtonWrapper);
 
     this.examplesDropdown = $(`
       <div class="dropdown-menu" aria-labelledby="path-examples-button">
@@ -252,10 +252,6 @@ class InputToolbar extends Component {
     this.disableArgInput();
   }
 
-  resetArgInput() {
-    this.unsetArgs()
-  }
-
   /**
    * @fires Events.UI_COMPONENT_READY
    */
@@ -317,11 +313,11 @@ class InputToolbar extends Component {
 
 
   getPath() {
-    return this.input.val()
+    return this.pathInput.val()
   }
 
   getArgs() {
-    return this.args.val()
+    return this.argInput.val()
   }
 
   on(event, cb) { this.#Emitter.on(event, cb); }

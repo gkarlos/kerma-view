@@ -1,4 +1,7 @@
+/**
+ * @module session
+ * @category Renderer
+ */
 module.exports = {
-  session : require('./session'),
-  sessionManager : require('./session-manager')
+  Session : require('./session')
 }

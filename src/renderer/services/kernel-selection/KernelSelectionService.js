@@ -1,176 +1,294 @@
-const KernelSelection  = require('@renderer/services/kernel-selection/KernelSelection')
-const SrcRange         = require('@renderer/models/source/SrcRange')
-const Service          = require('@renderer/services/Service')
-const CuKernel       = require('@renderer/models/cuda/CuKernel')
-const FunctionCallSrc  = require('@renderer/models/source')
-const CuLaunch = require('@renderer/models/cuda/CuLaunch')
-const CuBlock  = require('@renderer/models/cuda/CuBlock')
-const CuGrid   = require('@renderer/models/cuda/CuGrid')
-const CuDim    = require('@renderer/models/cuda/CuDim')
+'use-strict'
 
-/**@ignore @typedef {import("@renderer/services/kernel-selection/KernelSelection").KernelSelectionOnSelectCallback} KernelSelectionOnSelectCallback*/
+/** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionModel")} KernelSelectionModel */
+/** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionView")} KernelSelectionView */
+/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
+
+const App = require('@renderer/app')
+const KernelSelectionModel = require('@renderer/services/kernel-selection/KernelSelectionModel')
+const KernelSelectionView  = require('@renderer/services/kernel-selection/KernelSelectionView')
 
 /**
+ * A controller for a kernel selection
+ *
+ * A KernelSelection is **disabled** by default and needs to be explicitely enabled
+ * (see {@link module:kernel-selection.KernelSelection#enable})
  * @memberof module:kernel-selection
- * @extends Service
  */
-class KernelSelectionService extends Service {
-
-  /** @type {KernelSelection[]} */
-  #selections
-  /** @type {KernelSelection} */
-  #current
-  /** @type {KernelSelectionOnSelectCallback[]} */
-  #defaultOnSelectCallbacks
+class KernelSelectionService { 
+  /** @type {KernelSelectionModel} */ #model
+  /** @type {KernelSelectionView}  */ #view
 
   /**
-   * 
+   * Create a new KernelSelection instance
+   * @param {Array.<CuKernel>} [kernels] An array of CuKernel objects to be used as options
    */
   constructor() {
-    super("KernelSelectionService")
-    this.#selections = []
-    this.#current = null
-    this.#defaultOnSelectCallbacks = []
-  }
-
-  /**
-   * Create a new KernelSelection for a given list of kernels
-   * @param {CuKernel[]} kernels An array of CuKernel objects
-   * @param {Boolean} [makeCurrent] Make the selection the currently displayed selection
-   * @returns {KernelSelection}
-   */
-  create(kernels, makeCurrent=false) {
-    const selection = this.createEmpty(makeCurrent)
-    kernels.forEach(kernel => selection.addKernel(kernel))
-    return selection
-  }
-
-  /**
-   * Create an empty KernelSelection and optionally make it the current one
-   * @param {Boolean} [makeCurrent] Make the selection the currently displayed selection
-   * @returns {KernelSelection}
-   */
-  createEmpty(makeCurrent=false) {
-    const selection = new KernelSelection()
-    this.#defaultOnSelectCallbacks.forEach(callback => selection.onSelect(callback))
-    this.#selections.push(selection)
-    if ( makeCurrent)
-      this.activate(selection)
-    return selection
-  }
-
-  /**
-   * Retrieve the currently displaying selection
-   * @returns {KernelSelection}
-   */
-  getCurrent() { return this.#current }
-
-  /**
-   * 
-   * @param {KernelSelection} selection 
-   */
-  createMock(selection=null) {
-    const CuKernel = require('@renderer/models/cuda/CuKernel')
-    const FunctionSrc = require('@renderer/models/source/FunctionSrc')
-    const FunctionCallSrc = require('@renderer/models/source/FunctionCallSrc')
-    const Mock = require('@mock/cuda-source')
-
-    let kernels = []
-
-    Mock.kernels.forEach( (kernel, i) => {
-      let kernelFI = new FunctionSrc({
-        filename : kernel.source.filename,
-        name : kernel.source.name,
-        type : "void",
-        arguments : kernel.source.signature,
-        range : SrcRange.fromArray(kernel.source.range),
-        isKernel : true
-      })
-
-      let cuKernel = new CuKernel(i, kernelFI)
-
-      kernel.launches.forEach((launch, j) => {
-        let caller    = new FunctionSrc({ name : launch.caller.source.name, type : launch.caller.source.type, arguments : launch.caller.source.signature})
-        let launchFCS = new FunctionCallSrc({
-          name : CuKernel.name,
-          isKernelLaunch : true,
-          launchParams : launch.source.params,
-          range : SrcRange.fromArray(launch.source.range),
-          arguments : launch.source.arguments,
-          caller : caller
-        })
-
-        let cuLaunch = new CuLaunch(cuKernel, new CuGrid(1024, j % 2 == 0? 1000 : 200), { id : j, source: launchFCS})
-        cuKernel.addLaunch(cuLaunch)
-      })
-
-
-      kernels.push(cuKernel)
+    this.#model = new KernelSelectionModel()
+    this.#view  = new KernelSelectionView(this.#model).render()
+    this.#view.onSelect(kernel => {
+      this.#model.selectKernel(kernel)
+      App.emit(App.Events.INPUT_KERNEL_SELECTED, kernel)
     })
-
-    return selection? selection.addKernels(kernels) : this.createEmpty().addKernels(kernels)
   }
 
+  /// ------------------- ///
+  /// Accessor Properties ///
+  /// ------------------- ///
+
   /**
-   * 
-   * @param {KernelSelection} kernelSelection
-   * @returns {KernelSelectionService} this
+   * The model of this KernelSelection
+   * @type {KernelSelectionModel} 
    */
-  activate(kernelSelection) {
-    if ( kernelSelection && this.#current !== kernelSelection) {
-      if ( !this.#selections.find(sel => sel === kernelSelection))
-        this.#selections.push(kernelSelection)
-      this.#current && this.#current.dispose(false)
-      this.#current = kernelSelection
-      this.#current.view.render()
-    }
+  get model() { return this.#model }
+
+  /**
+   * The view of this KernelSelection
+   * @type {KernelSelectionView}
+   */
+  get view() { return this.#view }
+
+  /**
+   * The available options of this KernelSelection
+   * @type {Array.<CuKernel>}
+   */
+  get options() { return this.#model.options }
+
+  /**
+   * The number of available options
+   * @type {Number}
+   */
+  get numOptions() { return this.#model.options.length }
+
+  /// ------------------- ///
+  ///       Methods       ///
+  /// ------------------- ///
+
+  /**
+   * Add a kernel to the options
+   * @param {CuKernel} kernel A CuKernel
+   * @param {Boolean} [enable] 
+   *  If set, the selection will be enabled after the kernel is added
+   * @returns {KernelSelection} this
+   */
+  addKernel(kernel, enable=false) {
+    this.#model.addKernel(kernel)
+    this.#view.addKernel(kernel)
+    if ( enable && !this.#view.isEnabled())
+      this.#view.enable()
     return this
   }
 
   /**
-   * Dispose a KernelSelection. A disposed selection
-   * is not currently displayed but may be chosen later on
-   * @param {KernelSelection} kernelSelection 
-   * @returns {KernelSelectionService} this
+   * Add multiple kernel options
+   * @param {Array.<CuKernel>} kernels An array of CuKernel objects
+   * @param {Boolean} [enable]
+   *  If set, the selection will be enabled after the kernels are added
+   * @returns {KernelSelection} this
    */
-  dispose(kernelSelection) {
-    if ( this.#current === kernelSelection)
-      this.#current = null
-    kernelSelection.dispose(true)
+  addKernels(kernels=[], enable) {
+    let self = this
+    kernels.forEach(kernel => self.addKernel(kernel))
+    if ( enable)
+      this.enable()
     return this
   }
 
   /**
-   * Enable the Service
-   * @returns {KernelSelectionService} this
+   * Remove a kernel from the options
+   * If there are no options left the selection gets disabled
+   * @param {CuKernel} kernel 
+   * @param {Boolean} [keepEnabled] 
+   *  If set, the selection will not get disabled if there are no options left
+   * @returns {KernelSelection} this
    */
-  enable() {
-    super.enable()
-    for ( let selection of this.#selections)
-      selection.enable()
+  removeKernel(kernel, keepEnabled=false) {  
+    this.#model.removeKernel(kernel)
+    this.#view.removeKernel(kernel)
+    if ( keepEnabled && this.#view.isEnabled() && this.#model.numOptions === 0)
+      this.#view.disable()
     return this
   }
 
   /**
-   * Disable the Service
-   * @returns {KernelSelectionService} this
+   * Remove a number of kernels from the options
+   * @param {Array.<CuKernel>} kernels An array of CuKernel objects
+   * @param {Boolean} [keepEnabled]
+   *   If set, the selection will not get disabled if there are no options left after the removal
+   * @returns {KernelSelection} this 
    */
-  disable() {
-    super.disable()
-    for ( let selection of this.#selections)
-      selection.disable()
+  removeKernels(kernels=[], keepEnabled=false) {
+    if ( Array.isArray(kernels))
+      kernels.forEach(kernel => this.removeKernel(kernel, keepEnabled))
+    return this;
+  }
+
+  /**
+   * Remove all kernel options
+   * @fires module:kernel-selection.KernelSelection.disabled
+   * @returns {KernelSelection} this
+   */
+  removeAllKernels() {
+    this.#model.removeAllKernels()
+    this.#view.removeAllKernels()
+    this.#view.disable()
     return this
   }
 
   /**
-   * Register callback(s) that will be hooked to every KernelSelection created by the service
-   * @param {...KernelSelectionOnSelectCallback} callbacks
-   * @returns {KernelSelectionService} this
+   * Retrieve the current selected option, if one exists
+   * @returns {CuKernel} The select CuKernel if it exists. `null` otherwise
    */
-  defaultOnSelect(...callbacks) {
-    callbacks.forEach(callback => this.#defaultOnSelectCallbacks.push(callback))
+  getSelection() { return this.#model.getSelection() }
+
+  /**
+   * Unselect the current kernel
+   * @returns {KernelSelection} this
+   */
+  clearSelection() {
+    this.#model.clearSelection()
+    this.#view.clearSelection()
     return this
   }
+
+  /**
+   * Check if a kernel exists as an option
+   * @param {CuKernel} kernel
+   * @returns {Boolean} 
+   */
+  hasKernel(kernel) {
+    return this.#model.hasKernel(kernel)
+  }
+
+  /**
+   * Enable the selection. i.e allow the user to select an option
+   * @param {Boolean} [silent] If set, the "enabled" event will not be triggered
+   * @fires module:kernel-selection.KernelSelection.enabled
+   * @returns {KernelSelection} this
+   */
+  enable(silent=false) {
+    this.#view.enable(silent)
+    return this
+  }
+
+  /**
+   * Disable the selection. i.e disallow the user to select an option
+   * @param {Boolean} [silent] If set, the "disabled" event will not be triggered
+   * @fires module:kernel-selection.KernelSelection.disabled
+   * @returns {KernelSelection} this
+   */
+  disable(silent=false) {
+    this.#view.disable(silent)
+    return this;
+  }
+
+  /**
+   * Check if this selection is enabled (i.e. the user can interact with it)
+   * @returns {Boolean}
+   */
+  isEnabled() {
+    return this.#view.isEnabled()
+  }
+
+  /**
+   * Dispose the selection
+   * @return {KernelSelection} this
+   */
+  dispose() {
+    this.#view.dispose(true)
+    return this
+  }
+
+  /// --------------------- ///
+  /// Callback Registration ///
+  /// --------------------- ///
+
+  /**
+   * Register a callback to be invoked when the user selects an option
+   * @param {KernelSelectionOnSelectCallback} callback
+   * @returns {KernelSelection} this
+   */
+  onSelect(callback) {
+    this.#view.onSelect(callback)
+    return this;
+  }
+
+  /**
+   * Register a callback to be invoked when the selection gets enabled
+   * @param {KernelSelectionOnEnabledCallback} callback
+   * @returns {KernelSelection} this
+   */
+  onEnable(callback) {
+    this.#view.onEnable(callback)
+    return this
+  }
+
+  /**
+   * Register a callback to be invoked when the selection gets disabled
+   * @param {KernelSelectionOnDisabledCallback} callback
+   * @returns {KernelSelection} this
+   */
+  onDisable(callback) {
+    this.#view.onDisable(callback)
+    return this
+  }
+
 }
+
+/// ------------------- ///
+///       Events        ///
+/// ------------------- ///
+
+/** 
+ * @static  
+ * @property {String} Select
+ * @property {String} Enabled
+ * @property {String} Disabled
+ */
+KernelSelectionService.Events = {
+  /** */
+  Select : "select",
+  /** */
+  Enabled : "enabled",
+  /** */
+  Disabled : "disabled"
+}
+
+/**
+ * Fires when a kernel is selected
+ * @event module:kernel-selection.KernelSelectionService.select
+ * @property {CuKernel} kernel The selected kernel
+ */
+
+/**
+ * Fires when the selection gets enabled
+ * @event module:kernel-selection.KernelSelectionService.enabled
+ */
+
+/**
+ * Fires when the selection gets disabled
+ * @event module:kernel-selection.KernelSelectionService.disabled
+ */
+
+
+/// ------------------- ///
+///  Callback Typedefs  ///
+/// ------------------- ///
+
+/**
+ * @callback KernelSelectionOnSelectCallback
+ * @memberof module:kernel-selection~KernelSelection
+ * @param {CuKernel} kernel The selected kernel
+ */
+
+/**
+ * @callback KernelSelectionOnEnabledCallback
+ * @memberof module:kernel-selection
+ */
+
+/**
+ * @callback KernelSelectionOnDisabledCallback
+ * @memberof module:kernel-selection
+ */
 
 module.exports = KernelSelectionService

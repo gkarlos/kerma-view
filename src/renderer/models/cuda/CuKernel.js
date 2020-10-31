@@ -1,81 +1,55 @@
 /** @ignore @typedef {import("@renderer/models/source/FunctionSrc")} FunctionSrc */
 /** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
 
+const SrcRange = require("../source/SrcRange")
 /**
  * @memberof module:cuda
  */
 class CuKernel {
-  /** @type {Number} */
-  #id
-  /** @type {FunctionSrc} */
-  #source
-  /** @type {Array.<CuLaunch>} */
-  #launches
-  /** @type {String} */
-  #color
+  /** @type {Number}   */ #id
+  /** @type {SrcRange} */ #range
+  /** @type {String}   */ #color
+  /** @type {String}   */ #name
 
   /**
    * @param {Number} id
-   * @param {FunctionSrc} source 
+   * @param {string} name
+   * @param {SrcRange} range
    */
-  constructor(id,source) {
+  constructor(id,name,range,color) {
     this.#id = id
-    this.#source = source || null
-    this.#launches = []
+    this.#name = name
+    this.#range = range
+    this.#color = color
   }
 
   /** @type {Number} */
   get id() { return this.#id }
 
-  /** @type {FunctionSrc} */
-  get source() { return this.#source }
+  /** @type {SrcRange} */
+  get range() { return this.#range }
 
-  /** @type {String} */
-  get name() { return this.#source.name }
+  /** @type {string} */
+  get name() { return this.#name }
 
-  /** @type {Array.<CuLaunch>} */
-  get launches() { return this.#launches }
-
-  /** @type {String} */
+  /** @type {string} */
   get color() { return this.#color }
 
   /**
-   * 
-   * @param {String} color 
+   * @param {String} color
    * @return this;
    */
-  setColor(color){ 
+  setColor(color){
     this.#color = color
     return this
   }
-
-  /**
-   * @param {CuLaunch} launch 
-   * @returns {CuKernel} this
-   */
-  addLaunch(launch) {
-    if (launch)
-      this.#launches.push(launch)
-    return this
-  }
-
   /**
    * Compare with another kernel for equality
-   * @param {CuKernel} other 
+   * @param {CuKernel} other
    */
   equals(other) {
     return (other instanceof CuKernel)
       && this.#id === other.id
-      && !(this.#source === null || other.source === null)
-      && this.#source.equals(other.source)
-      // && ((self) => {
-      //   if ( self.#launches.length !== other.launches.length)
-      //     return false
-      //   for( let i = 0; i < self.#launches.length; ++i)
-      //     if ( !self.#launches[i].equals(other.launches[i]))
-      //       return false
-      //   return true
-      // })(this)
   }
 
   /**
@@ -84,9 +58,8 @@ class CuKernel {
    * @returns {String}
    */
   toString(short=false) {
-    return short? `#${this.id}, ${this.source.name} [x${this.launches.length}]` : `kernel(id: ${this.#id}, name: ${this.#source.name}, ${this.launches.length} launches)`
+    return `#${this.id}, ${this.name}`
   }
-  
 }
 
 module.exports = CuKernel

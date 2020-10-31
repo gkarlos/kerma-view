@@ -18,7 +18,7 @@ class CodenavToolbarView extends Component {
 
 
   constructor() {
-    let LOCATION_EDITOR_TOOLBAR = `#${App.ui.toolbar.editor.id}`
+    // let LOCATION_EDITOR_TOOLBAR = `#${App.ui.toolbar.editor.id}`
     let LOCATION_TOP_TOOLBAR = `#${App.ui.layout.header.right.id}`
 
     super('codenav-toolbar', LOCATION_TOP_TOOLBAR)

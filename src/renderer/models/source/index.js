@@ -10,9 +10,9 @@
  */
 module.exports = {
   SrcLoc : require('./SrcLoc'),
-  SrcInfo : require('./SrcInfo'),
   SrcRange : require('./SrcRange'),
-  FunctionSrc : require('./FunctionSrc'),
-  FunctionCallSrc : require('./FunctionCallSrc'),
-  MemorySrc : require('./MemorySrc')
+  // SrcInfo : require('./SrcInfo'),
+  // FunctionSrc : require('./FunctionSrc'),
+  // FunctionCallSrc : require('./FunctionCallSrc'),
+  // MemorySrc : require('./MemorySrc')
 }

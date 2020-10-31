@@ -13,46 +13,46 @@ function renderMemorySource(memory, uuid) {
 
   let res = $('<div class="memory-src-wrapper" title="Source"></div>').tooltip({delay: 300})
 
-  let src = memory.getSrc(),
-      declPos = src.getDeclContext().indexOf(src.getDecl())
+  // let src = memory.getSrc(),
+  //     declPos = src.getDeclContext().indexOf(src.getDecl())
 
-  let source = $(`<span class="memory-src" id="mem${uuid}"><i class="fas fa-code"></i></span>`).appendTo(res)
+  // let source = $(`<span class="memory-src" id="mem${uuid}"><i class="fas fa-code"></i></span>`).appendTo(res)
 
-  source.popover({
-    title: `Source @ <a href="#">${src.getRange().fromLine}:${src.getRange().fromColumn}</a>`,
-    trigger: 'manual',
-    placement: 'left',
-    html: true,
-    content: `
-      <p class="memory-src-context">
-        <span class="line">
-          <span class="line-number">${src.getRange().fromLine - 1}</span> 
-          <span class="implied-content"> ...</span>
-        </span>
-        <span class="line line-emph">
-          <span class="line-number line-number-highlighted">${src.getRange().fromLine}</span> 
-          <span class="line-content">${src.getDeclContext().substring(0, declPos)}</span>
-          <span class="line-content emph"> ${src.getDecl()}</span>
-          <span class="line-content"> 
-            ${src.getDeclContext().substring(declPos  + src.getDecl().length , src.getDeclContext().length)}
-          </span>
-        </span>
-        <span class="line">
-          <span class="line-number">${src.getRange().fromLine + 1}</span>
-          <span class="implied-content"> ...</span>
-        </span>
-      </p>
-    `,
-    template: `
-      <div class="popover memory-src-popover memory-src-popover-${uuid}" role="tooltip">
-        <div class="arrow"></div>
-        <span class="popover-header memory-src-popover-header" id="mem${uuid}"></span>
-        <div class="popover-body memory-src-popover-body" id="mem${uuid}"></div>
-      </div>`
-  })
+  // source.popover({
+  //   title: `Source @ <a href="#">${src.getRange().fromLine}:${src.getRange().fromColumn}</a>`,
+  //   trigger: 'manual',
+  //   placement: 'left',
+  //   html: true,
+  //   content: `
+  //     <p class="memory-src-context">
+  //       <span class="line">
+  //         <span class="line-number">${src.getRange().fromLine - 1}</span> 
+  //         <span class="implied-content"> ...</span>
+  //       </span>
+  //       <span class="line line-emph">
+  //         <span class="line-number line-number-highlighted">${src.getRange().fromLine}</span> 
+  //         <span class="line-content">${src.getDeclContext().substring(0, declPos)}</span>
+  //         <span class="line-content emph"> ${src.getDecl()}</span>
+  //         <span class="line-content"> 
+  //           ${src.getDeclContext().substring(declPos  + src.getDecl().length , src.getDeclContext().length)}
+  //         </span>
+  //       </span>
+  //       <span class="line">
+  //         <span class="line-number">${src.getRange().fromLine + 1}</span>
+  //         <span class="implied-content"> ...</span>
+  //       </span>
+  //     </p>
+  //   `,
+  //   template: `
+  //     <div class="popover memory-src-popover memory-src-popover-${uuid}" role="tooltip">
+  //       <div class="arrow"></div>
+  //       <span class="popover-header memory-src-popover-header" id="mem${uuid}"></span>
+  //       <div class="popover-body memory-src-popover-body" id="mem${uuid}"></div>
+  //     </div>`
+  // })
   
   res.on("click", () => {
-    source.popover('toggle')
+    // source.popover('toggle')
     res.tooltip('hide')
     if ( !$(res).hasClass("active") )
       $(res).addClass("active")
@@ -78,7 +78,7 @@ function renderMemorySource(memory, uuid) {
  */
 function renderMemoryName(memory, uuid) {
   let res = $('<div class="memory-name-wrapper"></div>')
-  let name = $(`<span class="memory-name">${memory.getSrc().getName()}</span>`).appendTo(res)
+  let name = $(`<span class="memory-name">${memory.getName()}</span>`).appendTo(res)
   return res
 }
 
@@ -292,18 +292,18 @@ class MemoryVisViewHeader {
         <div class="top-bar btn-toolbar card-header bg-light memory-vis-header" role="toolbar" aria-label="Toolbar with button groups">
         </div>`)
 
-      this.#memorySrc  = renderMemorySource(this.#view.memory, this.#view.id).appendTo(this.node)
-                         renderSeparator().appendTo(this.node)
+      // this.#memorySrc  = renderMemorySource(this.#view.memory, this.#view.id).appendTo(this.node)
+      //                    renderSeparator().appendTo(this.node)
 
       this.#memoryName = renderMemoryName(this.#view.memory, this.#view.id).appendTo(this.node)
                          renderSeparator().appendTo(this.node)
-      
+
       this.#memorySize = renderMemorySize(this.#view.memory, this.#view.id).appendTo(this.node)
                          renderSeparator().appendTo(this.node)
-                         
+
       this.#memoryType = renderMemoryType(this.#view.memory, this.#view.id).appendTo(this.node)
                          renderSeparator().appendTo(this.node)
-      
+
       this.#memoryTypeSize = renderMemoryTypeSize(this.#view.memory, this.#view.id).appendTo(this.node)
                              renderSeparator().appendTo(this.node)
 

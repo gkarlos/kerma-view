@@ -29,9 +29,6 @@ class Editor extends Component {
     this.AMDDefine  = this.AMDLoader.require.define;
     this.AMDRequire.config({
       baseUrl: fs.uriFromPath(path.join(__dirname, '../../../../node_modules/monaco-editor/min'))
-      // paths : { 
-      //   'vs' : ''
-      // }
     });
     this.finishedLoading = false;
   }
@@ -53,14 +50,6 @@ class Editor extends Component {
 
   }
 
-  showKernelLaunchSelection() {
-    
-  }
-
-  hideKernelLaunchSelection() {
-    
-  }
-
   updateLayout() {
     if( this.instance)
       this.instance.layout()
@@ -75,14 +64,6 @@ class Editor extends Component {
       console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
       return this;
     }
-
-    // register myself to the ui
-    // this.app.ui.registerComponent(this)
-    
-    // this.tabs.addNew("Cuda")
-    //          .addNew("LLVM-IR")
-    //          .addNew("PTX")
-    //          .select("Cuda")
 
     // Asynchronously load the editor and emit a completion("editor-loaded") event
     this.AMDRequire(['vs/editor/editor.main'], (monaco) => {
@@ -115,9 +96,9 @@ class Editor extends Component {
       throw new InternalError('Component must be rendered before calling defaultControls()')
 
     let on = (event, cb) => App.on(event, cb)
-    
+
     // User selected a file so load it to the editor
-    on(Events.INPUT_FILE_SELECTED, () => {
+    on(Events.INPUT_SELECTED, () => {
       let path = App.Input.path;
       fs.readFile(path, 'utf-8', (err, data) => {
         if ( err) {
