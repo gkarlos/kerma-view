@@ -77,7 +77,7 @@ global.examples = {
     "b+tree":   { path: "examples/rodinia/cuda/b+tree/b+tree.cu", args: "file mil.txt command command.txt"},
     "backprop": { path: "examples/rodinia/cuda/backprop/backprop.cu", args: "1000000" },
     "bfs":      { path: "examples/rodinia/cuda/bfs/bfs.cu", args: "todo"},
-    "cfd":      { path: "examples/rodinia/cuda/gaussian/cfd.cu", args: "todo"},
+    "cfd":      { path: "examples/rodinia/cuda/cfd/euler3d.cu", args: "todo"},
     "gaussian": { path: "examples/rodinia/cuda/gaussian/gaussian.cu", args: "todo"},
     "hotspot":  { path: "examples/rodinia/cuda/hotspot/hotspot.cu", args: "todo"},
     "lavaMD":   { path: "examples/rodinia/cuda/lavaMD/lavaMD.cu", args: "todo"},
