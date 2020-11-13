@@ -38,7 +38,7 @@
     "test-report:open:linux": "xdg-open test/report/index.html",
     "test-report:open:windows": "powershell Invoke-Item test/report/index.html",
     "deps": "node scripts/build-external-deps.js",
-    "postinstall": "cd examples && ./gen_compile_db.sh"
+    "postinstall": "cd examples && ./prepare.sh"
   },
   "_moduleAliases": {
     "@root": ".",
