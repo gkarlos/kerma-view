@@ -1,9 +1,9 @@
-const Memory      = require('@renderer/models/memory/Memory')
+const Memory      = require('@renderer/models/Memory')
 const CuAddrSpace = require('@renderer/models/cuda/CuAddrSpace')
 const Types       = require('@renderer/models/types/Types')
 const CuPointer = require('./CuPointer')
 
-/**@ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
+/**@ignore @typedef {import("@renderer/models/Memory")} Memory */
 /**@ignore @typedef {import("@renderer/models/cuda/CuAddrSpace")} CuAddrSpace*/
 
 /**

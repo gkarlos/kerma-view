@@ -12,9 +12,9 @@ class SrcRange {
   /** @type {Number} */ #toLine
   /** @type {Number} */ #toColumn
 
-  /** 
+  /**
    * Create a new SrcRange object
-   * @param {Object} opts   
+   * @param {Object} opts
    * @param {Number} opts.fromLine   Starting line
    * @param {Number} opts.fromColumn Starting column
    * @param {Number} opts.toLine     Ending line   (inclusive)
@@ -46,7 +46,7 @@ class SrcRange {
 
   /** @type {SrcLoc} */
   get to() { return new SrcLoc(this.#toLine, this.#toColumn) }
-  
+
   /** @type {Number} */
   get fromLine() { return this.#fromLine }
 

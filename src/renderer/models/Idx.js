@@ -1,13 +1,12 @@
 /** @ignore @typedef {import("@renderer/models/Dim")} Dim */
-/** @ignore @typedef {import("@renderer/models/Index")} Index */
+/** @ignore @typedef {import("@renderer/models/Idx")} Index */
 
 
 /**
  * Represents a 2D index. Can be used as a thread/block index
  * or index into an array. **Row-major** order is assumed
- * 
- * @category Renderer
- * @subcategory models
+ *
+ * @memberof module:models
  */
 class Index {
   /** @type {Number} */
@@ -23,7 +22,7 @@ class Index {
    * @param   {Index} index A 2D index
    * @param   {Dim} dim A cuda dim description
    * @throws  {Error} If args are invalid. **Only 2D Dims are supported**
-   * @returns {Number} 
+   * @returns {Number}
    */
   static linearize(index, dim) {
     if ( index === undefined) throw new Error('Missing required argument `index`')
@@ -44,7 +43,7 @@ class Index {
    * @param   {Number|Index} index A 1-Dimensional index. If a Index is passed and the y-dimension > 1 then it is returned as is.
    * @param   {Dim} dim A cuda dim description
    * @throws  {Error} If args are invalid. **Only 2D Dims are supported**
-   * @returns {Index} 
+   * @returns {Index}
    */
   static delinearize(index, dim) {
     if ( index === undefined) throw new Error('Missing required argument `index`')
@@ -112,7 +111,7 @@ class Index {
       this.#col = -1
       this.#row = -1
 
-    } else {  
+    } else {
 
       // if one argument passed treat it as col index
       if ( col === undefined) {
@@ -120,7 +119,6 @@ class Index {
         row = 0
         this.#onedimensional = true
       }
-  
       this._argCheck(row, col)
       this.#col = col
       this.#row = row

@@ -1,6 +1,6 @@
 /**@ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")} MemoryVisView */
 /**@ignore @typedef {import("@renderer/models/types/ArrayType")} ArrayType */
-/** @ignore @typedef {import("@renderer/models/Index")} Index */
+/** @ignore @typedef {import("@renderer/models/Idx")} Index */
 
 const d3 = require('d3')
 
@@ -386,7 +386,7 @@ class MemoryVisViewGrid {
       // acting on the initial rendering of this.#node
       this.#svg.on('ready', () => observer.observe( $(this.#node)[0]))
 
-      let Index = require('@renderer/models/Index')
+      let Index = require('@renderer/models/Idx')
       this.read(new Index(1,1))
 
       this.#rendered = true

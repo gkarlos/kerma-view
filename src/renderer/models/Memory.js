@@ -5,7 +5,7 @@
 // const MemorySrc    = require("@renderer/models/source/MemorySrc")
 const AddressSpace = require("@renderer/models/memory/AddressSpace")
 const Type         = require("@renderer/models/types/Type")
-const SrcLoc = require("../source/SrcLoc")
+const SrcLoc = require("./source/SrcLoc")
 
 
 /**
@@ -24,7 +24,7 @@ const SrcLoc = require("../source/SrcLoc")
  * Again, this class is used to refer to contiguous memory ranges;
  * pointers are explicitely modeled by {@link module:memory.Pointer}
  * 
- * @memberof module:memory
+ * @memberof module:models
  */
 class Memory {
   /**@type {Type}         */ #type

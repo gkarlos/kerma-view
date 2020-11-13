@@ -1,8 +1,8 @@
-const App       = require('@renderer/app')
+const App = require('@renderer/app')
 const Component = require('@renderer/ui/component/Component')
-const fs              = require('@common/util/fs')
-const {InternalError} = require('@common/util/error')
-const Events    = require('@renderer/events')
+const fs = require('@common/util/fs')
+const { InternalError } = require('@common/util/error')
+const Events = require('@renderer/events')
 const path = require('path')
 const EditorToolbar = require('./EditorToolbar')
 
@@ -19,8 +19,11 @@ class Editor extends Component {
   // /**@type {Object.<string, { model: TextModel, state: IEditorViewState, tab: EditorTab}} */
   // Data = {}
 
+  /**@type {string[]} */
+  #decorations
+
   /** */
-  constructor( id, container) {
+  constructor(id, container) {
     super(id, container)
     this.name = `Editor[${this.id}]`
     this.rendered = false;
@@ -30,21 +33,22 @@ class Editor extends Component {
     this.Toolbar = new EditorToolbar('editor-toolbar', `#${App.ui.layout.body.left.top.id}`)
     this.Tabs = this.Toolbar.tabs;
 
-    this.AMDLoader  = require('../../../../node_modules/monaco-editor/min/vs/loader.js');
+    this.AMDLoader = require('../../../../node_modules/monaco-editor/min/vs/loader.js');
     this.AMDRequire = this.AMDLoader.require;
-    this.AMDDefine  = this.AMDLoader.require.define;
+    this.AMDDefine = this.AMDLoader.require.define;
     this.AMDRequire.config({
       baseUrl: fs.uriFromPath(path.join(__dirname, '../../../../node_modules/monaco-editor/min'))
     });
     this.finishedLoading = false;
+    this.#decorations = []
   }
 
   isRendered() { return this.rendered }
   get tabs() { return Tabs }
 
   openWithTab(data, tab) {
-    if ( this.isRendered()) {
-      if ( tab) {
+    if (this.isRendered()) {
+      if (tab) {
         this.Tabs.closeAll()
         this.Tabs.add(tab, true)
       }
@@ -59,27 +63,50 @@ class Editor extends Component {
    * @param {number} lineEnd 
    */
   highlightRange(lineStart, lineEnd) {
-    console.log("highlighting range", lineStart, lineEnd)
-    let decorations = this.editor.deltaDecorations([], [
-      { range: new this.monaco.Range(lineStart,1,lineEnd,1),
+    this.#decorations = this.editor.deltaDecorations([], [
+      {
+        range: new this.monaco.Range(lineStart, 1, lineEnd, 1),
         options: {
           isWholeLine: true,
           linesDecorationsClassName: 'editor-kernel-line-decoration',
-          className : 'editor-kernel-line-highlight'
-        }}
+          className: 'editor-kernel-line-highlight',
+          wordWrap: 'on',
+          wordWrapColumn: 110,
+          wrappingIndent: "indent",
+        }
+      }
     ])
-    console.log(decorations)
+    //     mock.kernels.forEach(kernel => {
+    //       decorations.push({
+    //         range: new this.monaco.Range(...(kernel.source.range)),
+    //         options: {
+    //           isWholeLine : true, 
+    //           linesDecorationsClassName: 'editor-kernel-line-decoration',
+    //           className : 'editor-kernel-line-highlight'
+    //         }
+    //       })
+    //     })
+  }
 
-  //     mock.kernels.forEach(kernel => {
-  //       decorations.push({
-  //         range: new this.monaco.Range(...(kernel.source.range)),
-  //         options: {
-  //           isWholeLine : true, 
-  //           linesDecorationsClassName: 'editor-kernel-line-decoration',
-  //           className : 'editor-kernel-line-highlight'
-  //         }
-  //       })
-  //     })
+  /**
+   * @param {number} lineStart
+   * @param {number} lineEnd
+   * @param {number} type
+   */
+  colorGlyphRange(lineStart, lineEnd, type) {
+    console.log(lineStart, lineEnd, type)
+    this.editor.deltaDecorations([], [
+      {
+        range: new this.monaco.Range(lineStart, 1, lineEnd, 1),
+        options: {
+          glyphMarginClassName: type == 1 ? 'gutter-glyph-memory-read' : (type == 2 ? 'gutter-glyph-memory-write' : 'gutter-glyph-memory-read-write')
+        }
+      }
+    ])
+  }
+
+  jumpToRange(range) {
+    this.editor.revealLinesInCenter(range.from.line, range.to.line)
   }
   // /**
   //  * @param {String} value
@@ -126,7 +153,7 @@ class Editor extends Component {
   // }
 
   markLineRead(lineno) {
-
+    // glyphMarginClassName: 'gutter-glyph-memory-read-write',
   }
 
   markLineWrite(lineno) {
@@ -142,7 +169,7 @@ class Editor extends Component {
   }
 
   updateLayout() {
-    if( this.editor)
+    if (this.editor)
       this.editor.layout()
   }
 
@@ -151,7 +178,7 @@ class Editor extends Component {
   }
 
   render() {
-    if ( this.isRendered() ) {
+    if (this.isRendered()) {
       console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
       return this;
     }
@@ -175,6 +202,9 @@ class Editor extends Component {
       this.finishedLoading = true;
       this.rendered = true;
       this.Tabs.onSelect(tab => this._selectTab(tab))
+      App.on(Events.UI_RESIZE, () => {
+        this.editor.layout()
+      });
       App.emit(Events.EDITOR_LOADED, monaco)
     })
 
@@ -183,7 +213,7 @@ class Editor extends Component {
   }
 
   useDefaultControls() {
-    if ( !this.rendered)
+    if (!this.rendered)
       throw new InternalError('Component must be rendered before calling defaultControls()')
 
     // let on = (event, cb) => App.on(event, cb)
@@ -210,74 +240,74 @@ class Editor extends Component {
     // })
 
     // Monaco finished loading the input file
-  //   on(Events.EDITOR_INPUT_LOADED, () => { 
-  //     if ( mock.kernels.length == 0)
-  //       return;
+    //   on(Events.EDITOR_INPUT_LOADED, () => { 
+    //     if ( mock.kernels.length == 0)
+    //       return;
 
-  //     let decorations = []
+    //     let decorations = []
 
-  //     mock.kernels.forEach(kernel => {
-  //       decorations.push({
-  //         range: new this.monaco.Range(...(kernel.source.range)),
-  //         options: {
-  //           isWholeLine : true, 
-  //           linesDecorationsClassName: 'editor-kernel-line-decoration',
-  //           className : 'editor-kernel-line-highlight'
-  //         }
-  //       })
-  //     })
+    //     mock.kernels.forEach(kernel => {
+    //       decorations.push({
+    //         range: new this.monaco.Range(...(kernel.source.range)),
+    //         options: {
+    //           isWholeLine : true, 
+    //           linesDecorationsClassName: 'editor-kernel-line-decoration',
+    //           className : 'editor-kernel-line-highlight'
+    //         }
+    //       })
+    //     })
 
-  //     mock.kernels.forEach(kernel => {
-  //       // if ( kernel.statements.read.length == 0 && kernel.statements.write.length == 0 && kernel.statements.readwrite.length == 0)
-  //       //   console.log(`No statements found for kernel: ${kernel.source.name}`)
-  //       // else
-  //       //   console.log(`Statements for kernel: ${kernel.source.name}`)
+    //     mock.kernels.forEach(kernel => {
+    //       // if ( kernel.statements.read.length == 0 && kernel.statements.write.length == 0 && kernel.statements.readwrite.length == 0)
+    //       //   console.log(`No statements found for kernel: ${kernel.source.name}`)
+    //       // else
+    //       //   console.log(`Statements for kernel: ${kernel.source.name}`)
 
-  //       kernel.statements.read.forEach(readStmt => {
-  //         readStmt.reads.forEach(read => {
-  //           decorations.push({
-  //             range: new this.monaco.Range(read.from.row, read.from.col, read.to.row, read.to.col),
-  //             options : { 
-  //               glyphMarginClassName: 'gutter-glyph-memory-read',
-  //               minimap: {
-  //                 color: 'rgb(191, 127, 63)',
-  //                 position: 1
-  //               }
-  //             }
-  //           })
-  //         })
-  //       })
+    //       kernel.statements.read.forEach(readStmt => {
+    //         readStmt.reads.forEach(read => {
+    //           decorations.push({
+    //             range: new this.monaco.Range(read.from.row, read.from.col, read.to.row, read.to.col),
+    //             options : { 
+    //               glyphMarginClassName: 'gutter-glyph-memory-read',
+    //               minimap: {
+    //                 color: 'rgb(191, 127, 63)',
+    //                 position: 1
+    //               }
+    //             }
+    //           })
+    //         })
+    //       })
 
-  //       kernel.statements.write.forEach(writeStmt => {
-  //         writeStmt.forEach(write => {
-  //           decorations.push({
-  //             range: new this.monaco.Range(write.from.row, write.from.col, write.to.row, write.to.col),
-  //             options : {
-  //               glyphMarginClassName: 'gutter-glyph-memory-write'
-  //             }
-  //           })
-  //         })
-  //       })
+    //       kernel.statements.write.forEach(writeStmt => {
+    //         writeStmt.forEach(write => {
+    //           decorations.push({
+    //             range: new this.monaco.Range(write.from.row, write.from.col, write.to.row, write.to.col),
+    //             options : {
+    //               glyphMarginClassName: 'gutter-glyph-memory-write'
+    //             }
+    //           })
+    //         })
+    //       })
 
-  //       kernel.statements.readwrite.forEach(readWriteStmt => {
-  //         decorations.push({
-  //           range: new this.monaco.Range(readWriteStmt.source.from.row, readWriteStmt.source.from.col, 
-  //                                        readWriteStmt.source.to.row, readWriteStmt.source.to.col),
-  //           options : { 
-  //             glyphMarginClassName: 'gutter-glyph-memory-read-write',
-  //             minimap: {
-  //               color: 'rgb(191, 127, 63)',
-  //               position: 1
-  //             }
-  //           }
-  //         })
-  //       })
-  //     })
+    //       kernel.statements.readwrite.forEach(readWriteStmt => {
+    //         decorations.push({
+    //           range: new this.monaco.Range(readWriteStmt.source.from.row, readWriteStmt.source.from.col, 
+    //                                        readWriteStmt.source.to.row, readWriteStmt.source.to.col),
+    //           options : { 
+    //             glyphMarginClassName: 'gutter-glyph-memory-read-write',
+    //             minimap: {
+    //               color: 'rgb(191, 127, 63)',
+    //               position: 1
+    //             }
+    //           }
+    //         })
+    //       })
+    //     })
 
-  //     this.instance.deltaDecorations([], decorations)
-  //   })
+    //     this.instance.deltaDecorations([], decorations)
+    //   })
 
-  // }
+    // }
   }
 }
 

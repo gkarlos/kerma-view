@@ -2,7 +2,7 @@
 
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionModel")} KernelSelectionModel */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionView")} KernelSelectionView */
-/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
+/** @ignore @typedef {import("@renderer/models/Kernel")} Kernel */
 
 const App = require('@renderer/app')
 const KernelSelectionModel = require('@renderer/services/kernel-selection/KernelSelectionModel')
@@ -72,7 +72,9 @@ class KernelSelectionService {
    * @returns {KernelSelection} this
    */
   addKernel(kernel, enable=false) {
+    console.log("Adding kernel ", kernel)
     this.#model.addKernel(kernel)
+    console.log(this.#model)
     this.#view.addKernel(kernel)
     if ( enable && !this.#view.isEnabled())
       this.#view.enable()
@@ -239,8 +241,8 @@ class KernelSelectionService {
 ///       Events        ///
 /// ------------------- ///
 
-/** 
- * @static  
+/**
+ * @static
  * @property {String} Select
  * @property {String} Enabled
  * @property {String} Disabled

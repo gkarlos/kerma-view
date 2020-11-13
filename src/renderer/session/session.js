@@ -1,9 +1,9 @@
-/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
+/** @ignore @typedef {import("@renderer/models/Kernel")} Kernel */
 
 class Session {
   id = null;
-  /** @type CuKernel   */ #kernel
-  /** @type CuKernel[] */ #kernels
+  /** @type Kernel   */ #kernel
+  /** @type Kernel[] */ #kernels
   constructor(id=null) {
     if ( !id) {
       this.id = require('crypto').randomBytes(16).toString('base64');
@@ -12,24 +12,24 @@ class Session {
   }
 
   /**
-   * @param {CuKernel} kernel
+   * @param {Kernel} kernel
    */
   addKernel(kernel) {  this.#kernels.push(kernel); }
 
   /**
-   * @param {CuKernel} kernels
+   * @param {Kernel} kernels
    */
   setKernels(kernels) { this.#kernels = kernels }
 
   /**
-   * @param {CuKernel} kernel
+   * @param {Kernel} kernel
    */
   setKernel(kernel) {
     this.#kernel = kernel
     return this
   }
 
-  /** @returns {CuKernel[]} */
+  /** @returns {Kernel[]} */
   getKernels() { return this.#kernels }
 
   /**

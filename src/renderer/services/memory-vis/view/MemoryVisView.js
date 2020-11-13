@@ -1,6 +1,6 @@
 /** @ignore @typedef {import("@renderer/services/memory-vis/MemoryVisModel")} MemoryVisModel */
-/** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
-/** @ignore @typedef {import("@renderer/models/Index")} Index */
+/** @ignore @typedef {import("@renderer/models/Memory")} Memory */
+/** @ignore @typedef {import("@renderer/models/Idx")} Index */
 
 const MemoryVisViewHeader  = require('@renderer/services/memory-vis/view/MemoryVisViewHeader')
 const MemoryVisViewGrid = require('@renderer/services/memory-vis/view/MemoryVisViewGrid')

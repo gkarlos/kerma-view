@@ -58,6 +58,7 @@ class InputService extends Service {
     App.on(App.Events.KERMAD_INPUT_ERROR, () => this.reset())
   }
 
+  /** */
   reset() {
     Toolbar.reset();
     this.#dir = undefined

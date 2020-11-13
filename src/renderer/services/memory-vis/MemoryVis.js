@@ -1,4 +1,4 @@
-/** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
+/** @ignore @typedef {import("@renderer/models/Memory")} Memory */
 /** @ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")`} MemoryVisView */
 /** @ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisModel")`} MemoryVisModel */
 

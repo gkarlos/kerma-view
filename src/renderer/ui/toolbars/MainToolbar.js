@@ -17,8 +17,8 @@ class MainToolbar extends Component {
     this.rendered = false
     this.node = null
     this.insertTo = null;
-    this.kernelSelector = new KernelSelector('select-kernel', '#kernel-launch-selection-row', this.app)
-    this.kernelLaunchSelector = new KernelLaunchSelector('select-kernel-launch', '#kernel-launch-selection-row', this.app);
+    this.kernelSelector = new KernelSelector('select-kernel', '#main-selection-firstrow', this.app)
+    this.kernelLaunchSelector = new KernelLaunchSelector('select-kernel-launch', '#main-selection-firstrow', this.app);
     // this.codeNavToolbar = new CodeNavToolbar('code-nav-toolbar', '#codenav-threadselect-row', this.app, true)
     // this.app.ui.registerComponent(this)
     // this.app.ui.toolbar.main = this
@@ -31,7 +31,7 @@ class MainToolbar extends Component {
     
     this.node = $(`
       <div id="${this.id}" class="input-group card-header">
-        <div class="row selection-row d-inline-flex justify-content-between" id="kernel-launch-selection-row">
+        <div class="d-inline-flex justify-content-between">
         </div>
         <div class="row selection-row d-inline-flex justify-content-between" id="codenav-threadselect-row">
         </div>

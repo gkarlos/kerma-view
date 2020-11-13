@@ -1,6 +1,6 @@
 const {uuid} = require('@renderer/util/random')
 
-/** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
+/** @ignore @typedef {import("@renderer/models/Memory")} Memory */
 
 /**
  * Model for a memory visualization

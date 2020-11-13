@@ -1,4 +1,4 @@
-const Index = require('@renderer/models/Index')
+const Index = require('@renderer/models/Idx')
 
 /** @ignore @typedef import("@renderer/models/Dim") Dim */
 /** @ignore @typedef import("@renderer/models/cuda/CudaDim") Dim */

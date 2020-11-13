@@ -58,21 +58,21 @@ class MainSelectionArea extends Container {
       </div>
     `).appendTo(this.#locationSelector))
 
-    this.#firstRow = { node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="kernel-launch-selection-row"></div>`) }
+    this.#firstRow = { node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="main-selection-firstrow"></div>`) }
     let secondRow = { 
-      node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="compute-selection-row"</div>`),
+      node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="main-selection-secondrow"</div>`),
     }
 
     secondRow.left = {
-      node : $(`<div id="compute-selection-row-left"></div>`).appendTo(secondRow.node)
+      node : $(`<div id="main-selection-secondrow-left"></div>`).appendTo(secondRow.node)
     }
     
     secondRow.left.firstRow = {
-      node :  $(`<div id="compute-selection-row-left-firstRow"></div>`).appendTo(secondRow.left.node)
+      node :  $(`<div id="main-selection-secondrow-left-firstRow"></div>`).appendTo(secondRow.left.node)
     }
 
     secondRow.right = {
-      node : $(`<div id="compute-selection-row-right"></div>`).appendTo(secondRow.node)
+      node : $(`<div id="main-selection-secondrow-right"></div>`).appendTo(secondRow.node)
     }
 
     this.#secondRow = secondRow

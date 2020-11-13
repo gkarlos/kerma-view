@@ -194,6 +194,7 @@ class InputToolbar extends Component {
 
   /** */
   disable() {
+    // console.log("disabling")
     this.enabled = false
     this.disablePathBrowseButton()
     this.disablePathInput()
@@ -203,8 +204,10 @@ class InputToolbar extends Component {
 
   /** */
   enable() {
+    // console.log("enabling")
     this.enabled = true
     this.enablePathBrowseButton()
+    this.enablePathExamplesButton()
     this.enablePathInput()
     return this
   }
@@ -213,6 +216,7 @@ class InputToolbar extends Component {
   reset() {
     this.resetPathInput()
     this.resetArgInput()
+    this.enable()
   }
 
   setPath(val) {

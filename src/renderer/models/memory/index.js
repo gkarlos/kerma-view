@@ -13,5 +13,5 @@
  *  Models arbitrary memory ranges
  *//*--------------------------------------------------------------*/
 module.exports = {
-  Memory : require('./Memory'),
+  Memory : require('../Memory'),
 }

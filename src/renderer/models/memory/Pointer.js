@@ -1,5 +1,5 @@
 const AddressSpace = require("@renderer/models/memory/AddressSpace")
-const Memory       = require('@renderer/models/memory/Memory')
+const Memory       = require('@renderer/models/Memory')
 const PtrType      = require('@renderer/models/types/PtrType')
 
 /**

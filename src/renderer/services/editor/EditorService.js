@@ -6,6 +6,9 @@ const EditorTab = require('@renderer/services/editor/EditorTab')
 const resolve = require('@common/util/path').resolve
 const path = require('path')
 
+/** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
+
+
 /** @type EditorView */ var Editor = undefined
 
   /** @type {EditorTab} */
@@ -67,10 +70,22 @@ class EditorService extends Service {
    * @param {CuKernel[]} kernels
    */
   highlightKernels(kernels) {
-    if ( kernels)
-      kernels.forEach(kernel =>
-        Editor.highlightRange(kernel.range.fromLine, kernel.range.toLine))
+    if ( kernels) {
+      kernels.forEach(kernel => {
+        // gray background for kernel text
+        Editor.highlightRange(kernel.range.fromLine, kernel.range.toLine)
+
+        // mark statements
+        kernel.stmts.forEach(stmt => Editor.colorGlyphRange(stmt.range.fromLine, stmt.range.toLine, stmt.type))
+      })
+    }
   }
+
+
+  /**
+   * @param {CuKernel} kernel
+   */
+  jumptToKernel(kernel) { Editor.jumpToRange(kernel.range) }
   /** opens both source and compile commands */
   // open(input) {
   //   let self = this
@@ -152,6 +167,9 @@ class EditorService extends Service {
   //   })
   // }
 
+  reset() {
+    // TODO
+  }
 
   viewLoaded() {
     return Editor.hasFinishedLoading();

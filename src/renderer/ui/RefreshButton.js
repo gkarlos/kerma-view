@@ -66,7 +66,7 @@ class RefreshButton extends Component {
   }
 
   useDefaultControls() {
-    this.node.on('click', () => App.reload())
+    this.node.on('click', () => App.emit(App.Events.RELOAD))
   }
 }
 

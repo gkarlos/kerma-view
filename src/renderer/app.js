@@ -3,6 +3,7 @@
 /** @ignore @typedef {import("@renderer/services/log/ConsoleLogger")}                         ConsoleLogger           */
 /** @ignore @typedef {import("@renderer/services/notification/NotificationService")}          NotificationService     */
 /** @ignore @typedef {import("@renderer/services/kernel-selection/KernelSelectionService")}   KernelSelectionService  */
+/** @ignore @typedef {import("@renderer/services/kernel-informer/KernelInformerService")}     KernelInformerService   */
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionService")}   LaunchSelectionService  */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionService")} ComputeSelectionService */
 /** @ignore @typedef {import("@renderer/services/memory-vis/MemoryVisService")}               MemoryVisService        */
@@ -10,6 +11,7 @@
 /** @ignore @typedef {import("@renderer/services/editor/EditorService")}                      EditorService           */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
+const { Kernel, Stmt } = require("@renderer/models");
 const ColorGenerator = require("./util/ColorGenerator");
 
 const Session = require("@renderer/session").Session;
@@ -21,14 +23,14 @@ const Session = require("@renderer/session").Session;
  * @subcategory main
  */
 const App = {}
-App.Electron = { remote : undefined, app : undefined}
+App.Electron = { remote: undefined, app: undefined }
 App.Electron.remote = require('electron').remote
 App.remote = App.Electron.remote;
-App._               = require('underscore')
-App.Emitter    = new (require('events'))()
-App.on         = App.Emitter.on
-App.emit       = App.Emitter.emit
-App.once       = App.Emitter.once
+App._ = require('underscore')
+App.Emitter = new (require('events'))()
+App.on = App.Emitter.on
+App.emit = App.Emitter.emit
+App.once = App.Emitter.once
 App.eventNames = App.Emitter.eventNames
 App.Events = require('./events')
 App.events = App.Events
@@ -41,16 +43,18 @@ App.Kermad = undefined
  * @property {module:kernel-selection.KernelSelectionService} KernelSelection
  */
 App.Services = {
-  /** @type {ConsoleLogger}           */ Log : undefined,
-  /** @type {NotificationService}     */ Notification : undefined,
-  /** @type {KernelSelectionService}  */ KernelSelection : undefined,
-  /** @type {LaunchSelectionService}  */ LaunchSelection : undefined,
-  /** @type {ComputeSelectionService} */ ComputeSelection : undefined,
-  /** @type {EditorService}           */ Editor : undefined,
-  /** @type {CodenavService}          */ Codenav : undefined,
-  /** @type {MemoryVisService}        */ Vis : undefined,
-  /** @type {Boolean}                 */ preUiReady : false,
-  /** @type {Boolean}                 */ postUiReady : false,
+  /** @type {ConsoleLogger}           */ Log: undefined,
+  /** @type {NotificationService}     */ Notification: undefined,
+  /** @type {KernelSelectionService}  */ KernelSelection: undefined,
+  /** @type {LaunchSelectionService}  */ LaunchSelection: undefined,
+  /** @type {ComputeSelectionService} */ ComputeSelection: undefined,
+  /** @type {KernelInformerService}   */ KernelInformer : undefined,
+  /** @type {InputService}            */ Input: undefined,
+  /** @type {EditorService}           */ Editor: undefined,
+  /** @type {CodenavService}          */ Codenav: undefined,
+  /** @type {MemoryVisService}        */ Vis: undefined,
+  /** @type {Boolean}                 */ preUiReady: false,
+  /** @type {Boolean}                 */ postUiReady: false,
   /** @type {Boolean} */
   get ready() {
     return App.Services.preUiReady && app.Services.postUiReady
@@ -59,8 +63,10 @@ App.Services = {
 /** @type {NotificationService}    */ App.Notifier
 /** @type {ConsoleLogger}          */ App.Logger
 /** @type {EditorService}          */ App.Editor
+/** @type {InputService}           */ App.Input
 /** @type {Session}                */ App.Session
 /** @type {KernelSelectionService} */ App.KernelSelector
+/** @type {KernelInformerService}  */ App.KernelInformer
 // App.Session = {
 //   input: { source:"", compiledb: "", args: ""}
 // }
@@ -71,7 +77,7 @@ App.Examples = App.remote.getGlobal("examples")
 /// ------------------- ///
 
 /** @method */
-App.enableLogging  = () => { App.Services.Log.enable() }
+App.enableLogging = () => { App.Services.Log.enable() }
 /** @method */
 App.disableLogging = () => { App.Services.Log.disable() }
 
@@ -88,46 +94,50 @@ App.reload = () => {
  * This is only meant to be called once. Subsequent calls are a no-op
  * @method
  */
-App.main = function() {
-  if ( App.started) return false
+App.main = function () {
+  if (App.started) return false
   App.started = true
 
-  const NotificationService       = require('./services/notification').NotificationService
-  const ConsoleLogger             = require('./services/log').ConsoleLogger
-  const KernelSelectionService    = require('./services/kernel-selection').KernelSelectionService
+  const NotificationService = require('./services/notification').NotificationService
+  const ConsoleLogger = require('./services/log').ConsoleLogger
+  const KernelSelectionService = require('./services/kernel-selection').KernelSelectionService
   // const LaunchSelectionService    = require('./services/launch-selection').LaunchSelectionService
-  const ComputeSelectionService   = require('./services/compute-selection').ComputeSelectionService
-  const MemoryVisService          = require('./services/memory-vis').MemoryVisService
-  const CodenavService            = require("./services/codenav/CodenavService")
-  const InputService              = require("./services/input").InputService;
-  const EditorService             = require('./services/editor/EditorService')
+  const KernelInformerService = require('./services/kernel-informer').KernelInformerService
+  const ComputeSelectionService = require('./services/compute-selection').ComputeSelectionService
+  const MemoryVisService = require('./services/memory-vis').MemoryVisService
+  const CodenavService = require("./services/codenav/CodenavService")
+  const InputService = require("./services/input").InputService;
+  const EditorService = require('./services/editor/EditorService')
   const Kermad = require('@renderer/client/KermadClient')
   const Events = App.Events
   const TAG = "[app]"
 
   /// Initialize servises that don't require the UI
   function initPreUiServices() {
-    if ( !App.Services.preUiReady) {
-      App.Services.Log = new ConsoleLogger({level: ConsoleLogger.Level.Debug, color: true, timestamps: true}).enable()
+    if (!App.Services.preUiReady) {
+      App.Services.Log = new ConsoleLogger({ level: ConsoleLogger.Level.Debug, color: true, timestamps: true }).enable()
       App.Logger = App.Services.Log
       App.Services.preUiReady = true
     }
   }
   /// Initialize servises that require the UI
   function initPostUiServices() {
-    if ( App.Services.postUiReady) return
+    if (App.Services.postUiReady) return
 
-    App.Services.Editor           = new EditorService()
-    App.Services.Notification     = new NotificationService().enable()
-    App.Services.KernelSelection  = new KernelSelectionService().enable()
+    App.Services.Editor = new EditorService()
+    App.Services.Notification = new NotificationService().enable()
+    App.Services.KernelSelection = new KernelSelectionService().enable()
+    App.Services.KernelInformer = new KernelInformerService()
     // App.Services.LaunchSelection  = new LaunchSelectionService().enable()
     App.Services.ComputeSelection = new ComputeSelectionService().enable()
-    App.Services.Vis              = new MemoryVisService().enable()
-    App.Services.CodenavService   = new CodenavService().enable()
-    App.Services.Input            = new InputService().enable()
+    App.Services.Vis = new MemoryVisService().enable()
+    App.Services.CodenavService = new CodenavService().enable()
+    App.Services.Input = new InputService().enable()
     App.Editor = App.Services.Editor;
     App.Notifier = App.Services.Notification
+    App.Input = App.Services.Input
     App.KernelSelector = App.Services.KernelSelection
+    App.KernelInformer = App.Services.KernelInformer
     App.Input = App.Services.InputService
     App.Services.postUiReady = true
     // App.Services.KernelSelection.onSelect (
@@ -140,7 +150,7 @@ App.main = function() {
 
     App.Services.ComputeSelection
       .defaultOnUnitSelect(
-        (unit, mode) => App.Logger.debug(TAG, "User selected", mode.equals(ComputeSelectionService.Mode.Warp)? "warp:" : "thread:", unit.toString(true))
+        (unit, mode) => App.Logger.debug(TAG, "User selected", mode.equals(ComputeSelectionService.Mode.Warp) ? "warp:" : "thread:", unit.toString(true))
       )
       .defaultOnModeChange(
         (oldMode, newMode) => App.Logger.debug(TAG, "User changed comp. select mode:", oldMode.toString(), "->", newMode.toString())
@@ -152,7 +162,7 @@ App.main = function() {
     // App.Services.KernelSelection.createEmpty(true)
     // App.Services.LaunchSelection.createEmpty(true)
 
-    App.on( Events.INPUT_SELECTED, (input) => {
+    App.on(Events.INPUT_SELECTED, (input) => {
       App.Logger.debug(TAG, "User selected file:", input.source)
       App.Services.KernelSelection.enable()
     })
@@ -168,33 +178,58 @@ App.main = function() {
   const { CuKernel } = require("./models/cuda");
   const { SrcRange } = require("./models/source");
 
+  App.on(Events.RELOAD, () => {
+    if (App.Session) {
+      Kermad.StopSession(false)
+        .then((res) => App.reload())
+        .catch((err) => App.reload())
+    }
+  })
+
   App.on(Events.INPUT_SELECTED, (input) => {
     // 1. open the file in the editor
     App.Editor
       .openSource(input.source, input.dir)
-      .catch(err => {
-        App.Notifier.error(err)
-        App.Services.Input.reset()
-      })
-      // 2. send to kermad for proprocessing
       .then(() => Kermad.StartSession(input.dir, input.source, input.compiledb))
       .then((res) => {
+        console.log("HERE")
+        console.log(res)
         App.Session = new Session()
         let Col = new ColorGenerator(res['kernels'].length)
-        for ( let kern of res['kernels'])
-          App.Session.addKernel(new CuKernel(kern.id, kern.name,
-                                             SrcRange.fromArray(kern.range), Col.next()))
+        res['kernels'].forEach(k => {
+          let Kern = new Kernel(k.id, k.name, SrcRange.fromArray(k.range), Col.next())
+          k['stmts'].forEach(stmt => Kern.addStmt(new Stmt(stmt.id, stmt.type, SrcRange.fromArray(stmt.range))))
+          Kern.stats = k.stats || {}
+          App.Session.addKernel(Kern);
+        });
+        console.log(App.Session.getKernels())
         App.KernelSelector.addKernels(App.Session.getKernels())
         App.Editor.highlightKernels(App.Session.getKernels())
       })
+      .catch(err => {
+        App.Notifier.error("Failed to start Session");
+        App.Logger.error(err);
+        setTimeout(() => {
+          App.Editor.reset();
+          App.Services.Input.reset()
+        }, 1000)
+      })
+
+    // 2. send to kermad for proprocessing
+
   })
 
   App.on(Events.INPUT_KERNEL_SELECTED, (kernel) => {
-    App.Logger.debug(TAG, "User selected kernel:", kernel.toString(true))
+    console.log(kernel)
+    // App.Logger.debug(TAG, "User selected kernel:", kernel.toString(true))
 
     App.Session.setKernel(kernel)
     // 1. editor jump to kernel
+    App.Editor.jumptToKernel(kernel)
+    App.KernelInformer.show(kernel)
   })
+
+
 }
 
 module.exports = App

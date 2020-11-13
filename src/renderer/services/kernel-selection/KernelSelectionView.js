@@ -91,7 +91,10 @@ class KernelSelectionView extends Component {
        */
       this.#viewimpl.on('change', (id) => {
         if ( id.length > 0) {
+          console.log(id)
+          console.log(this.#model)
           let kernel = this.#model.findKernelWithId(parseInt(id))
+          console.log(kernel)
           this.#emitter.emit('select', kernel)
         }
       })

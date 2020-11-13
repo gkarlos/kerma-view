@@ -218,7 +218,6 @@ class ElectronLayout extends BaseLayout {
     this.body.split = Split(['#left', '#right'], {
       sizes: [50, 50],
       onDrag: () => {
-        console.log(App)
         App.emit(App.Events.UI_RESIZE)
       }
     })

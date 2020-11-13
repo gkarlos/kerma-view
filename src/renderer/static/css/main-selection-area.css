@@ -1,0 +1,33 @@
+
+#main-selection-firstrow {
+    margin-bottom: 8px;
+    margin-right: auto;
+    height: auto !important;
+}
+
+#main-selection-secondrow {
+    height: 99%;
+    max-height: 99%;
+    display: flex;
+    /* max-height: 92%; */
+}
+
+#main-selection-secondrow-left,
+#main-selection-secondrow-right {
+    width: 49%
+}
+
+#main-selection-secondrow-left {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    max-height: 100%;
+    padding-left: 0px;
+}
+
+
+#main-selection-secondrow-left-firstrow{
+    display: flex;
+    position: relative;
+    flex-flow: row;
+}

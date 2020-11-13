@@ -1,16 +1,15 @@
-/** @ignore @typedef {import("@renderer/models/source/FunctionSrc")} FunctionSrc */
-/** @ignore @typedef {import("@renderer/models/cuda/CuLaunch")} CuLaunch */
+/** @ignore @typedef {import("@renderer/models/source/SrcRange")} SrcRange */
+/** @ignore @typedef {import("@renderer/models/Stmt")} Stmt */
 
-const SrcRange = require("../source/SrcRange")
 /**
- * @memberof module:cuda
+ * @memberof module:models
  */
-class CuKernel {
+class Kernel {
   /** @type {Number}   */ #id
   /** @type {SrcRange} */ #range
   /** @type {String}   */ #color
   /** @type {String}   */ #name
-  /** @type {} */
+  /** @type {Stmt[]}   */ #stmts
 
   /**
    * @param {Number} id
@@ -22,6 +21,14 @@ class CuKernel {
     this.#name = name
     this.#range = range
     this.#color = color
+    this.#stmts = []
+  }
+
+  /**
+   * @param {Stmt} stmt
+   */
+  addStmt(stmt) {
+    this.#stmts.push(stmt)
   }
 
   /** @type {Number} */
@@ -36,6 +43,9 @@ class CuKernel {
   /** @type {string} */
   get color() { return this.#color }
 
+  /** @type {Stmt[]} */
+  get stmts() { return this.#stmts }
+
   /**
    * @param {String} color
    * @return this;
@@ -46,10 +56,10 @@ class CuKernel {
   }
   /**
    * Compare with another kernel for equality
-   * @param {CuKernel} other
+   * @param {Kernel} other
    */
   equals(other) {
-    return (other instanceof CuKernel)
+    return (other instanceof Kernel)
       && this.#id === other.id
   }
 
@@ -63,4 +73,4 @@ class CuKernel {
   }
 }
 
-module.exports = CuKernel
+module.exports = Kernel

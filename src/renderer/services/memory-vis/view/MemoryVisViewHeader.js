@@ -1,5 +1,5 @@
 /** @ignore @typedef {import("@renderer/services/memory-vis/view/MemoryVisView")} MemoryVisView */
-/** @ignore @typedef {import("@renderer/models/memory/Memory")} Memory */
+/** @ignore @typedef {import("@renderer/models/Memory")} Memory */
 /** @ignore @typedef {import("@renderer/models/types/Type")} Type */
 /** @ignore @typedef {import("@renderer/models/types/ArrayType")} ArrayType */
 /** @ignore @typedef {import("@renderer/models/types/StructType")} StructType */

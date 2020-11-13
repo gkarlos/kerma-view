@@ -1,6 +1,6 @@
 /** @ignore @typedef {import("@renderer/models/cuda/CuKernel")} CuKernel */
 
-const { CuKernel } = require("@renderer/models/cuda")
+const { Kernel } = require("@renderer/models/Kernel")
 
 /**
  * @memberof module:kernel-selection
@@ -36,8 +36,7 @@ class KernelSelectionModel {
    * @returns {KernelSelectionModel} this
    */
   addKernel(kernel) {
-    if ( kernel instanceof CuKernel)
-      this.#options.push(kernel)
+    this.#options.push(kernel)
     return this
   }
 
