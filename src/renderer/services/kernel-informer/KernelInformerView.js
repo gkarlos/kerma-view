@@ -9,13 +9,12 @@ class KernelInformerView extends Component{
   #rendered
 
   constructor() {
-    super('kernel-informer', App.ui.containers.mainSelection.secondRow.right)
+    super('kernel-informer', App.ui.containers.mainSelection.secondRow.left)
     this.#rendered = false;
   }
 
   render() {
     if ( !this.#rendered) {
-      console.log(this.container)
       this.#node = $("<div></div>")
       $(this.container.node).insertAt(0, this.#node)
       this.#rendered = true
@@ -32,12 +31,34 @@ class KernelInformerView extends Component{
    * @param {Kernel} kernel
    */
   show(kernel) {
+
+    function ppDim (dim) {
+      let res = `${dim.x}`
+      if ( dim.z > 1) {
+        return `${dim.z} &#215 ${dim.y} &#215 ` + res
+      } else if (dim.y > 1) {
+        return `${dim.y} &#215 ` + res
+      }
+      return res
+    }
+
     if ( this.#rendered)
       this.#node.html(
         `
-          <strong>Loads:</strong> ${kernel.stats.loads} <br/>
-          <strong>Stores:</strong> ${kernel.stats.stores} <br/>
-        `
+        <table>
+          <tr>
+              <th class="small text-muted pr-2" scope="row">L/S/A</th>
+              <td>${kernel.stats.loads}/${kernel.stats.stores}/${kernel.stats.atomics}</td>
+          </tr>
+          <tr>
+              <th class="small text-muted pr-2" scope="row">Block</th>
+              <td>${ppDim(kernel.launch.grid)}</td>
+          </tr>
+          <tr>
+              <th class="small text-muted pr-2" scope="row">Grid</th>
+              <td>${ppDim(kernel.launch.block)}</td>
+          </tr>
+        </table>`
       )
   }
 }

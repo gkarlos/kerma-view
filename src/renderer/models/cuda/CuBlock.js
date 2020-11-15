@@ -1,5 +1,5 @@
 const CuWarp   = require('@renderer/models/cuda/CuWarp')
-const CuDim    = require('@renderer/models/cuda/CuDim')
+const Dim    = require('@renderer/models/Dim')
 const CuLimits = require('@renderer/models/cuda/CuLimits')
 const CuIndex  = require('@renderer/models/cuda/CuIndex')
 
@@ -13,7 +13,7 @@ var isCuIndex
  * @memberof module:cuda
  */
 class CuBlock {
-  /** @type {CuDim}           */ #dim
+  /** @type {Dim}           */ #dim
   /** @type {CuGrid}        */ #grid 
   /** @type {CuIndex}       */ #index
   /** @type {Array<CuWarp>} */ #warps

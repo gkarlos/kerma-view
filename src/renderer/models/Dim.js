@@ -34,17 +34,6 @@ class Dim {
   }
 
   /**
-   *
-   * Factory method to create a new Dim instance
-   * @param {Number} x Size of the x-dimension (Number of columns)
-   * @param {Number} [y] Size of the y-dimension (Number of rows)
-   * @param {Number} [z] Size of the z-dimension (Number of layers)
-   */
-  static of(x, y = 1, z = 1) {
-    return new Dim(x, y, z)
-  }
-
-  /**
    * Size of the x-dimension (Number of columns)
    * @returns {Number}
    */

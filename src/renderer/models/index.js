@@ -1,9 +1,10 @@
 /**
- * @module memory
+ * @module models
  * @category Renderer
  */
 module.exports = {
   Kernel : require('./Kernel'),
   Stmt : require('./Stmt'),
-  Index : require('./Idx')
+  Index : require('./Idx'),
+  Dim: require('./Dim')
 }

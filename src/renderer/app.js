@@ -11,9 +11,6 @@
 /** @ignore @typedef {import("@renderer/services/editor/EditorService")}                      EditorService           */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
-const { Kernel, Stmt } = require("@renderer/models");
-const ColorGenerator = require("./util/ColorGenerator");
-
 const Session = require("@renderer/session").Session;
 
 // const { allowUnknownOption } = require("commander");
@@ -48,7 +45,7 @@ App.Services = {
   /** @type {KernelSelectionService}  */ KernelSelection: undefined,
   /** @type {LaunchSelectionService}  */ LaunchSelection: undefined,
   /** @type {ComputeSelectionService} */ ComputeSelection: undefined,
-  /** @type {KernelInformerService}   */ KernelInformer : undefined,
+  /** @type {KernelInformerService}   */ KernelInformer: undefined,
   /** @type {InputService}            */ Input: undefined,
   /** @type {EditorService}           */ Editor: undefined,
   /** @type {CodenavService}          */ Codenav: undefined,
@@ -67,6 +64,7 @@ App.Services = {
 /** @type {Session}                */ App.Session
 /** @type {KernelSelectionService} */ App.KernelSelector
 /** @type {KernelInformerService}  */ App.KernelInformer
+/** @type {ComputeSelectionService}*/ App.ComputeSelector
 // App.Session = {
 //   input: { source:"", compiledb: "", args: ""}
 // }
@@ -98,6 +96,8 @@ App.main = function () {
   if (App.started) return false
   App.started = true
 
+  const { Kernel, Stmt, Dim } = require("@renderer/models");
+  const ColorGenerator = require("./util/ColorGenerator");
   const NotificationService = require('./services/notification').NotificationService
   const ConsoleLogger = require('./services/log').ConsoleLogger
   const KernelSelectionService = require('./services/kernel-selection').KernelSelectionService
@@ -138,6 +138,7 @@ App.main = function () {
     App.Input = App.Services.Input
     App.KernelSelector = App.Services.KernelSelection
     App.KernelInformer = App.Services.KernelInformer
+    App.ComputeSelector = App.Services.ComputeSelection
     App.Input = App.Services.InputService
     App.Services.postUiReady = true
     // App.Services.KernelSelection.onSelect (
@@ -148,16 +149,16 @@ App.main = function () {
     //   launch => App.Logger.debug(TAG, "User selected launch:", launch.toString(true))
     // )
 
-    App.Services.ComputeSelection
-      .defaultOnUnitSelect(
-        (unit, mode) => App.Logger.debug(TAG, "User selected", mode.equals(ComputeSelectionService.Mode.Warp) ? "warp:" : "thread:", unit.toString(true))
-      )
-      .defaultOnModeChange(
-        (oldMode, newMode) => App.Logger.debug(TAG, "User changed comp. select mode:", oldMode.toString(), "->", newMode.toString())
-      )
-      .defaultOnBlockChange(
-        (oldBlock, newBlock) => App.Logger.debug(TAG, "User selected block:", newBlock.getIndex().toString())
-      )
+    // App.Services.ComputeSelection
+    //   .defaultOnUnitSelect(
+    //     (unit, mode) => App.Logger.debug(TAG, "User selected", mode.equals(ComputeSelectionService.Mode.Warp) ? "warp:" : "thread:", unit.toString(true))
+    //   )
+    //   .defaultOnModeChange(
+    //     (oldMode, newMode) => App.Logger.debug(TAG, "User changed comp. select mode:", oldMode.toString(), "->", newMode.toString())
+    //   )
+    //   .defaultOnBlockChange(
+    //     (oldBlock, newBlock) => App.Logger.debug(TAG, "User selected block:", newBlock.getIndex().toString())
+    //   )
 
     // App.Services.KernelSelection.createEmpty(true)
     // App.Services.LaunchSelection.createEmpty(true)
@@ -174,8 +175,6 @@ App.main = function () {
     initPostUiServices()
   })
 
-
-  const { CuKernel } = require("./models/cuda");
   const { SrcRange } = require("./models/source");
 
   App.on(Events.RELOAD, () => {
@@ -192,17 +191,16 @@ App.main = function () {
       .openSource(input.source, input.dir)
       .then(() => Kermad.StartSession(input.dir, input.source, input.compiledb))
       .then((res) => {
-        console.log("HERE")
-        console.log(res)
         App.Session = new Session()
         let Col = new ColorGenerator(res['kernels'].length)
         res['kernels'].forEach(k => {
           let Kern = new Kernel(k.id, k.name, SrcRange.fromArray(k.range), Col.next())
+            .setLaunch(new Dim(k['launch'].grid.x, k['launch'].grid.y, k['launch'].grid.z),
+                       new Dim(k['launch'].block.x, k['launch'].block.y, k['launch'].block.z))
+            .setStatistics(k.stats || {})
           k['stmts'].forEach(stmt => Kern.addStmt(new Stmt(stmt.id, stmt.type, SrcRange.fromArray(stmt.range))))
-          Kern.stats = k.stats || {}
           App.Session.addKernel(Kern);
         });
-        console.log(App.Session.getKernels())
         App.KernelSelector.addKernels(App.Session.getKernels())
         App.Editor.highlightKernels(App.Session.getKernels())
       })
@@ -227,6 +225,8 @@ App.main = function () {
     // 1. editor jump to kernel
     App.Editor.jumptToKernel(kernel)
     App.KernelInformer.show(kernel)
+    // 2. enable compute selection
+    App.ComputeSelector.show(kernel)
   })
 
 

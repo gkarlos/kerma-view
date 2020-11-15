@@ -1,5 +1,5 @@
 const Limits    = require('@renderer/models/cuda/CuLimits')
-const CuDim   = require('@renderer/models/cuda/CuDim')
+const CuDim   = require('@renderer/models/Dim')
 const CuIndex = require('@renderer/models/cuda/CuIndex')
 const CuBlock = require('@renderer/models/cuda/CuBlock')
 const Dim = require('@renderer/models/Dim')
@@ -11,8 +11,8 @@ const Dim = require('@renderer/models/Dim')
  * @memberof module:cuda
  */
 class CuGrid {
-  /** @type {CuDim}   */ #dim
-  /** @type {CuDim}   */ #blockDim
+  /** @type {Dim}   */ #dim
+  /** @type {Dim}   */ #blockDim
   /** @type {CuBlock} */ #blockInstance
 
   /**

@@ -94,7 +94,6 @@ class Editor extends Component {
    * @param {number} type
    */
   colorGlyphRange(lineStart, lineEnd, type) {
-    console.log(lineStart, lineEnd, type)
     this.editor.deltaDecorations([], [
       {
         range: new this.monaco.Range(lineStart, 1, lineEnd, 1),

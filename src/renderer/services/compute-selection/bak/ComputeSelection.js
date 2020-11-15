@@ -2,7 +2,7 @@ const ComputeSelectionMode = require('@renderer/services/compute-selection/Compu
 const ComputeSelectionView = require('@renderer/services/compute-selection/ComputeSelectionView')
 const ComputeSelectionModel = require('@renderer/services/compute-selection/ComputeSelectionModel')
 const CuGrid = require('@renderer/models/cuda/CuGrid')
-const CuDim = require('@renderer/models/cuda/CuDim')
+const Dim = require('@renderer/models/Dim')
 const ThreadMode = ComputeSelectionMode.Thread
 const WarpMode = ComputeSelectionMode.Warp
 
@@ -41,19 +41,19 @@ class ComputeSelection {
   /// Accessor Properties ///
   /// ------------------- ///
 
-  /** 
+  /**
    * Grid description of this selection
-   * @type {CuGrid}
+   * @type {Dim}
    */
   get grid() { return this.#model.grid }
 
   /**
    * Block description of this selection
-   * @type {CuDim}
+   * @type {Dim}
    */
   get block() { return this.#model.grid.block }
 
-  /** 
+  /**
    * Mode of the unit selection
    * @type {ComputeSelectionMode}
    */

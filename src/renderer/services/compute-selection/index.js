@@ -10,7 +10,7 @@ module.exports = {
   ComputeSelectionThreadView : require('./ComputeSelectionThreadView'),
   ComputeSelectionService : require('./ComputeSelectionService'),
   Events : require('./Events'),
-  ComputeSelection : require('./ComputeSelection'),
+  // ComputeSelection : require('./ComputeSelection'),
   ComputeSelectionModel : require('./ComputeSelectionModel'),
   ComputeSelectionMode : require('./ComputeSelectionMode'),
   ComputeSelectionModeView : require('./ComputeSelectionModeView')

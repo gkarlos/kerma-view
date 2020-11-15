@@ -150,7 +150,7 @@ body {
 }
 
 #kernel-selection-group, #launch-selection-group {
-    width : 49%;
+    width : 100%;
     /* height: 100%; */
     height: 33px !important;
     /* margin-left: auto; */

@@ -49,16 +49,29 @@ class MainSelectionArea extends Container {
   get secondRow() { return this.#secondRow }
 
   render() {
-    
     if ( this.rendered )
       return console.log(`[warn] multiple render() calls for ${this.name}. This is a no-op`)
-    
     this.setNode($(`
       <div id="${this.id}" class="input-group card-header">
       </div>
     `).appendTo(this.#locationSelector))
 
-    this.#firstRow = { node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="main-selection-firstrow"></div>`) }
+    // this.#firstRow = { node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="main-selection-firstrow"></div>`) }
+
+    let firstRow = {
+      node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="main-selection-firstrow"</div>`),
+    }
+
+    firstRow.left = {
+      node : $(`<div id="main-selection-firstrow-left"></div>`).appendTo(firstRow.node)
+    }
+
+    firstRow.right = {
+      node : $(`<div id="main-selection-firstrow-right"></div>`).appendTo(firstRow.node)
+    }
+
+    this.#firstRow = firstRow;
+
     let secondRow = { 
       node: $(`<div class="row selection-row d-inline-flex justify-content-between" id="main-selection-secondrow"</div>`),
     }
@@ -66,7 +79,7 @@ class MainSelectionArea extends Container {
     secondRow.left = {
       node : $(`<div id="main-selection-secondrow-left"></div>`).appendTo(secondRow.node)
     }
-    
+
     secondRow.left.firstRow = {
       node :  $(`<div id="main-selection-secondrow-left-firstRow"></div>`).appendTo(secondRow.left.node)
     }

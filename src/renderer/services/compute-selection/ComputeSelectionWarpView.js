@@ -14,7 +14,7 @@ const Events = require("@renderer/services/compute-selection/Events")
  * @memberof module:compute-selection
  */
 class ComputeSelectionWarpView extends Component {
-  
+
   /** @type {ComputeSelectionModel} */ #model
   /** @type {JQuery} */                #node
   /** @type {JQuery} */                #selected
@@ -23,18 +23,17 @@ class ComputeSelectionWarpView extends Component {
   /** @type {Boolean} */               #active
   /** @type {Boolean} */               #enabled
   /** @type {Boolean} */               #disposed
-  
-  
+
   #options = {
     /** @type {String} */ usableThreadsMode : 'bar' /// or 'bar'
   }
 
 
   /**
-   * @param {ComputeSelectionModel} model 
+   * @param {ComputeSelectionModel} model
    */
   constructor(model) {
-    super('warp-selector', App.ui.containers.mainSelection.secondRow.left)
+    super('warp-selector', App.ui.containers.mainSelection.secondRow.right)
     this.#model = model
     this.#active = false
     this.#rendered = false

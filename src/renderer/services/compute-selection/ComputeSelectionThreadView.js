@@ -26,7 +26,7 @@ class ComputeSelectionThreadView extends Component {
    * @param {ComputeSelectionModel} model 
    */
   constructor(model) {
-    super("thread-selector", App.ui.containers.mainSelection.secondRow.left)
+    super("thread-selector", App.ui.containers.mainSelection.secondRow.right)
     this.#model    = model
     this.#active   = false
     this.#enabled  = false

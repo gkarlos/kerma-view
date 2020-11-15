@@ -72,9 +72,7 @@ class KernelSelectionService {
    * @returns {KernelSelection} this
    */
   addKernel(kernel, enable=false) {
-    console.log("Adding kernel ", kernel)
     this.#model.addKernel(kernel)
-    console.log(this.#model)
     this.#view.addKernel(kernel)
     if ( enable && !this.#view.isEnabled())
       this.#view.enable()

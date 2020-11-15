@@ -1,8 +1,17 @@
 
 #main-selection-firstrow {
-    margin-bottom: 8px;
+    /* margin-bottom: 8px; */
     margin-right: auto;
     height: auto !important;
+}
+
+
+#main-selection-firstrow-left,
+#main-selection-firstrow-right {
+    /* margin-bottom: 8px; */
+    margin-right: auto;
+    height: auto !important;
+    width: 49%;
 }
 
 #main-selection-secondrow {

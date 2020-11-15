@@ -41,7 +41,7 @@ class KernelSelectionView extends Component {
    * @param {KernelSelectionModel} model 
    */
   constructor(model) {
-    super('kernel-selector', App.ui.containers.mainSelection.firstRow)
+    super('kernel-selector', App.ui.containers.mainSelection.firstRow.left)
     this.#model = model
     this.#enabled = false
     this.#rendered = false
@@ -91,10 +91,7 @@ class KernelSelectionView extends Component {
        */
       this.#viewimpl.on('change', (id) => {
         if ( id.length > 0) {
-          console.log(id)
-          console.log(this.#model)
           let kernel = this.#model.findKernelWithId(parseInt(id))
-          console.log(kernel)
           this.#emitter.emit('select', kernel)
         }
       })

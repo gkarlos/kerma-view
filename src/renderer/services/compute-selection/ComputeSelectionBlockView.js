@@ -27,7 +27,7 @@ class ComputeSelectionBlockView extends Component {
    * @param {ComputeSelectionModel} model 
    */
   constructor(model) {
-    super('warp-selector', App.ui.containers.mainSelection.secondRow.left.firstRow)
+    super('warp-selector', App.ui.containers.mainSelection.firstRow.right)
     this.#model    = model
     this.#active   = false
     this.#enabled  = false

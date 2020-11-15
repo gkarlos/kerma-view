@@ -1,3 +1,13 @@
 #kernel-informer-wrapper {
     width: 49%
 }
+
+#kernel-informer-table {
+    font-family: "Lucida Console", Courier, monospace; 
+}
+
+.kernel-informer-table .table-label {
+    background-color: #f3dcfa;
+    font-weight: bold;
+    min-width: 120px;
+}   
