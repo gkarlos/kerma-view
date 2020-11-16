@@ -151,7 +151,7 @@ function createLoadingWindow() {
   cl.debug('Creating window: \'loading\'')
 
   let loading = new BrowserWindow({
-    show: true, 
+    show: true,
     frame: false,
     height: 30,
     width: 300,
@@ -178,6 +178,8 @@ function createMainWindow() {
   let win = new BrowserWindow({
     title: app.title,
     width : settings.window.width, height : settings.window.height,
+    minWidth: settings.window.minWidth,
+    minHeight: settings.window.minHeight,
     webPreferences : {
       nodeIntegration : true,
       nodeIntegrationInWorker: true

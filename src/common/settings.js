@@ -83,25 +83,27 @@ function isReleaseBuild() {
 module.exports = {
   /**
    * Control the application's verbosity. Values `0,1,2`. At `verbose=0` no output is produced except for errors
-   * @type {(0|1|2)} 
+   * @type {(0|1|2)}
    * @default {@link defaults.verboce} => 0
    */
   verbose : 0,
   numDisplays : 0,
   displays : [],
   display : {
-    id : 0, 
+    id : 0,
     width : 0,
     height : 0
   },
-  window  : { 
-    width : 1920, 
+  window  : {
+    width : 1920,
     height : 1080,
+    minWidth: 1090,
+    minHeight: 750,
     maximized : false,
     zoom : false
   },
   build   : defaults.build,
-  cl      : { 
+  cl      : {
     tags  : true,
     color : true,
     requireInput : false
