@@ -1,4 +1,7 @@
 /** @ignore @typedef {import("@renderer/models/Kernel")} Kernel */
+/** @ignore @typedef {import("@renderer/models/Idx")} Index */
+
+/** @typedef {function(Index, number, number) : void} ComputeOnChangeCallback */
 
 const ComputeSelectionView = require('./ComputeSelectionView')
 
@@ -16,6 +19,7 @@ class ComputeSelectionService {
     this.#enabled = false
   }
 
+  /** @returns {ComputeSelectionService} */
   enable() {
     if ( !this.#enabled) {
       this.#enabled = true
@@ -24,12 +28,28 @@ class ComputeSelectionService {
     return this
   }
 
+  /** @returns {ComputeSelectionService} */
   disable() {
     if ( this.#enabled) {
       this.#currentView && this.#currentView.disable()
       this.#enabled = false;
     }
     return this
+  }
+
+  /** @returns {Index} */
+  getBlock() {
+    return this.#currentView.blockSelection;
+  }
+
+  /** @returns {number} */
+  getWarp() {
+    return this.#currentView.warpSelection;
+  }
+
+  /** @returns {number} */
+  getLane() {
+    return this.#currentView.threadSelection;
   }
 
   /**
@@ -69,6 +89,16 @@ class ComputeSelectionService {
       this.#currentView.render().enable()
     else
       this.#currentView.render().disable()
+  }
+
+  /**
+   * Set a callback to be fired when the user selects a block or warp
+   * @param {ComputeOnChangeCallback} callback
+   * @returns ComputeSelectionService
+   */
+  onChange(callback) {
+    this.#views.forEach(view => view.onChange(callback))
+    return this;
   }
 
 }

@@ -116,6 +116,7 @@
 
 .thread-selector-item {
     /* display: flex !important; */
+    display: table;
     height: 5%;
     padding: 3px;
     padding-right: 8px;
@@ -140,13 +141,13 @@
     width: auto;
 }
 
-.thread-selector-item .first-row .first-index,
+/* .thread-selector-item .first-row .first-index,
 .thread-selector-item .second-row .middle-index {
     font-size: x-small;
     color: #636c73;
     margin-right: 2px;
     vertical-align: text-bottom;
-}
+} */
 
 .thread-selector-item .thread-container {
     display: flex;
@@ -290,6 +291,32 @@
 
 .warp-index {
     margin: 0px;
+}
+
+.selected-warp {
+    /* background: rgb(236, 253, 230); */
+    /* background: rgba(251, 255, 19, 0.12); */
+    background: rgba(201, 195, 255, 0.12);
+    /* background: #17a2b8; */
+    border-top-width: 1px !important;
+    border:1px solid #cdd5ff;
+    border-radius: 3px;
+    /* opacity: 0.8;  */
+}
+
+.selected-lane {
+    /* background: rgb(198, 233, 255);
+    border: 2px solid #b9c5ff !important; */
+    background: rgba(163, 226, 177, 0.64);
+    border: 2px solid rgba(167, 204, 154, 1) !important;
+    border-radius: 3px;
+    opacity: 0.8;
+}
+
+.selected-lane-id {
+    font-size: x-small;
+    /* color: #636c73; */
+    vertical-align: text-bottom;
 }
 
 .warp-selector-item-selected {

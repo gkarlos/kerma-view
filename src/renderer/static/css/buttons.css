@@ -52,6 +52,11 @@
   top:1px;
 }
 
+.kv-btn:disabled{
+  position: unset;
+  opacity: 0.4 !important;
+}
+
 .btn-r-flat {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;

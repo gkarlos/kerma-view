@@ -1,0 +1,89 @@
+#codenav-toolbar {
+    position: relative;
+    /* right: 2px; */
+    float: left;
+}
+
+#codenav-toolbar-separator {
+    width: 0px; 
+    margin-left: 3px; 
+    margin-right: 3px; 
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+#codenav-toolbar button {
+    margin-left: 2px;
+}
+
+#codenav-toolbar-button-group {
+    float: right;
+    margin-top: 1px;
+}
+*/
+
+#codenav-toolbar .btn {
+    margin-left: 5px;
+}
+
+
+#codenav-btn-stop,
+#codenav-btn-prev-stmt,
+#codenav-btn-next-stmt, 
+#codenav-btn-prev-rdwr,
+#codenav-btn-next-rdwr {
+    width: 31px;
+}
+
+#codewalk-status {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+div#codewalk-status-text {
+    margin-left: 5px;
+    display: inline-block;
+    color: #6c757d!important;
+    font-size: 80%;
+    font-weight: 400;
+}
+
+div#codewalk-status-pulse.start {
+    display: inline-block;
+    background-color: rgb(52, 133, 52);
+    -webkit-border-radius: 30px;
+    height: 8px;
+    width: 8px;
+    -webkit-animation: pulsate 2s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    opacity: 0.5
+}
+
+div#codewalk-status-pulse.stop {
+    display: inline-block;
+    background-color: rgb(196, 63, 63);
+    -webkit-border-radius: 30px;
+    height: 8px;
+    width: 8px;
+    -webkit-animation: pulsate 2s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    opacity: 0.5
+}
+
+/* #codewalk-status-pulse> #inner .start,
+#codewalk-status-pulse > #outer .start {
+    background-color: #62bd19;
+}
+
+#codewalk-status #inner .stop,
+#codewalk-statis #outer .stop {
+    background-color: #f03e31;
+} */
+
+
+
+@-webkit-keyframes pulsate {
+    0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+    50% {opacity: 1.0;}
+    100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
+}

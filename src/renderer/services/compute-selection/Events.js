@@ -23,7 +23,9 @@ module.exports = {
   /** */
   Enabled : "enabled",
   /** */
-  Disabled : "disabled"
+  Disabled : "disabled",
+  /** */
+  Change : "change"
 }
 
 /**

@@ -122,7 +122,7 @@ class Editor extends Component {
     on(Events.EDITOR_INPUT_LOADED, () => { 
       if ( mock.kernels.length == 0)
         return;
-    
+
       let decorations = []
 
       mock.kernels.forEach(kernel => {

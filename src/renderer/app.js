@@ -7,7 +7,7 @@
 /** @ignore @typedef {import("@renderer/services/launch-selection/LaunchSelectionService")}   LaunchSelectionService  */
 /** @ignore @typedef {import("@renderer/services/compute-selection/ComputeSelectionService")} ComputeSelectionService */
 /** @ignore @typedef {import("@renderer/services/memory-vis/MemoryVisService")}               MemoryVisService        */
-/** @ignore @typedef {import("@renderer/services/codenav/CodenavService")}                    CodenavService          */
+/** @ignore @typedef {import("@renderer/services/codewalk/CodewalkService")}                  CodewalkService         */
 /** @ignore @typedef {import("@renderer/services/editor/EditorService")}                      EditorService           */
 /** @ignore @typedef {import("@renderer/ui")} Ui */
 
@@ -19,7 +19,25 @@ const Session = require("@renderer/session").Session;
  * @category Renderer
  * @subcategory main
  */
-const App = {}
+const App = {
+
+  /** @type Session */ _session_ : undefined,
+
+  /** @type {NotificationService}    */ Notifier : undefined,
+  /** @type {ConsoleLogger}          */ Logger : undefined,
+  /** @type {EditorService}          */ Editor : undefined,
+  /** @type {InputService}           */ Input : undefined,
+  /** @type {Session}                */ Session : undefined,
+  /** @type {KernelSelectionService} */ KernelSelector : undefined,
+  /** @type {KernelInformerService}  */ KernelInformer : undefined,
+  /** @type {ComputeSelectionService}*/ ComputeSelector : undefined,
+  /** @type {CodewalkService}        */ CodeWalker : undefined,
+
+  /** @type Session */
+  get Session() { return App.Sess; },
+  set Session(s) { this._session_ = s;}
+}
+
 App.Electron = { remote: undefined, app: undefined }
 App.Electron.remote = require('electron').remote
 App.remote = App.Electron.remote;
@@ -48,7 +66,7 @@ App.Services = {
   /** @type {KernelInformerService}   */ KernelInformer: undefined,
   /** @type {InputService}            */ Input: undefined,
   /** @type {EditorService}           */ Editor: undefined,
-  /** @type {CodenavService}          */ Codenav: undefined,
+  /** @type {CodewalkService}         */ Codenav: undefined,
   /** @type {MemoryVisService}        */ Vis: undefined,
   /** @type {Boolean}                 */ preUiReady: false,
   /** @type {Boolean}                 */ postUiReady: false,
@@ -57,14 +75,7 @@ App.Services = {
     return App.Services.preUiReady && app.Services.postUiReady
   }
 }
-/** @type {NotificationService}    */ App.Notifier
-/** @type {ConsoleLogger}          */ App.Logger
-/** @type {EditorService}          */ App.Editor
-/** @type {InputService}           */ App.Input
-/** @type {Session}                */ App.Session
-/** @type {KernelSelectionService} */ App.KernelSelector
-/** @type {KernelInformerService}  */ App.KernelInformer
-/** @type {ComputeSelectionService}*/ App.ComputeSelector
+
 // App.Session = {
 //   input: { source:"", compiledb: "", args: ""}
 // }
@@ -96,20 +107,19 @@ App.main = function () {
   if (App.started) return false
   App.started = true
 
-  const { Kernel, Stmt, Dim } = require("@renderer/models");
-  const ColorGenerator = require("./util/ColorGenerator");
-  const NotificationService = require('./services/notification').NotificationService
-  const ConsoleLogger = require('./services/log').ConsoleLogger
+  const { Kernel, Stmt, Dim }  = require("@renderer/models");
+  const ColorGenerator         = require("./util/ColorGenerator");
+  const NotificationService    = require('./services/notification').NotificationService
+  const ConsoleLogger          = require('./services/log').ConsoleLogger
   const KernelSelectionService = require('./services/kernel-selection').KernelSelectionService
-  // const LaunchSelectionService    = require('./services/launch-selection').LaunchSelectionService
-  const KernelInformerService = require('./services/kernel-informer').KernelInformerService
+  const KernelInformerService  = require('./services/kernel-informer').KernelInformerService
   const ComputeSelectionService = require('./services/compute-selection').ComputeSelectionService
   const MemoryVisService = require('./services/memory-vis').MemoryVisService
-  const CodenavService = require("./services/codenav/CodenavService")
-  const InputService = require("./services/input").InputService;
+  const CodewalkService  = require("./services/codewalk").CodewalkService
+  const InputService     = require("./services/input").InputService;
   const EditorService = require('./services/editor/EditorService')
-  const Kermad = require('@renderer/client/KermadClient')
-  const Events = App.Events
+  const Kermad        = require('@renderer/client/KermadClient')
+  const Events        = App.Events
   const TAG = "[app]"
 
   /// Initialize servises that don't require the UI
@@ -124,15 +134,15 @@ App.main = function () {
   function initPostUiServices() {
     if (App.Services.postUiReady) return
 
-    App.Services.Editor = new EditorService()
-    App.Services.Notification = new NotificationService().enable()
+    App.Services.Editor          = new EditorService()
+    App.Services.Notification    = new NotificationService().enable()
     App.Services.KernelSelection = new KernelSelectionService().enable()
-    App.Services.KernelInformer = new KernelInformerService()
-    // App.Services.LaunchSelection  = new LaunchSelectionService().enable()
+    App.Services.KernelInformer   = new KernelInformerService()
     App.Services.ComputeSelection = new ComputeSelectionService().enable()
-    App.Services.Vis = new MemoryVisService().enable()
-    App.Services.CodenavService = new CodenavService().enable()
+    App.Services.Vis              = new MemoryVisService().enable()
+    App.Services.CodewalkService  = new CodewalkService().disable()
     App.Services.Input = new InputService().enable()
+  
     App.Editor = App.Services.Editor;
     App.Notifier = App.Services.Notification
     App.Input = App.Services.Input
@@ -140,7 +150,10 @@ App.main = function () {
     App.KernelInformer = App.Services.KernelInformer
     App.ComputeSelector = App.Services.ComputeSelection
     App.Input = App.Services.InputService
+    App.CodeWalker = App.Services.CodewalkService
     App.Services.postUiReady = true
+
+
     // App.Services.KernelSelection.onSelect (
     //   , //App.Notifier.info(kernel.toString(), {title: "Kernel Selection"}),
     // )
@@ -191,7 +204,7 @@ App.main = function () {
       .openSource(input.source, input.dir)
       .then(() => Kermad.StartSession(input.dir, input.source, input.compiledb))
       .then((res) => {
-        App.Session = new Session()
+        App.Sess = new Session()
         let Col = new ColorGenerator(res['kernels'].length)
         res['kernels'].forEach(k => {
           let Kern = new Kernel(k.id, k.name, SrcRange.fromArray(k.range), Col.next())
@@ -230,6 +243,23 @@ App.main = function () {
   })
 
 
+  App.on(Events.INPUT_COMPUTE_SELECTED, (block, warp, lane) => {
+    App.Logger.info("Compute selection:", block.toString(), warp, lane)
+    App.CodeWalker.enable()
+  })
+
+  // App.on(Event)
+
+  App.on(Events.CODEWALK_START, () => {
+    App.Logger.info("Codewalk start");
+    App.Session.setBlock(App.ComputeSelector.getBlock())
+    App.Session.setWarp(App.ComputeSelector.getWarp());
+    App.Session.setLane(App.ComputeSelector.getLane());
+  })
+
+  App.on(Events.CODEWALK_STOP, () => {
+    App.Logger.info("Codewalk stop")
+  })
 }
 
 module.exports = App
