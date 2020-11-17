@@ -20,6 +20,7 @@ class ConsoleLogger extends Logger {
 		super(options.level || LogLevel.Info, options.name || `ConsoleLogger-${random.uuid(4)}`)
 		this.color      = options.color || false
 		this.timestamps = options.timestamps || false
+		// console.log.bind(window.console)
   }
 
   trace(message, ...args) {
@@ -61,7 +62,7 @@ class ConsoleLogger extends Logger {
 			if (this.getLevel() <= LogLevel.Info) {
 				if ( this.color)
 					if ( this.timestamps)
-						console.log(`%c INFO %c[${Logger.timestamp()}]`, 'color: #33f', 'color: #a3a3a3', message, ...args)
+						console.log(`%c INFO %c[${Logger.timestamp()}]`, 'color: #33f', 'color: #a3a3a3', message, ...args);
 					else
 						console.log('%c INFO', 'color: #33f', message, ...args);
 				else

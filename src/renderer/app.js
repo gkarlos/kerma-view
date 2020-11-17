@@ -107,12 +107,11 @@ App.main = function () {
   if (App.started) return false
   App.started = true
 
-  const { Kernel, Stmt, Dim }  = require("@renderer/models");
-  const ColorGenerator         = require("./util/ColorGenerator");
-  const NotificationService    = require('./services/notification').NotificationService
-  const ConsoleLogger          = require('./services/log').ConsoleLogger
-  const KernelSelectionService = require('./services/kernel-selection').KernelSelectionService
-  const KernelInformerService  = require('./services/kernel-informer').KernelInformerService
+  const { Kernel, Stmt, Dim }   = require("@renderer/models");
+  const ColorGenerator          = require("./util/ColorGenerator");
+  const NotificationService     = require('./services/notification').NotificationService
+  const KernelSelectionService  = require('./services/kernel-selection').KernelSelectionService
+  const KernelInformerService   = require('./services/kernel-informer').KernelInformerService
   const ComputeSelectionService = require('./services/compute-selection').ComputeSelectionService
   const MemoryVisService = require('./services/memory-vis').MemoryVisService
   const CodewalkService  = require("./services/codewalk").CodewalkService
@@ -125,7 +124,8 @@ App.main = function () {
   /// Initialize servises that don't require the UI
   function initPreUiServices() {
     if (!App.Services.preUiReady) {
-      App.Services.Log = new ConsoleLogger({ level: ConsoleLogger.Level.Debug, color: true, timestamps: true }).enable()
+      // App.Services.Log = new ConsoleLogger({ level: ConsoleLogger.Level.Debug, color: true, timestamps: true }).enable()
+      App.Services.Log = require('./services/log').SimpleLogger
       App.Logger = App.Services.Log
       App.Services.preUiReady = true
     }
@@ -263,5 +263,3 @@ App.main = function () {
 }
 
 module.exports = App
-
-
